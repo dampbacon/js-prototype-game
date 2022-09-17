@@ -6,7 +6,7 @@ import gradient from 'gradient-string';
 import chalkAnimation from 'chalk-animation';
 import {game_event} from './game_events.js'
 import XTerm from 'blessed-xterm'
-import events from 'events';
+import { clearInterval } from 'timers';
 
 
 
@@ -67,6 +67,7 @@ const screen = blessed.screen({
   dockBorders: true,
   fullUnicode: true
 });
+screen.program.hideCursor();
 var thing = chalk.blue('Hello') + ' World' + chalk.red('!') 
 var grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
 
@@ -265,7 +266,7 @@ form_thing.on('submit', function(data) {
   XTermApp.clear()
   XTermThing.write(body)
   screen.render();
-  logs.focus()
+  //logs.focus()
 });
 
 form_thing.on('reset', function(data) {
@@ -273,6 +274,7 @@ form_thing.on('reset', function(data) {
   XTermApp.clear()
   XTermThing.write(caleb)
   screen.render();
+  clearInterval(thingy);
 });
 
 screen.key('q', function() {
@@ -293,13 +295,30 @@ form_thing.focus()
 screen.key('p', function() {
   screen.focusNext();
 });
-//terms.term.write(caleb)
-XTermThing.write(caleb)
-//terms.term.write(gradient('cyan', 'red')('helllllllllllooooo world!'));
+
+var rainbow=chalkAnimation.rainbow('helllllllllllooooo world!').stop()
+
+
+function rainbowAnimate(item){
+  XTermApp.clear();
+  XTermThing.write(item.frame())
+  screen.render()
+}
+var thingy=setInterval(rainbowAnimate,10,rainbow)
+
+
+
+//XTermThing.write(caleb)
+
+
+
+
+
+
+
+
 
 // handling creating of buttons from an event. writing body etc
 
 //setInterval(function () {console.log(temp_event1.body)}, 10);
 
-
-//const listeners = emitter.rawListeners('resize');;

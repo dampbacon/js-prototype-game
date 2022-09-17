@@ -191,17 +191,6 @@ var form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
 
 screen.render()
 
-// event reader
-// multiple functions, exuction may differ based on event type
-
-
-var temp_event1=new game_event(1,body,{1:'goto 1(recursive)',2:'goto 2',3:'goto 3'})
-
-
-var temp_event2=new game_event(2,chalk.blue("event2"),{1:"goto 1"})
-var temp_event2=new game_event({id:3,body:chalk.blue("event3"),buttons:{2:"goto 2"}})
-
-
 var submit = blessed.button({
   parent: form_thing,
   mouse: true,
@@ -266,15 +255,15 @@ form_thing.on('submit', function(data) {
   XTermApp.clear()
   XTermThing.write(body)
   screen.render();
-  //logs.focus()
 });
 
-form_thing.on('reset', function(data) {
+
+
+form_thing.on('reset', function() {
   form_thing.setContent('Canceled.');
-  XTermApp.clear()
-  XTermThing.write(caleb)
+  XTermApp.clear();
+  XTermThing.write(caleb);
   screen.render();
-  clearInterval(thingy);
 });
 
 screen.key('q', function() {
@@ -304,11 +293,7 @@ function rainbowAnimate(item){
   XTermThing.write(item.frame())
   screen.render()
 }
-var thingy=setInterval(rainbowAnimate,10,rainbow)
-
-
-
-//XTermThing.write(caleb)
+//var thingy=setInterval(rainbowAnimate,10,rainbow)
 
 
 
@@ -319,6 +304,10 @@ var thingy=setInterval(rainbowAnimate,10,rainbow)
 
 
 // handling creating of buttons from an event. writing body etc
+// event reader
+// multiple functions, exuction may differ based on event type
 
-//setInterval(function () {console.log(temp_event1.body)}, 10);
 
+var temp_event1=new game_event(1,body,{1:'goto 1(recursive)',2:'goto 2',3:'goto 3'})
+var temp_event2=new game_event(2,chalk.blue("event2"),{1:"goto 1"})
+var temp_event2=new game_event({id:3,body:chalk.blue("event3"),buttons:{2:"goto 2"}})

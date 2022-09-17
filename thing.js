@@ -6,6 +6,9 @@ import gradient from 'gradient-string';
 import chalkAnimation from 'chalk-animation';
 import {game_event} from './game_events.js'
 import XTerm from 'blessed-xterm'
+import events from 'events';
+
+
 
 
 
@@ -67,16 +70,11 @@ const screen = blessed.screen({
 var thing = chalk.blue('Hello') + ' World' + chalk.red('!') 
 var grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
 
-
-
- 
 screen.title = 'my window title';
 
 const opts = {
-  shell:         null,//process.env.SHELL || "sh",
+  shell:         null,
   args:          [],
-  env:           process.env,
-  cwd:           process.cwd(),
   cursorType:    "block",
   border:        "line",
   scrollback:    1000,
@@ -99,9 +97,14 @@ var XTermThing = new XTerm(Object.assign({}, opts, {
 screen.append(XTermThing)
 screen.render()
 
+var XTermApp=XTermThing.term
+
+screen.on('resize', function() {
+  XTermThing.height=screen.height;
+  XTermThing.width=screen.width/2;
+  screen.render();});
 
 
- 
 var logs = grid.set(6,6,6,6,blessed.box,{
   tags: true,
   label: 'log',
@@ -131,14 +134,6 @@ var logs = grid.set(6,6,6,6,blessed.box,{
   }
 });
 
-// var terms= grid.set(0,0,12,6, blessed.terminal,{ //more usefull for writing ascii
-//   parent: screen,
-//   border: 'line',
-//   tags: true,
-//   scrollable: true,
-//   label: '{bold}screen{/bold}',
-//   handler: function() {},
-// });
 
 var stats=grid.set(0,9,6,1,blessed.box,{
   tags: true,
@@ -267,7 +262,7 @@ cancel.on('press', function() {
 form_thing.on('submit', function(data) {
   form_thing.setContent('Submitted.');
   logs.setContent(temp_event1.body)
-  XTermThing.term.clear()
+  XTermApp.clear()
   XTermThing.write(body)
   screen.render();
   logs.focus()
@@ -275,12 +270,23 @@ form_thing.on('submit', function(data) {
 
 form_thing.on('reset', function(data) {
   form_thing.setContent('Canceled.');
+  XTermApp.clear()
+  XTermThing.write(caleb)
   screen.render();
 });
 
 screen.key('q', function() {
   process.exit(0);
 });
+
+screen.key('l', function() {
+  XTermThing.height=screen.height;
+  XTermThing.width=screen.width/2;
+  screen.render();
+});
+
+
+
 
 form_thing.focus()
 
@@ -294,3 +300,6 @@ XTermThing.write(caleb)
 // handling creating of buttons from an event. writing body etc
 
 //setInterval(function () {console.log(temp_event1.body)}, 10);
+
+
+//const listeners = emitter.rawListeners('resize');;

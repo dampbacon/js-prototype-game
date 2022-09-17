@@ -23,22 +23,6 @@ var grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
  
 screen.title = 'my window title';
  
-// var box = grid.set(7,6,5,6,blessed.box,{
-//   content: thing,
-//   tags: true,
-//   border: {
-//     type: 'line'
-//   },
-//   style: {
-//     border: {
-//       fg: '#f0f0f0'
-//     },
-//     hover: {
-//       bg: 'green'
-//     }
-//   }
-// });
- 
 var logs = grid.set(6,6,6,6,blessed.box,{
   tags: true,
   label: 'log',
@@ -81,22 +65,22 @@ var stats=grid.set(0,9,6,1,blessed.box,{
     }
   }})
 
-  var actions=grid.set(0,10,6,2,blessed.list,{
-    tags: true,
-    scrollable: true,
-    label: '{bold}actions{/bold}',
-    content: thing,
+var actions=grid.set(0,10,6,2,blessed.list,{
+  tags: true,
+  scrollable: true,
+  label: '{bold}actions{/bold}',
+  content: thing,
+  border: {
+    type: 'line'
+  },
+  style: {
     border: {
-      type: 'line'
+      fg: '#f0f0f0'
     },
-    style: {
-      border: {
-        fg: '#f0f0f0'
-      },
-      hover: {
-        bg: 'green'
-      }
-    }})
+    hover: {
+      bg: 'green'
+    }
+  }})
 
 
 
@@ -135,20 +119,5 @@ var form_thing=grid.set(0,6,6,3,blessed.form,{
       bg: 'green'
     }
   }})
-
-
-
-
-
-
-
-
-
-const hint = "\r\nPress CTRL+q to stop sample program.\r\n"
-
-//terminal.write(frame)
-
-
-screen.append(terms)
 screen.render()
 

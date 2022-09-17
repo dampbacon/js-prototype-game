@@ -209,6 +209,9 @@ screen.key('q', function() {
 // handling creating of buttons from an event. writing body etc
 form_thing.focus()
 
+screen.key('p', function() {
+  screen.focusNext();
+});
 
 
 

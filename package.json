@@ -6,8 +6,12 @@
   "dependencies": {
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.11.0",
+    "blessed-xterm": "^1.4.3",
     "chalk": "^5.0.1",
     "chalk-animation": "^2.0.3",
-    "gradient-string": "^2.0.2"
+    "gradient-string": "^2.0.2",
+    "node-pty": "^0.10.1",
+    "term.js": "^0.0.7",
+    "xterm": "^5.0.0"
   }
 }

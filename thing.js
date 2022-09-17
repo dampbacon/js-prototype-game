@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import BlessedContrib from 'blessed-contrib';
 import gradient from 'gradient-string';
 import chalkAnimation from 'chalk-animation';
-import XTerm from 'blessed-xterm'
+//import XTerm from 'blessed-xterm'
 
 
 
@@ -91,17 +91,6 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
  
-// Render the screen.
-screen.render();
-
-function rainbow_frame(){
-  terms.term.reset()
-  //frame=rainbow.frame()
-  terms.term.write(body)
-  screen.render()
-}
-//setInterval(rainbow_frame,40)
-
 
 
 var form_thing=grid.set(0,6,6,3,blessed.form,{
@@ -119,5 +108,16 @@ var form_thing=grid.set(0,6,6,3,blessed.form,{
       bg: 'green'
     }
   }})
+
 screen.render()
 
+// event reader
+// multiple functions, exuction may differ based on event type
+
+
+
+
+
+
+
+// handling creating of buttons from an event. writing body etc

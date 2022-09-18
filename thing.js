@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import blessed from 'blessed';
 import chalk from 'chalk';
 import BlessedContrib from 'blessed-contrib';
@@ -108,17 +109,7 @@ screen.on('resize', function() {
   //Left_space_button = Math.floor((form_thing.width-submit.width)/2);
   //submit.left=Left_space_button
   logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
-  buttonsArray.forEach((element) => {element.width=form_thing.width-5})
-  screen.render();
-  buttonsArray.forEach((element, index, array) => {
-    if (!(index===0)){
-      let previous=array[index-1]
-      element.top=previous.top+previous.getScreenLines().length
-    }else{
-      element.top=1
-    }
-  })
-  screen.render();
+  resizeButtons()
 });
 
 
@@ -354,63 +345,54 @@ button2.on('press', function() {
 screen.key('q', function() {
   process.exit(0);
 });
-
 screen.key('l', function() {
   XTermThing.height=screen.height;
   XTermThing.width=screen.width/2;
   screen.render();
 });
-
-form_thing.focus()
-
 screen.key('p', function() {
   screen.focusNext();
 });
 screen.key('s', function() {
   form_thing.scroll(1)
-  form_thing.focus();
 });
-
 screen.key('w', function() {
   form_thing.scroll(-1)
-  form_thing.focus();
 });
-
-screen.key(['y'], function() {
+screen.key('y', function() {
+  form_thing.resetScroll()
   buttonsArray.forEach((button) => {form_thing.remove(button)})
+  logs.focus();
+  createButtons(temp_event1)
+  buttonsArray=eventButtons
+  resizeButtons()
+  logs.focus();
   screen.render();
 });
 
-XTermThing.write((gradient.pastel.multiline(
-`Hello world! i amdfbssdfbfsdbfdbfsdjbfdsjk\r
-writing down randomdfbbfdssdfbdfbsbfdsdbfsdb\r
-words lalalalaallalalashdfdsbffbdfbdssbdfb\r
-iujjuasudhufjiasdfnuhijsfdauihjsvdvdvfds\r`)));
 logs.setContent(caleb)
 screen.render();
 
 let buttonsArray = [button1,button2,button3,button4];
 
 //screen.render is essential for the correct screenlines amount to calculate
-buttonsArray.forEach((element) => {element.width=form_thing.width-5})
-
-screen.render()
-
-buttonsArray.forEach((element, index, array) => {
-  if (!(index===0)){
-    let previous=array[index-1]
-    element.top=previous.top+previous.getScreenLines().length
-  }else{
-    element.top=1
-  }
-})
-screen.render()
+function resizeButtons(){
+  buttonsArray.forEach((element) => {element.width=form_thing.width-5})
+  screen.render()
+  buttonsArray.forEach((element, index, array) => {
+    if (!(index===0)){
+      let previous=array[index-1]
+      element.top=previous.top+previous.getScreenLines().length
+    }else{
+      element.top=1
+    }
+  screen.render()
+})}
+resizeButtons()
 
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
-
-
 let temp_event1=new game_event({'id':1, 'body':"sasffsasgsasg", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true]]})
 let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
 let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
@@ -418,4 +400,43 @@ let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"ds
 let eventButtons=[];
 
 function createButtons(gameEvent) {
+  gameEvent['buttons'].forEach(item => {
+    eventButtons.push(blessed.button({
+      parent: form_thing,
+      mouse: true,
+      keys: true,
+      shrink: true,
+      padding: {
+        left: 1,
+        right: 1
+      },
+      shrink: true,
+      name: item[1],
+      content: item[1],
+      style: {
+        bg: 'blue',
+        focus: {
+          bg: 'red'
+        },
+        hover: {
+          bg: 'red'
+        }
+      }
+    }))
+  }
+  )
+  eventButtons.forEach((element)=>{
+    element.on('press', function() {
+      logs.setContent(temp_event1.body)
+      XTermApp.clear()
+      XTermApp.reset()
+      XTermThing.write(body)
+      screen.render();
+  })
+  })
 }
+
+
+
+
+logs.focus()

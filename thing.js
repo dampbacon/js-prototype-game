@@ -229,7 +229,7 @@ const form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
 
 screen.render()
 
-const button1 = blessed.button({
+let button1 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -254,7 +254,7 @@ const button1 = blessed.button({
   }
 });
 
-const button2 = blessed.button({
+let button2 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -278,7 +278,7 @@ const button2 = blessed.button({
   }
 });
 
-const button3 = blessed.button({
+let button3 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -303,7 +303,7 @@ const button3 = blessed.button({
   }
 });
 
-const button4 = blessed.button({
+let button4 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -376,6 +376,11 @@ screen.key('w', function() {
   form_thing.focus();
 });
 
+screen.key(['y'], function() {
+  buttonsArray.forEach((button) => {form_thing.remove(button)})
+  screen.render();
+});
+
 XTermThing.write((gradient.pastel.multiline(
 `Hello world! i amdfbssdfbfsdbfdbfsdjbfdsjk\r
 writing down randomdfbbfdssdfbdfbsbfdsdbfsdb\r
@@ -409,3 +414,8 @@ screen.render()
 let temp_event1=new game_event({'id':1, 'body':"sasffsasgsasg", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true]]})
 let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
 let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
+
+let eventButtons=[];
+
+function createButtons(gameEvent) {
+}

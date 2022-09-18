@@ -10,6 +10,9 @@ export class game_event{
         this.buttons=buttons
         //buttons are in the format of [[event_id,"button label", enabled_always=true]]        
     }
+    disableButton(number){
+        this.buttons[number-1][2]=false
+    }
 }
 
 export class game_event_gain_item extends game_event{

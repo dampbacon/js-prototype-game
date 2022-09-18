@@ -12,7 +12,7 @@ import { clearInterval } from 'timers';
 
 
 
-var body = 
+let body = 
 `[0m\r
 \r
   [1;34m░░░░░░░░░░░░[0m\r
@@ -30,9 +30,9 @@ var body =
 [1;35m░░░░░[0m   [1;31m♥♥♥[0m  [1;5;35;46m♦♦[0m\r
     [1;31m♥♥♥♥[0m\r
 [1;31m♥♥♥♥♥[0m\r
-[1;31m♥♥[0m\r
-`
-var caleb =
+[1;31m♥♥[0m\r`
+
+let caleb =
 
 `[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
 [38;5;241;48;5;241m▄[38;5;242;48;5;242m▄[48;5;242m  [38;5;242;48;5;242m▄▄[38;5;241;48;5;241m▄[48;5;241m  [38;5;59;48;5;241m▄[48;5;59m [38;5;59;48;5;59m▄[38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄[38;5;241;48;5;59m▄[48;5;59m [38;5;240;48;5;241m▄[38;5;59;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;240;48;5;240m▄▄[38;5;239;48;5;239m▄▄▄▄▄[48;5;239m  [38;5;239;48;5;239m▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄[48;5;239m [38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[m\r
@@ -59,6 +59,7 @@ var caleb =
 [38;5;239;48;5;95m▄[38;5;238;48;5;240m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;238m▄[48;5;237m [38;5;237;48;5;237m▄▄▄[38;5;236;48;5;236m▄[38;5;235;48;5;236m▄[38;5;234;48;5;234m▄[38;5;234;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄▄[38;5;238;48;5;237m▄[38;5;236;48;5;237m▄[38;5;232;48;5;232m▄[38;5;0;48;5;232m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;233m▄[38;5;234;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄▄[38;5;234;48;5;234m▄[48;5;234m [38;5;234;48;5;234m▄▄[38;5;234;48;5;235m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄▄[m\r
 [38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m\r`
 
+let thing = chalk.blue('Hello') + ' World' + chalk.red('!') 
 
 
 const screen = blessed.screen({
@@ -67,8 +68,7 @@ const screen = blessed.screen({
   fullUnicode: true
 });
 screen.program.hideCursor();
-var thing = chalk.blue('Hello') + ' World' + chalk.red('!') 
-var grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
+const grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
 
 screen.title = 'my window title';
 
@@ -87,7 +87,7 @@ const opts = {
   }
 }
 
-var XTermThing = new XTerm(Object.assign({}, opts, {
+const XTermThing = new XTerm(Object.assign({}, opts, {
   left:    0,
   top:     0,
   width:   Math.floor(screen.width / 2),
@@ -99,7 +99,7 @@ XTermThing.scrolling=true
 screen.append(XTermThing)
 screen.render()
 
-var XTermApp=XTermThing.term
+const XTermApp=XTermThing.term
 
 
 screen.on('resize', function() {
@@ -122,7 +122,7 @@ screen.on('resize', function() {
 });
 
 
-var logs = grid.set(6,6,6,6,blessed.box,{
+const logs = grid.set(6,6,6,6,blessed.box,{
   tags: true,
   label: 'log',
   alwaysScroll: 'true',
@@ -153,7 +153,7 @@ var logs = grid.set(6,6,6,6,blessed.box,{
 });
 
 
-var stats=grid.set(0,9,6,1,blessed.box,{
+const stats=grid.set(0,9,6,1,blessed.box,{
   tags: true,
   scrollable: true,
   label: '{bold}stats{/bold}',
@@ -171,7 +171,7 @@ var stats=grid.set(0,9,6,1,blessed.box,{
     focus:     { border: { fg: "green" } }
   }})
 
-var actions=grid.set(0,10,6,2,blessed.list,{
+const actions=grid.set(0,10,6,2,blessed.list,{
   tags: true,
   scrollable: true,
   label: '{bold}actions{/bold}',
@@ -200,7 +200,7 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
  
 
 
-var form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
+const form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
   parent: screen,
   keys: true,
   label: "choose. w,s to scroll",
@@ -229,7 +229,7 @@ var form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
 
 screen.render()
 
-var button1 = blessed.button({
+const button1 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -254,7 +254,7 @@ var button1 = blessed.button({
   }
 });
 
-var button2 = blessed.button({
+const button2 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -278,7 +278,7 @@ var button2 = blessed.button({
   }
 });
 
-var button3 = blessed.button({
+const button3 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -303,7 +303,7 @@ var button3 = blessed.button({
   }
 });
 
-var button4 = blessed.button({
+const button4 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -329,7 +329,6 @@ var button4 = blessed.button({
 });
 
 button1.on('press', function() {
-  //form_thing.submit();
   form_thing.setContent('Canceled.');
   XTermApp.clear();
   XTermApp.reset();
@@ -338,7 +337,6 @@ button1.on('press', function() {
 });
 
 button2.on('press', function() {
-  //form_thing.reset();
   logs.setContent(temp_event1.body)
   XTermApp.clear()
   XTermApp.reset()
@@ -363,9 +361,6 @@ screen.key('l', function() {
   screen.render();
 });
 
-
-
-
 form_thing.focus()
 
 screen.key('p', function() {
@@ -381,48 +376,15 @@ screen.key('w', function() {
   form_thing.focus();
 });
 
-var rainbow=chalkAnimation.rainbow('helllllllllllooooo world!').stop()
-
-//takes chalk Animation that's stopped
-function rainbowAnimate(item){
-  XTermApp.clear();
-  XTermThing.write(item.frame())
-  screen.render()
-}
-//var thingy=setInterval(rainbowAnimate,10,rainbow)
-//function buttonPosition(item){
-
-
 XTermThing.write((gradient.pastel.multiline(
 `Hello world! i amdfbssdfbfsdbfdbfsdjbfdsjk\r
 writing down randomdfbbfdssdfbdfbsbfdsdbfsdb\r
 words lalalalaallalalashdfdsbffbdfbdssbdfb\r
 iujjuasudhufjiasdfnuhijsfdauihjsvdvdvfds\r`)));
-//logs.setContent(gradient.fruit("aaaaaaappellpapldplsdpas"))
-//logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString()+"");
 logs.setContent(caleb)
 screen.render();
 
-
-// handling creating of buttons from an event. writing body etc
-// event reader
-// multiple functions, exuction may differ based on event type
-
-
-//button spacing function
-
-
-var temp_event1=new game_event({'id':1, 'body':"sasffsasgsasg", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)"],[2,"goto 2"]]})
-var temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1"],[3,"goto 3"]]})
-var temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2"]]})
-
-var buttonsArray = [button1,button2,button3,button4];
-
-// button2.width = form_thing.width-5
-// button1.width = form_thing.width-5
-// button3.width = form_thing.width-5
-// button4.width = form_thing.width-5
-
+let buttonsArray = [button1,button2,button3,button4];
 
 //screen.render is essential for the correct screenlines amount to calculate
 buttonsArray.forEach((element) => {element.width=form_thing.width-5})
@@ -437,6 +399,13 @@ buttonsArray.forEach((element, index, array) => {
     element.top=1
   }
 })
-
-
 screen.render()
+
+// handling creating of buttons from an event. writing body etc
+// event reader
+// multiple functions, exuction may differ based on event type
+
+
+let temp_event1=new game_event({'id':1, 'body':"sasffsasgsasg", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true]]})
+let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
+let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})

@@ -8,7 +8,7 @@ export class game_event{
         this.body=body
         this.toScreen=toScreen
         this.buttons=buttons
-        //buttons are in the format of [event_id,"button label"]
+        //buttons are in the format of [[event_id,"button label", enabled_always=true]]        
     }
 }
 

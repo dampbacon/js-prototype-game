@@ -7,6 +7,8 @@ import chalkAnimation from 'chalk-animation';
 import {game_event} from './game_events.js'
 import XTerm from 'blessed-xterm'
 import { clearInterval } from 'timers';
+import { stringify } from 'querystring';
+import term from 'term.js/lib/index.js';
 
 
 
@@ -95,14 +97,20 @@ var XTermThing = new XTerm(Object.assign({}, opts, {
   height:  screen.height,
   label:   "Screen"}))
 
+XTermThing.scrolling=true
+
 screen.append(XTermThing)
 screen.render()
 
 var XTermApp=XTermThing.term
 
+
 screen.on('resize', function() {
   XTermThing.height=screen.height;
   XTermThing.width=screen.width/2;
+  //Left_space_button = Math.floor((form_thing.width-submit.width)/2);
+  //submit.left=Left_space_button
+  logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+submit.width.toString());
   screen.render();});
 
 
@@ -184,9 +192,12 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
 var form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
   parent: screen,
   keys: true,
-  label: "actions",
+  label: "choose",
   bg: 'magenta',
-  content: 'test?'
+  content: 'test?',
+  padding:{
+    right:1,
+  }
 }));
 
 screen.render()
@@ -200,11 +211,11 @@ var submit = blessed.button({
     left: 1,
     right: 1
   },
-  left: 10,
-  top: 2,
+  left: 1,
+  top: 1,
   shrink: true,
   name: 'submit',
-  content: 'submit',
+  content: 'decide to be silly and eat a spud',
   style: {
     bg: 'blue',
     focus: {
@@ -225,11 +236,11 @@ var cancel = blessed.button({
     left: 1,
     right: 1
   },
-  left: 20,
-  top: 2,
+  left: 1,
+  top: 4,
   shrink: true,
   name: 'cancel',
-  content: 'cancel',
+  content: 'mmfmmmmmsdsfd uifdsjskad nfsjand kfknjsd',
   style: {
     bg: 'blue',
     focus: {
@@ -253,15 +264,22 @@ form_thing.on('submit', function(data) {
   form_thing.setContent('Submitted.');
   logs.setContent(temp_event1.body)
   XTermApp.clear()
+  XTermApp.reset()
+
   XTermThing.write(body)
   screen.render();
 });
 
-
+// term.write('\x1b')
+// // First \n will cancel any existing escape or go to new line
+// // Then the \n\r will put the cursor at the start of the next line
+// term.write('\n\n\r')
+// term.clear()
 
 form_thing.on('reset', function() {
   form_thing.setContent('Canceled.');
   XTermApp.clear();
+  XTermApp.reset();
   XTermThing.write(caleb);
   screen.render();
 });
@@ -287,27 +305,33 @@ screen.key('p', function() {
 
 var rainbow=chalkAnimation.rainbow('helllllllllllooooo world!').stop()
 
-
+//takes chalk Animation that's stopped
 function rainbowAnimate(item){
   XTermApp.clear();
   XTermThing.write(item.frame())
   screen.render()
 }
 //var thingy=setInterval(rainbowAnimate,10,rainbow)
+//function buttonPosition(item){
 
 
-
-
-
-
-
-
-
+XTermThing.write((gradient.pastel.multiline(
+`Hello world! i amdfbssdfbfsdbfdbfsdjbfdsjk\r
+writing down randomdfbbfdssdfbdfbsbfdsdbfsdb\r
+words lalalalaallalalashdfdsbffbdfbdssbdfb\r
+iujjuasudhufjiasdfnuhijsfdauihjsvdvdvfds\r`)));
+//logs.setContent(gradient.fruit("aaaaaaappellpapldplsdpas"))
+logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+submit.width.toString());
+screen.render();
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
 
 
-var temp_event1=new game_event(1,body,{1:'goto 1(recursive)',2:'goto 2',3:'goto 3'})
-var temp_event2=new game_event(2,chalk.blue("event2"),{1:"goto 1"})
-var temp_event2=new game_event({id:3,body:chalk.blue("event3"),buttons:{2:"goto 2"}})
+//button spacing function
+
+var buttonsArray = [submit,cancel];
+
+var temp_event1=new game_event({'id':1, 'body':"sasffsasgsasg", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)"],[2,"goto 2"]]})
+var temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1"],[3,"goto 3"]]})
+var temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2"]]})

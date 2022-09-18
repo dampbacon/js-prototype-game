@@ -7,8 +7,6 @@ import chalkAnimation from 'chalk-animation';
 import {game_event} from './game_events.js'
 import XTerm from 'blessed-xterm'
 import { clearInterval } from 'timers';
-import { stringify } from 'querystring';
-import term from 'term.js/lib/index.js';
 
 
 
@@ -35,8 +33,8 @@ var body =
 [1;31m♥♥[0m\r
 `
 var caleb =
-`
-[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
+
+`[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
 [38;5;241;48;5;241m▄[38;5;242;48;5;242m▄[48;5;242m  [38;5;242;48;5;242m▄▄[38;5;241;48;5;241m▄[48;5;241m  [38;5;59;48;5;241m▄[48;5;59m [38;5;59;48;5;59m▄[38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄[38;5;241;48;5;59m▄[48;5;59m [38;5;240;48;5;241m▄[38;5;59;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;240;48;5;240m▄▄[38;5;239;48;5;239m▄▄▄▄▄[48;5;239m  [38;5;239;48;5;239m▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄[48;5;239m [38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[m\r
 [38;5;241;48;5;241m▄▄[38;5;242;48;5;242m▄▄▄▄[38;5;241;48;5;241m▄▄[48;5;241m [38;5;241;48;5;59m▄▄▄[38;5;241;48;5;241m▄▄[38;5;242;48;5;241m▄[38;5;241;48;5;241m▄▄[38;5;241;48;5;59m▄▄[38;5;241;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄[38;5;240;48;5;59m▄▄[38;5;95;48;5;95m▄▄[38;5;240;48;5;59m▄[38;5;239;48;5;239m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄▄[38;5;239;48;5;240m▄[38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;238m▄[48;5;239m  [38;5;239;48;5;239m▄▄▄▄[m\r
 [38;5;59;48;5;59m▄[38;5;59;48;5;241m▄[38;5;241;48;5;241m▄▄[38;5;242;48;5;242m▄[38;5;241;48;5;242m▄[38;5;241;48;5;241m▄▄▄▄▄[38;5;59;48;5;59m▄[38;5;241;48;5;241m▄▄▄▄▄▄▄▄[38;5;241;48;5;59m▄[38;5;101;48;5;59m▄[38;5;101;48;5;95m▄▄[38;5;240;48;5;101m▄[38;5;239;48;5;95m▄[38;5;241;48;5;241m▄[38;5;95;48;5;95m▄[38;5;240;48;5;59m▄[38;5;238;48;5;239m▄[38;5;237;48;5;238m▄[38;5;236;48;5;237m▄[38;5;235;48;5;238m▄[38;5;235;48;5;237m▄[38;5;236;48;5;237m▄[38;5;236;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄▄▄▄▄▄▄▄▄▄▄[38;5;238;48;5;238m▄[m\r
@@ -59,8 +57,7 @@ var caleb =
 [38;5;137;48;5;239m▄[38;5;101;48;5;240m▄[38;5;137;48;5;239m▄[38;5;101;48;5;239m▄[38;5;95;48;5;239m▄[38;5;59;48;5;239m▄[38;5;238;48;5;239m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄[38;5;236;48;5;237m▄[38;5;235;48;5;236m▄[38;5;234;48;5;235m▄[38;5;235;48;5;236m▄▄▄[38;5;235;48;5;235m▄▄▄[38;5;239;48;5;95m▄[38;5;95;48;5;137m▄▄▄▄▄[38;5;95;48;5;95m▄▄[38;5;239;48;5;239m▄▄[38;5;238;48;5;239m▄▄[38;5;238;48;5;238m▄[38;5;236;48;5;237m▄[38;5;233;48;5;233m▄[38;5;232;48;5;232m▄▄[48;5;233m [38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;236m▄[38;5;235;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄▄▄▄[38;5;238;48;5;238m▄▄▄[m\r
 [38;5;137;48;5;137m▄[38;5;101;48;5;137m▄[38;5;95;48;5;137m▄[38;5;239;48;5;137m▄[38;5;238;48;5;95m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄▄▄[38;5;236;48;5;236m▄▄[38;5;235;48;5;234m▄[38;5;233;48;5;234m▄▄[38;5;234;48;5;234m▄▄▄▄[38;5;235;48;5;236m▄[38;5;238;48;5;95m▄[38;5;95;48;5;95m▄▄▄▄[38;5;239;48;5;95m▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄[38;5;236;48;5;236m▄[38;5;233;48;5;233m▄[38;5;232;48;5;232m▄▄[38;5;233;48;5;233m▄[38;5;233;48;5;232m▄[38;5;233;48;5;233m▄▄[38;5;234;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;234;48;5;235m▄[38;5;234;48;5;236m▄[38;5;235;48;5;237m▄[38;5;236;48;5;237m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄▄▄[48;5;238m [m\r
 [38;5;239;48;5;95m▄[38;5;238;48;5;240m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;238m▄[48;5;237m [38;5;237;48;5;237m▄▄▄[38;5;236;48;5;236m▄[38;5;235;48;5;236m▄[38;5;234;48;5;234m▄[38;5;234;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄▄[38;5;238;48;5;237m▄[38;5;236;48;5;237m▄[38;5;232;48;5;232m▄[38;5;0;48;5;232m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;233m▄[38;5;234;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄▄[38;5;234;48;5;234m▄[48;5;234m [38;5;234;48;5;234m▄▄[38;5;234;48;5;235m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄▄[m\r
-[38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m\r
-`
+[38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m\r`
 
 
 
@@ -110,7 +107,7 @@ screen.on('resize', function() {
   XTermThing.width=screen.width/2;
   //Left_space_button = Math.floor((form_thing.width-submit.width)/2);
   //submit.left=Left_space_button
-  logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+submit.width.toString());
+  logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
   screen.render();});
 
 
@@ -139,7 +136,8 @@ var logs = grid.set(6,6,6,6,blessed.box,{
     },
     hover: {
       bg: 'green'
-    }
+    },
+    focus:     { border: { fg: "green" } }
   }
 });
 
@@ -158,7 +156,8 @@ var stats=grid.set(0,9,6,1,blessed.box,{
     },
     hover: {
       bg: 'green'
-    }
+    },
+    focus:     { border: { fg: "green" } }
   }})
 
 var actions=grid.set(0,10,6,2,blessed.list,{
@@ -175,7 +174,8 @@ var actions=grid.set(0,10,6,2,blessed.list,{
     },
     hover: {
       bg: 'green'
-    }
+    },
+    focus:     { border: { fg: "green" } }
   }})
 
 
@@ -192,17 +192,33 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
 var form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
   parent: screen,
   keys: true,
-  label: "choose",
+  label: "choose. w,s to scroll",
   bg: 'magenta',
   content: 'test?',
   padding:{
-    right:1,
+    right:0,
+  },
+  style: {
+  focus:     { border: { fg: "green" } }
+  },
+  alwaysScroll: 'true',
+  scrollable: 'true',
+  scrollbars: 'true',
+  scrollbar: {
+    ch: chalk.red.bgYellow('\u2592'),
+    track: {
+      bg: 'green',
+      fg: 'red'
+    },
+    style: {
+      inverse: true
+    }
   }
 }));
 
 screen.render()
 
-var submit = blessed.button({
+var button1 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -227,7 +243,7 @@ var submit = blessed.button({
   }
 });
 
-var cancel = blessed.button({
+var button2 = blessed.button({
   parent: form_thing,
   mouse: true,
   keys: true,
@@ -238,9 +254,8 @@ var cancel = blessed.button({
   },
   left: 1,
   top: 4,
-  shrink: true,
   name: 'cancel',
-  content: 'mmfmmmmmsdsfd uifdsjskad nfsjand kfknjsd',
+  content: 'mmfmmmmmsdsfd uifdsjskad nfsjand kfknjsdhbhjgjvfcdyfvtgbhnjmybguhnjuhynijmk',
   style: {
     bg: 'blue',
     focus: {
@@ -252,37 +267,80 @@ var cancel = blessed.button({
   }
 });
 
-submit.on('press', function() {
-  form_thing.submit();
+var button3 = blessed.button({
+  parent: form_thing,
+  mouse: true,
+  keys: true,
+  shrink: true,
+  padding: {
+    left: 1,
+    right: 1
+  },
+  left: 1,
+  top: 7,
+  shrink: true,
+  name: 'cancel',
+  content: 'button 3~~~',
+  style: {
+    bg: 'blue',
+    focus: {
+      bg: 'red'
+    },
+    hover: {
+      bg: 'red'
+    }
+  }
 });
 
-cancel.on('press', function() {
-  form_thing.reset();
+var button4 = blessed.button({
+  parent: form_thing,
+  mouse: true,
+  keys: true,
+  shrink: true,
+  padding: {
+    left: 1,
+    right: 1
+  },
+  left: 1,
+  top: 10,
+  shrink: true,
+  name: 'cancel',
+  content: 'button 444444444~~~',
+  style: {
+    bg: 'blue',
+    focus: {
+      bg: 'red'
+    },
+    hover: {
+      bg: 'red'
+    }
+  }
 });
 
-form_thing.on('submit', function(data) {
-  form_thing.setContent('Submitted.');
-  logs.setContent(temp_event1.body)
-  XTermApp.clear()
-  XTermApp.reset()
-
-  XTermThing.write(body)
-  screen.render();
-});
-
-// term.write('\x1b')
-// // First \n will cancel any existing escape or go to new line
-// // Then the \n\r will put the cursor at the start of the next line
-// term.write('\n\n\r')
-// term.clear()
-
-form_thing.on('reset', function() {
+button1.on('press', function() {
+  //form_thing.submit();
   form_thing.setContent('Canceled.');
   XTermApp.clear();
   XTermApp.reset();
   XTermThing.write(caleb);
   screen.render();
 });
+
+button2.on('press', function() {
+  //form_thing.reset();
+  logs.setContent(temp_event1.body)
+  XTermApp.clear()
+  XTermApp.reset()
+  XTermThing.write(body)
+  screen.render();
+});
+
+
+// term.write('\x1b')
+// // First \n will cancel any existing escape or go to new line
+// // Then the \n\r will put the cursor at the start of the next line
+// term.write('\n\n\r')
+// term.clear()
 
 screen.key('q', function() {
   process.exit(0);
@@ -301,6 +359,15 @@ form_thing.focus()
 
 screen.key('p', function() {
   screen.focusNext();
+});
+screen.key('s', function() {
+  form_thing.scroll(1)
+  form_thing.focus();
+});
+
+screen.key('w', function() {
+  form_thing.scroll(-1)
+  form_thing.focus();
 });
 
 var rainbow=chalkAnimation.rainbow('helllllllllllooooo world!').stop()
@@ -321,8 +388,11 @@ writing down randomdfbbfdssdfbdfbsbfdsdbfsdb\r
 words lalalalaallalalashdfdsbffbdfbdssbdfb\r
 iujjuasudhufjiasdfnuhijsfdauihjsvdvdvfds\r`)));
 //logs.setContent(gradient.fruit("aaaaaaappellpapldplsdpas"))
-logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+submit.width.toString());
+//logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString()+"");
+logs.setContent(caleb)
 screen.render();
+
+
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
@@ -330,8 +400,34 @@ screen.render();
 
 //button spacing function
 
-var buttonsArray = [submit,cancel];
+var buttonsArray = [button1,button2,button3,button4];
 
 var temp_event1=new game_event({'id':1, 'body':"sasffsasgsasg", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)"],[2,"goto 2"]]})
 var temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1"],[3,"goto 3"]]})
 var temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2"]]})
+
+//to be generalized to a function
+if (button2.width >(form_thing.width-5)){
+  button2.width = button2.width-5
+}
+if (button1.width >(form_thing.width-5)){
+  button1.width = button1.width-5
+}
+if (button3.width >(form_thing.width-5)){
+  button3.width = button3.width-5
+}
+if (button4.width >(form_thing.width-5)){
+  button4.width = button4.width-5
+}
+
+
+//screen.render is essential for the correct screenlines amount to calculate
+screen.render()
+
+button1.top=1
+button2.top=button1.top+button1.getScreenLines().length
+button3.top=button2.top+button2.getScreenLines().length
+button4.top=button3.top+button3.getScreenLines().length
+
+XTermThing.write("\n\rlines button 2: "+button2.getScreenLines())
+screen.render()

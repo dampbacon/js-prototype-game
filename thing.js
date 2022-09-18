@@ -108,7 +108,18 @@ screen.on('resize', function() {
   //Left_space_button = Math.floor((form_thing.width-submit.width)/2);
   //submit.left=Left_space_button
   logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
-  screen.render();});
+  buttonsArray.forEach((element) => {element.width=form_thing.width-5})
+  screen.render();
+  buttonsArray.forEach((element, index, array) => {
+    if (!(index===0)){
+      let previous=array[index-1]
+      element.top=previous.top+previous.getScreenLines().length
+    }else{
+      element.top=1
+    }
+  })
+  screen.render();
+});
 
 
 var logs = grid.set(6,6,6,6,blessed.box,{
@@ -280,7 +291,7 @@ var button3 = blessed.button({
   top: 7,
   shrink: true,
   name: 'cancel',
-  content: 'button 3~~~',
+  content: 'button',
   style: {
     bg: 'blue',
     focus: {
@@ -400,34 +411,32 @@ screen.render();
 
 //button spacing function
 
-var buttonsArray = [button1,button2,button3,button4];
 
 var temp_event1=new game_event({'id':1, 'body':"sasffsasgsasg", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)"],[2,"goto 2"]]})
 var temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1"],[3,"goto 3"]]})
 var temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2"]]})
 
-//to be generalized to a function
-if (button2.width >(form_thing.width-5)){
-  button2.width = button2.width-5
-}
-if (button1.width >(form_thing.width-5)){
-  button1.width = button1.width-5
-}
-if (button3.width >(form_thing.width-5)){
-  button3.width = button3.width-5
-}
-if (button4.width >(form_thing.width-5)){
-  button4.width = button4.width-5
-}
+var buttonsArray = [button1,button2,button3,button4];
+
+// button2.width = form_thing.width-5
+// button1.width = form_thing.width-5
+// button3.width = form_thing.width-5
+// button4.width = form_thing.width-5
 
 
 //screen.render is essential for the correct screenlines amount to calculate
+buttonsArray.forEach((element) => {element.width=form_thing.width-5})
+
 screen.render()
 
-button1.top=1
-button2.top=button1.top+button1.getScreenLines().length
-button3.top=button2.top+button2.getScreenLines().length
-button4.top=button3.top+button3.getScreenLines().length
+buttonsArray.forEach((element, index, array) => {
+  if (!(index===0)){
+    let previous=array[index-1]
+    element.top=previous.top+previous.getScreenLines().length
+  }else{
+    element.top=1
+  }
+})
 
-XTermThing.write("\n\rlines button 2: "+button2.getScreenLines())
+
 screen.render()

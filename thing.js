@@ -356,12 +356,11 @@ screen.key('w', function() {
 screen.key('y', function() {
   form_thing.resetScroll()
   buttonsArray.forEach((button) => {form_thing.remove(button)})
-  buttonsArray=[]
-  eventButtons=[]
+  
+  buttonsArray=[];
   logs.focus();
-  createButtons(temp_event1,eventButtons,story)
-  buttonsArray=eventButtons
-  resizeButtons()
+  createButtons(temp_event1,buttonsArray,story);
+  resizeButtons();
   logs.focus();
 });
 
@@ -397,7 +396,6 @@ let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"ds
 
 
 let testEventArr=[temp_event1,temp_event2,temp_event3]
-let eventButtons=[];
 let story={}
 //let counter=0
 

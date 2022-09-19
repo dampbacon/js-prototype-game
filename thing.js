@@ -425,16 +425,19 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
         }
       }
     })
-    
-    
+    buttonsArr.push(temp)
     temp.on('press', function() {
       XTermApp.clear()
       XTermApp.reset()
       XTermThing.write(storyObj[item[0]]['body'].toString())
       XTermThing.write("hmmmmmm "+" ")
+      buttonsArr.forEach((element)=>{form_thing.remove(element);element.destroy()})
+      buttonsArr=[]
+      form_thing.reset()
+      //XTermThing.write()
       screen.render();
     })
-    buttonsArr.push(temp)
+    
 })}
   
   

@@ -356,6 +356,8 @@ screen.key('w', function() {
 screen.key('y', function() {
   form_thing.resetScroll()
   buttonsArray.forEach((button) => {form_thing.remove(button)})
+  buttonsArray=[]
+  eventButtons=[]
   logs.focus();
   createButtons(temp_event1,eventButtons,story)
   buttonsArray=eventButtons
@@ -376,12 +378,13 @@ function resizeButtons(){
   buttonsArray.forEach((element) => {element.width=form_thing.width-5})
   screen.render()
   buttonsArray.forEach((element, index, array) => {
+    element.top=1
     if (!(index===0)){
       let previous=array[index-1]
-      element.top=previous.top+previous.getScreenLines().length
-    }else{
-      element.top=1
-    }
+      element.top=previous.top+previous.getScreenLines().length}
+    // }else{
+    //   element.top=1
+    // }
   screen.render()
 })}
 resizeButtons()
@@ -397,10 +400,12 @@ let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"ds
 let testEventArr=[temp_event1,temp_event2,temp_event3]
 let eventButtons=[];
 let story={}
+let counter=0
 
 function createButtons(gameEvent,buttonsArr,storyObj={}) {
+  counter=0
   gameEvent['buttons'].forEach(item => {
-    let temp=blessed.button({
+    buttonsArr.push(new blessed.button({
       parent: form_thing,
       mouse: true,
       keys: true,
@@ -421,30 +426,21 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
           bg: 'red'
         }
       }
-    })
-    temp.on('press', function() {
+    }))
+    buttonsArr[counter].on('press', function() {
       //logs.setContent(storyArr[element[0]]['body'])
       //console.log(storyArr)
       XTermApp.clear()
       XTermApp.reset()
       XTermThing.write(storyObj[item[0]]['body'].toString())
       XTermThing.write("hmmmmmm")
+      //buttonsArray = [...buttonsArr]
+      XTermThing.write(buttonsArray[0].top.toString())
       screen.render();
     })
-    buttonsArr.push(temp)
+    counter+=1
   }
   )
-  // buttonsArr.forEach((element)=>{
-  //   element.on('press', function() {
-  //     //logs.setContent(storyArr[element[0]]['body'])
-  //     //console.log(storyArr)
-  //     XTermApp.clear()
-  //     XTermApp.reset()
-  //     XTermThing.write(storyObj[1]['body'].toString())
-  //     XTermThing.write("hmmmmmm")
-  //     screen.render();
-  // }
-  // )})
 }
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded

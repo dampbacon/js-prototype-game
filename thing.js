@@ -12,7 +12,7 @@ import { clearInterval } from 'timers';
 
 
 
-
+//test content
 let body = 
 `[0m\r
 \r
@@ -32,9 +32,8 @@ let body =
     [1;31m♥♥♥♥[0m\r
 [1;31m♥♥♥♥♥[0m\r
 [1;31m♥♥[0m\r`
-
+//test content
 let caleb =
-
 `[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
 [38;5;241;48;5;241m▄[38;5;242;48;5;242m▄[48;5;242m  [38;5;242;48;5;242m▄▄[38;5;241;48;5;241m▄[48;5;241m  [38;5;59;48;5;241m▄[48;5;59m [38;5;59;48;5;59m▄[38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄[38;5;241;48;5;59m▄[48;5;59m [38;5;240;48;5;241m▄[38;5;59;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;240;48;5;240m▄▄[38;5;239;48;5;239m▄▄▄▄▄[48;5;239m  [38;5;239;48;5;239m▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄[48;5;239m [38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[m\r
 [38;5;241;48;5;241m▄▄[38;5;242;48;5;242m▄▄▄▄[38;5;241;48;5;241m▄▄[48;5;241m [38;5;241;48;5;59m▄▄▄[38;5;241;48;5;241m▄▄[38;5;242;48;5;241m▄[38;5;241;48;5;241m▄▄[38;5;241;48;5;59m▄▄[38;5;241;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄[38;5;240;48;5;59m▄▄[38;5;95;48;5;95m▄▄[38;5;240;48;5;59m▄[38;5;239;48;5;239m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄▄[38;5;239;48;5;240m▄[38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;238m▄[48;5;239m  [38;5;239;48;5;239m▄▄▄▄[m\r
@@ -87,7 +86,6 @@ const opts = {
       scrolling: { border: { fg: "red" } }
   }
 }
-
 const XTermThing = new XTerm(Object.assign({}, opts, {
   left:    0,
   top:     0,
@@ -96,23 +94,13 @@ const XTermThing = new XTerm(Object.assign({}, opts, {
   label:   "Screen"}))
 
 XTermThing.scrolling=true
-
 screen.append(XTermThing)
 screen.render()
 
 const XTermApp=XTermThing.term
 
-
-screen.on('resize', function() {
-  XTermThing.height=screen.height;
-  XTermThing.width=screen.width/2;
-  //Left_space_button = Math.floor((form_thing.width-submit.width)/2);
-  //submit.left=Left_space_button
-  logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
-  resizeButtons()
-});
-
-
+//might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
+//then write string on exit to a file so that log can be reloaded if desired
 const logs = grid.set(6,6,6,6,blessed.box,{
   tags: true,
   label: 'log',
@@ -142,8 +130,7 @@ const logs = grid.set(6,6,6,6,blessed.box,{
     focus:     { border: { fg: "green" } }
   }
 });
-
-
+//in future will display player stats
 const stats=grid.set(0,9,6,1,blessed.box,{
   tags: true,
   scrollable: true,
@@ -161,7 +148,7 @@ const stats=grid.set(0,9,6,1,blessed.box,{
     },
     focus:     { border: { fg: "green" } }
   }})
-
+//in the future will be a table with options to view/manage inventory and attack
 const actions=grid.set(0,10,6,2,blessed.list,{
   tags: true,
   scrollable: true,
@@ -180,17 +167,7 @@ const actions=grid.set(0,10,6,2,blessed.list,{
     focus:     { border: { fg: "green" } }
   }})
 
-
-
-
- 
-// Quit on Escape, q, or Control-C.
-screen.key(['escape', 'q', 'C-c'], function(ch, key) {
-  return process.exit(0);
-});
- 
-
-
+//button container
 const form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
   parent: screen,
   keys: true,
@@ -220,6 +197,7 @@ const form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
 
 screen.render()
 
+//test button declarations
 let button1 = blessed.button({
   parent: form_thing,
   mouse: true,
@@ -319,6 +297,14 @@ let button4 = blessed.button({
   }
 });
 
+// term.write('\x1b')
+// // First \n will cancel any existing escape or go to new line
+// // Then the \n\r will put the cursor at the start of the next line
+// term.write('\n\n\r')
+// term.clear()
+
+
+//Listeners for test buttons
 button1.on('press', function() {
   form_thing.setContent('Canceled.');
   XTermApp.clear();
@@ -326,7 +312,6 @@ button1.on('press', function() {
   XTermThing.write(caleb);
   screen.render();
 });
-
 button2.on('press', function() {
   logs.setContent(temp_event1.body)
   XTermApp.clear()
@@ -335,42 +320,51 @@ button2.on('press', function() {
   screen.render();
 });
 
-
-// term.write('\x1b')
-// // First \n will cancel any existing escape or go to new line
-// // Then the \n\r will put the cursor at the start of the next line
-// term.write('\n\n\r')
-// term.clear()
-
-screen.key('q', function() {
-  process.exit(0);
+//Listeners
+screen.on('resize', function() {
+  XTermThing.height=screen.height;
+  XTermThing.width=screen.width/2;
+  logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
+  resizeButtons()
 });
+// Quit on Escape, q, or Control-C.
+screen.key(['escape', 'q', 'C-c'], function(ch, key) {
+  return process.exit(0);
+});
+
 screen.key('l', function() {
   XTermThing.height=screen.height;
   XTermThing.width=screen.width/2;
   screen.render();
 });
+
 screen.key('p', function() {
   screen.focusNext();
 });
+
 screen.key('s', function() {
   form_thing.scroll(1)
 });
+
 screen.key('w', function() {
   form_thing.scroll(-1)
 });
+
+//test content key listener
 screen.key('y', function() {
   form_thing.resetScroll()
   buttonsArray.forEach((button) => {form_thing.remove(button)})
   logs.focus();
-  createButtons(temp_event1)
+  createButtons(temp_event1,eventButtons)
   buttonsArray=eventButtons
   resizeButtons()
   logs.focus();
-  screen.render();
 });
 
+//test content
 logs.setContent(caleb)
+
+
 screen.render();
 
 let buttonsArray = [button1,button2,button3,button4];
@@ -397,11 +391,14 @@ let temp_event1=new game_event({'id':1, 'body':"sasffsasgsasg", 'toScreen':"worl
 let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
 let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
 
-let eventButtons=[];
 
-function createButtons(gameEvent) {
+let testEventArr=[temp_event1,temp_event2,temp_event3]
+let eventButtons=[];
+let story={}
+
+function createButtons(gameEvent,buttonsArr) {
   gameEvent['buttons'].forEach(item => {
-    eventButtons.push(blessed.button({
+    buttonsArr.push(blessed.button({
       parent: form_thing,
       mouse: true,
       keys: true,
@@ -425,7 +422,7 @@ function createButtons(gameEvent) {
     }))
   }
   )
-  eventButtons.forEach((element)=>{
+  buttonsArr.forEach((element)=>{
     element.on('press', function() {
       logs.setContent(temp_event1.body)
       XTermApp.clear()
@@ -435,6 +432,14 @@ function createButtons(gameEvent) {
   })
   })
 }
+// basically to map event to a object using the event id as a key, 
+// this is so that events can be looked up by button param then loaded
+function createEventsMap(eventsArrary=[],storyArr={}) {
+  eventsArrary.forEach((element)=>{
+    storyArr[element.id]=element
+  })
+}
+createEventsMap(testEventArr,story)
 
 
 

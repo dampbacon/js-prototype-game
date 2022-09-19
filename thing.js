@@ -355,8 +355,7 @@ screen.key('w', function() {
 //test content key listener
 screen.key('y', function() {
   form_thing.resetScroll()
-  buttonsArray.forEach((button) => {form_thing.remove(button)})
-  
+  buttonsArray.forEach((button) => {form_thing.remove(button);button.destroy()})
   buttonsArray=[];
   logs.focus();
   createButtons(temp_event1,buttonsArray,story);
@@ -431,10 +430,17 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       XTermApp.reset()
       XTermThing.write(storyObj[item[0]]['body'].toString())
       XTermThing.write("hmmmmmm "+" ")
+
       buttonsArr.forEach((element)=>{form_thing.remove(element);element.destroy()})
+      buttonsArray.forEach((element)=>{form_thing.remove(element);element.destroy()})
+
       buttonsArr=[]
-      form_thing.reset()
-      //XTermThing.write()
+      buttonsArray=[]
+
+      logs.focus();
+      createButtons(storyObj[item[0]],buttonsArray,storyObj);
+      resizeButtons();
+      logs.focus();
       screen.render();
     })
     

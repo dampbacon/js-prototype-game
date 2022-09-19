@@ -378,13 +378,12 @@ function resizeButtons(){
   buttonsArray.forEach((element) => {element.width=form_thing.width-5})
   screen.render()
   buttonsArray.forEach((element, index, array) => {
-    element.top=1
     if (!(index===0)){
       let previous=array[index-1]
-      element.top=previous.top+previous.getScreenLines().length}
-    // }else{
-    //   element.top=1
-    // }
+      element.top=previous.top+previous.getScreenLines().length
+    }else{
+      element.top=1
+    }
   screen.render()
 })}
 resizeButtons()
@@ -400,12 +399,11 @@ let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"ds
 let testEventArr=[temp_event1,temp_event2,temp_event3]
 let eventButtons=[];
 let story={}
-let counter=0
+//let counter=0
 
 function createButtons(gameEvent,buttonsArr,storyObj={}) {
-  counter=0
   gameEvent['buttons'].forEach(item => {
-    buttonsArr.push(new blessed.button({
+    let temp=new blessed.button({
       parent: form_thing,
       mouse: true,
       keys: true,
@@ -414,6 +412,8 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
         left: 1,
         right: 1
       },
+      left: 1,
+      top: 1,
       shrink: true,
       name: item[1],
       content: item[1],
@@ -426,22 +426,21 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
           bg: 'red'
         }
       }
-    }))
-    buttonsArr[counter].on('press', function() {
-      //logs.setContent(storyArr[element[0]]['body'])
-      //console.log(storyArr)
+    })
+    
+    
+    temp.on('press', function() {
       XTermApp.clear()
       XTermApp.reset()
       XTermThing.write(storyObj[item[0]]['body'].toString())
-      XTermThing.write("hmmmmmm")
-      //buttonsArray = [...buttonsArr]
-      XTermThing.write(buttonsArray[0].top.toString())
+      XTermThing.write("hmmmmmm "+" ")
       screen.render();
     })
-    counter+=1
-  }
-  )
-}
+    buttonsArr.push(temp)
+})}
+  
+  
+
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded
 // idea is for events eventually to be read from a json file

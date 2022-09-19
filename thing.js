@@ -98,7 +98,7 @@ screen.append(XTermThing)
 screen.render()
 
 const XTermApp=XTermThing.term
-
+//
 //might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
 //then write string on exit to a file so that log can be reloaded if desired
 //animimate wrting the log via slowly writing it and try this to animate it:
@@ -389,7 +389,7 @@ resizeButtons()
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
-let temp_event1=new game_event({'id':1, 'body':"event1", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true]]})
+let temp_event1=new game_event({'id':1, 'body':chalk.yellow("event1"), 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true],[3,"goto 3 lolololololololollolololololololol",true]]})
 let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
 let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
 
@@ -428,9 +428,9 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
     temp.on('press', function() {
       XTermApp.clear()
       XTermApp.reset()
-      XTermThing.write(storyObj[item[0]]['body'].toString())
+      XTermThing.write(storyObj[item[0]]['toScreen'].toString())
       XTermThing.write("hmmmmmm "+" ")
-
+      logs.setContent(storyObj[item[0]]['body'])
       buttonsArr.forEach((element)=>{form_thing.remove(element);element.destroy()})
       buttonsArray.forEach((element)=>{form_thing.remove(element);element.destroy()})
 

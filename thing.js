@@ -101,6 +101,8 @@ const XTermApp=XTermThing.term
 
 //might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
 //then write string on exit to a file so that log can be reloaded if desired
+//animimate wrting the log via slowly writing it and try this to animate it:
+//https://stackoverflow.com/questions/10264261/move-one-character-to-the-left-in-the-console
 const logs = grid.set(6,6,6,6,blessed.box,{
   tags: true,
   label: 'log',
@@ -434,6 +436,7 @@ function createButtons(gameEvent,buttonsArr) {
 }
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded
+// idea is for events eventually to be read from a json file
 function createEventsMap(eventsArrary=[],storyArr={}) {
   eventsArrary.forEach((element)=>{
     storyArr[element.id]=element

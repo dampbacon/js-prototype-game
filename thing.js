@@ -357,7 +357,7 @@ screen.key('y', function() {
   form_thing.resetScroll()
   buttonsArray.forEach((button) => {form_thing.remove(button)})
   logs.focus();
-  createButtons(temp_event1,eventButtons)
+  createButtons(temp_event1,eventButtons,story)
   buttonsArray=eventButtons
   resizeButtons()
   logs.focus();
@@ -389,7 +389,7 @@ resizeButtons()
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
-let temp_event1=new game_event({'id':1, 'body':"sasffsasgsasg", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true]]})
+let temp_event1=new game_event({'id':1, 'body':"event1", 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true]]})
 let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
 let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
 
@@ -398,9 +398,9 @@ let testEventArr=[temp_event1,temp_event2,temp_event3]
 let eventButtons=[];
 let story={}
 
-function createButtons(gameEvent,buttonsArr) {
+function createButtons(gameEvent,buttonsArr,storyObj={}) {
   gameEvent['buttons'].forEach(item => {
-    buttonsArr.push(blessed.button({
+    let temp=blessed.button({
       parent: form_thing,
       mouse: true,
       keys: true,
@@ -421,18 +421,30 @@ function createButtons(gameEvent,buttonsArr) {
           bg: 'red'
         }
       }
-    }))
-  }
-  )
-  buttonsArr.forEach((element)=>{
-    element.on('press', function() {
-      logs.setContent(temp_event1.body)
+    })
+    temp.on('press', function() {
+      //logs.setContent(storyArr[element[0]]['body'])
+      //console.log(storyArr)
       XTermApp.clear()
       XTermApp.reset()
-      XTermThing.write(body)
+      XTermThing.write(storyObj[item[0]]['body'].toString())
+      XTermThing.write("hmmmmmm")
       screen.render();
-  })
-  })
+    })
+    buttonsArr.push(temp)
+  }
+  )
+  // buttonsArr.forEach((element)=>{
+  //   element.on('press', function() {
+  //     //logs.setContent(storyArr[element[0]]['body'])
+  //     //console.log(storyArr)
+  //     XTermApp.clear()
+  //     XTermApp.reset()
+  //     XTermThing.write(storyObj[1]['body'].toString())
+  //     XTermThing.write("hmmmmmm")
+  //     screen.render();
+  // }
+  // )})
 }
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded
@@ -444,3 +456,4 @@ function createEventsMap(eventsArrary=[],storyArr={}) {
 }
 createEventsMap(testEventArr,story)
 logs.focus()
+

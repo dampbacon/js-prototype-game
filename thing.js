@@ -127,7 +127,7 @@ const logs = grid.set(6,6,6,6,blessed.box,{
       fg: '#f0f0f0'
     },
     hover: {
-      bg: 'green'
+      //bg: 'green'
     },
     focus:     { border: { fg: "green" } }
   }
@@ -135,8 +135,22 @@ const logs = grid.set(6,6,6,6,blessed.box,{
 //in future will display player stats
 const stats=grid.set(0,9,6,1,blessed.box,{
   tags: true,
-  scrollable: true,
+  padding: {
+    left: 1,},
   label: '{bold}stats{/bold}',
+  alwaysScroll: 'true',
+  scrollable: 'true',
+  scrollbars: 'true',
+  scrollbar: {
+    ch: ' ',
+    track: {
+      bg: 'blue'
+    },
+    style: {
+      inverse: true
+    }
+  },
+  keys: true,
   border: {
     type: 'line'
   },
@@ -145,14 +159,19 @@ const stats=grid.set(0,9,6,1,blessed.box,{
       fg: '#f0f0f0'
     },
     hover: {
-      bg: 'green'
+      //bg: 'green'
     },
     focus:     { border: { fg: "green" } }
-  }})
+  }
+  
+  }
+)
 //in the future will be a table with options to view/manage inventory and attack
 const actions=grid.set(0,10,6,2,blessed.list,{
   tags: true,
   scrollable: true,
+  mouse: true,
+  keys: true,
   label: '{bold}actions{/bold}',
   content: thing,
   border: {
@@ -160,10 +179,10 @@ const actions=grid.set(0,10,6,2,blessed.list,{
   },
   style: {
     border: {
-      fg: '#f0f0f0'
+      fg: 'magenta'
     },
     hover: {
-      bg: 'green'
+      //bg: 'green'
     },
     focus:     { border: { fg: "green" } }
   }})
@@ -172,22 +191,24 @@ const actions=grid.set(0,10,6,2,blessed.list,{
 const form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
   parent: screen,
   keys: true,
-  label: "choose. w,s to scroll",
-  bg: 'magenta',
-  content: 'test?',
+  label: `choose ~ ${chalk.green('w s')} to scroll`,
+  //content: 'test?',
   padding:{
     right:0,
   },
   style: {
-  focus:     { border: { fg: "green" } }
+    //bg: '#66CCFF',
+    //border: {
+      //bg: '#000033'},
+    focus:     { border: { fg: "green" } }
   },
   alwaysScroll: 'true',
   scrollable: 'true',
   scrollbars: 'true',
   scrollbar: {
-    ch: chalk.red.bgYellow('\u2592'),
+    ch: chalk.green.bgBlueBright('\u2592'),
     track: {
-      bg: 'green',
+      bg: '#630330',
       fg: 'red'
     },
     style: {
@@ -214,12 +235,12 @@ let button1 = blessed.button({
   name: 'submit',
   content: 'decide to be silly and eat a spud',
   style: {
-    bg: 'blue',
+    bg: '#0066CC',
     focus: {
-      bg: 'red'
+      bg: '#cc0066'
     },
     hover: {
-      bg: 'red'
+      bg: '#cc0066'
     }
   }
 });
@@ -238,12 +259,12 @@ let button2 = blessed.button({
   name: 'cancel',
   content: 'mmfmmmmmsdsfd uifdsjskad nfsjand kfknjsdhbhjgjvfcdyfvtgbhnjmybguhnjuhynijmk',
   style: {
-    bg: 'blue',
+    bg: '#0066CC',
     focus: {
-      bg: 'red'
+      bg: '#cc0066'
     },
     hover: {
-      bg: 'red'
+      bg: '#cc0066'
     }
   }
 });
@@ -263,12 +284,12 @@ let button3 = blessed.button({
   name: 'cancel',
   content: 'button',
   style: {
-    bg: 'blue',
+    bg: '#0066CC',
     focus: {
-      bg: 'red'
+      bg: '#cc0066'
     },
     hover: {
-      bg: 'red'
+      bg: '#cc0066'
     }
   }
 });
@@ -288,12 +309,12 @@ let button4 = blessed.button({
   name: 'cancel',
   content: 'button 444444444~~~',
   style: {
-    bg: 'blue',
+    bg: '#0066CC',
     focus: {
-      bg: 'red'
+      bg: '#cc0066'
     },
     hover: {
-      bg: 'red'
+      bg: '#cc0066'
     }
   }
 });
@@ -358,18 +379,14 @@ screen.key('y', function() {
   buttonsArray=[];
   logs.focus();
   createButtons(temp_event1,buttonsArray,story);
+  form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString())+" "+chalk.bold.greenBright("choices")}`)
   resizeButtons();
   logs.focus();
 });
 
 //test content
-logs.setContent(caleb)
-
-
+//logs.setContent(caleb)
 screen.render();
-
-let buttonsArray = [button1,button2,button3,button4];
-
 //screen.render is essential for the correct screenlines amount to calculate
 function resizeButtons(){
   buttonsArray.forEach((element) => {element.width=form_thing.width-5})
@@ -388,14 +405,12 @@ resizeButtons()
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
+let buttonsArray = [button1,button2,button3,button4];
 let temp_event1=new game_event({'id':1, 'body':chalk.yellow("event1"), 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true],[3,"goto 3 lolololololololollolololololololol",true]]})
 let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
 let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
-
-
 let testEventArr=[temp_event1,temp_event2,temp_event3]
 let story={}
-//let counter=0
 
 function createButtons(gameEvent,buttonsArr,storyObj={}) {
   gameEvent['buttons'].forEach(item => {
@@ -414,12 +429,12 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       name: item[1],
       content: item[1],
       style: {
-        bg: 'blue',
+        bg: '#0066CC',
         focus: {
-          bg: 'red'
+          bg: '#cc0066'
         },
         hover: {
-          bg: 'red'
+          bg: '#cc0066'
         }
       }
     })
@@ -437,10 +452,12 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       buttonsArr=[]
       buttonsArray=[]
 
-      logs.focus();
+      //logs.focus();
       createButtons(storyObj[item[0]],buttonsArray,storyObj);
       resizeButtons();
-      logs.focus();
+      
+      buttonsArray[0].focus();
+      form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString())+" "+chalk.bold.greenBright("choices")}`)
       screen.render();
     })
     
@@ -462,15 +479,19 @@ logs.focus()
 let thePlayer = new Player("name")
 function refreshStats() {
   stats.setContent(
-` {bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
- {bold}${chalk.green("AC ")}{/bold} = ${thePlayer.ac}
- ${chalk.yellowBright('str')} = ${thePlayer.str}
- ${chalk.grey('con')} = ${thePlayer.const}
- ${chalk.hex('000080')('dex')} = ${thePlayer.dex}
- ${chalk.hex('630330')('cha')} = ${thePlayer.cha}`)
+`{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
+{bold}${chalk.green("AC ")}{/bold} = ${thePlayer.ac}
+${chalk.yellowBright('str')} = ${thePlayer.str}
+${chalk.grey('con')} = ${thePlayer.const}
+${chalk.hex('000080')('dex')} = ${thePlayer.dex}
+${chalk.hex('630330')('cha')} = ${thePlayer.cha}
+ 
+${chalk.magenta("dmg")} =
+${chalk.magenta("mag")} =`)
     screen.render()
  }
 
 
 refreshStats()
+stats.focus()
 screen.render()

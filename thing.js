@@ -8,7 +8,7 @@ import chalkAnimation from 'chalk-animation';
 import {game_event} from './game_events.js'
 import XTerm from 'blessed-xterm'
 import { clearInterval } from 'timers';
-
+import {Player} from './player.js';
 
 
 
@@ -98,7 +98,6 @@ screen.append(XTermThing)
 screen.render()
 
 const XTermApp=XTermThing.term
-//test commit
 console.log("fshdshuijfds")
 //might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
 //then write string on exit to a file so that log can be reloaded if desired
@@ -138,7 +137,6 @@ const stats=grid.set(0,9,6,1,blessed.box,{
   tags: true,
   scrollable: true,
   label: '{bold}stats{/bold}',
-  content: 'str:4\ncon:5\ndex:4\n',
   border: {
     type: 'line'
   },
@@ -316,7 +314,7 @@ button1.on('press', function() {
   screen.render();
 });
 button2.on('press', function() {
-  logs.setContent(temp_event1.body)
+  logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
   XTermApp.clear()
   XTermApp.reset()
   XTermThing.write(body)
@@ -427,6 +425,7 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
     })
     buttonsArr.push(temp)
     temp.on('press', function() {
+      //potential for random events in the future
       XTermApp.clear()
       XTermApp.reset()
       XTermThing.write(storyObj[item[0]]['toScreen'].toString())
@@ -460,3 +459,18 @@ function createEventsMap(eventsArrary=[],storyArr={}) {
 createEventsMap(testEventArr,story)
 logs.focus()
 
+let thePlayer = new Player("name")
+function refreshStats() {
+  stats.setContent(
+` {bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
+ {bold}${chalk.green("AC ")}{/bold} = ${thePlayer.ac}
+ ${chalk.yellowBright('str')} = ${thePlayer.str}
+ ${chalk.grey('con')} = ${thePlayer.const}
+ ${chalk.hex('000080')('dex')} = ${thePlayer.dex}
+ ${chalk.hex('630330')('cha')} = ${thePlayer.cha}`)
+    screen.render()
+ }
+
+
+refreshStats()
+screen.render()

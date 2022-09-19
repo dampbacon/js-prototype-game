@@ -23,8 +23,16 @@ export class game_event_gain_item extends game_event{
 }
 
 export class game_event_enemy extends game_event{
-    constructor({'id':id,'body':body,'toScreen':toScreen,'buttons':buttons,'arryenemy':arryenemy}={...defaults,arryenemy:[]}){
+    constructor({'id':id,'body':body,'toScreen':toScreen,'buttons':buttons,'arryEnemy':arryEnemy}={...defaults,arryEnemy:[]}){
         super(id,body,toScreen,buttons)
-        this.arryenemy=arryenemy;
+        this.arryEnemy=arryEnemy;
+    }
+}
+
+//stub
+export class game_event_skillcheck extends game_event{
+    constructor({'id':id,'body':body,'toScreen':toScreen,'buttons':buttons,'arrySkillCheck':arrySkillCheck}={...defaults,arrySkillCheck:[]}){
+        super(id,body,toScreen,buttons)
+        this.arrySkillCheck=arrySkillCheck;
     }
 }

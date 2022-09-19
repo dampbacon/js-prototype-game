@@ -98,7 +98,8 @@ screen.append(XTermThing)
 screen.render()
 
 const XTermApp=XTermThing.term
-//
+//test commit
+console.log("fshdshuijfds")
 //might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
 //then write string on exit to a file so that log can be reloaded if desired
 //animimate wrting the log via slowly writing it and try this to animate it:

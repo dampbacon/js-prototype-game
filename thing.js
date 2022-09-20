@@ -525,8 +525,8 @@ async function test(){
   XTermThing.write("\u2592".repeat(90))
   XTermThing.write("[D[D[D".repeat(2))
   XTermThing.write(chalk.green.bold.bgBlue("test[D[D[D[D[ATEST"))
-  XTermThing.write("")
-  XTermApp.buffer
+  XTermThing.write('\u001B[6n')
+  //XTermApp.buffer
 }
 test()
 XTermThing.write("AYSNC PLZ")

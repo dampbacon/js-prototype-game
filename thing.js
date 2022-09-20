@@ -5,11 +5,18 @@ import chalk from 'chalk';
 import BlessedContrib from 'blessed-contrib';
 import gradient from 'gradient-string';
 import chalkAnimation from 'chalk-animation';
-import {game_event} from './game_events.js'
+import {game_event, game_event_enemy, game_event_gain_item} from './game_events.js'
 import XTerm from 'blessed-xterm'
 import { clearInterval } from 'timers';
 import {Player} from './player.js';
 
+// test content
+let temp_event1=new game_event({'id':1, 'body':chalk.yellow("event1"), 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true],[3,"goto 3 lolololololololollolololololololol",true]]})
+let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
+let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
+let testEventArr=[temp_event1,temp_event2,temp_event3]
+let story={}
+let thePlayer = new Player("name")
 
 
 //test content
@@ -32,7 +39,6 @@ let body =
     [1;31m♥♥♥♥[0m\r
 [1;31m♥♥♥♥♥[0m\r
 [1;31m♥♥[0m\r`
-//test content
 let caleb =
 `[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
 [38;5;241;48;5;241m▄[38;5;242;48;5;242m▄[48;5;242m  [38;5;242;48;5;242m▄▄[38;5;241;48;5;241m▄[48;5;241m  [38;5;59;48;5;241m▄[48;5;59m [38;5;59;48;5;59m▄[38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄[38;5;241;48;5;59m▄[48;5;59m [38;5;240;48;5;241m▄[38;5;59;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;240;48;5;240m▄▄[38;5;239;48;5;239m▄▄▄▄▄[48;5;239m  [38;5;239;48;5;239m▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄[48;5;239m [38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[m\r
@@ -58,7 +64,6 @@ let caleb =
 [38;5;137;48;5;137m▄[38;5;101;48;5;137m▄[38;5;95;48;5;137m▄[38;5;239;48;5;137m▄[38;5;238;48;5;95m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄▄▄[38;5;236;48;5;236m▄▄[38;5;235;48;5;234m▄[38;5;233;48;5;234m▄▄[38;5;234;48;5;234m▄▄▄▄[38;5;235;48;5;236m▄[38;5;238;48;5;95m▄[38;5;95;48;5;95m▄▄▄▄[38;5;239;48;5;95m▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄[38;5;236;48;5;236m▄[38;5;233;48;5;233m▄[38;5;232;48;5;232m▄▄[38;5;233;48;5;233m▄[38;5;233;48;5;232m▄[38;5;233;48;5;233m▄▄[38;5;234;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;234;48;5;235m▄[38;5;234;48;5;236m▄[38;5;235;48;5;237m▄[38;5;236;48;5;237m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄▄▄[48;5;238m [m\r
 [38;5;239;48;5;95m▄[38;5;238;48;5;240m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;238m▄[48;5;237m [38;5;237;48;5;237m▄▄▄[38;5;236;48;5;236m▄[38;5;235;48;5;236m▄[38;5;234;48;5;234m▄[38;5;234;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄▄[38;5;238;48;5;237m▄[38;5;236;48;5;237m▄[38;5;232;48;5;232m▄[38;5;0;48;5;232m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;233m▄[38;5;234;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄▄[38;5;234;48;5;234m▄[48;5;234m [38;5;234;48;5;234m▄▄[38;5;234;48;5;235m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄▄[m\r
 [38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m\r`
-// test content
 let thing = chalk.blue('Hello') + ' World' + chalk.red('!') 
 
 
@@ -378,12 +383,14 @@ screen.key('y', function() {
   buttonsArray.forEach((button) => {form_thing.remove(button);button.destroy()})
   buttonsArray=[];
   logs.focus();
+  XTermApp.reset()
+  eventHandler(temp_event1)
   createButtons(temp_event1,buttonsArray,story);
   form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString())+" "+chalk.bold.greenBright("choices")}`)
   resizeButtons();
   logs.focus();
 });
-
+let buttonsArray = [button1,button2,button3,button4];
 //test content
 //logs.setContent(caleb)
 screen.render();
@@ -405,13 +412,6 @@ resizeButtons()
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
-let buttonsArray = [button1,button2,button3,button4];
-let temp_event1=new game_event({'id':1, 'body':chalk.yellow("event1"), 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true],[3,"goto 3 lolololololololollolololololololol",true]]})
-let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
-let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
-let testEventArr=[temp_event1,temp_event2,temp_event3]
-let story={}
-
 function createButtons(gameEvent,buttonsArr,storyObj={}) {
   gameEvent['buttons'].forEach(item => {
     let temp=new blessed.button({
@@ -443,9 +443,13 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       //potential for random events in the future
       XTermApp.clear()
       XTermApp.reset()
-      XTermThing.write(storyObj[item[0]]['toScreen'].toString())
-      XTermThing.write("hmmmmmm "+" ")
-      logs.setContent(storyObj[item[0]]['body'])
+
+      //replace with event handler function
+      // XTermThing.write(storyObj[item[0]]['toScreen'].toString())
+      // XTermThing.write("hmmmmmm "+" ")
+      // logs.setContent(storyObj[item[0]]['body'])
+      eventHandler(storyObj[item[0]])
+      
       buttonsArr.forEach((element)=>{form_thing.remove(element);element.destroy()})
       buttonsArray.forEach((element)=>{form_thing.remove(element);element.destroy()})
 
@@ -456,12 +460,12 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       createButtons(storyObj[item[0]],buttonsArray,storyObj);
       resizeButtons();
       
-      buttonsArray[0].focus();
+      logs.focus();
       form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString())+" "+chalk.bold.greenBright("choices")}`)
       screen.render();
     })
-    
-})}
+  })
+}
   
   
 
@@ -473,10 +477,12 @@ function createEventsMap(eventsArrary=[],storyArr={}) {
     storyArr[element.id]=element
   })
 }
+//return maybe idek
 createEventsMap(testEventArr,story)
 logs.focus()
 
-let thePlayer = new Player("name")
+
+
 function refreshStats() {
   stats.setContent(
 `{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
@@ -489,9 +495,41 @@ ${chalk.hex('630330')('cha')} = ${thePlayer.cha}
 ${chalk.magenta("dmg")} =
 ${chalk.magenta("mag")} =`)
     screen.render()
- }
+}
 
 
 refreshStats()
 stats.focus()
 screen.render()
+
+//sloppy but easy way to make it work
+function eventHandler(gameEvent){
+  XTermThing.write(gameEvent['toScreen'].toString())
+  logs.setContent(gameEvent['body'])
+  XTermThing.write("\n\r"+chalk.green(JSON.stringify(gameEvent)))
+  if (gameEvent instanceof(game_event_gain_item)){
+  } else if (gameEvent instanceof(game_event_enemy)){
+
+  } else if (gameEvent instanceof(game_event_gain_item)){
+
+  }
+}
+
+//CSI (Control Sequence Introducer) sequences TEST ~ will be used to animate in the future
+//test async
+//test code escape sequences \033[D\033[D\033[D. maybe use  char
+// "\033[F" – move cursor to the beginning of the previous line
+// "\033[A" – move cursor up one line
+async function test(){
+  await new Promise(resolve => setTimeout(resolve, 5000));
+  XTermThing.write("\u2592".repeat(90))
+  XTermThing.write("[D[D[D".repeat(2))
+  XTermThing.write(chalk.green.bold.bgBlue("test[D[D[D[D[ATEST"))
+  XTermThing.write("")
+  XTermApp.buffer
+}
+test()
+XTermThing.write("AYSNC PLZ")
+async function slowWrite(terminal,str){
+
+}

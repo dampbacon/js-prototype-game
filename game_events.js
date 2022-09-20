@@ -1,6 +1,7 @@
 
 var defaults={'id':0,'body':'','toScreen':'','buttons':[[]]}
 
+//to factory event builder
 
 export class game_event{
     constructor({'id':id,'body':body,'toScreen':toScreen,'buttons':buttons}={defaults}){
@@ -13,6 +14,8 @@ export class game_event{
     disableButton(number){
         this.buttons[number-1][2]=false
     }
+    test = () => console.log("mmmmmmmmmmmmmmmmmmmmmm!!")
+
 }
 
 export class game_event_gain_item extends game_event{

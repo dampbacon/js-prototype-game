@@ -27,4 +27,5 @@ function hrtime(previousTimestamp) {
   return [seconds, nanoseconds];
 }
 
-module.exports = process.hrtime || hrtime;
+//module.exports = process.hrtime || hrtime;
+export default process.hrtime || hrtime;

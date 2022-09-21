@@ -1,19 +1,22 @@
 //from https://github.com/astefanutti/kubebox
-//modern xserver.js implementation files
-const blessed  = require('blessed'),
-      debounce = require('lodash.debounce'),
-      hrtime   = require('./hrtime'),
-      os       = require('os');
+//modern xterm.js implementation files
+import blessed from 'blessed';
+import debounce from 'lodash.debounce';
+import hrtime from './hrtime.js';
+import os from 'os';
+//import {Terminal} from 'xterm-headless';
+import pkg from 'xterm-headless';
+const {Terminal} = pkg;
 
 const nextTick = global.setImmediate || process.nextTick.bind(process);
 
-const Terminal = os.platform() === 'browser'
-  ? window.Terminal
-  : require('xterm-headless').Terminal;
+// const Terminal = os.platform() === 'browser'
+//   ? window.Terminal
+//   : require('xterm-headless').Terminal;
 
 const CRLF_OR_LF = os.platform() === 'browser' && window.navigator.platform === 'Win32' || os.platform() === 'win32' ? '\r\n' : '\n';
 
-class XTerm extends blessed.ScrollableBox {
+class XTermNew extends blessed.ScrollableBox {
 
   constructor(options = {}) {
     super(options);
@@ -419,4 +422,4 @@ function getWrappedLineCoordinates(terminal, index, line) {
   return [x, y];
 };
 
-module.exports = XTerm;
+export default XTermNew;

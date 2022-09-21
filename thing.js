@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+import XTermNew from './blessed-xterm/blessed-xterm.js'
 import blessed from 'blessed';
 import chalk from 'chalk';
 import BlessedContrib from 'blessed-contrib';
@@ -77,6 +77,13 @@ const grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
 
 screen.title = 'my window title';
 
+const XTermTestv2 = new XTermNew({top: 'center',
+left: 'center', width:screen.width/4, height:screen.height, border: {
+  type: 'line'
+}})
+screen.append(XTermTestv2)
+
+
 const opts = {
   shell:         null,
   args:          [],
@@ -94,7 +101,8 @@ const opts = {
 const XTermThing = new XTerm(Object.assign({}, opts, {
   left:    0,
   top:     0,
-  width:   Math.floor(screen.width / 2),
+  //width:   Math.floor(screen.width / 2),
+  width:   Math.floor(screen.width / 8),
   height:  screen.height,
   label:   "Screen"}))
 

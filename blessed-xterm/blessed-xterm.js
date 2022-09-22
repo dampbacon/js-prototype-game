@@ -16,7 +16,7 @@ const nextTick = global.setImmediate || process.nextTick.bind(process);
 
 const CRLF_OR_LF = os.platform() === 'browser' && window.navigator.platform === 'Win32' || os.platform() === 'win32' ? '\r\n' : '\n';
 
-class XTermNew extends blessed.ScrollableBox {
+class XTermNew extends blessed.box {
 
   constructor(options = {}) {
     super(options);
@@ -72,6 +72,7 @@ class XTermNew extends blessed.ScrollableBox {
     // perform an initial resizing once
     this.once('render', resize);
 
+    
     // selection coordinates
     this.on('mousedown', function (data) {
       // return if already scrolling or selecting

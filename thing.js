@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import XTermNew from './blessed-xterm/blessed-xterm.js'
+import * as scroll from './blessed-xterm/scroll.cjs';
+import * as throttle from './blessed-xterm/scroll.cjs';
 import blessed from 'blessed';
 import chalk from 'chalk';
 import BlessedContrib from 'blessed-contrib';
@@ -76,14 +78,51 @@ screen.program.hideCursor();
 const grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
 
 screen.title = 'my window title';
+/*
+const XTermTestv2 = new XTermNew({width:Math.floor(screen.width / 2),border: {
+  type: 'line',
+  scrollable: 'true',
+  scrollbar: 'true',
+  scrollbar: {
+  ch: ' ',
+  track: {
+    bg: 'blue'
+  },
+  style: {
+    inverse: true
+  }}
+  ,}})*/
 
-const XTermTestv2 = new XTermNew({top: 'center',
-left: 'center', width:screen.width/4, height:screen.height, border: {
-  type: 'line'
-}})
+const XTermTestv2 = new XTermNew({
+  top    : 0,
+  bottom : 0,
+  width  : '50%',
+  align  : 'left',
+  tags   : true,
+  keys   : true,
+  mouse  : true,
+  border : 'line',
+  style  : {
+    label : { bold: true },
+  },
+  
+})
 screen.append(XTermTestv2)
+screen.render()
+//XTermTestv2.writeSync("HEHEHEHEHEHEHEHHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEH\n\nEHEHEHEHEHEHEHEHEHEHEHEHE")
+//XTermTestv2.writeSync("[D[D[D".repeat(2))
+//XTermTestv2.writeSync(chalk.green.bold.bgBlue("test[D[D[D[D[ATEST"))
+let b=XTermTestv2.term.buffer
+//XTermTestv2.reset()
+
+ let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it.`
+ 
+
+XTermTestv2.writeSync("")
+XTermTestv2.scrollTo(0)
 
 
+/*
 const opts = {
   shell:         null,
   args:          [],
@@ -105,12 +144,12 @@ const XTermThing = new XTerm(Object.assign({}, opts, {
   width:   Math.floor(screen.width / 8),
   height:  screen.height,
   label:   "Screen"}))
-
-XTermThing.scrolling=true
-screen.append(XTermThing)
+*/
+XTermTestv2.scrolling=true
+//screen.append(XTermThing)
 screen.render()
 
-const XTermApp=XTermThing.term
+const XTermApp=XTermTestv2.term
 console.log("fshdshuijfds")
 //might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
 //then write string on exit to a file so that log can be reloaded if desired
@@ -344,21 +383,21 @@ button1.on('press', function() {
   form_thing.setContent('Canceled.');
   XTermApp.clear();
   XTermApp.reset();
-  XTermThing.write(caleb);
+  logs.setContent(caleb);
   screen.render();
 });
 button2.on('press', function() {
   logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
   XTermApp.clear()
   XTermApp.reset()
-  XTermThing.write(body)
+  XTermTestv2.writeSync(body)
   screen.render();
 });
 
 //Listeners
 screen.on('resize', function() {
-  XTermThing.height=screen.height;
-  XTermThing.width=screen.width/2;
+  XTermTestv2.height=screen.height;
+  XTermTestv2.width=Math.floor(screen.width/2);
   logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
   resizeButtons()
 });
@@ -368,10 +407,16 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
 });
 
 screen.key('l', function() {
-  XTermThing.height=screen.height;
-  XTermThing.width=screen.width/2;
+  XTermTestv2.height=screen.height;
+  XTermTestv2.width=screen.width/2;
   screen.render();
 });
+
+screen.key('e', function() {
+  XTermTestv2.focus();
+  screen.render();
+});
+
 
 screen.key('p', function() {
   screen.focusNext();
@@ -379,10 +424,12 @@ screen.key('p', function() {
 
 screen.key('s', function() {
   form_thing.scroll(1)
+  XTermTestv2.scroll(1)
 });
 
 screen.key('w', function() {
   form_thing.scroll(-1)
+  XTermTestv2.scroll(-1)
 });
 
 //test content key listener
@@ -512,9 +559,9 @@ screen.render()
 
 //sloppy but easy way to make it work
 function eventHandler(gameEvent){
-  XTermThing.write(gameEvent['toScreen'].toString())
+  XTermTestv2.writeSync(gameEvent['toScreen'].toString())
   logs.setContent(gameEvent['body'])
-  XTermThing.write("\n\r"+chalk.green(JSON.stringify(gameEvent)))
+  XTermTestv2.writeSync("\n\r"+chalk.green(JSON.stringify(gameEvent)))
   if (gameEvent instanceof(game_event_gain_item)){
   } else if (gameEvent instanceof(game_event_enemy)){
 
@@ -527,17 +574,65 @@ function eventHandler(gameEvent){
 //test async
 //test code escape sequences \033[D\033[D\033[D. maybe use  char
 // "\033[F" – move cursor to the beginning of the previous line
-// "\033[A" – move cursor up one line
+//
+//
+//
+//up - "\033[A"
+//down - "\033[B"
+//left - "\033[D"
+//right - "\033[C"
 async function test(){
-  await new Promise(resolve => setTimeout(resolve, 5000));
-  XTermThing.write("\u2592".repeat(90))
-  XTermThing.write("[D[D[D".repeat(2))
-  XTermThing.write(chalk.green.bold.bgBlue("test[D[D[D[D[ATEST"))
-  XTermThing.write('\u001B[6n')
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  XTermTestv2.writeSync("\u2592".repeat(90))
+  XTermTestv2.writeSync("[D[D[D".repeat(2))
+  XTermTestv2.writeSync(chalk.green.bold.bgBlue("test[D[D[D[D[ATEST"))
+  XTermTestv2.writeSync('[C'.repeat(6)+'[B'.repeat(6))
+  XTermTestv2.writeSync('apple')
+
+  XTermTestv2.writeSync(b.active.cursorX+", "+b.active.cursorY+'[B')
+  XTermTestv2.writeSync(`[${40}D~hhmhmhmhmhm[B`)
+  XTermTestv2.writeSync(b.active.cursorX+", "+b.active.cursorY+'[B')
+  XTermTestv2.writeSync("cols: "+XTermTestv2.term.cols)
+
   //XTermApp.buffer
 }
-test()
-XTermThing.write("AYSNC PLZ")
-async function slowWrite(terminal,str){
-
+//test()
+//XTermThing.write("AYSNC PLZ")
+//split string into array of words
+function escBackByNum(num){
+  return `[${num}D`
 }
+async function slowWrite(str=''){
+  str.replace(/\n+/g, ' ')
+  str.replace(/\r+/g, ' ')
+  let strArr=str.split(' ')
+  for (let [index,tempStr] of strArr.entries())
+  {
+    tempStr+=' '
+    let cursorX = XTermTestv2.term.buffer.active.cursorX; 
+    let tempStrLength = tempStr.length
+    let numCols = XTermTestv2.term.cols
+    if (index === 0) {
+    }
+    else if (index === strArr.length - 1) {
+    }
+    if (cursorX===(numCols-1)){
+    }
+
+
+    if (1 + cursorX + tempStrLength <= numCols){
+      XTermTestv2.writeSync(chalk.hex('505050')(tempStr))
+      await new Promise(resolve => setTimeout(resolve, 50));
+      XTermTestv2.writeSync(`${escBackByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
+      await new Promise(resolve => setTimeout(resolve, 50));
+      //unwrite then rewrite diff color
+    }else{
+      XTermTestv2.writeSync(`\n${chalk.hex('505050')(tempStr)}`)
+      await new Promise(resolve => setTimeout(resolve, 50));
+      XTermTestv2.writeSync(`${escBackByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
+      await new Promise(resolve => setTimeout(resolve, 50));
+    }
+  }
+}
+await new Promise(resolve => setTimeout(resolve, 1500))
+slowWrite(test1)

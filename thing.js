@@ -632,8 +632,6 @@ XTermTestv2.writeSync('a')
 await new Promise(resolve => setTimeout(resolve, 1500))
 
 //XTermTestv2.writeSync(goToTermPosStr([0,0],XTermTestv2))
-XTermTestv2.scrollASCIIESC(0,scrollPosition)
-XTermTestv2.writeSync(chalk.redBright("test:"))
 
 
 //XTermTestv2.writeSync(`\n`)

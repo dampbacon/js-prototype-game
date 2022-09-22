@@ -10,6 +10,7 @@ import chalkAnimation from 'chalk-animation';
 import {game_event, game_event_enemy, game_event_gain_item} from './game_events.js'
 import { clearInterval } from 'timers';
 import {Player} from './player.js';
+import { count } from 'console';
 
 // test content
 let temp_event1=new game_event({'id':1, 'body':chalk.yellow("event1"), 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true],[3,"goto 3 lolololololololollolololololololol",true]]})
@@ -18,7 +19,6 @@ let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"ds
 let testEventArr=[temp_event1,temp_event2,temp_event3]
 let story={}
 let thePlayer = new Player("name")
-
 
 //test content
 let body = 
@@ -67,7 +67,6 @@ let caleb =
 [38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m\r`
 let thing = chalk.blue('Hello') + ' World' + chalk.red('!') 
 
-
 const screen = blessed.screen({
   fastCSR: true,
   dockBorders: true,
@@ -77,20 +76,6 @@ screen.program.hideCursor();
 const grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
 
 screen.title = 'my window title';
-/*
-const XTermTestv2 = new XTermNew({width:Math.floor(screen.width / 2),border: {
-  type: 'line',
-  scrollable: 'true',
-  scrollbar: 'true',
-  scrollbar: {
-  ch: ' ',
-  track: {
-    bg: 'blue'
-  },
-  style: {
-    inverse: true
-  }}
-  ,}})*/
 
 const XTermTestv2 = new XTermNew({
   top    : 0,
@@ -119,33 +104,7 @@ let b=XTermTestv2.term.buffer
 
 XTermTestv2.writeSync("")
 XTermTestv2.scrollTo(0)
-
-
-/*
-const opts = {
-  shell:         null,
-  args:          [],
-  cursorType:    "block",
-  border:        "line",
-  scrollback:    1000,
-  style: {
-      fg:        "default",
-      bg:        "default",
-      border:    { fg: "default" },
-      focus:     { border: { fg: "green" } },
-      scrolling: { border: { fg: "red" } }
-  }
-}
-const XTermThing = new XTerm(Object.assign({}, opts, {
-  left:    0,
-  top:     0,
-  //width:   Math.floor(screen.width / 2),
-  width:   Math.floor(screen.width / 8),
-  height:  screen.height,
-  label:   "Screen"}))
-*/
 XTermTestv2.scrolling=true
-//screen.append(XTermThing)
 screen.render()
 
 const XTermApp=XTermTestv2.term
@@ -550,8 +509,6 @@ ${chalk.magenta("dmg")} =
 ${chalk.magenta("mag")} =`)
     screen.render()
 }
-
-
 refreshStats()
 stats.focus()
 screen.render()
@@ -563,9 +520,7 @@ function eventHandler(gameEvent){
   XTermTestv2.writeSync("\n\r"+chalk.green(JSON.stringify(gameEvent)))
   if (gameEvent instanceof(game_event_gain_item)){
   } else if (gameEvent instanceof(game_event_enemy)){
-
   } else if (gameEvent instanceof(game_event_gain_item)){
-
   }
 }
 
@@ -575,7 +530,7 @@ function eventHandler(gameEvent){
 // "\033[F" – move cursor to the beginning of the previous line
 //
 //
-//
+//DONT USE M TO SCROLL UP
 //up - "\033[A"
 //down - "\033[B"
 //left - "\033[D"
@@ -595,12 +550,35 @@ async function test(){
 
   //XTermApp.buffer
 }
-//test()
-//XTermThing.write("AYSNC PLZ")
-//split string into array of words
-function escBackByNum(num){
+
+let scrollPosition = 0;
+XTermTestv2.term.onScroll((apple)=>{XTermTestv2.writeSync(`|scroll +${apple.valueOf()}|`);scrollPosition=apple.valueOf()})
+
+function escLeftByNum(num){
   return `[${num}D`
 }
+function escRightByNum(num) {
+  return `[${num}C`
+}
+function escUpByNum(num){
+  return `[${num}A`
+}
+function escDownByNum(num){
+  return `[${num}B`
+}
+function findCursor(terminal=XTermTestv2){
+  return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY];
+}
+function goToTermPosStr(arr1,terminal=XTermTestv2){
+  let arr2 = findCursor(terminal)
+  let Xpos = arr1[0]-arr2[0]
+  let Ypos = arr1[1]-arr2[1]
+  let escHorizontalChars = Xpos >=0 ?  escRightByNum(Xpos) : escLeftByNum(Math.abs(Xpos))
+  let escVerticalChars = (Ypos >=0) ? escDownByNum(Ypos) : escUpByNum(Math.abs(Ypos))
+  return `${escHorizontalChars}${escVerticalChars}`}
+
+
+
 async function slowWrite(str='',terminal,speed){
   str.replace(/\n+/g, ' ')
   str.replace(/\r+/g, ' ')
@@ -617,21 +595,46 @@ async function slowWrite(str='',terminal,speed){
     }
     if (cursorX===(numCols-1)){
     }
-
-
     if (1 + cursorX + tempStrLength <= numCols){
       terminal.writeSync(chalk.hex('505050')(tempStr))
       await new Promise(resolve => setTimeout(resolve, speed));
-      terminal.writeSync(`${escBackByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
+      terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
       await new Promise(resolve => setTimeout(resolve, speed));
       //unwrite then rewrite diff color
     }else{
+      // check how scrolling affects logged cursor positions and if it should decrement Y position
       terminal.writeSync(`\n${chalk.hex('505050')(tempStr)}`)
       await new Promise(resolve => setTimeout(resolve, speed));
-      terminal.writeSync(`${escBackByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
+      terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
       await new Promise(resolve => setTimeout(resolve, speed));
     }
   }
 }
 await new Promise(resolve => setTimeout(resolve, 1500))
-slowWrite(test1,XTermTestv2,20)
+slowWrite(test1,XTermTestv2,2)
+await new Promise(resolve => setTimeout(resolve, 1500))
+//slowWrite(test1,XTermTestv2,5)
+await new Promise(resolve => setTimeout(resolve, 1500))
+XTermTestv2.writeSync(""+findCursor(XTermTestv2).toString())
+XTermTestv2.writeSync(goToTermPosStr([20,20],XTermTestv2)+`${chalk.bold.red("test position")}`)
+XTermTestv2.writeSync(goToTermPosStr([40,35],XTermTestv2)+`${chalk.bold.red("test position")}`)
+XTermTestv2.writeSync(goToTermPosStr([40,42],XTermTestv2)+`${chalk.bold.red("test position")}`)
+XTermTestv2.writeSync("\n\n\n\n\n|TEST|")
+await new Promise(resolve => setTimeout(resolve, 1500))
+
+XTermTestv2.writeSync(`${goToTermPosStr([0,0],XTermTestv2)}QQQQQQQQQQ`)
+let k = ((scrollPosition.valueOf()+1-1))
+console.log(scrollPosition);
+//XTermTestv2.scroll(-scrollPosition);
+await new Promise(resolve => setTimeout(resolve, 1500))
+XTermTestv2.writeSync('a')
+//XTermTestv2.term.scrollLines(-10)
+await new Promise(resolve => setTimeout(resolve, 1500))
+
+//XTermTestv2.writeSync(goToTermPosStr([0,0],XTermTestv2))
+XTermTestv2.scrollASCIIESC(0,scrollPosition)
+XTermTestv2.writeSync(chalk.redBright("test:"))
+
+
+//XTermTestv2.writeSync(`\n`)
+//animate ideas, queue of words that form gradient, Lines that form gradient, set sections are writen

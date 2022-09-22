@@ -8,7 +8,6 @@ import BlessedContrib from 'blessed-contrib';
 import gradient from 'gradient-string';
 import chalkAnimation from 'chalk-animation';
 import {game_event, game_event_enemy, game_event_gain_item} from './game_events.js'
-import XTerm from 'blessed-xterm'
 import { clearInterval } from 'timers';
 import {Player} from './player.js';
 
@@ -602,16 +601,16 @@ async function test(){
 function escBackByNum(num){
   return `[${num}D`
 }
-async function slowWrite(str=''){
+async function slowWrite(str='',terminal,speed){
   str.replace(/\n+/g, ' ')
   str.replace(/\r+/g, ' ')
   let strArr=str.split(' ')
   for (let [index,tempStr] of strArr.entries())
   {
     tempStr+=' '
-    let cursorX = XTermTestv2.term.buffer.active.cursorX; 
+    let cursorX = terminal.term.buffer.active.cursorX; 
     let tempStrLength = tempStr.length
-    let numCols = XTermTestv2.term.cols
+    let numCols = terminal.term.cols
     if (index === 0) {
     }
     else if (index === strArr.length - 1) {
@@ -621,18 +620,18 @@ async function slowWrite(str=''){
 
 
     if (1 + cursorX + tempStrLength <= numCols){
-      XTermTestv2.writeSync(chalk.hex('505050')(tempStr))
-      await new Promise(resolve => setTimeout(resolve, 50));
-      XTermTestv2.writeSync(`${escBackByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
-      await new Promise(resolve => setTimeout(resolve, 50));
+      terminal.writeSync(chalk.hex('505050')(tempStr))
+      await new Promise(resolve => setTimeout(resolve, speed));
+      terminal.writeSync(`${escBackByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
+      await new Promise(resolve => setTimeout(resolve, speed));
       //unwrite then rewrite diff color
     }else{
-      XTermTestv2.writeSync(`\n${chalk.hex('505050')(tempStr)}`)
-      await new Promise(resolve => setTimeout(resolve, 50));
-      XTermTestv2.writeSync(`${escBackByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
-      await new Promise(resolve => setTimeout(resolve, 50));
+      terminal.writeSync(`\n${chalk.hex('505050')(tempStr)}`)
+      await new Promise(resolve => setTimeout(resolve, speed));
+      terminal.writeSync(`${escBackByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
+      await new Promise(resolve => setTimeout(resolve, speed));
     }
   }
 }
 await new Promise(resolve => setTimeout(resolve, 1500))
-slowWrite(test1)
+slowWrite(test1,XTermTestv2,20)

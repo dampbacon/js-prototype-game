@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 import XTermNew from './blessed-xterm/blessed-xterm.js'
-import * as scroll from './blessed-xterm/scroll.cjs';
-import * as throttle from './blessed-xterm/scroll.cjs';
 import blessed from 'blessed';
 import chalk from 'chalk';
 import BlessedContrib from 'blessed-contrib';
@@ -10,7 +8,7 @@ import chalkAnimation from 'chalk-animation';
 import {game_event, game_event_enemy, game_event_gain_item} from './game_events.js'
 import { clearInterval } from 'timers';
 import {Player} from './player.js';
-import { count } from 'console';
+import Terminal from 'term.js/src/term.js';
 
 // test content
 let temp_event1=new game_event({'id':1, 'body':chalk.yellow("event1"), 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true],[3,"goto 3 lolololololololollolololololololol",true]]})
@@ -98,17 +96,13 @@ screen.render()
 //XTermTestv2.writeSync(chalk.green.bold.bgBlue("test[D[D[D[D[ATEST"))
 let b=XTermTestv2.term.buffer
 //XTermTestv2.reset()
-
- let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it.`
- 
-
+let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it.`
 XTermTestv2.writeSync("")
 XTermTestv2.scrollTo(0)
 XTermTestv2.scrolling=true
 screen.render()
 
 const XTermApp=XTermTestv2.term
-console.log("fshdshuijfds")
 //might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
 //then write string on exit to a file so that log can be reloaded if desired
 //animimate wrting the log via slowly writing it and try this to animate it:
@@ -421,10 +415,10 @@ function resizeButtons(){
   screen.render()
 })}
 resizeButtons()
-
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
+// messy, remove redundant code in future
 function createButtons(gameEvent,buttonsArr,storyObj={}) {
   gameEvent['buttons'].forEach(item => {
     let temp=new blessed.button({
@@ -456,13 +450,8 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       //potential for random events in the future
       XTermApp.clear()
       XTermApp.reset()
-
-      //replace with event handler function
-      // XTermThing.write(storyObj[item[0]]['toScreen'].toString())
-      // XTermThing.write("hmmmmmm "+" ")
-      // logs.setContent(storyObj[item[0]]['body'])
       eventHandler(storyObj[item[0]])
-      
+
       buttonsArr.forEach((element)=>{form_thing.remove(element);element.destroy()})
       buttonsArray.forEach((element)=>{form_thing.remove(element);element.destroy()})
 
@@ -472,16 +461,12 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       //logs.focus();
       createButtons(storyObj[item[0]],buttonsArray,storyObj);
       resizeButtons();
-      
       logs.focus();
       form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString())+" "+chalk.bold.greenBright("choices")}`)
       screen.render();
     })
   })
 }
-  
-  
-
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded
 // idea is for events eventually to be read from a json file
@@ -493,9 +478,6 @@ function createEventsMap(eventsArrary=[],storyArr={}) {
 //return maybe idek
 createEventsMap(testEventArr,story)
 logs.focus()
-
-
-
 function refreshStats() {
   stats.setContent(
 `{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
@@ -550,10 +532,8 @@ async function test(){
 
   //XTermApp.buffer
 }
-
 let scrollPosition = 0;
 XTermTestv2.term.onScroll((apple)=>{XTermTestv2.writeSync(`|scroll +${apple.valueOf()}|`);scrollPosition=apple.valueOf()})
-
 function escLeftByNum(num){
   return `[${num}D`
 }
@@ -575,10 +555,8 @@ function goToTermPosStr(arr1,terminal=XTermTestv2){
   let Ypos = arr1[1]-arr2[1]
   let escHorizontalChars = Xpos >=0 ?  escRightByNum(Xpos) : escLeftByNum(Math.abs(Xpos))
   let escVerticalChars = (Ypos >=0) ? escDownByNum(Ypos) : escUpByNum(Math.abs(Ypos))
-  return `${escHorizontalChars}${escVerticalChars}`}
-
-
-
+  return `${escHorizontalChars}${escVerticalChars}`
+}
 async function slowWrite(str='',terminal,speed){
   str.replace(/\n+/g, ' ')
   str.replace(/\r+/g, ' ')
@@ -596,43 +574,51 @@ async function slowWrite(str='',terminal,speed){
     if (cursorX===(numCols-1)){
     }
     if (1 + cursorX + tempStrLength <= numCols){
-      terminal.writeSync(chalk.hex('505050')(tempStr))
+      terminal.writeSync(chalk.hex('909090')(tempStr))
       await new Promise(resolve => setTimeout(resolve, speed));
-      terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
+      terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('FFFFFF')(tempStr)}`)
       await new Promise(resolve => setTimeout(resolve, speed));
       //unwrite then rewrite diff color
     }else{
       // check how scrolling affects logged cursor positions and if it should decrement Y position
-      terminal.writeSync(`\n${chalk.hex('505050')(tempStr)}`)
+      terminal.writeSync(`\n${chalk.hex('909090')(tempStr)}`)
       await new Promise(resolve => setTimeout(resolve, speed));
-      terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('909090')(tempStr)}`)
+      terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('FFFFFF')(tempStr)}`)
       await new Promise(resolve => setTimeout(resolve, speed));
     }
   }
 }
+//
+// TEST CODE
+//
 await new Promise(resolve => setTimeout(resolve, 1500))
-slowWrite(test1,XTermTestv2,2)
-await new Promise(resolve => setTimeout(resolve, 1500))
-//slowWrite(test1,XTermTestv2,5)
-await new Promise(resolve => setTimeout(resolve, 1500))
-XTermTestv2.writeSync(""+findCursor(XTermTestv2).toString())
-XTermTestv2.writeSync(goToTermPosStr([20,20],XTermTestv2)+`${chalk.bold.red("test position")}`)
-XTermTestv2.writeSync(goToTermPosStr([40,35],XTermTestv2)+`${chalk.bold.red("test position")}`)
-XTermTestv2.writeSync(goToTermPosStr([40,42],XTermTestv2)+`${chalk.bold.red("test position")}`)
-XTermTestv2.writeSync("\n\n\n\n\n|TEST|")
-await new Promise(resolve => setTimeout(resolve, 1500))
-
-XTermTestv2.writeSync(`${goToTermPosStr([0,0],XTermTestv2)}QQQQQQQQQQ`)
-let k = ((scrollPosition.valueOf()+1-1))
-console.log(scrollPosition);
-//XTermTestv2.scroll(-scrollPosition);
-await new Promise(resolve => setTimeout(resolve, 1500))
-XTermTestv2.writeSync('a')
-//XTermTestv2.term.scrollLines(-10)
-await new Promise(resolve => setTimeout(resolve, 1500))
-
-//XTermTestv2.writeSync(goToTermPosStr([0,0],XTermTestv2))
-
+//slowWrite(test1,XTermTestv2,20)
+//await new Promise(resolve => setTimeout(resolve, 1500))
 
 //XTermTestv2.writeSync(`\n`)
 //animate ideas, queue of words that form gradient, Lines that form gradient, set sections are writen
+async function scanline(str='',terminal=XTermTestv2,speed){
+  str.replace(/\n+/g, '')
+  str.replace(/\r+/g, '')
+  let strArr=str.split(/\b(?![\s.])/);
+  let lines=[]
+  let cols=terminal.term.cols
+  let rollingCount=0
+  let line=[]
+  for(let item of strArr){
+    rollingCount+=item.length
+    if(rollingCount>cols){
+      line[line.length-1]=line[line.length-1]+"\n"
+      lines.push(line)
+      rollingCount = item.length
+      line.forEach((item)=>{terminal.writeSync(item)})
+      line=[]
+      line.push(item)
+    }else{
+      line.push(item)
+    }
+  }terminal.writeSync(`${escDownByNum(2)+escLeftByNum(3)+lines.length}`)
+  
+}
+await new Promise(resolve => setTimeout(resolve, 1500))
+scanline(test1,XTermTestv2,2)

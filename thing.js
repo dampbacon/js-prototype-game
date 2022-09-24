@@ -96,7 +96,6 @@ screen.render()
 //XTermTestv2.writeSync(chalk.green.bold.bgBlue("test[D[D[D[D[ATEST"))
 let b=XTermTestv2.term.buffer
 //XTermTestv2.reset()
-let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it.`
 XTermTestv2.writeSync("")
 XTermTestv2.scrollTo(0)
 XTermTestv2.scrolling=true
@@ -438,12 +437,12 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       style: {
         bg: '#0066CC',
         focus: {
-          bg: '#cc0066'
+          bg: '#cc0066',
         },
         hover: {
-          bg: '#cc0066'
-        }
-      }
+          bg: '#cc0066',
+        },
+      },
     })
     buttonsArr.push(temp)
     temp.on('press', function() {
@@ -533,7 +532,7 @@ async function test(){
   //XTermApp.buffer
 }
 let scrollPosition = 0;
-XTermTestv2.term.onScroll((apple)=>{XTermTestv2.writeSync(`|scroll +${apple.valueOf()}|`);scrollPosition=apple.valueOf()})
+XTermTestv2.term.onScroll((apple)=>{scrollPosition=apple.valueOf()})
 function escLeftByNum(num){
   return `[${num}D`
 }
@@ -557,6 +556,7 @@ function goToTermPosStr(arr1,terminal=XTermTestv2){
   let escVerticalChars = (Ypos >=0) ? escDownByNum(Ypos) : escUpByNum(Math.abs(Ypos))
   return `${escHorizontalChars}${escVerticalChars}`
 }
+
 async function slowWrite(str='',terminal,speed){
   str.replace(/\n+/g, ' ')
   str.replace(/\r+/g, ' ')
@@ -608,17 +608,58 @@ async function scanline(str='',terminal=XTermTestv2,speed){
   for(let item of strArr){
     rollingCount+=item.length
     if(rollingCount>cols){
+      if (rollingCount-1===cols){
+        line[line.length-1]=line[line.length-1].slice(0, -1)
+      }
       line[line.length-1]=line[line.length-1]+"\n"
       lines.push(line)
       rollingCount = item.length
+
       line.forEach((item)=>{terminal.writeSync(item)})
       line=[]
       line.push(item)
     }else{
       line.push(item)
     }
-  }terminal.writeSync(`${escDownByNum(2)+escLeftByNum(3)+lines.length}`)
-  
+  }
+  //
+  // queue of 5 elements
+  //
+  let lens = [,,,,,]
 }
+//doesn't change array length unlike normal shift method
+function shiftArray(arr=[1,2,3,4,5],populate=true,populateArray=['h','i','j','k','l',],end=''){
+  let retVal = arr[0]
+  for (let i = 0; i < arr.length-1; i++){
+    arr[i]=arr[i+1]
+    }
+  arr[arr.length-1] = populate ? shiftArray(populateArray,false): end
+  return retVal
+}
+
+
+
+
+
+let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
 await new Promise(resolve => setTimeout(resolve, 1500))
-scanline(test1,XTermTestv2,2)
+scanline(test1.repeat(1),XTermTestv2,2)
+await new Promise(resolve => setTimeout(resolve, 1500))
+let pop = ['e','f','g',]
+let arrayTest=['a','b','c','d',]
+XTermTestv2.writeSync('['+arrayTest.toString()+']')
+XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
+XTermTestv2.writeSync('['+arrayTest.toString()+']')
+XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
+XTermTestv2.writeSync('['+arrayTest.toString()+']')
+XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
+XTermTestv2.writeSync('['+arrayTest.toString()+']')
+XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
+XTermTestv2.writeSync('['+arrayTest.toString()+']')
+XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
+XTermTestv2.writeSync('['+arrayTest.toString()+']')
+XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
+XTermTestv2.writeSync('['+arrayTest.toString()+']')
+XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
+XTermTestv2.writeSync('['+arrayTest.toString()+']')
+

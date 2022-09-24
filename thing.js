@@ -9,6 +9,10 @@ import {game_event, game_event_enemy, game_event_gain_item} from './game_events.
 import { clearInterval } from 'timers';
 import {Player} from './player.js';
 import Terminal from 'term.js/src/term.js';
+import { hrtime } from 'node:process';
+import NanoTimer from 'nanotimer';
+
+
 
 // test content
 let temp_event1=new game_event({'id':1, 'body':chalk.yellow("event1"), 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true],[3,"goto 3 lolololololololollolololololololol",true]]})
@@ -642,20 +646,16 @@ function shiftArray(arr=[1,2,3,4,5],end='',populate=true,populateArray=['h','i',
   return retVal
 }
 
-async function scanlines(terminal=XTermTestv2,text='',speed=20){
-  const allEmpty = arr => arr.every(e => e === undefined);
+async function scanlines(terminal=XTermTestv2,text='',speed=0){
+  //const allEmpty = arr => arr.every(e => e === undefined);
   let lines = fitLines(text,terminal.term.cols)
   let arr = [,,,,,]
   let arr2 = [[,,],[,,],[,,],[,,],[,,],]
   let cursorPos = 1
-  //terminal.writeSync(chalk.green(`[${arr.toString()}] [${lines[0].toString()}]`))
-  //for(let line of lines){
-    //while(!allEmpty(line))
-  //lines[0].forEach(line => terminal.writeSync(chalk.green(line)))
-  for(let i = 0; i < lines[0].length+4; i++){
-      shiftArray(arr,'',true,lines[0])
+  for(let line of lines){
+    for(let i = 0; i < line.length+4; i++){
+      shiftArray(arr,'',true,line)
       shiftArray(arr2,[,,],false)
-      //terminal.writeSync(arr.toString())
       arr2[arr2.length-1] = [cursorPos , arr[arr.length-1]]
       if (arr2[4][0]!==undefined){
         terminal.writeSync(`[${arr2[4][0]}G${chalk.gray(arr2[4][1])}`)
@@ -678,13 +678,18 @@ async function scanlines(terminal=XTermTestv2,text='',speed=20){
         await new Promise(resolve => setTimeout(resolve,speed))
       }
       cursorPos = cursorPos+=arr[arr.length-1].length
+   }
+   terminal.writeSync('\n')
+   cursorPos = 1
   }
 }
 
 
 let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
 //fitLines(test1.repeat(1),XTermTestv2.term.cols)
-scanlines(XTermTestv2,test1.repeat(2),2)
+scanlines(XTermTestv2,test1.repeat(2),7)
+var hrTime = process.hrtime()
+
 await new Promise(resolve => setTimeout(resolve, 1500))
 await new Promise(resolve => setTimeout(resolve, 1500))
 let pop = ['e','f','g',]

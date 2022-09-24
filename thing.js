@@ -65,12 +65,22 @@ let caleb =
 [38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m\r`
 let thing = chalk.blue('Hello') + ' World' + chalk.red('!') 
 
+const program = blessed.program()
+program.cursorColor('000000')
 const screen = blessed.screen({
+  program: program,
   fastCSR: true,
   dockBorders: true,
-  fullUnicode: true
+  fullUnicode: true,
+  cursor: {
+    shape: {
+      bg: 'red',
+      fg: 'white',
+    },
+    blink: false
+  }
 });
-screen.program.hideCursor();
+screen.program.hideCursor(true);
 const grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
 
 screen.title = 'my window title';
@@ -597,12 +607,11 @@ await new Promise(resolve => setTimeout(resolve, 1500))
 
 //XTermTestv2.writeSync(`\n`)
 //animate ideas, queue of words that form gradient, Lines that form gradient, set sections are writen
-async function scanline(str='',terminal=XTermTestv2,speed){
+function fitLines(str='',cols=0){
   str.replace(/\n+/g, '')
   str.replace(/\r+/g, '')
   let strArr=str.split(/\b(?![\s.])/);
   let lines=[]
-  let cols=terminal.term.cols
   let rollingCount=0
   let line=[]
   for(let item of strArr){
@@ -611,55 +620,87 @@ async function scanline(str='',terminal=XTermTestv2,speed){
       if (rollingCount-1===cols){
         line[line.length-1]=line[line.length-1].slice(0, -1)
       }
-      line[line.length-1]=line[line.length-1]+"\n"
+      //line[line.length-1]=line[line.length-1]+"\n"
       lines.push(line)
       rollingCount = item.length
-
-      line.forEach((item)=>{terminal.writeSync(item)})
+      //line.forEach((item)=>{XTermTestv2.writeSync(item)})
       line=[]
       line.push(item)
     }else{
       line.push(item)
     }
   }
-  //
-  // queue of 5 elements
-  //
-  let lens = [,,,,,]
+  return lines
 }
 //doesn't change array length unlike normal shift method
-function shiftArray(arr=[1,2,3,4,5],populate=true,populateArray=['h','i','j','k','l',],end=''){
+function shiftArray(arr=[1,2,3,4,5],end='',populate=true,populateArray=['h','i','j','k','l',]){
   let retVal = arr[0]
   for (let i = 0; i < arr.length-1; i++){
     arr[i]=arr[i+1]
     }
-  arr[arr.length-1] = populate ? shiftArray(populateArray,false): end
+  arr[arr.length-1] = populate ? shiftArray(populateArray,end,false): end
   return retVal
 }
 
-
-
+async function scanlines(terminal=XTermTestv2,text='',speed=20){
+  const allEmpty = arr => arr.every(e => e === undefined);
+  let lines = fitLines(text,terminal.term.cols)
+  let arr = [,,,,,]
+  let arr2 = [[,,],[,,],[,,],[,,],[,,],]
+  let cursorPos = 1
+  //terminal.writeSync(chalk.green(`[${arr.toString()}] [${lines[0].toString()}]`))
+  //for(let line of lines){
+    //while(!allEmpty(line))
+  //lines[0].forEach(line => terminal.writeSync(chalk.green(line)))
+  for(let i = 0; i < lines[0].length+4; i++){
+      shiftArray(arr,'',true,lines[0])
+      shiftArray(arr2,[,,],false)
+      //terminal.writeSync(arr.toString())
+      arr2[arr2.length-1] = [cursorPos , arr[arr.length-1]]
+      if (arr2[4][0]!==undefined){
+        terminal.writeSync(`[${arr2[4][0]}G${chalk.gray(arr2[4][1])}`)
+        await new Promise(resolve => setTimeout(resolve,speed))
+      }
+      if (arr2[3][0]!==undefined){
+        terminal.writeSync(`[${arr2[3][0]}G${chalk.red(arr2[3][1])}`)
+        await new Promise(resolve => setTimeout(resolve,speed))
+      }
+      if (arr2[2][0]!==undefined){
+        terminal.writeSync(`[${arr2[2][0]}G${chalk.green(arr2[2][1])}`)
+        await new Promise(resolve => setTimeout(resolve,speed))
+      }
+      if (arr2[1][0]!==undefined){
+        terminal.writeSync(`[${arr2[1][0]}G${chalk.cyan(arr2[1][1])}`)
+        await new Promise(resolve => setTimeout(resolve,speed))
+      }
+      if (arr2[0][0]!==undefined){
+        terminal.writeSync(`[${arr2[0][0]}G${chalk.magenta(arr2[0][1])}`)
+        await new Promise(resolve => setTimeout(resolve,speed))
+      }
+      cursorPos = cursorPos+=arr[arr.length-1].length
+  }
+}
 
 
 let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
+//fitLines(test1.repeat(1),XTermTestv2.term.cols)
+scanlines(XTermTestv2,test1.repeat(2),2)
 await new Promise(resolve => setTimeout(resolve, 1500))
-scanline(test1.repeat(1),XTermTestv2,2)
 await new Promise(resolve => setTimeout(resolve, 1500))
 let pop = ['e','f','g',]
 let arrayTest=['a','b','c','d',]
-XTermTestv2.writeSync('['+arrayTest.toString()+']')
-XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
-XTermTestv2.writeSync('['+arrayTest.toString()+']')
-XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
-XTermTestv2.writeSync('['+arrayTest.toString()+']')
-XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
-XTermTestv2.writeSync('['+arrayTest.toString()+']')
-XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
-XTermTestv2.writeSync('['+arrayTest.toString()+']')
-XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
-XTermTestv2.writeSync('['+arrayTest.toString()+']')
-XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
-XTermTestv2.writeSync('['+arrayTest.toString()+']')
-XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,true,pop)))
-XTermTestv2.writeSync('['+arrayTest.toString()+']')
-
+// XTermTestv2.writeSync('['+arrayTest.toString()+']')
+// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
+// XTermTestv2.writeSync('['+arrayTest.toString()+']')
+// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
+// XTermTestv2.writeSync('['+arrayTest.toString()+']')
+// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
+// XTermTestv2.writeSync('['+arrayTest.toString()+']')
+// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
+// XTermTestv2.writeSync('['+arrayTest.toString()+']')
+// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
+// XTermTestv2.writeSync('['+arrayTest.toString()+']')
+// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
+// XTermTestv2.writeSync('['+arrayTest.toString()+']')
+// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
+// XTermTestv2.writeSync('['+arrayTest.toString()+']')

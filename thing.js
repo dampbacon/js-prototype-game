@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+'use strict';
+
 import XTermNew from './blessed-xterm/blessed-xterm.js'
 import blessed from 'blessed';
 import chalk from 'chalk';
@@ -10,7 +12,7 @@ import { clearInterval } from 'timers';
 import {Player} from './player.js';
 import Terminal from 'term.js/src/term.js';
 import { hrtime } from 'node:process';
-import NanoTimer from 'nanotimer';
+import os from 'os'
 
 
 
@@ -98,11 +100,19 @@ const XTermTestv2 = new XTermNew({
   keys   : true,
   mouse  : true,
   border : 'line',
+  scrollPosition : 3,
   style  : {
     label : { bold: true },
+    scrollbar: {
+      bg: 'red',
+      fg: 'blue'
+    }
+  
+    
   },
   
 })
+
 screen.append(XTermTestv2)
 screen.render()
 //XTermTestv2.writeSync("HEHEHEHEHEHEHEHHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEH\n\nEHEHEHEHEHEHEHEHEHEHEHEHE")
@@ -113,6 +123,7 @@ let b=XTermTestv2.term.buffer
 XTermTestv2.writeSync("")
 XTermTestv2.scrollTo(0)
 XTermTestv2.scrolling=true
+
 screen.render()
 
 const XTermApp=XTermTestv2.term
@@ -214,7 +225,7 @@ const form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
     right:0,
   },
   style: {
-    //bg: '#66CCFF',
+    //bg: '#515151',
     //border: {
       //bg: '#000033'},
     focus:     { border: { fg: "green" } }
@@ -448,6 +459,7 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       shrink: true,
       name: item[1],
       content: item[1],
+      //shadow: true,
       style: {
         bg: '#0066CC',
         focus: {
@@ -657,24 +669,25 @@ async function scanlines(terminal=XTermTestv2,text='',speed=0){
       shiftArray(arr,'',true,line)
       shiftArray(arr2,[,,],false)
       arr2[arr2.length-1] = [cursorPos , arr[arr.length-1]]
-      if (arr2[4][0]!==undefined){
-        terminal.writeSync(`[${arr2[4][0]}G${chalk.gray(arr2[4][1])}`)
+      //generalize if statements based on arr/arr2 length
+      if (arr2[4][0]){
+        terminal.writeSync(`[${arr2[4][0]}G${chalk.hex("ed5564")(arr2[4][1])}`) 
         await new Promise(resolve => setTimeout(resolve,speed))
       }
-      if (arr2[3][0]!==undefined){
-        terminal.writeSync(`[${arr2[3][0]}G${chalk.red(arr2[3][1])}`)
+      if (arr2[3][0]){
+        terminal.writeSync(`[${arr2[3][0]}G${chalk.hex("ffce54")(arr2[3][1])}`) 
         await new Promise(resolve => setTimeout(resolve,speed))
       }
-      if (arr2[2][0]!==undefined){
-        terminal.writeSync(`[${arr2[2][0]}G${chalk.green(arr2[2][1])}`)
+      if (arr2[2][0]){
+        terminal.writeSync(`[${arr2[2][0]}G${chalk.hex("a0d568")(arr2[2][1])}`)
         await new Promise(resolve => setTimeout(resolve,speed))
       }
-      if (arr2[1][0]!==undefined){
-        terminal.writeSync(`[${arr2[1][0]}G${chalk.cyan(arr2[1][1])}`)
+      if (arr2[1][0]){
+        terminal.writeSync(`[${arr2[1][0]}G${chalk.hex("4fc1e8")(arr2[1][1])}`)  
         await new Promise(resolve => setTimeout(resolve,speed))
       }
-      if (arr2[0][0]!==undefined){
-        terminal.writeSync(`[${arr2[0][0]}G${chalk.magenta(arr2[0][1])}`)
+      if (arr2[0][0]){
+        terminal.writeSync(`[${arr2[0][0]}G${chalk.hex("ac92eb")(arr2[0][1])}`)  
         await new Promise(resolve => setTimeout(resolve,speed))
       }
       cursorPos = cursorPos+=arr[arr.length-1].length
@@ -683,29 +696,20 @@ async function scanlines(terminal=XTermTestv2,text='',speed=0){
    cursorPos = 1
   }
 }
-
+//ESC[?25l	make cursor invisible
+//ESC[?25h	make cursor visible
+//
+//
+console.log('[?25l')
+XTermTestv2.writeSync('[?25l')
 
 let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
 //fitLines(test1.repeat(1),XTermTestv2.term.cols)
-scanlines(XTermTestv2,test1.repeat(2),7)
+scanlines(XTermTestv2,test1.repeat(12),20)
 var hrTime = process.hrtime()
 
 await new Promise(resolve => setTimeout(resolve, 1500))
 await new Promise(resolve => setTimeout(resolve, 1500))
 let pop = ['e','f','g',]
 let arrayTest=['a','b','c','d',]
-// XTermTestv2.writeSync('['+arrayTest.toString()+']')
-// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
-// XTermTestv2.writeSync('['+arrayTest.toString()+']')
-// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
-// XTermTestv2.writeSync('['+arrayTest.toString()+']')
-// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
-// XTermTestv2.writeSync('['+arrayTest.toString()+']')
-// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
-// XTermTestv2.writeSync('['+arrayTest.toString()+']')
-// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
-// XTermTestv2.writeSync('['+arrayTest.toString()+']')
-// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
-// XTermTestv2.writeSync('['+arrayTest.toString()+']')
-// XTermTestv2.writeSync(chalk.red(shiftArray(arrayTest,'',true,pop)))
-// XTermTestv2.writeSync('['+arrayTest.toString()+']')
+

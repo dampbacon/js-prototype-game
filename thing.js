@@ -691,7 +691,7 @@ XTermTestv2.writeSync('[?25l')
 
 let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
 //fitLines(test1.repeat(1),XTermTestv2.term.cols)
-scanlines(XTermTestv2,test1,5)
+scanlines(XTermTestv2,test1.repeat(100),2)
 var hrTime = process.hrtime()
 
 await new Promise(resolve => setTimeout(resolve, 1500))

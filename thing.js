@@ -102,6 +102,7 @@ const XTermTestv2 = new XTermNew({
   border : 'line',
   style  : {
     label : { bold: true },
+    focus:     { border: { fg: "green" } }
   },
   scrollbar : {
     ch    : ' ',
@@ -143,6 +144,7 @@ const logs = new XTermNew({
   border : 'line',
   style  : {
     label : { bold: true },
+    focus:     { border: { fg: "green" } }
   },
   scrollbar : {
     ch    : ' ',
@@ -219,7 +221,7 @@ const stats=grid.set(0,9,6,1,blessed.box,{
   }
   
   }
-)
+).with(scroll.scroll,scroll.throttle)
 //in the future will be a table with options to view/manage inventory and attack
 const actions=grid.set(0,10,6,2,blessed.list,{
   tags: true,
@@ -269,7 +271,7 @@ const form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
       inverse: true
     }
   }
-}));
+})).with(scroll.scroll,scroll.throttle)
 
 screen.render()
 
@@ -408,30 +410,19 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
 
-screen.key('l', function() {
-  XTermTestv2.height=screen.height;
-  XTermTestv2.width=screen.width/2;
-  screen.render();
-});
-
 screen.key('e', function() {
   XTermTestv2.focus();
   screen.render();
 });
-
 
 screen.key('p', function() {
   screen.focusNext();
 });
 
 screen.key('s', function() {
-  form_thing.scroll(1)
-  XTermTestv2.scroll(1)
 });
 
 screen.key('w', function() {
-  form_thing.scroll(-1)
-  XTermTestv2.scroll(-1)
 });
 
 //test content key listener
@@ -719,6 +710,8 @@ XTermTestv2.writeSync('[?25l')
 let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
 //fitLines(test1.repeat(1),XTermTestv2.term.cols)
 scanlines(XTermTestv2,test1.repeat(1),2)
+scanlines(logs,test1.repeat(1),2)
+
 var hrTime = process.hrtime()
 
 await new Promise(resolve => setTimeout(resolve, 1500))

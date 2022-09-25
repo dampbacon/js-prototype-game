@@ -110,9 +110,9 @@ const XTermTestv2 = new XTermNew({
       style : { bg: 'grey' },
     },
   },
-}).with(scroll.scroll,scroll.throttle)//, throttle);
-
+}).with(scroll.scroll,scroll.throttle)
 screen.append(XTermTestv2)
+
 screen.render()
 //XTermTestv2.writeSync("HEHEHEHEHEHEHEHHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEH\n\nEHEHEHEHEHEHEHEHEHEHEHEHE")
 //XTermTestv2.writeSync("[D[D[D".repeat(2))
@@ -130,35 +130,62 @@ const XTermApp=XTermTestv2.term
 //then write string on exit to a file so that log can be reloaded if desired
 //animimate wrting the log via slowly writing it and try this to animate it:
 //https://stackoverflow.com/questions/10264261/move-one-character-to-the-left-in-the-console
-const logs = grid.set(6,6,6,6,blessed.box,{
-  tags: true,
-  label: 'log',
-  alwaysScroll: 'true',
-  scrollable: 'true',
-  scrollbars: 'true',
-  scrollbar: {
-    ch: ' ',
-    track: {
-      bg: 'blue'
-    },
-    style: {
-      inverse: true
-    }
+
+const logs = new XTermNew({
+  top    : '50%',
+  bottom : 0,
+  left   :'50%',
+  width  : '50%',
+  align  : 'left',
+  tags   : true,
+  keys   : true,
+  mouse  : true,
+  border : 'line',
+  style  : {
+    label : { bold: true },
   },
-  keys: true,
-  border: {
-    type: 'line'
+  scrollbar : {
+    ch    : ' ',
+    style : { bg: 'white' },
+    track : {
+      style : { bg: 'grey' },
+    },
   },
-  style: {
-    border: {
-      fg: '#f0f0f0'
-    },
-    hover: {
-      //bg: 'green'
-    },
-    focus:     { border: { fg: "green" } }
-  }
-});
+}).with(scroll.scroll,scroll.throttle)
+screen.append(logs)
+
+
+
+
+// const logs = grid.set(6,6,6,6,blessed.box,{
+//   tags: true,
+//   label: 'log',
+//   alwaysScroll: 'true',
+//   scrollable: 'true',
+//   scrollbars: 'true',
+//   scrollbar: {
+//     ch: ' ',
+//     track: {
+//       bg: 'blue'
+//     },
+//     style: {
+//       inverse: true
+//     }
+//   },
+//   keys: true,
+//   border: {
+//     type: 'line'
+//   },
+//   style: {
+//     border: {
+//       fg: '#f0f0f0'
+//     },
+//     hover: {
+//       //bg: 'green'
+//     },
+//     focus:     { border: { fg: "green" } }
+//   }
+// });
 //in future will display player stats
 const stats=grid.set(0,9,6,1,blessed.box,{
   tags: true,
@@ -358,11 +385,11 @@ button1.on('press', function() {
   form_thing.setContent('Canceled.');
   XTermApp.clear();
   XTermApp.reset();
-  logs.setContent(caleb);
+  XTermTestv2.writeSync(caleb);
   screen.render();
 });
 button2.on('press', function() {
-  logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
+  //logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
   XTermApp.clear()
   XTermApp.reset()
   XTermTestv2.writeSync(body)
@@ -373,7 +400,7 @@ button2.on('press', function() {
 screen.on('resize', function() {
   XTermTestv2.height=screen.height;
   XTermTestv2.width=Math.floor(screen.width/2);
-  logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
+  //logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
   resizeButtons()
 });
 // Quit on Escape, q, or Control-C.
@@ -412,13 +439,13 @@ screen.key('y', function() {
   form_thing.resetScroll()
   buttonsArray.forEach((button) => {form_thing.remove(button);button.destroy()})
   buttonsArray=[];
-  logs.focus();
+  stats.focus();
   XTermApp.reset()
   eventHandler(temp_event1)
   createButtons(temp_event1,buttonsArray,story);
   form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString())+" "+chalk.bold.greenBright("choices")}`)
   resizeButtons();
-  logs.focus();
+  stats.focus();
 });
 let buttonsArray = [button1,button2,button3,button4];
 //test content
@@ -485,7 +512,7 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       //logs.focus();
       createButtons(storyObj[item[0]],buttonsArray,storyObj);
       resizeButtons();
-      logs.focus();
+      stats.focus();
       form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString())+" "+chalk.bold.greenBright("choices")}`)
       screen.render();
     })
@@ -501,7 +528,7 @@ function createEventsMap(eventsArrary=[],storyArr={}) {
 }
 //return maybe idek
 createEventsMap(testEventArr,story)
-logs.focus()
+stats.focus()
 function refreshStats() {
   stats.setContent(
 `{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
@@ -658,6 +685,7 @@ function shiftArray(arr=[1,2,3,4,5],end='',populate=true,populateArray=['h','i',
 
 let rainbowVoil=[ 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
 let rainbowWithBlue=[ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ]
+//later makes a varient that constructs a multiline gradient and writes that as the last stepe
 async function scanlines(terminal=XTermTestv2,text='', speed=5,colorArr=[]){
   colorArr = colorArr ? [ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ] : colorArr
   let lines = fitLines(text,terminal.term.cols)
@@ -690,7 +718,7 @@ XTermTestv2.writeSync('[?25l')
 
 let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
 //fitLines(test1.repeat(1),XTermTestv2.term.cols)
-scanlines(XTermTestv2,test1.repeat(100),2)
+scanlines(XTermTestv2,test1.repeat(1),2)
 var hrTime = process.hrtime()
 
 await new Promise(resolve => setTimeout(resolve, 1500))

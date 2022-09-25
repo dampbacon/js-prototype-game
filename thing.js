@@ -636,16 +636,15 @@ function fitLines(str='',cols=0){
       if (rollingCount-1===cols){
         line[line.length-1]=line[line.length-1].slice(0, -1)
       }
-      //line[line.length-1]=line[line.length-1]+"\n"
       lines.push(line)
       rollingCount = item.length
-      //line.forEach((item)=>{XTermTestv2.writeSync(item)})
       line=[]
       line.push(item)
     }else{
       line.push(item)
     }
   }
+  lines.push(line)
   return lines
 }
 //doesn't change array length unlike normal shift method
@@ -661,6 +660,10 @@ function shiftArray(arr=[1,2,3,4,5],end='',populate=true,populateArray=['h','i',
 async function scanlines(terminal=XTermTestv2,text='',speed=0){
   //const allEmpty = arr => arr.every(e => e === undefined);
   let lines = fitLines(text,terminal.term.cols)
+  for(let line of lines){
+    terminal.writeSync(line.join(''))
+    terminal.writeSync('\n')
+  }
   let arr2 = ['','','','','',]
   let cursorPos = 1
   let arr=arr2.map((content,index,arr)=>{arr[index] = [cursorPos,content]})
@@ -691,7 +694,7 @@ XTermTestv2.writeSync('[?25l')
 
 let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
 //fitLines(test1.repeat(1),XTermTestv2.term.cols)
-scanlines(XTermTestv2,test1.repeat(12),20)
+scanlines(XTermTestv2,test1,20)
 var hrTime = process.hrtime()
 
 await new Promise(resolve => setTimeout(resolve, 1500))

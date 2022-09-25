@@ -657,21 +657,18 @@ function shiftArray(arr=[1,2,3,4,5],end='',populate=true,populateArray=['h','i',
   return retVal
 }
 
-async function scanlines(terminal=XTermTestv2,text='',speed=0){
-  //const allEmpty = arr => arr.every(e => e === undefined);
+let rainbowVoil=[ 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
+let rainbowWithBlue=[ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ]
+async function scanlines(terminal=XTermTestv2,text='', speed=5,colorArr=[]){
+  colorArr = colorArr ? [ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ] : colorArr
   let lines = fitLines(text,terminal.term.cols)
-  for(let line of lines){
-    terminal.writeSync(line.join(''))
-    terminal.writeSync('\n')
-  }
-  let arr2 = ['','','','','',]
+  let arr2 = Array(colorArr.length).fill('')
   let cursorPos = 1
   let arr=arr2.map((content,index,arr)=>{arr[index] = [cursorPos,content]})
-  let colorArr = ["ac92eb","4fc1e8","a0d568","ffce54","ed5564",]
   for(let line of lines){
     for(let i = 0; i < line.length+arr.length-1; i++){
       shiftArray(arr,'',true,line)
-      shiftArray(arr2,[,,],false)
+      shiftArray(arr2,['','',],false)
       arr2[arr2.length-1] = [cursorPos , arr[arr.length-1]]
       for(let i = arr.length-1; i > - 1 ; i--){
         if (arr2[i][0]){
@@ -694,7 +691,7 @@ XTermTestv2.writeSync('[?25l')
 
 let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
 //fitLines(test1.repeat(1),XTermTestv2.term.cols)
-scanlines(XTermTestv2,test1,20)
+scanlines(XTermTestv2,test1,5)
 var hrTime = process.hrtime()
 
 await new Promise(resolve => setTimeout(resolve, 1500))

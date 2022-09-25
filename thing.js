@@ -10,10 +10,10 @@ import chalkAnimation from 'chalk-animation';
 import {game_event, game_event_enemy, game_event_gain_item} from './game_events.js'
 import { clearInterval } from 'timers';
 import {Player} from './player.js';
-import Terminal from 'term.js/src/term.js';
 import { hrtime } from 'node:process';
 import os from 'os'
-
+import './blessed/patches.cjs';
+import * as scroll from './blessed/scroll.cjs'
 
 
 // test content
@@ -100,18 +100,17 @@ const XTermTestv2 = new XTermNew({
   keys   : true,
   mouse  : true,
   border : 'line',
-  scrollPosition : 3,
   style  : {
     label : { bold: true },
-    scrollbar: {
-      bg: 'red',
-      fg: 'blue'
-    }
-  
-    
   },
-  
-})
+  scrollbar : {
+    ch    : ' ',
+    style : { bg: 'white' },
+    track : {
+      style : { bg: 'grey' },
+    },
+  },
+}).with(scroll.scroll,scroll.throttle)//, throttle);
 
 screen.append(XTermTestv2)
 screen.render()
@@ -122,7 +121,7 @@ let b=XTermTestv2.term.buffer
 //XTermTestv2.reset()
 XTermTestv2.writeSync("")
 XTermTestv2.scrollTo(0)
-XTermTestv2.scrolling=true
+//XTermTestv2.scrolling=true
 
 screen.render()
 

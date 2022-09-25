@@ -16,7 +16,7 @@ const nextTick = global.setImmediate || process.nextTick.bind(process);
 
 const CRLF_OR_LF = os.platform() === 'browser' && window.navigator.platform === 'Win32' || os.platform() === 'win32' ? '\r\n' : '\n';
 
-class XTermNew extends blessed.box {
+class XTermNew extends blessed.ScrollableBox{
 
   constructor(options = {}) {
     super(options);

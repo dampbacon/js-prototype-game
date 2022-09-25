@@ -661,34 +661,20 @@ function shiftArray(arr=[1,2,3,4,5],end='',populate=true,populateArray=['h','i',
 async function scanlines(terminal=XTermTestv2,text='',speed=0){
   //const allEmpty = arr => arr.every(e => e === undefined);
   let lines = fitLines(text,terminal.term.cols)
-  let arr = [,,,,,]
-  let arr2 = [[,,],[,,],[,,],[,,],[,,],]
+  let arr2 = ['','','','','',]
   let cursorPos = 1
+  let arr=arr2.map((content,index,arr)=>{arr[index] = [cursorPos,content]})
+  let colorArr = ["ac92eb","4fc1e8","a0d568","ffce54","ed5564",]
   for(let line of lines){
-    for(let i = 0; i < line.length+4; i++){
+    for(let i = 0; i < line.length+arr.length-1; i++){
       shiftArray(arr,'',true,line)
       shiftArray(arr2,[,,],false)
       arr2[arr2.length-1] = [cursorPos , arr[arr.length-1]]
-      //generalize if statements based on arr/arr2 length
-      if (arr2[4][0]){
-        terminal.writeSync(`[${arr2[4][0]}G${chalk.hex("ed5564")(arr2[4][1])}`) 
-        await new Promise(resolve => setTimeout(resolve,speed))
-      }
-      if (arr2[3][0]){
-        terminal.writeSync(`[${arr2[3][0]}G${chalk.hex("ffce54")(arr2[3][1])}`) 
-        await new Promise(resolve => setTimeout(resolve,speed))
-      }
-      if (arr2[2][0]){
-        terminal.writeSync(`[${arr2[2][0]}G${chalk.hex("a0d568")(arr2[2][1])}`)
-        await new Promise(resolve => setTimeout(resolve,speed))
-      }
-      if (arr2[1][0]){
-        terminal.writeSync(`[${arr2[1][0]}G${chalk.hex("4fc1e8")(arr2[1][1])}`)  
-        await new Promise(resolve => setTimeout(resolve,speed))
-      }
-      if (arr2[0][0]){
-        terminal.writeSync(`[${arr2[0][0]}G${chalk.hex("ac92eb")(arr2[0][1])}`)  
-        await new Promise(resolve => setTimeout(resolve,speed))
+      for(let i = arr.length-1; i > - 1 ; i--){
+        if (arr2[i][0]){
+          terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1])}`) 
+          await new Promise(resolve => setTimeout(resolve,speed))
+        }
       }
       cursorPos = cursorPos+=arr[arr.length-1].length
    }

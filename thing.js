@@ -529,7 +529,7 @@ ${chalk.grey('con')} = ${thePlayer.const}
 ${chalk.hex('000080')('dex')} = ${thePlayer.dex}
 ${chalk.hex('630330')('cha')} = ${thePlayer.cha}
  
-${chalk.magenta("dmg")} =
+${chalk.magenta("dmg")} = ${thePlayer.basedamage}
 ${chalk.magenta("mag")} =`)
     screen.render()
 }
@@ -540,7 +540,8 @@ screen.render()
 //sloppy but easy way to make it work
 function eventHandler(gameEvent){
   XTermTestv2.writeSync(gameEvent['toScreen'].toString())
-  logs.setContent(gameEvent['body'])
+  logs.writeSync('\n\n')
+  logs.writeSync(gameEvent['body'])
   XTermTestv2.writeSync("\n\r"+chalk.green(JSON.stringify(gameEvent)))
   if (gameEvent instanceof(game_event_gain_item)){
   } else if (gameEvent instanceof(game_event_enemy)){
@@ -718,4 +719,19 @@ await new Promise(resolve => setTimeout(resolve, 1500))
 await new Promise(resolve => setTimeout(resolve, 1500))
 let pop = ['e','f','g',]
 let arrayTest=['a','b','c','d',]
+
+
+function toggleUi(){
+  form_thing.toggle()
+  XTermTestv2.toggle()
+  logs.toggle()
+  stats.toggle()
+  actions.toggle()
+}
+toggleUi()
+screen.render()
+await new Promise(resolve => setTimeout(resolve, 1500))
+toggleUi()
+stats.focus()
+screen.render()
 

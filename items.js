@@ -1,10 +1,14 @@
-class item{
-}
-class weapon extends Item{
-}
-class armour extends Item{
-}
-class consumable extends Item{
-}
-class timeoutItem extends Item{
-}
+export const WEAPONS=Object.freeze({
+    SPEAR:'SPEAR',
+    DAGGER:'DAGGER',
+    SCIMITAR:'SCIMITAR',
+    SWORD:'SWORD',
+
+})
+let WEAPONmap={}
+//dmg dice d(amount)
+WEAPONmap[WEAPONS.SPEAR]=8
+WEAPONmap[WEAPONS.SCIMITAR]=10
+WEAPONmap[WEAPONS.DAGGER]=4
+WEAPONmap[WEAPONS.SWORD]=10
+export {WEAPONmap};

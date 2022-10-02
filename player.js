@@ -1,7 +1,11 @@
 //var seedrandom = require('seedrandom');
 import Chance from 'chance';
-//set seed for everything
-const chance1 = new Chance('hello');
+//set seed for stats roll
+const chance1 = new Chance();
+//diff object for dice
+const chance2 =new Chance('hello');
+//diff object for map generation
+const chance3 =new Chance('hello');
 console.log(chance1.random());    
 console.log(chance1.random());    
 chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
@@ -21,15 +25,15 @@ export class Player{
         this.nextLvlxp=200
         this.name = name;
         //damage
-        this.str = 10;
+        this.str;
         //hp modifier
-        this.const = 10;
         //tohit
-        this.dex = 10;
-        this.cha = 10;
-        this.ac = 10;
-        this.hpMax = 20
-        this.hp = 20;
+        this.dex;
+        this.cha;
+        this.int;
+        this.ac;
+        this.hpMax;
+        this.hp;
         this.slots = {leftHand: false, rightHand: false, head: false, body: false, ring: false}
         //this.items = Array(5).fill(0)
         this.basedamage = this.str+skillBonus(this.str)
@@ -72,9 +76,9 @@ function d(n){
 }
 
 function rollDamage(Player){
-    Player.basedamage+d(Player.weapon)
+    Player.basedamage+d
 }
 
-function rollSTATS(Player){
-
+export function rollStat(){
+    return skillBonus(chance1.rpg('3d6', {sum: true}) )
 }

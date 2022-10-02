@@ -13,7 +13,11 @@ import {Player} from './player.js';
 import { hrtime } from 'node:process';
 import os from 'os'
 import './blessed/patches.cjs';
-import * as scroll from './blessed/scroll.cjs'
+import * as scroll from './blessed/scroll.cjs';
+import { rollStat } from './player.js';
+import fs from 'fs';
+import pkg from 'iconv-lite';
+const {iconv} = pkg;
 
 
 // test content
@@ -22,7 +26,6 @@ let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"a
 let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
 let testEventArr=[temp_event1,temp_event2,temp_event3]
 let story={}
-let thePlayer = new Player("name")
 
 //test content
 let body = 
@@ -520,21 +523,6 @@ function createEventsMap(eventsArrary=[],storyArr={}) {
 //return maybe idek
 createEventsMap(testEventArr,story)
 stats.focus()
-function refreshStats() {
-  stats.setContent(
-`{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
-{bold}${chalk.green("AC ")}{/bold} = ${thePlayer.ac}
-${chalk.yellowBright('str')} = ${thePlayer.str}
-${chalk.grey('con')} = ${thePlayer.const}
-${chalk.hex('000080')('dex')} = ${thePlayer.dex}
-${chalk.hex('630330')('cha')} = ${thePlayer.cha}
- 
-${chalk.magenta("dmg")} = ${thePlayer.basedamage}
-${chalk.magenta("mag")} =`)
-    screen.render()
-}
-refreshStats()
-stats.focus()
 screen.render()
 
 //sloppy but easy way to make it work
@@ -635,7 +623,6 @@ async function slowWrite(str='',terminal,speed){
 //
 // TEST CODE
 //
-await new Promise(resolve => setTimeout(resolve, 1500))
 //slowWrite(test1,XTermTestv2,20)
 //await new Promise(resolve => setTimeout(resolve, 1500))
 
@@ -710,13 +697,13 @@ XTermTestv2.writeSync('[?25l')
 
 let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
 //fitLines(test1.repeat(1),XTermTestv2.term.cols)
-scanlines(XTermTestv2,test1.repeat(1),2)
-scanlines(logs,test1.repeat(1),2)
+//scanlines(XTermTestv2,test1.repeat(1),2)
+//scanlines(logs,test1.repeat(1),2)
 
 var hrTime = process.hrtime()
 
-await new Promise(resolve => setTimeout(resolve, 1500))
-await new Promise(resolve => setTimeout(resolve, 1500))
+//await new Promise(resolve => setTimeout(resolve, 1500))
+//await new Promise(resolve => setTimeout(resolve, 1500))
 let pop = ['e','f','g',]
 let arrayTest=['a','b','c','d',]
 
@@ -731,7 +718,107 @@ function toggleUi(){
 toggleUi()
 screen.render()
 await new Promise(resolve => setTimeout(resolve, 1500))
-toggleUi()
+//toggleUi()
 stats.focus()
 screen.render()
+
+var box = blessed.box({
+  top: 'center',
+  left: 'center',
+  width: '40%',
+  height: '80%',
+  tags: true,
+  keys: true,
+  content: '{bold}hmm{/bold}!',
+  border: {
+    type: 'line'
+  },
+  style: {
+    fg: 'white',
+    //bg: 'magenta',
+    border: {
+      //fg: '#4b0082',
+      //bg: '#4b0082',
+    },
+    hover: {
+      bg: 'green'
+    }
+  }
+});
+
+let thePlayer = new Player("name")
+thePlayer.str = rollStat();
+thePlayer.hp = 10+thePlayer.str;
+thePlayer.hpMax = thePlayer.hp;
+thePlayer.int = rollStat();
+thePlayer.dex = rollStat();
+thePlayer.cha = rollStat();
+
+
+screen.append(box);
+screen.render()
+await new Promise(resolve => setTimeout(resolve, 700))
+box.pushLine(`${' '.repeat(Math.floor(box.width/2)-' HP: '.length-2)} hp: ${thePlayer.hp}`)
+screen.render()
+await new Promise(resolve => setTimeout(resolve,  1))
+box.pushLine(`${' '.repeat(Math.floor(box.width/2)-'str: '.length-2)}str: ${thePlayer.str}`)
+screen.render()
+await new Promise(resolve => setTimeout(resolve, 1))
+box.pushLine(`${' '.repeat(Math.floor(box.width/2)-'dex: '.length-2)}dex: ${thePlayer.dex}`)
+screen.render()
+await new Promise(resolve => setTimeout(resolve, 1))
+box.pushLine(`${' '.repeat(Math.floor(box.width/2)-'int: '.length-2)}int: ${thePlayer.int}`)
+screen.render()
+await new Promise(resolve => setTimeout(resolve, 1))
+box.pushLine(`${' '.repeat(Math.floor(box.width/2)-'cha: '.length-2)}cha: ${thePlayer.cha}`)
+screen.render()
+await new Promise(resolve => setTimeout(resolve, 1))
+box.pushLine(`\n${' '.repeat(Math.floor(box.width/2)-Math.floor('[ ENTER to continue ]'.length/2)-3)}[ ENTER to continue ]`)
+screen.render()
+box.focus()
+box.key('enter', function() {
+  toggleUi()
+  box.hide()
+}
+)
+//let rainbowVoil=[ 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
+
+function refreshStats(player=thePlayer) {
+  stats.setContent(
+`{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
+{bold}${chalk.green("AC ")}{/bold} = ${thePlayer.ac}
+${chalk.yellowBright('str')} = ${thePlayer.str}
+${chalk.grey('int')} = ${thePlayer.int}
+${chalk.hex('000080')('dex')} = ${thePlayer.dex}
+${chalk.hex('630330')('cha')} = ${thePlayer.cha} 
+${chalk.magenta("dmg")} = ${thePlayer.basedamage}
+${chalk.magenta("mag")} =`)
+    screen.render()
+}
+
+refreshStats()
+box.focus()
+screen.render()
+
+//let a=pkg.decode(aaaaa,'win1252')
+let bb =`[37m[40m                                           [m
+[37m[40m                   [33m[40m▒▒▒░░[37m[40m                   [m
+[37m[40m                 [33m[40m▒▒▒▒░░░░░[37m[40m                 [m
+[37m[40m                [33m[40m██▓▓▓▓▓▓▓██[37m[40m                [m
+[37m[40m       [33m[40m▒▒▒░░[37m[40m    [33m[40m▐▓▒░█▒  ░▓▌[37m[40m                [m
+[37m[40m     [33m[40m▒▒▒▒░░░░░[37m[40m  [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m    [33m[40m▒▒▒░░[37m[40m       [m
+[37m[40m    [33m[40m██▓▓▓▓▓▓▓██[37m[40m         [93m[40m▄[37m[40m     [33m[40m▒▒▒░░░░░[37m[40m     [m
+[37m[40m    [33m[40m▐▓▒░█▒  ░▓▌[37m[40m         [91m[40m█[37m[40m   [33m[40m██▓▓▓▓▓▓▓██[37m[40m    [m
+[37m[40m    [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m             [33m[40m▐▓▒░█▒  ░▓▌[37m[40m    [m
+[37m[40m        [93m[40m▄[37m[40m     [33m[40m▒▒▒░░[37m[40m        [93m[40m▄[33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m    [m
+[37m[40m        [96m[40m█[37m[40m   [33m[40m▒▒▒▒░░░░░[37m[40m   [93m[40m▄[37m[40m  [95m[40m█[37m[40m               [m
+[37m[40m     [32m[40m░░[37m[40m    [33m[40m██▓▓▓▓▓▓▓██[37m[40m  [94m[40m█[37m[40m                  [m
+[37m[40m       [32m[40m░░[37m[40m  [33m[40m▐▓▒░█▒  ░▓▌[37m[40m    [32m[40m░░░[37m[40m    [33m[40m▒▒▒░░[37m[40m     [m
+[37m[40m           [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m   [32m[40m░[37m[40m     [33m[40m▒▒▒▒░░░░░[37m[40m   [m
+[37m[40m                              [33m[40m██▓▓▓▓▓▓▓██[37m[40m  [m
+[37m[40m         [32m[40m░[37m[40m [32m[40m░[37m[40m [32m[40m░[37m[40m                [33m[40m▐▓▒░█▒  ░▓▌[37m[40m  [m
+[37m[40m                     [32m[40m░░░░░[37m[40m    [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m  [m
+[37m[40m                                           [m
+`
+XTermTestv2.write(bb)
 

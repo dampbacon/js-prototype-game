@@ -31,12 +31,12 @@ export class Player{
         this.dex;
         this.cha;
         this.int;
-        this.ac;
+        this.ac=10;
         this.hpMax;
         this.hp;
-        this.slots = {leftHand: false, rightHand: false, head: false, body: false, ring: false}
+        this.slots = {weapon: true, shield: false, head: false, armor: false, ring: false}
         //this.items = Array(5).fill(0)
-        this.basedamage = this.str+skillBonus(this.str)
+        this.basedamage;
         this.persuade = this.cha+skillBonus(this.cha)
         this.weapon = WEAPONmap[WEAPONS.SWORD]
     }

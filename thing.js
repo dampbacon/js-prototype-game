@@ -120,14 +120,9 @@ const XTermTestv2 = new XTermNew({
 screen.append(XTermTestv2)
 
 screen.render()
-//XTermTestv2.writeSync("HEHEHEHEHEHEHEHHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEH\n\nEHEHEHEHEHEHEHEHEHEHEHEHE")
-//XTermTestv2.writeSync("[D[D[D".repeat(2))
-//XTermTestv2.writeSync(chalk.green.bold.bgBlue("test[D[D[D[D[ATEST"))
 let b=XTermTestv2.term.buffer
-//XTermTestv2.reset()
 XTermTestv2.writeSync("")
 XTermTestv2.scrollTo(0)
-//XTermTestv2.scrolling=true
 
 screen.render()
 
@@ -497,9 +492,8 @@ screen.render()
 //sloppy but easy way to make it work
 function eventHandler(gameEvent){
   XTermTestv2.writeSync(gameEvent['toScreen'].toString())
-  logs.writeSync('\n\n')
   logs.writeSync(gameEvent['body'])
-  XTermTestv2.writeSync("\n\r"+chalk.green(JSON.stringify(gameEvent)))
+  XTermTestv2.writeSync("\n"+chalk.green(JSON.stringify(gameEvent)))
   if (gameEvent instanceof(game_event_gain_item)){
   } else if (gameEvent instanceof(game_event_enemy)){
   } else if (gameEvent instanceof(game_event_gain_item)){
@@ -677,7 +671,7 @@ async function gradient_scanlines(terminal=XTermTestv2,text="", speed=5,gradient
   }
   multiline=gradientFunction(multiline)
   let cleaned=''
-  let cleanUp=fitLines(lorem,terminal.term.cols)
+  let cleanUp=fitLines(text,terminal.term.cols)
   for(let line of cleanUp){
     let line_str=line.join('')
     line_str=line_str.concat('\n')
@@ -909,17 +903,34 @@ Donec semper sagittis condimentum.
 Mauris vitae pellentesque tellus. 
 Integer velit neque, 
 fermentum vel tempus non, 
-pulvinar id tellus.
-`
-var grad = smallGrad(['#5ee7df', '#b490ca']);
-var grad2 = grad.hsv(6);
-grad2.forEach((color, i, arr) => {
-	arr[i]=color.toHex()
-})
-grad2.reverse()
-//vice: {colors: ['#5ee7df', '#b490ca'], options: {interpolation: 'hsv'}},
-await new Promise(resolve => setTimeout(resolve, 1000));
-XTermTestv2.writeSync(gradient_scanlines(XTermTestv2,lorem,5,gradient.vice.multiline,grad2))
-await new Promise(resolve => setTimeout(resolve, 1000));
+pulvinar id tellus.`
+// var grad = smallGrad(['#5ee7df', '#b490ca']);
+// var grad2 = grad.hsv(6);
+// grad2.forEach((color, i, arr) => {
+// 	arr[i]=color.toHex()
+// })
+// grad2.reverse()
+var pgrad=['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978']
 
+pgrad.reverse()
+
+//retro: {colors: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'], options: {}},
+//vice: {colors: ['#5ee7df', '#b490ca'], options: {interpolation: 'hsv'}},
+//pastel: {colors: ['#74ebd5', '#74ecd5'], options: {interpolation: 'hsv', hsvSpin: 'long'}}
+
+await new Promise(resolve => setTimeout(resolve, 1000));
+XTermTestv2.writeSync(gradient_scanlines(XTermTestv2,lorem.repeat(2),1,gradient.retro.multiline,pgrad))
+await new Promise(resolve => setTimeout(resolve, 10000));
+logs.writeSync('Y= '+XTermTestv2.term.buffer.active.cursorY+', x= '+XTermTestv2.term.buffer.active.cursorX+
+', terminal height ='+XTermTestv2.term.rows+', terminal width ='+XTermTestv2.term.cols)
+//18 is bottom count starts from 0 inclusive
+XTermTestv2.writeSync('AAA')
 //start event, display mountain, goto mountian or goto village
+//function to scroll text via moving cursor to bottom and writting a few \n then set cursor to 0,0
+function rollLog(terminal=XTermTestv2){
+  let scrollAmount=terminal.term.buffer.active.cursorY+1
+  // \ after \r to escape the hidden newline character
+  terminal.writeSync(`${escDownByNum((terminal.term.rows-1)-terminal.term.buffer.active.cursorY)}\r\
+  ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows-1)}`)
+}
+rollLog()

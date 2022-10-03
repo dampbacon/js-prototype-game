@@ -664,12 +664,20 @@ function shiftArray(arr=[1,2,3,4,5],end='',populate=true,populateArray=['h','i',
   return retVal
 }
 
+function mapTextPosition(textArr){
+  let lines = textArr;
+  for(let y=0;y<lines.length;y++){
+    for(let x=0;x<lines[y].length;x++){
+      lines[y][x]=[lines[y][x],x,y]
+    }  
+  } 
+}
+
 
 let rainbowVoil=[ 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
 let rainbowWithBlue=[ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ]
-//later makes a varient that constructs a multiline gradient and writes that as the last stepe
 async function scanlines(terminal=XTermTestv2,text='', speed=5,colorArr=[]){
-  colorArr = colorArr ? [ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ] : colorArr
+  colorArr = colorArr ? colorArr : [ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ] 
   let lines = fitLines(text,terminal.term.cols)
   let arr2 = Array(colorArr.length).fill('')
   let cursorPos = 1
@@ -692,6 +700,81 @@ async function scanlines(terminal=XTermTestv2,text='', speed=5,colorArr=[]){
   }
 }
 
+async function gradient_scanlines(terminal=XTermTestv2,text="", speed=5,gradientFunction,colorArr=[]){
+  let lorem_lines=fitLines(text,terminal.term.cols)
+  let multiline=``
+  for(let line of lorem_lines){
+    let line_str=line.join('')
+    line_str=line_str.concat('\n')
+    multiline=multiline.concat(line_str)
+  }
+  multiline=gradientFunction(multiline)
+  let cleaned=''
+  let cleanUp=fitLines(lorem,terminal.term.cols)
+  for(let line of cleanUp){
+    let line_str=line.join('')
+    line_str=line_str.concat('\n')
+    cleaned=cleaned.concat(line_str)
+  }
+  let texttoarr = multiline 
+  let texttoarr2 = cleaned 
+  let strArr=texttoarr.split("\n");
+  let strArr2=texttoarr2.split("\n");
+  for(let i=0;i<strArr.length;i++){
+    strArr[i]=strArr[i].split(" ")
+    strArr2[i]=strArr2[i].split(" ")
+  }
+  let temp_arr=JSON.parse(JSON.stringify(strArr2))
+  mapTextPosition(temp_arr) 
+  //effectivelly ignores first element of array so must compensate for that
+  colorArr = colorArr ? [colorArr[0],...colorArr] : [ 'ffffff','ffffff', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ] 
+  let gradient_text = strArr;
+  let lines = temp_arr;
+  let arr2 = Array(colorArr.length).fill('')
+  let cursorPos = 1
+  //add 2d array word position
+  let arr=arr2.map((content,index,arr)=>{arr[index] = [cursorPos,content,0/*XposArr*/,0/*YposArr*/]})
+  for(let line of lines){
+    for(let [index,word] of line.entries()){
+      line[index][0]=word[0].concat(' ')
+    }
+  }
+  for(let line of gradient_text){
+    for(let [index,word] of line.entries()){
+      line[index]=word.concat(' ')
+    }
+  }
+  for(let x=0;x<lines.length;x++){
+    let line = lines[x]
+    for(let i = 0; i < line.length+arr.length-1; i++){
+      shiftArray(arr,'',true,line)
+      shiftArray(arr2,['','',0,0,],false)
+      arr2[arr2.length-1] = [cursorPos , arr[arr.length-1]]
+      for(let i = arr.length-1; i > - 1 ; i--){
+        if(!(i===0)){
+          if (arr2[i][0]){
+            if (arr2[i][1][0]){terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1][0])}`)}
+            await new Promise(resolve => setTimeout(resolve,speed))
+          }
+        }else if(i===0){
+          if (arr2[i][0]){
+            if (arr2[i][1][0]){terminal.writeSync(`[${arr2[i][0]}G${gradient_text[arr2[i][1][2]][arr2[i][1][1]]}`)}
+            await new Promise(resolve => setTimeout(resolve,speed))
+          }
+        }
+      }
+      try {
+        cursorPos = cursorPos+=arr[arr.length-1][0].length
+      } catch (error) {
+        cursorPos = cursorPos+=0
+      }
+   }
+   terminal.writeSync('\n')
+   cursorPos = 1
+  }
+}
+
+
 
 //ESC[?25l	make cursor invisible
 //ESC[?25h	make cursor visible
@@ -700,19 +783,6 @@ async function scanlines(terminal=XTermTestv2,text='', speed=5,colorArr=[]){
 console.log('[?25l')
 XTermTestv2.writeSync('[?25l')
 logs.writeSync('[?25l')
-
-let test1=`This is a very long single line string which might be used to display assertion messages or some text. It has much more than 80 symbols so it would take more then one screen in your text editor to view it. `
-//fitLines(test1.repeat(1),XTermTestv2.term.cols)
-//scanlines(XTermTestv2,test1.repeat(1),2)
-//scanlines(logs,test1.repeat(1),2)
-
-var hrTime = process.hrtime()
-
-//await new Promise(resolve => setTimeout(resolve, 1500))
-//await new Promise(resolve => setTimeout(resolve, 1500))
-let pop = ['e','f','g',]
-let arrayTest=['a','b','c','d',]
-
 
 function toggleUi(){
   form_thing.toggle()
@@ -727,7 +797,7 @@ await new Promise(resolve => setTimeout(resolve, 1500))
 //toggleUi()
 stats.focus()
 screen.render()
-
+//stats box
 var box = blessed.box({
   top: 'center',
   left: 'center',
@@ -787,7 +857,6 @@ box.key('enter', function() {
   box.hide()
 }
 )
-//let rainbowVoil=[ 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
 
 function refreshStats(player=thePlayer) {
   stats.setContent(
@@ -806,9 +875,7 @@ refreshStats()
 box.focus()
 screen.render()
 
-//let a=pkg.decode(aaaaa,'win1252')
-let bb =`
-    ${chalk.bold(`THE VILLAGE`)}
+let bb =`    ${chalk.bold(`THE VILLAGE`)}
 [37m[40m                                           [m
 [37m[40m                   [33m[40m▒▒▒░░[37m[40m                   [m
 [37m[40m                 [33m[40m▒▒▒▒░░░░░[37m[40m                 [m
@@ -858,7 +925,6 @@ let mountain=`[37m[40m                        [97m[40m░░[37m[40m      
 //reminder how to convert ansi art to utf8
 //run script on cmder to convert my ansi art to utf8
 //ansiart2utf8 mountain.ans > sometext.txt
-
 //XTermTestv2.write(mountain)
 
 //test string
@@ -879,96 +945,8 @@ fermentum vel tempus non,
 pulvinar id tellus.
 `
 
-
-
-
-let lorem_lines=fitLines(lorem,XTermTestv2.term.cols)
-let multiline=``
-for(let line of lorem_lines){
-  let line_str=line.join('')
-  line_str=line_str.concat('\n')
-  multiline=multiline.concat(line_str)
-}
-multiline=gradient.rainbow.multiline(multiline)
-let cleaned=''
-let cleanUp=fitLines(lorem,XTermTestv2.term.cols)
-for(let line of cleanUp){
-  let line_str=line.join('')
-  line_str=line_str.concat('\n')
-  cleaned=cleaned.concat(line_str)
-}
-let texttoarr = multiline 
-let texttoarr2 = cleaned 
-let strArr=texttoarr.split("\n");
-let strArr2=texttoarr2.split("\n");
-for(let i=0;i<strArr.length;i++){
-  strArr[i]=strArr[i].split(" ")
-  strArr2[i]=strArr2[i].split(" ")
-}
-function mapTextPosition(textArr){
-  let lines = textArr;
-  for(let y=0;y<lines.length;y++){
-    for(let x=0;x<lines[y].length;x++){
-      lines[y][x]=[lines[y][x],x,y]
-    }  
-  } 
-}
-//deep copy
-let temp_arr=JSON.parse(JSON.stringify(strArr2))
-mapTextPosition(temp_arr) 
-async function gradient_scanlines(terminal=XTermTestv2,textArr=strArr2,gradientArr=strArr, speed=5,colorArr=[]){
-  
-  colorArr = colorArr ? [ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ] : colorArr
-  let gradient_text = gradientArr;
-  // add arr to text arr so each word in a line like ['word',x,y]
-  let lines = textArr;
-  let arr2 = Array(colorArr.length).fill('')
-  let cursorPos = 1
-  //add 2d array word position
-  let arr=arr2.map((content,index,arr)=>{arr[index] = [cursorPos,content,0/*XposArr*/,0/*YposArr*/]})
-  for(let line of lines){
-    for(let [index,word] of line.entries()){
-      line[index][0]=word[0].concat(' ')
-    }
-  }
-  for(let line of gradient_text){
-    for(let [index,word] of line.entries()){
-      line[index]=word.concat(' ')
-    }
-  }
-  for(let x=0;x<lines.length;x++){
-    let line = lines[x]
-    for(let i = 0; i < line.length+arr.length-1; i++){
-      shiftArray(arr,'',true,line)
-      shiftArray(arr2,['','',0,0,],false)
-      arr2[arr2.length-1] = [cursorPos , arr[arr.length-1]]
-      for(let i = arr.length-1; i > - 1 ; i--){
-        if(!(i===0)){
-          if (arr2[i][0]){
-            if (arr2[i][1][0])
-            {terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1][0])}`)}
-            await new Promise(resolve => setTimeout(resolve,speed))
-          }
-        }else{
-          if (arr2[i][0]){
-            if (arr2[i][1][0])
-            {terminal.writeSync(`[${arr2[i][0]}G${gradient_text[arr2[i][1][2]][arr2[i][1][1]]}`)}
-            await new Promise(resolve => setTimeout(resolve,speed))
-          }
-        }
-      }
-      try {
-        cursorPos = cursorPos+=arr[arr.length-1][0].length
-      } catch (error) {
-        cursorPos = cursorPos+=0
-      }
-   }
-   terminal.writeSync('\n')
-   cursorPos = 1
-  }
-}
 await new Promise(resolve => setTimeout(resolve, 1000));
 //XTermTestv2.writeSync(multiline+"")
-XTermTestv2.writeSync(gradient_scanlines(XTermTestv2,temp_arr,strArr,3))
+XTermTestv2.writeSync(gradient_scanlines(XTermTestv2,lorem,50,gradient.pastel.multiline,rainbowWithBlue))
 await new Promise(resolve => setTimeout(resolve, 1000));
 //XTermTestv2.writeSync(multiline)

@@ -161,39 +161,6 @@ const logs = new XTermNew({
 }).with(scroll.scroll,scroll.throttle)
 screen.append(logs)
 
-
-
-
-// const logs = grid.set(6,6,6,6,blessed.box,{
-//   tags: true,
-//   label: 'log',
-//   alwaysScroll: 'true',
-//   scrollable: 'true',
-//   scrollbars: 'true',
-//   scrollbar: {
-//     ch: ' ',
-//     track: {
-//       bg: 'blue'
-//     },
-//     style: {
-//       inverse: true
-//     }
-//   },
-//   keys: true,
-//   border: {
-//     type: 'line'
-//   },
-//   style: {
-//     border: {
-//       fg: '#f0f0f0'
-//     },
-//     hover: {
-//       //bg: 'green'
-//     },
-//     focus:     { border: { fg: "green" } }
-//   }
-// });
-//in future will display player stats
 const stats=grid.set(0,9,6,1,blessed.box,{
   tags: true,
   padding: {
@@ -952,5 +919,7 @@ grad2.forEach((color, i, arr) => {
 grad2.reverse()
 //vice: {colors: ['#5ee7df', '#b490ca'], options: {interpolation: 'hsv'}},
 await new Promise(resolve => setTimeout(resolve, 1000));
-XTermTestv2.writeSync(gradient_scanlines(XTermTestv2,lorem,3,gradient.vice.multiline,grad2))
+XTermTestv2.writeSync(gradient_scanlines(XTermTestv2,lorem,5,gradient.vice.multiline,grad2))
 await new Promise(resolve => setTimeout(resolve, 1000));
+
+//start event, display mountain, goto mountian or goto village

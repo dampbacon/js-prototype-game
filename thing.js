@@ -17,6 +17,8 @@ import * as scroll from './blessed/scroll.cjs';
 import { rollStat } from './player.js';
 import fs from 'fs';
 import pkg from 'iconv-lite';
+import smallGrad from 'tinygradient';
+const {tinygradient} = smallGrad;
 const {iconv} = pkg;
 
 
@@ -672,8 +674,6 @@ function mapTextPosition(textArr){
     }  
   } 
 }
-
-
 let rainbowVoil=[ 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
 let rainbowWithBlue=[ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ]
 async function scanlines(terminal=XTermTestv2,text='', speed=5,colorArr=[]){
@@ -944,9 +944,13 @@ Integer velit neque,
 fermentum vel tempus non, 
 pulvinar id tellus.
 `
-
+var grad = smallGrad(['#5ee7df', '#b490ca']);
+var grad2 = grad.hsv(6);
+grad2.forEach((color, i, arr) => {
+	arr[i]=color.toHex()
+})
+grad2.reverse()
+//vice: {colors: ['#5ee7df', '#b490ca'], options: {interpolation: 'hsv'}},
 await new Promise(resolve => setTimeout(resolve, 1000));
-//XTermTestv2.writeSync(multiline+"")
-XTermTestv2.writeSync(gradient_scanlines(XTermTestv2,lorem,50,gradient.pastel.multiline,rainbowWithBlue))
+XTermTestv2.writeSync(gradient_scanlines(XTermTestv2,lorem,3,gradient.vice.multiline,grad2))
 await new Promise(resolve => setTimeout(resolve, 1000));
-//XTermTestv2.writeSync(multiline)

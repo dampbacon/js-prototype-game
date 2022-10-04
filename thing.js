@@ -23,10 +23,98 @@ const {iconv} = pkg;
 
 
 // test content
-let temp_event1=new game_event({'id':1, 'body':chalk.yellow("event1"), 'toScreen':"world", 'buttons':[[1,"goto 1(recur)",true],[2,"goto 2",true],[3,"goto 3 lolololololololollolololololololol",true]]})
-let temp_event2=new game_event({'id':2,'body':chalk.blue("event2"),'toScreen':"adasfas",'buttons':[[1,"goto 1",true],[3,"goto 3",true]]})
-let temp_event3=new game_event({'id':3,'body':chalk.red("event3"),'toScreen':"dsfdasg",'buttons':[[2,"goto 2",true]]})
-let testEventArr=[temp_event1,temp_event2,temp_event3]
+let 
+mountain=`[37m[40m                        [97m[40m░░[37m[40m                            [m
+[37m[40m                  [97m[40m▒░[37m[40m   [97m[40m░██▓▓[90m[40m░░[37m[40m                        [m
+[37m[40m                 [97m[40m█▓░░[37m[40m [97m[40m░▓█████▓▒░░[37m[40m [90m[40m░[37m[40m                   [m
+[37m[40m               [97m[40m▓▓▒░░▓███▒█▒▒███▓▒░[90m[40m░[37m[40m  [90m[40m░[37m[40m                [m
+[37m[40m             [97m[40m░▓░░[37m[40m [90m[40m░[97m[40m█▒█[90m[40m░[97m[40m░▒█[90m[40m░░▒░[97m[40m░█▓▒[90m[40m░[37m[40m  [90m[40m░░[37m[40m               [m
+[37m[40m           [97m[40m░▒▒░[37m[40m  [90m[40m░[97m[40m██[37m[40m▒░ [97m[40m░[90m[40m░░[37m[40m  [97m[40m▓▓▒[37m[40m [97m[40m░▓▓▒[37m[40m  [90m[40m░[37m[40m  [97m[40m▒▓[37m[40m           [m
+[37m[40m         [97m[40m░▒▒[37m[40m   [97m[40m░▓[90m[40m▓[37m[40m▒░░ [90m[40m░[37m[40m▒[90m[40m░[37m[40m   [90m[40m░▒[97m[40m▓▒░[37m[40m  [97m[40m▓[96m[40m▓░[90m[40m▒[97m[40m▒▒▒▒▓▒[37m[40m         [m
+[37m[40m   [97m[40m░▒▓▓▓▒▒[37m[40m   [97m[40m░▓█[37m[40m▓░░ ░▒░ [97m[40m█▓[37m[40m   [90m[40m░▒▒[97m[40m▓[90m[40m░[96m[40m▒███[97m[40m▓░[37m[40m    [97m[40m▓▓▒[37m[40m       [m
+[37m[40m  [97m[40m▒▓░[37m[40m [97m[40m░█▓▒░[37m[40m [97m[40m░█[90m[40m▒[37m[40m░░ ▒▒[90m[40m░[37m[40m  ▓▓[97m[40m▒▒░[37m[40m  [90m[40m░░[97m[40m▓[96m[40m▓▓██[90m[40m█▓░[37m[40m     [90m[40m░[97m[40m▓▒[37m[40m      [m
+[37m[40m [97m[40m▓▓░▒▒[90m[40m░[37m[40m  [97m[40m▒██▓[90m[40m░[37m[40m░░░▒[90m[40m░[37m[40m  [97m[40m░▒[37m[40m█▒░ [97m[40m▒▒[37m[40m  [96m[40m░▓███░[37m[40m [90m[40m▓█[37m[40m      [90m[40m░[97m[40m▓▓[37m[40m     [m
+[37m[40m [97m[40m░[37m[40m  [97m[40m░▒▒▒[90m[40m░[37m[40m  [90m[40m░[97m[40m▓▓▓▓[90m[40m░░[37m[40m  [97m[40m▒▒[90m[40m░░░░█[37m[40m [97m[40m▒▒[37m[40m [96m[40m░░█████░[90m[40m██▓░[37m[40m     [97m[40m▓▒[37m[40m    [m
+[37m[40m       [97m[40m▓▒▒░[90m[40m░[37m[40m   [97m[40m▓▒[90m[40m░[37m[40m ░[97m[40m▒[90m[40m░░[37m[40m  ▓[90m[40m░░[37m[40m [97m[40m░▒▒[37m[40m [96m[40m▒[37m[40m   [96m[40m▓█▒[37m[40m [90m[40m▒▓▓[37m[40m     [97m[40m▒▒▒[37m[40m  [m
+[37m[40m      [90m[40m░░[37m[40m [97m[40m░░[90m[40m░[37m[40m     [90m[40m░[37m[40m █[90m[40m░▓[37m[40m    ░[90m[40m░░[37m[40m  [97m[40m▒░[37m[40m    [96m[40m░██░[37m[40m  [90m[40m▒▓░[37m[40m     [97m[40m▒▒[90m[40m░[m
+[37m[40m     [90m[40m░░[37m[40m    [90m[40m░░▒░░░░[37m[40m ▒[90m[40m░[37m[40m       [90m[40m█[37m[40m░        [96m[40m█░[37m[40m    [90m[40m░░[37m[40m       [90m[40m░[m
+[37m[40m     [90m[40m░[37m[40m         [90m[40m░[37m[40m [33m[40m░░░░░░[37m[40m▒[33m[40m░░░░[32m[40m░░▒▒▒░[37m[40m [33m[40m░░[94m[40m▓▓▓[33m[40m░▒▒▒▒▒▒▒▒▒▒░░░[m
+[37m[40m [33m[40m░░░▒▒▒▒▒▒▒[32m[40m▓▓▓▓▒▒▒▒[33m[40m░░[32m[40m▒▒[37m[40m▓[32m[40m▒▓████▒[33m[40m░▒▒▒[34m[40m▓[94m[40m█▓[33m[40m░░░░[37m[40m            [m
+[37m[40m    [32m[40m░░░░░░▒▒░░▒▓▓▓▒▒▒▒[37m[40m▓░[32m[40m▓░[37m[40m  [32m[40m░▒▓▓▒▒▒[34m[40m▒▓[32m[40m▒▒░░░░░░░░░[37m[40m      [m
+[37m[40m        [32m[40m░▒▒█▓▒▒░░░▒▒██[37m[40m░[32m[40m▓▒░[37m[40m    [32m[40m░░░[37m[40m   [34m[40m░░▒▒▓▒[37m[40m            [m
+[37m[40m   [32m[40m▒▒▒░░▒▒▓█████▓████[37m[40m▓▓[32m[40m▒░[37m[40m [32m[40m░▒▒▒▒░░░░░░░[34m[40m▒░▒[32m[40m▒[37m[40m            [m
+[32m[40m▒▒[33m[40m░░░[32m[40m▓█▓▒▒░[37m[40m [33m[40m░░[32m[40m░██░[37m[40m ░▓      [32m[40m░▒░░░░░▒▒[34m[40m▓▓▓[37m[40m  [32m[40m▒▓░[37m[40m          [m
+[37m[40m  [37m[43m▄▄▄[37m[40m▄[33m[40m░░░[32m[40m▒▒░[37m[43m▄[33m[40m▀[37m[40m    ░█░    [94m[40m▒▒▒[34m[40m▓[94m[40m███▓▓▒[34m[40m▒▒[32m[40m░▓▓▒░[37m[40m            [m
+[37m[40m [33m[40m░░░░[37m[40m▒[33m[40m███[37m[40m   ▒     █▀   [94m[40m░█▓▓████▒███▓▒[37m[40m [32m[40m░░░░▓[37m[40m           [m
+[37m[40m [33m[40m████[37m[40m▀▀▒▄▄▄▒▒   ▄▀▀   [94m[40m▒░█▒▒█▒▓███▒░█▒[37m[40m     [32m[40m▓[37m[40m           [m
+[37m[40m [33m[40m▀▀[37m[43m▄▄[37m[40m▄▄▒    ▀▀▀▀▀     [94m[40m█▓█▒█▒[37m[40m                          [m
+[37m[40m                     [94m[40m░▓▒░░[37m[40m                            [m
+[37m[40m                                                      [m
+`
+
+
+
+let temp_event1=new game_event({
+  id:1, 
+  body:{
+    body:'some words for an test event, plz work~~~~~~~~~~`we wq ew qkiuoh hj khgfdf gk hj gf dhjksgfd'.repeat(3),
+    format:{
+        writeMode:'gradientScanlines', 
+        gradientFunction:gradient.retro.multiline,
+        gradientArr:['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
+        speed:4,
+    },
+    TextFile:{
+        exists:false,
+        url:''
+    },
+  },
+  toScreen:{
+    toScreen:mountain,
+    AnsiFile:{
+        exists:false,
+        url:'',
+    },
+  },
+  buttons:[
+    [1,"goto 1(recur)",true],
+    [2,"goto 2",true],
+    //[3,"goto 3 lolololololololollolololololololol",true]
+  ]
+})
+
+
+let temp_event2= new game_event({
+  id:2, 
+  body:{
+    body:'GAME EVENT 2, plz work~~~~~~~~~~`wewqewqkiuohhjkhgfdfgkhjgfdhjksgfd',
+    format:{
+        writeMode:'gradientScanlines', 
+        gradientFunction:gradient.retro.multiline,
+        gradientArr:['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
+    },
+    TextFile:{
+        exists:false,
+        url:''
+    },
+  },
+  toScreen:{
+    toScreen:"~~~AAAA~~~~",
+    AnsiFile:{
+        exists:false,
+        url:'',
+    },
+  },
+  buttons:[
+    [1,"goto 1",true],
+    //[2,"goto 2",true],
+    //[3,"goto 3 lolololololololollolololololololol",true]
+  ]
+})
+
+
+
+let testEventArr=[temp_event1,temp_event2,]
 let story={}
 
 //test content
@@ -490,10 +578,16 @@ stats.focus()
 screen.render()
 
 //sloppy but easy way to make it work
-function eventHandler(gameEvent){
-  XTermTestv2.writeSync(gameEvent['toScreen'].toString())
-  logs.writeSync(gameEvent['body'])
-  XTermTestv2.writeSync("\n"+chalk.green(JSON.stringify(gameEvent)))
+function eventHandler(gameEvent=temp_event1){
+  rollLog(logs)
+  let gbf=gameEvent.body.format
+  //make enum thing later
+  if(gbf.writeMode='gradientScanlines'){
+    gradient_scanlines(logs,gameEvent.body.body,gbf.speed,gbf.gradientFunction,gbf.gradientArr)
+  }
+
+  XTermTestv2.writeSync(gameEvent.toScreen.toScreen)
+
   if (gameEvent instanceof(game_event_gain_item)){
   } else if (gameEvent instanceof(game_event_enemy)){
   } else if (gameEvent instanceof(game_event_gain_item)){
@@ -717,7 +811,7 @@ async function gradient_scanlines(terminal=XTermTestv2,text="", speed=5,gradient
             if (arr2[i][1][0]){terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1][0])}`)}
             await new Promise(resolve => setTimeout(resolve,speed))
           }
-        }else if(i===0){
+        }else if(i===0){ 
           if (arr2[i][0]){
             if (arr2[i][1][0]){terminal.writeSync(`[${arr2[i][0]}G${gradient_text[arr2[i][1][2]][arr2[i][1][1]]}`)}
             await new Promise(resolve => setTimeout(resolve,speed))
@@ -730,8 +824,11 @@ async function gradient_scanlines(terminal=XTermTestv2,text="", speed=5,gradient
         cursorPos = cursorPos+=0
       }
    }
-   terminal.writeSync('\n')
+   if(!(x===lines.length-1)){
+    terminal.writeSync('\n')
+   }
    cursorPos = 1
+   
   }
 }
 
@@ -754,7 +851,6 @@ function toggleUi(){
 }
 toggleUi()
 screen.render()
-await new Promise(resolve => setTimeout(resolve, 1500))
 //toggleUi()
 stats.focus()
 screen.render()
@@ -794,7 +890,7 @@ thePlayer.basedamage= thePlayer.str+5
 
 screen.append(box);
 screen.render()
-await new Promise(resolve => setTimeout(resolve, 700))
+await new Promise(resolve => setTimeout(resolve, 1))
 box.pushLine(`${' '.repeat(Math.floor(box.width/2)-' HP: '.length-2)} hp: ${thePlayer.hp}`)
 screen.render()
 await new Promise(resolve => setTimeout(resolve,  1))
@@ -856,7 +952,8 @@ let bb =`    ${chalk.bold(`THE VILLAGE`)}
 [37m[40m                     [32m[40m░░░░░[37m[40m    [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m  [m
 [37m[40m                                           [m
 `
-let mountain=`[37m[40m                        [97m[40m░░[37m[40m                            [m
+
+mountain=`[37m[40m                        [97m[40m░░[37m[40m                            [m
 [37m[40m                  [97m[40m▒░[37m[40m   [97m[40m░██▓▓[90m[40m░░[37m[40m                        [m
 [37m[40m                 [97m[40m█▓░░[37m[40m [97m[40m░▓█████▓▒░░[37m[40m [90m[40m░[37m[40m                   [m
 [37m[40m               [97m[40m▓▓▒░░▓███▒█▒▒███▓▒░[90m[40m░[37m[40m  [90m[40m░[37m[40m                [m
@@ -883,6 +980,7 @@ let mountain=`[37m[40m                        [97m[40m░░[37m[40m      
 [37m[40m                     [94m[40m░▓▒░░[37m[40m                            [m
 [37m[40m                                                      [m
 `
+
 //reminder how to convert ansi art to utf8
 //run script on cmder to convert my ansi art to utf8
 //ansiart2utf8 mountain.ans > sometext.txt
@@ -890,7 +988,7 @@ let mountain=`[37m[40m                        [97m[40m░░[37m[40m      
 
 //test string
 let lorem=
-`Lorem ipsum dolor sit amet, 
+`Lorem ipsum dolor sit amet,
 consectetur adipiscing elit. 
 Morbi varius ut augue ac sagittis. 
 Vivamus lectus lacus, commodo eu ligula pulvinar, 
@@ -918,13 +1016,13 @@ pgrad.reverse()
 //vice: {colors: ['#5ee7df', '#b490ca'], options: {interpolation: 'hsv'}},
 //pastel: {colors: ['#74ebd5', '#74ecd5'], options: {interpolation: 'hsv', hsvSpin: 'long'}}
 
-await new Promise(resolve => setTimeout(resolve, 1000));
-XTermTestv2.writeSync(gradient_scanlines(XTermTestv2,lorem.repeat(2),1,gradient.retro.multiline,pgrad))
-await new Promise(resolve => setTimeout(resolve, 10000));
-logs.writeSync('Y= '+XTermTestv2.term.buffer.active.cursorY+', x= '+XTermTestv2.term.buffer.active.cursorX+
-', terminal height ='+XTermTestv2.term.rows+', terminal width ='+XTermTestv2.term.cols)
+
+// await new Promise(resolve => setTimeout(resolve, 10000));
+// logs.writeSync('Y= '+XTermTestv2.term.buffer.active.cursorY+', x= '+XTermTestv2.term.buffer.active.cursorX+
+// ', terminal height ='+XTermTestv2.term.rows+', terminal width ='+XTermTestv2.term.cols)
+
+
 //18 is bottom count starts from 0 inclusive
-XTermTestv2.writeSync('AAA')
 //start event, display mountain, goto mountian or goto village
 //function to scroll text via moving cursor to bottom and writting a few \n then set cursor to 0,0
 function rollLog(terminal=XTermTestv2){
@@ -933,4 +1031,8 @@ function rollLog(terminal=XTermTestv2){
   terminal.writeSync(`${escDownByNum((terminal.term.rows-1)-terminal.term.buffer.active.cursorY)}\r\
   ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows-1)}`)
 }
-rollLog()
+// scanlines(XTermTestv2,lorem,20,pgrad)
+scanlines(XTermTestv2,"apples are disgusting",20,pgrad)
+//XTermTestv2.writeSync(gradient_scanlines(logs,"apples are disgusting",20,gradient.retro.multiline,pgrad))
+
+//rollLog()

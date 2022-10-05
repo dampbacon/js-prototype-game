@@ -3,8 +3,8 @@ import Chance from 'chance';
 const chance1 = new Chance();
 //make roll initiative function in main file
 
-class monster{
-    constructor(name='', hitDie=2, AC=10, aggro/*12always hostile 0 inverse */, morale, weapon, dmgDie, rarity) {
+class monster {
+    constructor(name = '', hitDie = 2, AC = 10, aggro/*12always hostile 0 inverse */, morale, weapon, dmgDie, rarity) {
         this.name = name;
         this.hitDie = hitDie;
         this.AC = AC;
@@ -16,15 +16,15 @@ class monster{
         this.hp = chance1.rpg(`${this.hitDie}d6`);
     }
 }
-function copyMonster(monsterToCopy){
+function copyMonster(monsterToCopy) {
     return new monster(
-        monsterToCopy.name, 
-        monsterToCopy.hitDie, 
-        monsterToCopy.AC, 
-        monsterToCopy.morale, 
-        monsterToCopy.weapon, 
-        monsterToCopy.dmgDie, 
-        monsterToCopy.aggro, 
+        monsterToCopy.name,
+        monsterToCopy.hitDie,
+        monsterToCopy.AC,
+        monsterToCopy.morale,
+        monsterToCopy.weapon,
+        monsterToCopy.dmgDie,
+        monsterToCopy.aggro,
         monsterToCopy.rarity
     )
 }

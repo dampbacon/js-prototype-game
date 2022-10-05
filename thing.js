@@ -7,9 +7,9 @@ import chalk from 'chalk';
 import BlessedContrib from 'blessed-contrib';
 import gradient from 'gradient-string';
 import chalkAnimation from 'chalk-animation';
-import {game_event, game_event_enemy, game_event_gain_item} from './game_events.js'
+import { game_event, game_event_enemy, game_event_gain_item } from './game_events.js'
 import { clearInterval } from 'timers';
-import {Player} from './player.js';
+import { Player } from './player.js';
 import { hrtime } from 'node:process';
 import os from 'os'
 import './blessed/patches.cjs';
@@ -18,13 +18,13 @@ import { rollStat } from './player.js';
 import fs from 'fs';
 import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
-const {tinygradient} = smallGrad;
-const {iconv} = pkg;
+const { tinygradient } = smallGrad;
+const { iconv } = pkg;
 
 
 // test content
-let 
-mountain=`[37m[40m                        [97m[40m░░[37m[40m                            [m
+let
+  mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
 [37m[40m                  [97m[40m▒░[37m[40m   [97m[40m░██▓▓[90m[40m░░[37m[40m                        [m
 [37m[40m                 [97m[40m█▓░░[37m[40m [97m[40m░▓█████▓▒░░[37m[40m [90m[40m░[37m[40m                   [m
 [37m[40m               [97m[40m▓▓▒░░▓███▒█▒▒███▓▒░[90m[40m░[37m[40m  [90m[40m░[37m[40m                [m
@@ -54,59 +54,59 @@ mountain=`[37m[40m                        [97m[40m░░[37m[40m          
 
 
 
-let temp_event1=new game_event({
-  id:1, 
-  body:{
-    body:'some words for an test event, plz work~~~~~~~~~~`we wq ew qkiuoh hj khgfdf gk hj gf dhjksgfd'.repeat(3),
-    format:{
-        writeMode:'gradientScanlines', 
-        gradientFunction:gradient.retro.multiline,
-        gradientArr:['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
-        speed:4,
+let temp_event1 = new game_event({
+  id: 1,
+  body: {
+    body: 'some words for an test event, plz work~~~~~~~~~~`we wq ew qkiuoh hj khgfdf gk hj gf dhjksgfd'.repeat(3),
+    format: {
+      writeMode: 'gradientScanlines',
+      gradientFunction: gradient.retro.multiline,
+      gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
+      speed: 4,
     },
-    TextFile:{
-        exists:false,
-        url:''
-    },
-  },
-  toScreen:{
-    toScreen:mountain,
-    AnsiFile:{
-        exists:false,
-        url:'',
+    TextFile: {
+      exists: false,
+      url: ''
     },
   },
-  buttons:[
-    [1,"goto 1(recur)",true],
-    [2,"goto 2",true],
+  toScreen: {
+    toScreen: mountain,
+    AnsiFile: {
+      exists: false,
+      url: '',
+    },
+  },
+  buttons: [
+    [1, "goto 1(recur)", true],
+    [2, "goto 2", true],
     //[3,"goto 3 lolololololololollolololololololol",true]
   ]
 })
 
 
-let temp_event2= new game_event({
-  id:2, 
-  body:{
-    body:'GAME EVENT 2, plz work~~~~~~~~~~`wewqewqkiuohhjkhgfdfgkhjgfdhjksgfd',
-    format:{
-        writeMode:'gradientScanlines', 
-        gradientFunction:gradient.retro.multiline,
-        gradientArr:['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
+let temp_event2 = new game_event({
+  id: 2,
+  body: {
+    body: 'GAME EVENT 2, plz work~~~~~~~~~~`wewqewqkiuohhjkhgfdfgkhjgfdhjksgfd',
+    format: {
+      writeMode: 'gradientScanlines',
+      gradientFunction: gradient.retro.multiline,
+      gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
     },
-    TextFile:{
-        exists:false,
-        url:''
-    },
-  },
-  toScreen:{
-    toScreen:"~~~AAAA~~~~",
-    AnsiFile:{
-        exists:false,
-        url:'',
+    TextFile: {
+      exists: false,
+      url: ''
     },
   },
-  buttons:[
-    [1,"goto 1",true],
+  toScreen: {
+    toScreen: "~~~AAAA~~~~",
+    AnsiFile: {
+      exists: false,
+      url: '',
+    },
+  },
+  buttons: [
+    [1, "goto 1", true],
     //[2,"goto 2",true],
     //[3,"goto 3 lolololololololollolololololololol",true]
   ]
@@ -114,12 +114,12 @@ let temp_event2= new game_event({
 
 
 
-let testEventArr=[temp_event1,temp_event2,]
-let story={}
+let testEventArr = [temp_event1, temp_event2,]
+let story = {}
 
 //test content
-let body = 
-`[0m\r
+let body =
+  `[0m\r
 \r
   [1;34m░░░░░░░░░░░░[0m\r
 [1;34m░░░░░[0m\r
@@ -138,7 +138,7 @@ let body =
 [1;31m♥♥♥♥♥[0m\r
 [1;31m♥♥[0m\r`
 let caleb =
-`[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
+  `[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
 [38;5;241;48;5;241m▄[38;5;242;48;5;242m▄[48;5;242m  [38;5;242;48;5;242m▄▄[38;5;241;48;5;241m▄[48;5;241m  [38;5;59;48;5;241m▄[48;5;59m [38;5;59;48;5;59m▄[38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄[38;5;241;48;5;59m▄[48;5;59m [38;5;240;48;5;241m▄[38;5;59;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;240;48;5;240m▄▄[38;5;239;48;5;239m▄▄▄▄▄[48;5;239m  [38;5;239;48;5;239m▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄[48;5;239m [38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[m\r
 [38;5;241;48;5;241m▄▄[38;5;242;48;5;242m▄▄▄▄[38;5;241;48;5;241m▄▄[48;5;241m [38;5;241;48;5;59m▄▄▄[38;5;241;48;5;241m▄▄[38;5;242;48;5;241m▄[38;5;241;48;5;241m▄▄[38;5;241;48;5;59m▄▄[38;5;241;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄[38;5;240;48;5;59m▄▄[38;5;95;48;5;95m▄▄[38;5;240;48;5;59m▄[38;5;239;48;5;239m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄▄[38;5;239;48;5;240m▄[38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;238m▄[48;5;239m  [38;5;239;48;5;239m▄▄▄▄[m\r
 [38;5;59;48;5;59m▄[38;5;59;48;5;241m▄[38;5;241;48;5;241m▄▄[38;5;242;48;5;242m▄[38;5;241;48;5;242m▄[38;5;241;48;5;241m▄▄▄▄▄[38;5;59;48;5;59m▄[38;5;241;48;5;241m▄▄▄▄▄▄▄▄[38;5;241;48;5;59m▄[38;5;101;48;5;59m▄[38;5;101;48;5;95m▄▄[38;5;240;48;5;101m▄[38;5;239;48;5;95m▄[38;5;241;48;5;241m▄[38;5;95;48;5;95m▄[38;5;240;48;5;59m▄[38;5;238;48;5;239m▄[38;5;237;48;5;238m▄[38;5;236;48;5;237m▄[38;5;235;48;5;238m▄[38;5;235;48;5;237m▄[38;5;236;48;5;237m▄[38;5;236;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄▄▄▄▄▄▄▄▄▄▄[38;5;238;48;5;238m▄[m\r
@@ -162,7 +162,7 @@ let caleb =
 [38;5;137;48;5;137m▄[38;5;101;48;5;137m▄[38;5;95;48;5;137m▄[38;5;239;48;5;137m▄[38;5;238;48;5;95m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄▄▄[38;5;236;48;5;236m▄▄[38;5;235;48;5;234m▄[38;5;233;48;5;234m▄▄[38;5;234;48;5;234m▄▄▄▄[38;5;235;48;5;236m▄[38;5;238;48;5;95m▄[38;5;95;48;5;95m▄▄▄▄[38;5;239;48;5;95m▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄[38;5;236;48;5;236m▄[38;5;233;48;5;233m▄[38;5;232;48;5;232m▄▄[38;5;233;48;5;233m▄[38;5;233;48;5;232m▄[38;5;233;48;5;233m▄▄[38;5;234;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;234;48;5;235m▄[38;5;234;48;5;236m▄[38;5;235;48;5;237m▄[38;5;236;48;5;237m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄▄▄[48;5;238m [m\r
 [38;5;239;48;5;95m▄[38;5;238;48;5;240m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;238m▄[48;5;237m [38;5;237;48;5;237m▄▄▄[38;5;236;48;5;236m▄[38;5;235;48;5;236m▄[38;5;234;48;5;234m▄[38;5;234;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄▄[38;5;238;48;5;237m▄[38;5;236;48;5;237m▄[38;5;232;48;5;232m▄[38;5;0;48;5;232m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;233m▄[38;5;234;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄▄[38;5;234;48;5;234m▄[48;5;234m [38;5;234;48;5;234m▄▄[38;5;234;48;5;235m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄▄[m\r
 [38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m\r`
-let thing = chalk.blue('Hello') + ' World' + chalk.red('!') 
+let thing = chalk.blue('Hello') + ' World' + chalk.red('!')
 
 const program = blessed.program()
 program.cursorColor('000000')
@@ -180,74 +180,75 @@ const screen = blessed.screen({
   }
 });
 screen.program.hideCursor(true);
-const grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
+const grid = new BlessedContrib.grid({ rows: 12, cols: 12, screen: screen })
 
 screen.title = 'my window title';
 
 const XTermTestv2 = new XTermNew({
-  top    : 0,
-  bottom : 0,
-  width  : '50%',
-  align  : 'left',
-  tags   : true,
-  keys   : true,
-  mouse  : true,
-  border : 'line',
-  style  : {
-    label : { bold: true },
-    focus:     { border: { fg: "green" } }
+  top: 0,
+  bottom: 0,
+  width: '50%',
+  align: 'left',
+  tags: true,
+  keys: true,
+  mouse: true,
+  border: 'line',
+  style: {
+    label: { bold: true },
+    focus: { border: { fg: "green" } }
   },
-  scrollbar : {
-    ch    : ' ',
-    style : { bg: 'white' },
-    track : {
-      style : { bg: 'grey' },
+  scrollbar: {
+    ch: ' ',
+    style: { bg: 'white' },
+    track: {
+      style: { bg: 'grey' },
     },
   },
-}).with(scroll.scroll,scroll.throttle)
+}).with(scroll.scroll, scroll.throttle)
 screen.append(XTermTestv2)
 
 screen.render()
-let b=XTermTestv2.term.buffer
+let b = XTermTestv2.term.buffer
 XTermTestv2.writeSync("")
 XTermTestv2.scrollTo(0)
 
 screen.render()
 
-const XTermApp=XTermTestv2.term
+const XTermApp = XTermTestv2.term
 //might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
 //then write string on exit to a file so that log can be reloaded if desired
 //animimate wrting the log via slowly writing it and try this to animate it:
 //https://stackoverflow.com/questions/10264261/move-one-character-to-the-left-in-the-console
 
 const logs = new XTermNew({
-  top    : '50%',
-  bottom : 0,
-  left   :'50%',
-  width  : '50%',
-  align  : 'left',
-  tags   : true,
-  keys   : true,
-  mouse  : true,
-  border : 'line',
-  style  : {
-    label : { bold: true },
-    focus:     { border: { fg: "green" } }
+  top: '50%',
+  bottom: 0,
+  left: '50%',
+  width: '50%',
+  align: 'left',
+  tags: true,
+  keys: true,
+  mouse: true,
+  border: 'line',
+  style: {
+    label: { bold: true },
+    focus: { border: { fg: "green" } }
   },
-  scrollbar : {
-    ch    : ' ',
-    style : { bg: 'white' },
-    track : {
-      style : { bg: 'grey' },
+  scrollbar: {
+    ch: ' ',
+    style: { bg: 'white' },
+    track: {
+      style: { bg: 'grey' },
     },
   },
-}).with(scroll.scroll,scroll.throttle)
+}).with(scroll.scroll, scroll.throttle)
 screen.append(logs)
 
-const stats=grid.set(0,9,6,1,blessed.box,{
+const stats = grid.set(0, 9, 6, 1, blessed.box, {
   tags: true,
   padding: {
-    left: 1,},
+    left: 1,
+  },
   label: '{bold}stats{/bold}',
   alwaysScroll: 'true',
   scrollable: 'true',
@@ -272,13 +273,13 @@ const stats=grid.set(0,9,6,1,blessed.box,{
     hover: {
       //bg: 'green'
     },
-    focus:     { border: { fg: "green" } }
+    focus: { border: { fg: "green" } }
   }
-  
-  }
-).with(scroll.scroll,scroll.throttle)
+
+}
+).with(scroll.scroll, scroll.throttle)
 //in the future will be a table with options to view/manage inventory and attack
-const actions=grid.set(0,10,6,2,blessed.list,{
+const actions = grid.set(0, 10, 6, 2, blessed.list, {
   tags: true,
   scrollable: true,
   mouse: true,
@@ -295,23 +296,24 @@ const actions=grid.set(0,10,6,2,blessed.list,{
     hover: {
       //bg: 'green'
     },
-    focus:     { border: { fg: "green" } }
-  }})
+    focus: { border: { fg: "green" } }
+  }
+})
 
 //button container
-const form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
+const form_thing = grid.set(0, 6, 6, 3, blessed.form = blessed.form, ({
   parent: screen,
   keys: true,
   label: `choose ~ ${chalk.green('w s')} to scroll`,
   //content: 'test?',
-  padding:{
-    right:0,
+  padding: {
+    right: 0,
   },
   style: {
     //bg: '#515151',
     //border: {
-      //bg: '#000033'},
-    focus:     { border: { fg: "green" } }
+    //bg: '#000033'},
+    focus: { border: { fg: "green" } }
   },
   alwaysScroll: 'true',
   scrollable: 'true',
@@ -326,7 +328,7 @@ const form_thing=grid.set(0,6,6,3,blessed.form = blessed.form,({
       inverse: true
     }
   }
-})).with(scroll.scroll,scroll.throttle)
+})).with(scroll.scroll, scroll.throttle)
 
 screen.render()
 
@@ -438,14 +440,14 @@ let button4 = blessed.button({
 
 
 //Listeners for test buttons
-button1.on('press', function() {
+button1.on('press', function () {
   form_thing.setContent('Canceled.');
   XTermApp.clear();
   XTermApp.reset();
   XTermTestv2.writeSync(caleb);
   screen.render();
 });
-button2.on('press', function() {
+button2.on('press', function () {
   //logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
   XTermApp.clear()
   XTermApp.reset()
@@ -454,70 +456,74 @@ button2.on('press', function() {
 });
 
 //Listeners
-screen.on('resize', function() {
-  XTermTestv2.height=screen.height;
-  XTermTestv2.width=Math.floor(screen.width/2);
+screen.on('resize', function () {
+  XTermTestv2.height = screen.height;
+  XTermTestv2.width = Math.floor(screen.width / 2);
   //logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
   resizeButtons()
 });
 // Quit on Escape, q, or Control-C.
-screen.key(['escape', 'q', 'C-c'], function(ch, key) {
+screen.key(['escape', 'q', 'C-c'], function (ch, key) {
   return process.exit(0);
 });
 
-screen.key('e', function() {
+screen.key('e', function () {
   XTermTestv2.focus();
   screen.render();
 });
 
-screen.key('p', function() {
+screen.key('p', function () {
   screen.focusNext();
 });
 
-screen.key('s', function() {
+screen.key('s', function () {
 });
 
-screen.key('w', function() {
+screen.key('w', function () {
 });
 
 //test content key listener
-screen.key('y', function() {
+screen.key('y', function () {
   form_thing.resetScroll()
-  buttonsArray.forEach((button) => {form_thing.remove(button);button.destroy()})
-  buttonsArray=[];
+  buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
+  buttonsArray = [];
   stats.focus();
   XTermApp.reset()
   eventHandler(temp_event1)
-  createButtons(temp_event1,buttonsArray,story);
-  form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString())+" "+chalk.bold.greenBright("choices")}`)
+  createButtons(temp_event1, buttonsArray, story);
+  form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
   resizeButtons();
   stats.focus();
 });
-let buttonsArray = [button1,button2,button3,button4];
+let buttonsArray = [button1, button2, button3, button4];
 //test content
 //logs.setContent(caleb)
 screen.render();
 //screen.render is essential for the correct screenlines amount to calculate
-function resizeButtons(){
-  buttonsArray.forEach((element) => {element.width=form_thing.width-5})
+function resizeButtons() {
+  buttonsArray.forEach((element) => { element.width = form_thing.width - 5 })
   screen.render()
   buttonsArray.forEach((element, index, array) => {
-    if (!(index===0)){
-      let previous=array[index-1]
-      element.top=previous.top+previous.getScreenLines().length
-    }else{
-      element.top=1
+    if (!(index === 0)) {
+      let previous = array[index - 1]
+      element.top = previous.top + previous.getScreenLines().length
+    } else {
+      element.top = 1
     }
-  screen.render()
-})}
+    screen.render()
+  })
+}
 resizeButtons()
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
 // messy, remove redundant code in future
-function createButtons(gameEvent,buttonsArr,storyObj={}) {
+// The problem trying to make this function more pure is that for some reason
+// the resize button cannot get a valid height and crashes on screen resize
+// if i attempt to remove all mentions of buttonsArray
+function createButtons(gameEvent, buttonsArr, storyObj = {}) {
   gameEvent['buttons'].forEach(item => {
-    let temp=new blessed.button({
+    let temp = new blessed.button({
       parent: form_thing,
       mouse: true,
       keys: true,
@@ -546,23 +552,23 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
     //make it handle different types of buttons that do not redirect to another event for example combat
     // if temp.gameEvent== something
     // or gameevent do something 
-    temp.on('press', function() {
+    temp.on('press', function () {
       //potential for random events in the future
       //call event handler for the event assocaited with one the button directs to on press
       eventHandler(storyObj[item[0]])
 
       XTermApp.clear()
       XTermApp.reset()
-      buttonsArr.forEach((element)=>{form_thing.remove(element);element.destroy()})
-      buttonsArray.forEach((element)=>{form_thing.remove(element);element.destroy()})
-      buttonsArr=[]
-      
-      buttonsArray=[]
+      buttonsArr.forEach((element) => { form_thing.remove(element); element.destroy() })
+      buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
+
+      buttonsArr = []
+      buttonsArray = []
       //logs.focus();
-      createButtons(storyObj[item[0]],buttonsArray,storyObj);
+      createButtons(storyObj[item[0]], buttonsArray, storyObj);
       resizeButtons();
       stats.focus();
-      form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString())+" "+chalk.bold.greenBright("choices")}`)
+      form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
       screen.render();
     })
   })
@@ -570,35 +576,35 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded
 // idea is for events eventually to be read from a json file
-function createEventsMap(eventsArrary=[],storyArr={}) {
-  eventsArrary.forEach((element)=>{
-    storyArr[element.id]=element
+function createEventsMap(eventsArrary = [], storyArr = {}) {
+  eventsArrary.forEach((element) => {
+    storyArr[element.id] = element
   })
 }
 //return maybe idek
-createEventsMap(testEventArr,story)
+createEventsMap(testEventArr, story)
 stats.focus()
 screen.render()
 
 //sloppy but easy way to make it work
-function eventHandler(gameEvent=temp_event1){
+function eventHandler(gameEvent = temp_event1) {
   rollLog(logs)
-  let gbf=gameEvent.body.format
+  let gbf = gameEvent.body.format
   //make enum thing later
-  if(gbf.writeMode='gradientScanlines'){
-    gradient_scanlines(logs,gameEvent.body.body,gbf.speed,gbf.gradientFunction,gbf.gradientArr)
+  if (gbf.writeMode = 'gradientScanlines') {
+    gradient_scanlines(logs, gameEvent.body.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr)
   }
 
   XTermTestv2.writeSync(gameEvent.toScreen.toScreen)
 
-  if (gameEvent instanceof(game_event_gain_item)){
-  } else if (gameEvent instanceof(game_event_enemy)){
+  if (gameEvent instanceof (game_event_gain_item)) {
+  } else if (gameEvent instanceof (game_event_enemy)) {
     combat(gameEvent)
-  } else if (gameEvent instanceof(game_event_gain_item)){
+  } else if (gameEvent instanceof (game_event_gain_item)) {
   }
 }
 
-function combat(gameEvent){
+function combat(gameEvent) {
 }
 
 
@@ -617,58 +623,57 @@ function combat(gameEvent){
 //right - "\033[C"
 
 let scrollPosition = 0;
-XTermTestv2.term.onScroll((apple)=>{scrollPosition=apple.valueOf()})
+XTermTestv2.term.onScroll((apple) => { scrollPosition = apple.valueOf() })
 
 //
 //  TERMINAL WRITE FUNCTIONS
 //  MOVE TO SEPERATE FILE LATER
 //
-function escLeftByNum(num){
+function escLeftByNum(num) {
   return `[${num}D`
 }
 function escRightByNum(num) {
   return `[${num}C`
 }
-function escUpByNum(num){
+function escUpByNum(num) {
   return `[${num}A`
 }
-function escDownByNum(num){
+function escDownByNum(num) {
   return `[${num}B`
 }
-function findCursor(terminal=XTermTestv2){
+function findCursor(terminal = XTermTestv2) {
   return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY];
 }
-function goToTermPosStr(arr1,terminal=XTermTestv2){
+function goToTermPosStr(arr1, terminal = XTermTestv2) {
   let arr2 = findCursor(terminal)
-  let Xpos = arr1[0]-arr2[0]
-  let Ypos = arr1[1]-arr2[1]
-  let escHorizontalChars = Xpos >=0 ?  escRightByNum(Xpos) : escLeftByNum(Math.abs(Xpos))
-  let escVerticalChars = (Ypos >=0) ? escDownByNum(Ypos) : escUpByNum(Math.abs(Ypos))
+  let Xpos = arr1[0] - arr2[0]
+  let Ypos = arr1[1] - arr2[1]
+  let escHorizontalChars = Xpos >= 0 ? escRightByNum(Xpos) : escLeftByNum(Math.abs(Xpos))
+  let escVerticalChars = (Ypos >= 0) ? escDownByNum(Ypos) : escUpByNum(Math.abs(Ypos))
   return `${escHorizontalChars}${escVerticalChars}`
 }
-async function slowWrite(str='',terminal,speed){
+async function slowWrite(str = '', terminal, speed) {
   str.replace(/\n+/g, ' ')
   str.replace(/\r+/g, ' ')
-  let strArr=str.split(' ')
-  for (let [index,tempStr] of strArr.entries())
-  {
-    tempStr+=' '
-    let cursorX = terminal.term.buffer.active.cursorX; 
+  let strArr = str.split(' ')
+  for (let [index, tempStr] of strArr.entries()) {
+    tempStr += ' '
+    let cursorX = terminal.term.buffer.active.cursorX;
     let tempStrLength = tempStr.length
     let numCols = terminal.term.cols
     if (index === 0) {
     }
     else if (index === strArr.length - 1) {
     }
-    if (cursorX===(numCols-1)){
+    if (cursorX === (numCols - 1)) {
     }
-    if (1 + cursorX + tempStrLength <= numCols){
+    if (1 + cursorX + tempStrLength <= numCols) {
       terminal.writeSync(chalk.hex('909090')(tempStr))
       await new Promise(resolve => setTimeout(resolve, speed));
       terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('FFFFFF')(tempStr)}`)
       await new Promise(resolve => setTimeout(resolve, speed));
       //unwrite then rewrite diff color
-    }else{
+    } else {
       // check how scrolling affects logged cursor positions and if it should decrement Y position
       terminal.writeSync(`\n${chalk.hex('909090')(tempStr)}`)
       await new Promise(resolve => setTimeout(resolve, speed));
@@ -685,26 +690,26 @@ async function slowWrite(str='',terminal,speed){
 
 //XTermTestv2.writeSync(`\n`)
 //animate ideas, queue of words that form gradient, Lines that form gradient, set sections are writen
-function fitLines(str='',cols=0){
+function fitLines(str = '', cols = 0) {
   //various checks for characters that screw up the line wrapping
   let str1 = str.replace(/\n+/g, '')
   let str2 = str1.replace(/\\n+/g, '')
   let str3 = str2.replace(/\r+/g, '')
-  let strArr=str3.split(/\b(?![\s.])/);
-  let lines=[]
-  let rollingCount=0
-  let line=[]
-  for(let item of strArr){
-    rollingCount+=item.length
-    if(rollingCount>cols){
-      if (rollingCount-1===cols){
-        line[line.length-1]=line[line.length-1].slice(0, -1)
+  let strArr = str3.split(/\b(?![\s.])/);
+  let lines = []
+  let rollingCount = 0
+  let line = []
+  for (let item of strArr) {
+    rollingCount += item.length
+    if (rollingCount > cols) {
+      if (rollingCount - 1 === cols) {
+        line[line.length - 1] = line[line.length - 1].slice(0, -1)
       }
       lines.push(line)
       rollingCount = item.length
-      line=[]
+      line = []
       line.push(item)
-    }else{
+    } else {
       line.push(item)
     }
   }
@@ -712,129 +717,129 @@ function fitLines(str='',cols=0){
   return lines
 }
 //doesn't change array length unlike normal shift method
-function shiftArray(arr=[1,2,3,4,5],end='',populate=true,populateArray=['h','i','j','k','l',]){
+function shiftArray(arr = [1, 2, 3, 4, 5], end = '', populate = true, populateArray = ['h', 'i', 'j', 'k', 'l',]) {
   let retVal = arr[0]
-  for (let i = 0; i < arr.length-1; i++){
-    arr[i]=arr[i+1]
-    }
-  arr[arr.length-1] = populate ? shiftArray(populateArray,end,false): end
+  for (let i = 0; i < arr.length - 1; i++) {
+    arr[i] = arr[i + 1]
+  }
+  arr[arr.length - 1] = populate ? shiftArray(populateArray, end, false) : end
   return retVal
 }
 
-function mapTextPosition(textArr){
+function mapTextPosition(textArr) {
   let lines = textArr;
-  for(let y=0;y<lines.length;y++){
-    for(let x=0;x<lines[y].length;x++){
-      lines[y][x]=[lines[y][x],x,y]
-    }  
-  } 
+  for (let y = 0; y < lines.length; y++) {
+    for (let x = 0; x < lines[y].length; x++) {
+      lines[y][x] = [lines[y][x], x, y]
+    }
+  }
 }
 
-function rollLog(terminal=XTermTestv2){
-  let scrollAmount=terminal.term.buffer.active.cursorY+1
+function rollLog(terminal = XTermTestv2) {
+  let scrollAmount = terminal.term.buffer.active.cursorY + 1
   // \ after \r to escape the hidden newline character
-  terminal.writeSync(`${escDownByNum((terminal.term.rows-1)-terminal.term.buffer.active.cursorY)}\r\
-  ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows-1)}`)
+  terminal.writeSync(`${escDownByNum((terminal.term.rows - 1) - terminal.term.buffer.active.cursorY)}\r\
+  ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows - 1)}`)
 }
 
-let rainbowVoil=[ 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
-let rainbowWithBlue=[ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ]
-async function scanlines(terminal=XTermTestv2,text='', speed=5,colorArr=[]){
-  colorArr = colorArr ? colorArr : [ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ] 
-  let lines = fitLines(text,terminal.term.cols)
+let rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
+let rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
+async function scanlines(terminal = XTermTestv2, text = '', speed = 5, colorArr = []) {
+  colorArr = colorArr ? colorArr : ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
+  let lines = fitLines(text, terminal.term.cols)
   let arr2 = Array(colorArr.length).fill('')
   let cursorPos = 1
-  let arr=arr2.map((content,index,arr)=>{arr[index] = [cursorPos,content]})
-  for(let line of lines){
-    for(let i = 0; i < line.length+arr.length-1; i++){
-      shiftArray(arr,'',true,line)
-      shiftArray(arr2,['','',],false)
-      arr2[arr2.length-1] = [cursorPos , arr[arr.length-1]]
-      for(let i = arr.length-1; i > - 1 ; i--){
-        if (arr2[i][0]){
-          terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1])}`) 
-          await new Promise(resolve => setTimeout(resolve,speed))
+  let arr = arr2.map((content, index, arr) => { arr[index] = [cursorPos, content] })
+  for (let line of lines) {
+    for (let i = 0; i < line.length + arr.length - 1; i++) {
+      shiftArray(arr, '', true, line)
+      shiftArray(arr2, ['', '',], false)
+      arr2[arr2.length - 1] = [cursorPos, arr[arr.length - 1]]
+      for (let i = arr.length - 1; i > - 1; i--) {
+        if (arr2[i][0]) {
+          terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1])}`)
+          await new Promise(resolve => setTimeout(resolve, speed))
         }
       }
-      cursorPos = cursorPos+=arr[arr.length-1].length
-   }
-   terminal.writeSync('\n')
-   cursorPos = 1
+      cursorPos = cursorPos += arr[arr.length - 1].length
+    }
+    terminal.writeSync('\n')
+    cursorPos = 1
   }
 }
 
-async function gradient_scanlines(terminal=XTermTestv2,text="", speed=5,gradientFunction,colorArr=[]){
-  let lorem_lines=fitLines(text,terminal.term.cols)
-  let multiline=``
-  for(let line of lorem_lines){
-    let line_str=line.join('')
-    line_str=line_str.concat('\n')
-    multiline=multiline.concat(line_str)
+async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, gradientFunction, colorArr = []) {
+  let lorem_lines = fitLines(text, terminal.term.cols)
+  let multiline = ``
+  for (let line of lorem_lines) {
+    let line_str = line.join('')
+    line_str = line_str.concat('\n')
+    multiline = multiline.concat(line_str)
   }
-  multiline=gradientFunction(multiline)
-  let cleaned=''
-  let cleanUp=fitLines(text,terminal.term.cols)
-  for(let line of cleanUp){
-    let line_str=line.join('')
-    line_str=line_str.concat('\n')
-    cleaned=cleaned.concat(line_str)
+  multiline = gradientFunction(multiline)
+  let cleaned = ''
+  let cleanUp = fitLines(text, terminal.term.cols)
+  for (let line of cleanUp) {
+    let line_str = line.join('')
+    line_str = line_str.concat('\n')
+    cleaned = cleaned.concat(line_str)
   }
-  let texttoarr = multiline 
-  let texttoarr2 = cleaned 
-  let strArr=texttoarr.split("\n");
-  let strArr2=texttoarr2.split("\n");
-  for(let i=0;i<strArr.length;i++){
-    strArr[i]=strArr[i].split(" ")
-    strArr2[i]=strArr2[i].split(" ")
+  let texttoarr = multiline
+  let texttoarr2 = cleaned
+  let strArr = texttoarr.split("\n");
+  let strArr2 = texttoarr2.split("\n");
+  for (let i = 0; i < strArr.length; i++) {
+    strArr[i] = strArr[i].split(" ")
+    strArr2[i] = strArr2[i].split(" ")
   }
-  let temp_arr=JSON.parse(JSON.stringify(strArr2))
-  mapTextPosition(temp_arr) 
+  let temp_arr = JSON.parse(JSON.stringify(strArr2))
+  mapTextPosition(temp_arr)
   //effectivelly ignores first element of array so must compensate for that
-  colorArr = colorArr ? [colorArr[0],...colorArr] : [ 'ffffff','ffffff', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ] 
+  colorArr = colorArr ? [colorArr[0], ...colorArr] : ['ffffff', 'ffffff', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
   let gradient_text = strArr;
   let lines = temp_arr;
   let arr2 = Array(colorArr.length).fill('')
   let cursorPos = 1
   //add 2d array word position
-  let arr=arr2.map((content,index,arr)=>{arr[index] = [cursorPos,content,0/*XposArr*/,0/*YposArr*/]})
-  for(let line of lines){
-    for(let [index,word] of line.entries()){
-      line[index][0]=word[0].concat(' ')
+  let arr = arr2.map((content, index, arr) => { arr[index] = [cursorPos, content, 0/*XposArr*/, 0/*YposArr*/] })
+  for (let line of lines) {
+    for (let [index, word] of line.entries()) {
+      line[index][0] = word[0].concat(' ')
     }
   }
-  for(let line of gradient_text){
-    for(let [index,word] of line.entries()){
-      line[index]=word.concat(' ')
+  for (let line of gradient_text) {
+    for (let [index, word] of line.entries()) {
+      line[index] = word.concat(' ')
     }
   }
-  for(let x=0;x<lines.length;x++){
+  for (let x = 0; x < lines.length; x++) {
     let line = lines[x]
-    for(let i = 0; i < line.length+arr.length-1; i++){
-      shiftArray(arr,'',true,line)
-      shiftArray(arr2,['','',0,0,],false)
-      arr2[arr2.length-1] = [cursorPos , arr[arr.length-1]]
-      for(let i = arr.length-1; i > - 1 ; i--){
-        if(!(i===0)){
-          if (arr2[i][0]){
-            if (arr2[i][1][0])terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1][0])}`);
-            await new Promise(resolve => setTimeout(resolve,speed))
+    for (let i = 0; i < line.length + arr.length - 1; i++) {
+      shiftArray(arr, '', true, line)
+      shiftArray(arr2, ['', '', 0, 0,], false)
+      arr2[arr2.length - 1] = [cursorPos, arr[arr.length - 1]]
+      for (let i = arr.length - 1; i > - 1; i--) {
+        if (!(i === 0)) {
+          if (arr2[i][0]) {
+            if (arr2[i][1][0]) terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1][0])}`);
+            await new Promise(resolve => setTimeout(resolve, speed))
           }
-        }else if(i===0){ 
-          if (arr2[i][0]){
-            if (arr2[i][1][0])terminal.writeSync(`[${arr2[i][0]}G${gradient_text[arr2[i][1][2]][arr2[i][1][1]]}`);
-            await new Promise(resolve => setTimeout(resolve,speed))
+        } else if (i === 0) {
+          if (arr2[i][0]) {
+            if (arr2[i][1][0]) terminal.writeSync(`[${arr2[i][0]}G${gradient_text[arr2[i][1][2]][arr2[i][1][1]]}`);
+            await new Promise(resolve => setTimeout(resolve, speed))
           }
         }
       }
       try {
-        cursorPos = cursorPos+=arr[arr.length-1][0].length
+        cursorPos = cursorPos += arr[arr.length - 1][0].length
       } catch (error) {
-        cursorPos = cursorPos+=0
+        cursorPos = cursorPos += 0
       }
-   }
-   if(!(x===lines.length-1))terminal.writeSync('\n');
-   cursorPos = 1
-   
+    }
+    if (!(x === lines.length - 1)) terminal.writeSync('\n');
+    cursorPos = 1
+
   }
 }
 //
@@ -851,7 +856,7 @@ console.log('[?25l')
 XTermTestv2.writeSync('[?25l')
 logs.writeSync('[?25l')
 
-function toggleUi(){
+function toggleUi() {
   form_thing.toggle()
   XTermTestv2.toggle()
   logs.toggle()
@@ -890,43 +895,43 @@ const box = blessed.box({
 // perhaps pass to constructer later but unessential
 let thePlayer = new Player("name")
 thePlayer.str = rollStat();
-thePlayer.hp = 10+thePlayer.str;
+thePlayer.hp = 10 + thePlayer.str;
 thePlayer.hpMax = thePlayer.hp;
 thePlayer.int = rollStat();
 thePlayer.dex = rollStat();
 thePlayer.cha = rollStat();
-thePlayer.basedamage= thePlayer.str+5
+thePlayer.basedamage = thePlayer.str + 5
 
 screen.append(box);
 screen.render()
 await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`${' '.repeat(Math.floor(box.width/2)-' HP: '.length-2)} hp: ${thePlayer.hp}`)
-screen.render()
-await new Promise(resolve => setTimeout(resolve,  1))
-box.pushLine(`${' '.repeat(Math.floor(box.width/2)-'str: '.length-2)}str: ${thePlayer.str}`)
+box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - ' HP: '.length - 2)} hp: ${thePlayer.hp}`)
 screen.render()
 await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`${' '.repeat(Math.floor(box.width/2)-'dex: '.length-2)}dex: ${thePlayer.dex}`)
+box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - 'str: '.length - 2)}str: ${thePlayer.str}`)
 screen.render()
 await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`${' '.repeat(Math.floor(box.width/2)-'int: '.length-2)}int: ${thePlayer.int}`)
+box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - 'dex: '.length - 2)}dex: ${thePlayer.dex}`)
 screen.render()
 await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`${' '.repeat(Math.floor(box.width/2)-'cha: '.length-2)}cha: ${thePlayer.cha}`)
+box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - 'int: '.length - 2)}int: ${thePlayer.int}`)
 screen.render()
 await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`\n${' '.repeat(Math.floor(box.width/2)-Math.floor('[ ENTER to continue ]'.length/2)-3)}[ ENTER to continue ]`)
+box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - 'cha: '.length - 2)}cha: ${thePlayer.cha}`)
+screen.render()
+await new Promise(resolve => setTimeout(resolve, 1))
+box.pushLine(`\n${' '.repeat(Math.floor(box.width / 2) - Math.floor('[ ENTER to continue ]'.length / 2) - 3)}[ ENTER to continue ]`)
 screen.render()
 box.focus()
-box.key('enter', function() {
+box.key('enter', function () {
   toggleUi()
   box.hide()
 }
 )
 
-function refreshStats(player=thePlayer) {
+function refreshStats(player = thePlayer) {
   stats.setContent(
-`{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
+    `{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
 {bold}${chalk.green("AC ")}{/bold} = ${thePlayer.ac}
 ${chalk.yellowBright('str')} = ${thePlayer.str}
 ${chalk.grey('int')} = ${thePlayer.int}
@@ -934,14 +939,14 @@ ${chalk.hex('000080')('dex')} = ${thePlayer.dex}
 ${chalk.hex('630330')('cha')} = ${thePlayer.cha} 
 ${chalk.magenta("dmg")} = ${thePlayer.basedamage}
 ${chalk.magenta("mag")} =`)
-    screen.render()
+  screen.render()
 }
 
 refreshStats()
 box.focus()
 screen.render()
 
-let bb =`    ${chalk.bold(`THE VILLAGE`)}
+let bb = `    ${chalk.bold(`THE VILLAGE`)}
 [37m[40m                                           [m
 [37m[40m                   [33m[40m▒▒▒░░[37m[40m                   [m
 [37m[40m                 [33m[40m▒▒▒▒░░░░░[37m[40m                 [m
@@ -962,7 +967,7 @@ let bb =`    ${chalk.bold(`THE VILLAGE`)}
 [37m[40m                                           [m
 `
 
-mountain=`[37m[40m                        [97m[40m░░[37m[40m                            [m
+mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
 [37m[40m                  [97m[40m▒░[37m[40m   [97m[40m░██▓▓[90m[40m░░[37m[40m                        [m
 [37m[40m                 [97m[40m█▓░░[37m[40m [97m[40m░▓█████▓▒░░[37m[40m [90m[40m░[37m[40m                   [m
 [37m[40m               [97m[40m▓▓▒░░▓███▒█▒▒███▓▒░[90m[40m░[37m[40m  [90m[40m░[37m[40m                [m
@@ -996,8 +1001,8 @@ mountain=`[37m[40m                        [97m[40m░░[37m[40m          
 //XTermTestv2.write(mountain)
 
 //test string
-let lorem=
-`Lorem ipsum dolor sit amet,
+let lorem =
+  `Lorem ipsum dolor sit amet,
 consectetur adipiscing elit. 
 Morbi varius ut augue ac sagittis. 
 Vivamus lectus lacus, commodo eu ligula pulvinar, 
@@ -1017,7 +1022,7 @@ pulvinar id tellus.`
 // 	arr[i]=color.toHex()
 // })
 // grad2.reverse()
-var pgrad=['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978']
+var pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978']
 
 pgrad.reverse()
 

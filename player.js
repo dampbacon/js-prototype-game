@@ -16,7 +16,7 @@ chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 //
 
 
-import { ARMOURmap, WEAPONmap, WEAPONS
+import { ARMOURmap, WEAPONmap, WEAPONS, ARMOUR
  } from "./items.js";
 export class Player{
     constructor(name='apples'){
@@ -40,6 +40,7 @@ export class Player{
         this.weapon = WEAPONmap[WEAPONS.SWORD]
         this.armour = ARMOURmap[ARMOUR.LOIN_CLOTH]
         this.ac= this.armour ? this.armour : 10
+        this.depth=0;
     }
     changeWeapon(weapon){
         //update basedamage and equip slot

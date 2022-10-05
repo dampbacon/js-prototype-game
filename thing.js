@@ -543,20 +543,21 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       },
     })
     buttonsArr.push(temp)
+    //make it handle different types of buttons that do not redirect to another event for example combat
+    // if temp.gameEvent== something
+    // or gameevent do something 
     temp.on('press', function() {
       //potential for random events in the future
-      XTermApp.clear()
-      XTermApp.reset()
-
       //call event handler for the event assocaited with one the button directs to on press
       eventHandler(storyObj[item[0]])
 
+      XTermApp.clear()
+      XTermApp.reset()
       buttonsArr.forEach((element)=>{form_thing.remove(element);element.destroy()})
       buttonsArray.forEach((element)=>{form_thing.remove(element);element.destroy()})
-
       buttonsArr=[]
+      
       buttonsArray=[]
-
       //logs.focus();
       createButtons(storyObj[item[0]],buttonsArray,storyObj);
       resizeButtons();
@@ -676,7 +677,7 @@ async function slowWrite(str='',terminal,speed){
     }
   }
 }
-//
+//  
 // TEST CODE
 //
 //slowWrite(test1,XTermTestv2,20)

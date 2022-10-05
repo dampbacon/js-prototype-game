@@ -547,6 +547,8 @@ function createButtons(gameEvent,buttonsArr,storyObj={}) {
       //potential for random events in the future
       XTermApp.clear()
       XTermApp.reset()
+
+      //call event handler for the event assocaited with one the button directs to on press
       eventHandler(storyObj[item[0]])
 
       buttonsArr.forEach((element)=>{form_thing.remove(element);element.destroy()})
@@ -590,9 +592,16 @@ function eventHandler(gameEvent=temp_event1){
 
   if (gameEvent instanceof(game_event_gain_item)){
   } else if (gameEvent instanceof(game_event_enemy)){
+    combat(gameEvent)
   } else if (gameEvent instanceof(game_event_gain_item)){
   }
 }
+
+function combat(gameEvent){
+}
+
+
+
 
 //CSI (Control Sequence Introducer) sequences TEST ~ will be used to animate in the future
 //test async
@@ -605,23 +614,14 @@ function eventHandler(gameEvent=temp_event1){
 //down - "\033[B"
 //left - "\033[D"
 //right - "\033[C"
-async function test(){
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  XTermTestv2.writeSync("\u2592".repeat(90))
-  XTermTestv2.writeSync("[D[D[D".repeat(2))
-  XTermTestv2.writeSync(chalk.green.bold.bgBlue("test[D[D[D[D[ATEST"))
-  XTermTestv2.writeSync('[C'.repeat(6)+'[B'.repeat(6))
-  XTermTestv2.writeSync('apple')
 
-  XTermTestv2.writeSync(b.active.cursorX+", "+b.active.cursorY+'[B')
-  XTermTestv2.writeSync(`[${40}D~hhmhmhmhmhm[B`)
-  XTermTestv2.writeSync(b.active.cursorX+", "+b.active.cursorY+'[B')
-  XTermTestv2.writeSync("cols: "+XTermTestv2.term.cols)
-
-  //XTermApp.buffer
-}
 let scrollPosition = 0;
 XTermTestv2.term.onScroll((apple)=>{scrollPosition=apple.valueOf()})
+
+//
+//  TERMINAL WRITE FUNCTIONS
+//  MOVE TO SEPERATE FILE LATER
+//
 function escLeftByNum(num){
   return `[${num}D`
 }
@@ -645,7 +645,6 @@ function goToTermPosStr(arr1,terminal=XTermTestv2){
   let escVerticalChars = (Ypos >=0) ? escDownByNum(Ypos) : escUpByNum(Math.abs(Ypos))
   return `${escHorizontalChars}${escVerticalChars}`
 }
-
 async function slowWrite(str='',terminal,speed){
   str.replace(/\n+/g, ' ')
   str.replace(/\r+/g, ' ')
@@ -729,6 +728,14 @@ function mapTextPosition(textArr){
     }  
   } 
 }
+
+function rollLog(terminal=XTermTestv2){
+  let scrollAmount=terminal.term.buffer.active.cursorY+1
+  // \ after \r to escape the hidden newline character
+  terminal.writeSync(`${escDownByNum((terminal.term.rows-1)-terminal.term.buffer.active.cursorY)}\r\
+  ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows-1)}`)
+}
+
 let rainbowVoil=[ 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
 let rainbowWithBlue=[ '93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000' ]
 async function scanlines(terminal=XTermTestv2,text='', speed=5,colorArr=[]){
@@ -808,12 +815,12 @@ async function gradient_scanlines(terminal=XTermTestv2,text="", speed=5,gradient
       for(let i = arr.length-1; i > - 1 ; i--){
         if(!(i===0)){
           if (arr2[i][0]){
-            if (arr2[i][1][0]){terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1][0])}`)}
+            if (arr2[i][1][0])terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1][0])}`);
             await new Promise(resolve => setTimeout(resolve,speed))
           }
         }else if(i===0){ 
           if (arr2[i][0]){
-            if (arr2[i][1][0]){terminal.writeSync(`[${arr2[i][0]}G${gradient_text[arr2[i][1][2]][arr2[i][1][1]]}`)}
+            if (arr2[i][1][0])terminal.writeSync(`[${arr2[i][0]}G${gradient_text[arr2[i][1][2]][arr2[i][1][1]]}`);
             await new Promise(resolve => setTimeout(resolve,speed))
           }
         }
@@ -824,14 +831,15 @@ async function gradient_scanlines(terminal=XTermTestv2,text="", speed=5,gradient
         cursorPos = cursorPos+=0
       }
    }
-   if(!(x===lines.length-1)){
-    terminal.writeSync('\n')
-   }
+   if(!(x===lines.length-1))terminal.writeSync('\n');
    cursorPos = 1
    
   }
 }
-
+//
+//  TERMINAL WRITE FUNCTIONS
+//  END OF SECTION
+//
 
 
 //ESC[?25l	make cursor invisible
@@ -855,7 +863,7 @@ screen.render()
 stats.focus()
 screen.render()
 //stats box
-var box = blessed.box({
+const box = blessed.box({
   top: 'center',
   left: 'center',
   width: '40%',
@@ -878,7 +886,7 @@ var box = blessed.box({
     }
   }
 });
-// perhaps pass to constructer but unessential
+// perhaps pass to constructer later but unessential
 let thePlayer = new Player("name")
 thePlayer.str = rollStat();
 thePlayer.hp = 10+thePlayer.str;
@@ -1025,14 +1033,8 @@ pgrad.reverse()
 //18 is bottom count starts from 0 inclusive
 //start event, display mountain, goto mountian or goto village
 //function to scroll text via moving cursor to bottom and writting a few \n then set cursor to 0,0
-function rollLog(terminal=XTermTestv2){
-  let scrollAmount=terminal.term.buffer.active.cursorY+1
-  // \ after \r to escape the hidden newline character
-  terminal.writeSync(`${escDownByNum((terminal.term.rows-1)-terminal.term.buffer.active.cursorY)}\r\
-  ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows-1)}`)
-}
 // scanlines(XTermTestv2,lorem,20,pgrad)
-scanlines(XTermTestv2,"apples are disgusting",20,pgrad)
+//scanlines(XTermTestv2,"apples are disgusting",20,pgrad)
 //XTermTestv2.writeSync(gradient_scanlines(logs,"apples are disgusting",20,gradient.retro.multiline,pgrad))
 
 //rollLog()

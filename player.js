@@ -16,7 +16,7 @@ chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 //
 
 
-import { WEAPONmap, WEAPONS
+import { ARMOURmap, WEAPONmap, WEAPONS
  } from "./items.js";
 export class Player{
     constructor(name='apples'){
@@ -31,14 +31,21 @@ export class Player{
         this.dex;
         this.cha;
         this.int;
-        this.ac=10;
         this.hpMax;
         this.hp;
-        this.slots = {weapon: true, shield: false, head: false, armor: false, ring: false}
+        this.slots = {weapon: true, shield: false, head: false, armor: true, ring: false}
         //this.items = Array(5).fill(0)
         this.basedamage;
         this.persuade = this.cha+skillBonus(this.cha)
         this.weapon = WEAPONmap[WEAPONS.SWORD]
+        this.armour = ARMOURmap[ARMOUR.LOIN_CLOTH]
+        this.ac= this.armour ? this.armour : 10
+    }
+    changeWeapon(weapon){
+        //update basedamage and equip slot
+    }
+    changeArmour(armour){
+        //update ac and equip slot
     }
     increaseHP(amount){
 

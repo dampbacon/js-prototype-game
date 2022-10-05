@@ -8,6 +8,7 @@ const defaults={
         body:'',
         format:{
             //later make write modes like an enum thing with 'default', 'scan lines',
+            //Or directly bind function like gradientFunction
             writeMode:'gradientScanlines', 
             gradientFunction:gradient.retro.multiline,
             gradientArr:['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],

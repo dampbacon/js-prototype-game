@@ -1,0 +1,1 @@
+//blank in future methods to write things to terminals in fancy ways wills be here instead of in the main file

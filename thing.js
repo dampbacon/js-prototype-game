@@ -555,10 +555,11 @@ function createButtons(gameEvent, buttonsArr, storyObj = {}) {
     temp.on('press', function () {
       //potential for random events in the future
       //call event handler for the event assocaited with one the button directs to on press
-      eventHandler(storyObj[item[0]])
-
       XTermApp.clear()
       XTermApp.reset()
+      eventHandler(storyObj[item[0]])
+
+      
       buttonsArr.forEach((element) => { form_thing.remove(element); element.destroy() })
       buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
 

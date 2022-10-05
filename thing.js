@@ -14,7 +14,6 @@ import { hrtime } from 'node:process';
 import os from 'os'
 import './blessed/patches.cjs';
 import * as scroll from './blessed/scroll.cjs';
-import { rollStat } from './player.js';
 import fs from 'fs';
 import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
@@ -24,7 +23,7 @@ const { iconv } = pkg;
 
 // test content
 let
-  mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
+	mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
 [37m[40m                  [97m[40m▒░[37m[40m   [97m[40m░██▓▓[90m[40m░░[37m[40m                        [m
 [37m[40m                 [97m[40m█▓░░[37m[40m [97m[40m░▓█████▓▒░░[37m[40m [90m[40m░[37m[40m                   [m
 [37m[40m               [97m[40m▓▓▒░░▓███▒█▒▒███▓▒░[90m[40m░[37m[40m  [90m[40m░[37m[40m                [m
@@ -55,61 +54,61 @@ let
 
 
 let temp_event1 = new game_event({
-  id: 1,
-  body: {
-    body: 'some words for an test event, plz work~~~~~~~~~~`we wq ew qkiuoh hj khgfdf gk hj gf dhjksgfd'.repeat(3),
-    format: {
-      writeMode: 'gradientScanlines',
-      gradientFunction: gradient.retro.multiline,
-      gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
-      speed: 4,
-    },
-    TextFile: {
-      exists: false,
-      url: ''
-    },
-  },
-  toScreen: {
-    toScreen: mountain,
-    AnsiFile: {
-      exists: false,
-      url: '',
-    },
-  },
-  buttons: [
-    [1, "goto 1(recur)", true],
-    [2, "goto 2", true],
-    //[3,"goto 3 lolololololololollolololololololol",true]
-  ]
+	id: 1,
+	body: {
+		body: 'some words for an test event, plz work~~~~~~~~~~`we wq ew qkiuoh hj khgfdf gk hj gf dhjksgfd'.repeat(3),
+		format: {
+			writeMode: 'gradientScanlines',
+			gradientFunction: gradient.retro.multiline,
+			gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
+			speed: 4,
+		},
+		TextFile: {
+			exists: false,
+			url: ''
+		},
+	},
+	toScreen: {
+		toScreen: mountain,
+		AnsiFile: {
+			exists: false,
+			url: '',
+		},
+	},
+	buttons: [
+		[1, "goto 1(recur)", true],
+		[2, "goto 2", true],
+		//[3,"goto 3 lolololololololollolololololololol",true]
+	]
 })
 
 
 let temp_event2 = new game_event({
-  id: 2,
-  body: {
-    body: 'GAME EVENT 2, plz work~~~~~~~~~~`wewqewqkiuohhjkhgfdfgkhjgfdhjksgfd',
-    format: {
-      writeMode: 'gradientScanlines',
-      gradientFunction: gradient.retro.multiline,
-      gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
-    },
-    TextFile: {
-      exists: false,
-      url: ''
-    },
-  },
-  toScreen: {
-    toScreen: "~~~AAAA~~~~",
-    AnsiFile: {
-      exists: false,
-      url: '',
-    },
-  },
-  buttons: [
-    [1, "goto 1", true],
-    //[2,"goto 2",true],
-    //[3,"goto 3 lolololololololollolololololololol",true]
-  ]
+	id: 2,
+	body: {
+		body: 'GAME EVENT 2, plz work~~~~~~~~~~`wewqewqkiuohhjkhgfdfgkhjgfdhjksgfd',
+		format: {
+			writeMode: 'gradientScanlines',
+			gradientFunction: gradient.retro.multiline,
+			gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
+		},
+		TextFile: {
+			exists: false,
+			url: ''
+		},
+	},
+	toScreen: {
+		toScreen: "~~~AAAA~~~~",
+		AnsiFile: {
+			exists: false,
+			url: '',
+		},
+	},
+	buttons: [
+		[1, "goto 1", true],
+		//[2,"goto 2",true],
+		//[3,"goto 3 lolololololololollolololololololol",true]
+	]
 })
 
 
@@ -119,7 +118,7 @@ let story = {}
 
 //test content
 let body =
-  `[0m\r
+	`[0m\r
 \r
   [1;34m░░░░░░░░░░░░[0m\r
 [1;34m░░░░░[0m\r
@@ -138,7 +137,7 @@ let body =
 [1;31m♥♥♥♥♥[0m\r
 [1;31m♥♥[0m\r`
 let caleb =
-  `[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
+	`[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
 [38;5;241;48;5;241m▄[38;5;242;48;5;242m▄[48;5;242m  [38;5;242;48;5;242m▄▄[38;5;241;48;5;241m▄[48;5;241m  [38;5;59;48;5;241m▄[48;5;59m [38;5;59;48;5;59m▄[38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄[38;5;241;48;5;59m▄[48;5;59m [38;5;240;48;5;241m▄[38;5;59;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;240;48;5;240m▄▄[38;5;239;48;5;239m▄▄▄▄▄[48;5;239m  [38;5;239;48;5;239m▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄[48;5;239m [38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[m\r
 [38;5;241;48;5;241m▄▄[38;5;242;48;5;242m▄▄▄▄[38;5;241;48;5;241m▄▄[48;5;241m [38;5;241;48;5;59m▄▄▄[38;5;241;48;5;241m▄▄[38;5;242;48;5;241m▄[38;5;241;48;5;241m▄▄[38;5;241;48;5;59m▄▄[38;5;241;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄[38;5;240;48;5;59m▄▄[38;5;95;48;5;95m▄▄[38;5;240;48;5;59m▄[38;5;239;48;5;239m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄▄[38;5;239;48;5;240m▄[38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;238m▄[48;5;239m  [38;5;239;48;5;239m▄▄▄▄[m\r
 [38;5;59;48;5;59m▄[38;5;59;48;5;241m▄[38;5;241;48;5;241m▄▄[38;5;242;48;5;242m▄[38;5;241;48;5;242m▄[38;5;241;48;5;241m▄▄▄▄▄[38;5;59;48;5;59m▄[38;5;241;48;5;241m▄▄▄▄▄▄▄▄[38;5;241;48;5;59m▄[38;5;101;48;5;59m▄[38;5;101;48;5;95m▄▄[38;5;240;48;5;101m▄[38;5;239;48;5;95m▄[38;5;241;48;5;241m▄[38;5;95;48;5;95m▄[38;5;240;48;5;59m▄[38;5;238;48;5;239m▄[38;5;237;48;5;238m▄[38;5;236;48;5;237m▄[38;5;235;48;5;238m▄[38;5;235;48;5;237m▄[38;5;236;48;5;237m▄[38;5;236;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄▄▄▄▄▄▄▄▄▄▄[38;5;238;48;5;238m▄[m\r
@@ -167,17 +166,17 @@ let thing = chalk.blue('Hello') + ' World' + chalk.red('!')
 const program = blessed.program()
 program.cursorColor('000000')
 const screen = blessed.screen({
-  program: program,
-  fastCSR: true,
-  dockBorders: true,
-  fullUnicode: true,
-  cursor: {
-    shape: {
-      bg: 'red',
-      fg: 'white',
-    },
-    blink: false
-  }
+	program: program,
+	fastCSR: true,
+	dockBorders: true,
+	fullUnicode: true,
+	cursor: {
+		shape: {
+			bg: 'red',
+			fg: 'white',
+		},
+		blink: false
+	}
 });
 screen.program.hideCursor(true);
 const grid = new BlessedContrib.grid({ rows: 12, cols: 12, screen: screen })
@@ -185,25 +184,25 @@ const grid = new BlessedContrib.grid({ rows: 12, cols: 12, screen: screen })
 screen.title = 'my window title';
 
 const XTermTestv2 = new XTermNew({
-  top: 0,
-  bottom: 0,
-  width: '50%',
-  align: 'left',
-  tags: true,
-  keys: true,
-  mouse: true,
-  border: 'line',
-  style: {
-    label: { bold: true },
-    focus: { border: { fg: "green" } }
-  },
-  scrollbar: {
-    ch: ' ',
-    style: { bg: 'white' },
-    track: {
-      style: { bg: 'grey' },
-    },
-  },
+	top: 0,
+	bottom: 0,
+	width: '50%',
+	align: 'left',
+	tags: true,
+	keys: true,
+	mouse: true,
+	border: 'line',
+	style: {
+		label: { bold: true },
+		focus: { border: { fg: "green" } }
+	},
+	scrollbar: {
+		ch: ' ',
+		style: { bg: 'white' },
+		track: {
+			style: { bg: 'grey' },
+		},
+	},
 }).with(scroll.scroll, scroll.throttle)
 screen.append(XTermTestv2)
 
@@ -221,215 +220,215 @@ const XTermApp = XTermTestv2.term
 //https://stackoverflow.com/questions/10264261/move-one-character-to-the-left-in-the-console
 
 const logs = new XTermNew({
-  top: '50%',
-  bottom: 0,
-  left: '50%',
-  width: '50%',
-  align: 'left',
-  tags: true,
-  keys: true,
-  mouse: true,
-  border: 'line',
-  style: {
-    label: { bold: true },
-    focus: { border: { fg: "green" } }
-  },
-  scrollbar: {
-    ch: ' ',
-    style: { bg: 'white' },
-    track: {
-      style: { bg: 'grey' },
-    },
-  },
+	top: '50%',
+	bottom: 0,
+	left: '50%',
+	width: '50%',
+	align: 'left',
+	tags: true,
+	keys: true,
+	mouse: true,
+	border: 'line',
+	style: {
+		label: { bold: true },
+		focus: { border: { fg: "green" } }
+	},
+	scrollbar: {
+		ch: ' ',
+		style: { bg: 'white' },
+		track: {
+			style: { bg: 'grey' },
+		},
+	},
 }).with(scroll.scroll, scroll.throttle)
 screen.append(logs)
 
 const stats = grid.set(0, 9, 6, 1, blessed.box, {
-  tags: true,
-  padding: {
-    left: 1,
-  },
-  label: '{bold}stats{/bold}',
-  alwaysScroll: 'true',
-  scrollable: 'true',
-  scrollbars: 'true',
-  scrollbar: {
-    ch: ' ',
-    track: {
-      bg: 'blue'
-    },
-    style: {
-      inverse: true
-    }
-  },
-  keys: true,
-  border: {
-    type: 'line'
-  },
-  style: {
-    border: {
-      fg: '#f0f0f0'
-    },
-    hover: {
-      //bg: 'green'
-    },
-    focus: { border: { fg: "green" } }
-  }
+	tags: true,
+	padding: {
+		left: 1,
+	},
+	label: '{bold}stats{/bold}',
+	alwaysScroll: 'true',
+	scrollable: 'true',
+	scrollbars: 'true',
+	scrollbar: {
+		ch: ' ',
+		track: {
+			bg: 'blue'
+		},
+		style: {
+			inverse: true
+		}
+	},
+	keys: true,
+	border: {
+		type: 'line'
+	},
+	style: {
+		border: {
+			fg: '#f0f0f0'
+		},
+		hover: {
+			//bg: 'green'
+		},
+		focus: { border: { fg: "green" } }
+	}
 
 }
 ).with(scroll.scroll, scroll.throttle)
 //in the future will be a table with options to view/manage inventory and attack
 const actions = grid.set(0, 10, 6, 2, blessed.list, {
-  tags: true,
-  scrollable: true,
-  mouse: true,
-  keys: true,
-  label: '{bold}actions{/bold}',
-  content: thing,
-  border: {
-    type: 'line'
-  },
-  style: {
-    border: {
-      fg: 'magenta'
-    },
-    hover: {
-      //bg: 'green'
-    },
-    focus: { border: { fg: "green" } }
-  }
+	tags: true,
+	scrollable: true,
+	mouse: true,
+	keys: true,
+	label: '{bold}actions{/bold}',
+	content: thing,
+	border: {
+		type: 'line'
+	},
+	style: {
+		border: {
+			fg: 'magenta'
+		},
+		hover: {
+			//bg: 'green'
+		},
+		focus: { border: { fg: "green" } }
+	}
 })
 
 //button container
 const form_thing = grid.set(0, 6, 6, 3, blessed.form = blessed.form, ({
-  parent: screen,
-  keys: true,
-  label: `choose ~ ${chalk.green('w s')} to scroll`,
-  //content: 'test?',
-  padding: {
-    right: 0,
-  },
-  style: {
-    //bg: '#515151',
-    //border: {
-    //bg: '#000033'},
-    focus: { border: { fg: "green" } }
-  },
-  alwaysScroll: 'true',
-  scrollable: 'true',
-  scrollbars: 'true',
-  scrollbar: {
-    ch: chalk.green.bgBlueBright('\u2592'),
-    track: {
-      bg: '#630330',
-      fg: 'red'
-    },
-    style: {
-      inverse: true
-    }
-  }
+	parent: screen,
+	keys: true,
+	label: `choose ~ ${chalk.green('w s')} to scroll`,
+	//content: 'test?',
+	padding: {
+		right: 0,
+	},
+	style: {
+		//bg: '#515151',
+		//border: {
+		//bg: '#000033'},
+		focus: { border: { fg: "green" } }
+	},
+	alwaysScroll: 'true',
+	scrollable: 'true',
+	scrollbars: 'true',
+	scrollbar: {
+		ch: chalk.green.bgBlueBright('\u2592'),
+		track: {
+			bg: '#630330',
+			fg: 'red'
+		},
+		style: {
+			inverse: true
+		}
+	}
 })).with(scroll.scroll, scroll.throttle)
 
 screen.render()
 
 //test button declarations
 let button1 = blessed.button({
-  parent: form_thing,
-  mouse: true,
-  keys: true,
-  shrink: true,
-  padding: {
-    left: 1,
-    right: 1
-  },
-  left: 1,
-  top: 1,
-  shrink: true,
-  name: 'submit',
-  content: 'decide to be silly and eat a spud',
-  style: {
-    bg: '#0066CC',
-    focus: {
-      bg: '#cc0066'
-    },
-    hover: {
-      bg: '#cc0066'
-    }
-  }
+	parent: form_thing,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 1,
+	top: 1,
+	shrink: true,
+	name: 'submit',
+	content: 'decide to be silly and eat a spud',
+	style: {
+		bg: '#0066CC',
+		focus: {
+			bg: '#cc0066'
+		},
+		hover: {
+			bg: '#cc0066'
+		}
+	}
 });
 
 let button2 = blessed.button({
-  parent: form_thing,
-  mouse: true,
-  keys: true,
-  shrink: true,
-  padding: {
-    left: 1,
-    right: 1
-  },
-  left: 1,
-  top: 4,
-  name: 'cancel',
-  content: 'mmfmmmmmsdsfd uifdsjskad nfsjand kfknjsdhbhjgjvfcdyfvtgbhnjmybguhnjuhynijmk',
-  style: {
-    bg: '#0066CC',
-    focus: {
-      bg: '#cc0066'
-    },
-    hover: {
-      bg: '#cc0066'
-    }
-  }
+	parent: form_thing,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 1,
+	top: 4,
+	name: 'cancel',
+	content: 'mmfmmmmmsdsfd uifdsjskad nfsjand kfknjsdhbhjgjvfcdyfvtgbhnjmybguhnjuhynijmk',
+	style: {
+		bg: '#0066CC',
+		focus: {
+			bg: '#cc0066'
+		},
+		hover: {
+			bg: '#cc0066'
+		}
+	}
 });
 
 let button3 = blessed.button({
-  parent: form_thing,
-  mouse: true,
-  keys: true,
-  shrink: true,
-  padding: {
-    left: 1,
-    right: 1
-  },
-  left: 1,
-  top: 7,
-  shrink: true,
-  name: 'cancel',
-  content: 'button',
-  style: {
-    bg: '#0066CC',
-    focus: {
-      bg: '#cc0066'
-    },
-    hover: {
-      bg: '#cc0066'
-    }
-  }
+	parent: form_thing,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 1,
+	top: 7,
+	shrink: true,
+	name: 'cancel',
+	content: 'button',
+	style: {
+		bg: '#0066CC',
+		focus: {
+			bg: '#cc0066'
+		},
+		hover: {
+			bg: '#cc0066'
+		}
+	}
 });
 
 let button4 = blessed.button({
-  parent: form_thing,
-  mouse: true,
-  keys: true,
-  shrink: true,
-  padding: {
-    left: 1,
-    right: 1
-  },
-  left: 1,
-  top: 10,
-  shrink: true,
-  name: 'cancel',
-  content: 'button 444444444~~~',
-  style: {
-    bg: '#0066CC',
-    focus: {
-      bg: '#cc0066'
-    },
-    hover: {
-      bg: '#cc0066'
-    }
-  }
+	parent: form_thing,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 1,
+	top: 10,
+	shrink: true,
+	name: 'cancel',
+	content: 'button 444444444~~~',
+	style: {
+		bg: '#0066CC',
+		focus: {
+			bg: '#cc0066'
+		},
+		hover: {
+			bg: '#cc0066'
+		}
+	}
 });
 
 // term.write('\x1b')
@@ -441,39 +440,39 @@ let button4 = blessed.button({
 
 //Listeners for test buttons
 button1.on('press', function () {
-  form_thing.setContent('Canceled.');
-  XTermApp.clear();
-  XTermApp.reset();
-  XTermTestv2.writeSync(caleb);
-  screen.render();
+	form_thing.setContent('Canceled.');
+	XTermApp.clear();
+	XTermApp.reset();
+	XTermTestv2.writeSync(caleb);
+	screen.render();
 });
 button2.on('press', function () {
-  //logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
-  XTermApp.clear()
-  XTermApp.reset()
-  XTermTestv2.writeSync(body)
-  screen.render();
+	//logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
+	XTermApp.clear()
+	XTermApp.reset()
+	XTermTestv2.writeSync(body)
+	screen.render();
 });
 
 //Listeners
 screen.on('resize', function () {
-  XTermTestv2.height = screen.height;
-  XTermTestv2.width = Math.floor(screen.width / 2);
-  //logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
-  resizeButtons()
+	XTermTestv2.height = screen.height;
+	XTermTestv2.width = Math.floor(screen.width / 2);
+	//logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
+	resizeButtons()
 });
 // Quit on Escape, q, or Control-C.
 screen.key(['escape', 'q', 'C-c'], function (ch, key) {
-  return process.exit(0);
+	return process.exit(0);
 });
 
 screen.key('e', function () {
-  XTermTestv2.focus();
-  screen.render();
+	XTermTestv2.focus();
+	screen.render();
 });
 
 screen.key('p', function () {
-  screen.focusNext();
+	screen.focusNext();
 });
 
 screen.key('s', function () {
@@ -484,16 +483,16 @@ screen.key('w', function () {
 
 //test content key listener
 screen.key('y', function () {
-  form_thing.resetScroll()
-  buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
-  buttonsArray = [];
-  stats.focus();
-  XTermApp.reset()
-  eventHandler(temp_event1)
-  createButtons(temp_event1, buttonsArray, story);
-  form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
-  resizeButtons();
-  stats.focus();
+	form_thing.resetScroll()
+	buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
+	buttonsArray = [];
+	stats.focus();
+	XTermApp.reset()
+	eventHandler(temp_event1)
+	createButtons(temp_event1, buttonsArray, story);
+	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
+	resizeButtons();
+	stats.focus();
 });
 let buttonsArray = [button1, button2, button3, button4];
 //test content
@@ -501,17 +500,17 @@ let buttonsArray = [button1, button2, button3, button4];
 screen.render();
 //screen.render is essential for the correct screenlines amount to calculate
 function resizeButtons() {
-  buttonsArray.forEach((element) => { element.width = form_thing.width - 5 })
-  screen.render()
-  buttonsArray.forEach((element, index, array) => {
-    if (!(index === 0)) {
-      let previous = array[index - 1]
-      element.top = previous.top + previous.getScreenLines().length
-    } else {
-      element.top = 1
-    }
-    screen.render()
-  })
+	buttonsArray.forEach((element) => { element.width = form_thing.width - 5 })
+	screen.render()
+	buttonsArray.forEach((element, index, array) => {
+		if (!(index === 0)) {
+			let previous = array[index - 1]
+			element.top = previous.top + previous.getScreenLines().length
+		} else {
+			element.top = 1
+		}
+		screen.render()
+	})
 }
 resizeButtons()
 // handling creating of buttons from an event. writing body etc
@@ -521,66 +520,71 @@ resizeButtons()
 // The problem trying to make this function more pure is that for some reason
 // the resize button cannot get a valid height and crashes on screen resize
 // if i attempt to remove all mentions of buttonsArray
+
+let combatFlag = false;
 function createButtons(gameEvent, buttonsArr, storyObj = {}) {
-  gameEvent['buttons'].forEach(item => {
-    let temp = new blessed.button({
-      parent: form_thing,
-      mouse: true,
-      keys: true,
-      shrink: true,
-      padding: {
-        left: 1,
-        right: 1
-      },
-      left: 1,
-      top: 1,
-      shrink: true,
-      name: item[1],
-      content: item[1],
-      //shadow: true,
-      style: {
-        bg: '#0066CC',
-        focus: {
-          bg: '#cc0066',
-        },
-        hover: {
-          bg: '#cc0066',
-        },
-      },
-    })
-    buttonsArr.push(temp)
-    //make it handle different types of buttons that do not redirect to another event for example combat
-    // if temp.gameEvent== something
-    // or gameevent do something 
-    temp.on('press', function () {
-      //potential for random events in the future
-      //call event handler for the event assocaited with one the button directs to on press
-      XTermApp.clear()
-      XTermApp.reset()
-      eventHandler(storyObj[item[0]])
+	gameEvent['buttons'].forEach(item => {
+		let temp = new blessed.button({
+			parent: form_thing,
+			mouse: true,
+			keys: true,
+			shrink: true,
+			padding: {
+				left: 1,
+				right: 1
+			},
+			left: 1,
+			top: 1,
+			shrink: true,
+			name: item[1],
+			content: item[1],
+			//shadow: true,
+			style: {
+				bg: '#0066CC',
+				focus: {
+					bg: '#cc0066',
+				},
+				hover: {
+					bg: '#cc0066',
+				},
+			},
+		})
+		buttonsArr.push(temp)
+		//make it handle different types of buttons that do not redirect to another event for example combat
+		// if temp.gameEvent== something
+		// or gameevent do something 
+		temp.on('press', function () {
+			//potential for random events in the future
+			//call event handler for the event assocaited with one the button directs to on press
+			XTermApp.clear()
+			XTermApp.reset()
 
-      
-      buttonsArr.forEach((element) => { form_thing.remove(element); element.destroy() })
-      buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
 
-      buttonsArr = []
-      buttonsArray = []
-      //logs.focus();
-      createButtons(storyObj[item[0]], buttonsArray, storyObj);
-      resizeButtons();
-      stats.focus();
-      form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
-      screen.render();
-    })
-  })
+
+			buttonsArr.forEach((element) => { form_thing.remove(element); element.destroy() })
+			buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
+			buttonsArr = []
+			buttonsArray = []
+			eventHandler(storyObj[item[0]])
+
+			if (!(combatFlag)) {
+				//logs.focus();
+				createButtons(storyObj[item[0]], buttonsArray, storyObj);
+				resizeButtons();
+				stats.focus();
+				form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
+				screen.render();
+			}
+		})
+	})
 }
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded
 // idea is for events eventually to be read from a json file
 function createEventsMap(eventsArrary = [], storyArr = {}) {
-  eventsArrary.forEach((element) => {
-    storyArr[element.id] = element
-  })
+	eventsArrary.forEach((element) => {
+		storyArr[element.id] = element
+	})
 }
 //return maybe idek
 createEventsMap(testEventArr, story)
@@ -589,23 +593,27 @@ screen.render()
 
 //sloppy but easy way to make it work
 function eventHandler(gameEvent = temp_event1) {
-  rollLog(logs)
-  let gbf = gameEvent.body.format
-  //make enum thing later
-  if (gbf.writeMode = 'gradientScanlines') {
-    gradient_scanlines(logs, gameEvent.body.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr)
-  }
+	rollLog(logs)
+	let gbf = gameEvent.body.format
+	//make enum thing later
+	if (gbf.writeMode = 'gradientScanlines') {
+		gradient_scanlines(logs, gameEvent.body.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr)
+	}
 
-  XTermTestv2.writeSync(gameEvent.toScreen.toScreen)
+	XTermTestv2.writeSync(gameEvent.toScreen.toScreen)
 
-  if (gameEvent instanceof (game_event_gain_item)) {
-  } else if (gameEvent instanceof (game_event_enemy)) {
-    combat(gameEvent)
-  } else if (gameEvent instanceof (game_event_gain_item)) {
-  }
+	if (gameEvent instanceof (game_event_gain_item)) {
+
+	} else if (gameEvent instanceof (game_event_enemy)) {
+		combatFlag = true;
+		combat(gameEvent)
+	} else if (gameEvent instanceof (game_event_gain_item)) {
+
+	}
 }
 
 function combat(gameEvent) {
+
 }
 
 
@@ -631,57 +639,57 @@ XTermTestv2.term.onScroll((apple) => { scrollPosition = apple.valueOf() })
 //  MOVE TO SEPERATE FILE LATER
 //
 function escLeftByNum(num) {
-  return `[${num}D`
+	return `[${num}D`
 }
 function escRightByNum(num) {
-  return `[${num}C`
+	return `[${num}C`
 }
 function escUpByNum(num) {
-  return `[${num}A`
+	return `[${num}A`
 }
 function escDownByNum(num) {
-  return `[${num}B`
+	return `[${num}B`
 }
 function findCursor(terminal = XTermTestv2) {
-  return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY];
+	return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY];
 }
 function goToTermPosStr(arr1, terminal = XTermTestv2) {
-  let arr2 = findCursor(terminal)
-  let Xpos = arr1[0] - arr2[0]
-  let Ypos = arr1[1] - arr2[1]
-  let escHorizontalChars = Xpos >= 0 ? escRightByNum(Xpos) : escLeftByNum(Math.abs(Xpos))
-  let escVerticalChars = (Ypos >= 0) ? escDownByNum(Ypos) : escUpByNum(Math.abs(Ypos))
-  return `${escHorizontalChars}${escVerticalChars}`
+	let arr2 = findCursor(terminal)
+	let Xpos = arr1[0] - arr2[0]
+	let Ypos = arr1[1] - arr2[1]
+	let escHorizontalChars = Xpos >= 0 ? escRightByNum(Xpos) : escLeftByNum(Math.abs(Xpos))
+	let escVerticalChars = (Ypos >= 0) ? escDownByNum(Ypos) : escUpByNum(Math.abs(Ypos))
+	return `${escHorizontalChars}${escVerticalChars}`
 }
 async function slowWrite(str = '', terminal, speed) {
-  str.replace(/\n+/g, ' ')
-  str.replace(/\r+/g, ' ')
-  let strArr = str.split(' ')
-  for (let [index, tempStr] of strArr.entries()) {
-    tempStr += ' '
-    let cursorX = terminal.term.buffer.active.cursorX;
-    let tempStrLength = tempStr.length
-    let numCols = terminal.term.cols
-    if (index === 0) {
-    }
-    else if (index === strArr.length - 1) {
-    }
-    if (cursorX === (numCols - 1)) {
-    }
-    if (1 + cursorX + tempStrLength <= numCols) {
-      terminal.writeSync(chalk.hex('909090')(tempStr))
-      await new Promise(resolve => setTimeout(resolve, speed));
-      terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('FFFFFF')(tempStr)}`)
-      await new Promise(resolve => setTimeout(resolve, speed));
-      //unwrite then rewrite diff color
-    } else {
-      // check how scrolling affects logged cursor positions and if it should decrement Y position
-      terminal.writeSync(`\n${chalk.hex('909090')(tempStr)}`)
-      await new Promise(resolve => setTimeout(resolve, speed));
-      terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('FFFFFF')(tempStr)}`)
-      await new Promise(resolve => setTimeout(resolve, speed));
-    }
-  }
+	str.replace(/\n+/g, ' ')
+	str.replace(/\r+/g, ' ')
+	let strArr = str.split(' ')
+	for (let [index, tempStr] of strArr.entries()) {
+		tempStr += ' '
+		let cursorX = terminal.term.buffer.active.cursorX;
+		let tempStrLength = tempStr.length
+		let numCols = terminal.term.cols
+		if (index === 0) {
+		}
+		else if (index === strArr.length - 1) {
+		}
+		if (cursorX === (numCols - 1)) {
+		}
+		if (1 + cursorX + tempStrLength <= numCols) {
+			terminal.writeSync(chalk.hex('909090')(tempStr))
+			await new Promise(resolve => setTimeout(resolve, speed));
+			terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('FFFFFF')(tempStr)}`)
+			await new Promise(resolve => setTimeout(resolve, speed));
+			//unwrite then rewrite diff color
+		} else {
+			// check how scrolling affects logged cursor positions and if it should decrement Y position
+			terminal.writeSync(`\n${chalk.hex('909090')(tempStr)}`)
+			await new Promise(resolve => setTimeout(resolve, speed));
+			terminal.writeSync(`${escLeftByNum(tempStrLength)}${chalk.hex('FFFFFF')(tempStr)}`)
+			await new Promise(resolve => setTimeout(resolve, speed));
+		}
+	}
 }
 //  
 // TEST CODE
@@ -692,156 +700,156 @@ async function slowWrite(str = '', terminal, speed) {
 //XTermTestv2.writeSync(`\n`)
 //animate ideas, queue of words that form gradient, Lines that form gradient, set sections are writen
 function fitLines(str = '', cols = 0) {
-  //various checks for characters that screw up the line wrapping
-  let str1 = str.replace(/\n+/g, '')
-  let str2 = str1.replace(/\\n+/g, '')
-  let str3 = str2.replace(/\r+/g, '')
-  let strArr = str3.split(/\b(?![\s.])/);
-  let lines = []
-  let rollingCount = 0
-  let line = []
-  for (let item of strArr) {
-    rollingCount += item.length
-    if (rollingCount > cols) {
-      if (rollingCount - 1 === cols) {
-        line[line.length - 1] = line[line.length - 1].slice(0, -1)
-      }
-      lines.push(line)
-      rollingCount = item.length
-      line = []
-      line.push(item)
-    } else {
-      line.push(item)
-    }
-  }
-  lines.push(line)
-  return lines
+	//various checks for characters that screw up the line wrapping
+	let str1 = str.replace(/\n+/g, '')
+	let str2 = str1.replace(/\\n+/g, '')
+	let str3 = str2.replace(/\r+/g, '')
+	let strArr = str3.split(/\b(?![\s.])/);
+	let lines = []
+	let rollingCount = 0
+	let line = []
+	for (let item of strArr) {
+		rollingCount += item.length
+		if (rollingCount > cols) {
+			if (rollingCount - 1 === cols) {
+				line[line.length - 1] = line[line.length - 1].slice(0, -1)
+			}
+			lines.push(line)
+			rollingCount = item.length
+			line = []
+			line.push(item)
+		} else {
+			line.push(item)
+		}
+	}
+	lines.push(line)
+	return lines
 }
 //doesn't change array length unlike normal shift method
 function shiftArray(arr = [1, 2, 3, 4, 5], end = '', populate = true, populateArray = ['h', 'i', 'j', 'k', 'l',]) {
-  let retVal = arr[0]
-  for (let i = 0; i < arr.length - 1; i++) {
-    arr[i] = arr[i + 1]
-  }
-  arr[arr.length - 1] = populate ? shiftArray(populateArray, end, false) : end
-  return retVal
+	let retVal = arr[0]
+	for (let i = 0; i < arr.length - 1; i++) {
+		arr[i] = arr[i + 1]
+	}
+	arr[arr.length - 1] = populate ? shiftArray(populateArray, end, false) : end
+	return retVal
 }
 
 function mapTextPosition(textArr) {
-  let lines = textArr;
-  for (let y = 0; y < lines.length; y++) {
-    for (let x = 0; x < lines[y].length; x++) {
-      lines[y][x] = [lines[y][x], x, y]
-    }
-  }
+	let lines = textArr;
+	for (let y = 0; y < lines.length; y++) {
+		for (let x = 0; x < lines[y].length; x++) {
+			lines[y][x] = [lines[y][x], x, y]
+		}
+	}
 }
 
 function rollLog(terminal = XTermTestv2) {
-  let scrollAmount = terminal.term.buffer.active.cursorY + 1
-  // \ after \r to escape the hidden newline character
-  terminal.writeSync(`${escDownByNum((terminal.term.rows - 1) - terminal.term.buffer.active.cursorY)}\r\
+	let scrollAmount = terminal.term.buffer.active.cursorY + 1
+	// \ after \r to escape the hidden newline character
+	terminal.writeSync(`${escDownByNum((terminal.term.rows - 1) - terminal.term.buffer.active.cursorY)}\r\
   ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows - 1)}`)
 }
 
 let rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
 let rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
 async function scanlines(terminal = XTermTestv2, text = '', speed = 5, colorArr = []) {
-  colorArr = colorArr ? colorArr : ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
-  let lines = fitLines(text, terminal.term.cols)
-  let arr2 = Array(colorArr.length).fill('')
-  let cursorPos = 1
-  let arr = arr2.map((content, index, arr) => { arr[index] = [cursorPos, content] })
-  for (let line of lines) {
-    for (let i = 0; i < line.length + arr.length - 1; i++) {
-      shiftArray(arr, '', true, line)
-      shiftArray(arr2, ['', '',], false)
-      arr2[arr2.length - 1] = [cursorPos, arr[arr.length - 1]]
-      for (let i = arr.length - 1; i > - 1; i--) {
-        if (arr2[i][0]) {
-          terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1])}`)
-          await new Promise(resolve => setTimeout(resolve, speed))
-        }
-      }
-      cursorPos = cursorPos += arr[arr.length - 1].length
-    }
-    terminal.writeSync('\n')
-    cursorPos = 1
-  }
+	colorArr = colorArr ? colorArr : ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
+	let lines = fitLines(text, terminal.term.cols)
+	let arr2 = Array(colorArr.length).fill('')
+	let cursorPos = 1
+	let arr = arr2.map((content, index, arr) => { arr[index] = [cursorPos, content] })
+	for (let line of lines) {
+		for (let i = 0; i < line.length + arr.length - 1; i++) {
+			shiftArray(arr, '', true, line)
+			shiftArray(arr2, ['', '',], false)
+			arr2[arr2.length - 1] = [cursorPos, arr[arr.length - 1]]
+			for (let i = arr.length - 1; i > - 1; i--) {
+				if (arr2[i][0]) {
+					terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1])}`)
+					await new Promise(resolve => setTimeout(resolve, speed))
+				}
+			}
+			cursorPos = cursorPos += arr[arr.length - 1].length
+		}
+		terminal.writeSync('\n')
+		cursorPos = 1
+	}
 }
 
 async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, gradientFunction, colorArr = []) {
-  let lorem_lines = fitLines(text, terminal.term.cols)
-  let multiline = ``
-  for (let line of lorem_lines) {
-    let line_str = line.join('')
-    line_str = line_str.concat('\n')
-    multiline = multiline.concat(line_str)
-  }
-  multiline = gradientFunction(multiline)
-  let cleaned = ''
-  let cleanUp = fitLines(text, terminal.term.cols)
-  for (let line of cleanUp) {
-    let line_str = line.join('')
-    line_str = line_str.concat('\n')
-    cleaned = cleaned.concat(line_str)
-  }
-  let texttoarr = multiline
-  let texttoarr2 = cleaned
-  let strArr = texttoarr.split("\n");
-  let strArr2 = texttoarr2.split("\n");
-  for (let i = 0; i < strArr.length; i++) {
-    strArr[i] = strArr[i].split(" ")
-    strArr2[i] = strArr2[i].split(" ")
-  }
-  let temp_arr = JSON.parse(JSON.stringify(strArr2))
-  mapTextPosition(temp_arr)
-  //effectivelly ignores first element of array so must compensate for that
-  colorArr = colorArr ? [colorArr[0], ...colorArr] : ['ffffff', 'ffffff', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
-  let gradient_text = strArr;
-  let lines = temp_arr;
-  let arr2 = Array(colorArr.length).fill('')
-  let cursorPos = 1
-  //add 2d array word position
-  let arr = arr2.map((content, index, arr) => { arr[index] = [cursorPos, content, 0/*XposArr*/, 0/*YposArr*/] })
-  for (let line of lines) {
-    for (let [index, word] of line.entries()) {
-      line[index][0] = word[0].concat(' ')
-    }
-  }
-  for (let line of gradient_text) {
-    for (let [index, word] of line.entries()) {
-      line[index] = word.concat(' ')
-    }
-  }
-  for (let x = 0; x < lines.length; x++) {
-    let line = lines[x]
-    for (let i = 0; i < line.length + arr.length - 1; i++) {
-      shiftArray(arr, '', true, line)
-      shiftArray(arr2, ['', '', 0, 0,], false)
-      arr2[arr2.length - 1] = [cursorPos, arr[arr.length - 1]]
-      for (let i = arr.length - 1; i > - 1; i--) {
-        if (!(i === 0)) {
-          if (arr2[i][0]) {
-            if (arr2[i][1][0]) terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1][0])}`);
-            await new Promise(resolve => setTimeout(resolve, speed))
-          }
-        } else if (i === 0) {
-          if (arr2[i][0]) {
-            if (arr2[i][1][0]) terminal.writeSync(`[${arr2[i][0]}G${gradient_text[arr2[i][1][2]][arr2[i][1][1]]}`);
-            await new Promise(resolve => setTimeout(resolve, speed))
-          }
-        }
-      }
-      try {
-        cursorPos = cursorPos += arr[arr.length - 1][0].length
-      } catch (error) {
-        cursorPos = cursorPos += 0
-      }
-    }
-    if (!(x === lines.length - 1)) terminal.writeSync('\n');
-    cursorPos = 1
+	let lorem_lines = fitLines(text, terminal.term.cols)
+	let multiline = ``
+	for (let line of lorem_lines) {
+		let line_str = line.join('')
+		line_str = line_str.concat('\n')
+		multiline = multiline.concat(line_str)
+	}
+	multiline = gradientFunction(multiline)
+	let cleaned = ''
+	let cleanUp = fitLines(text, terminal.term.cols)
+	for (let line of cleanUp) {
+		let line_str = line.join('')
+		line_str = line_str.concat('\n')
+		cleaned = cleaned.concat(line_str)
+	}
+	let texttoarr = multiline
+	let texttoarr2 = cleaned
+	let strArr = texttoarr.split("\n");
+	let strArr2 = texttoarr2.split("\n");
+	for (let i = 0; i < strArr.length; i++) {
+		strArr[i] = strArr[i].split(" ")
+		strArr2[i] = strArr2[i].split(" ")
+	}
+	let temp_arr = JSON.parse(JSON.stringify(strArr2))
+	mapTextPosition(temp_arr)
+	//effectivelly ignores first element of array so must compensate for that
+	colorArr = colorArr ? [colorArr[0], ...colorArr] : ['ffffff', 'ffffff', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
+	let gradient_text = strArr;
+	let lines = temp_arr;
+	let arr2 = Array(colorArr.length).fill('')
+	let cursorPos = 1
+	//add 2d array word position
+	let arr = arr2.map((content, index, arr) => { arr[index] = [cursorPos, content, 0/*XposArr*/, 0/*YposArr*/] })
+	for (let line of lines) {
+		for (let [index, word] of line.entries()) {
+			line[index][0] = word[0].concat(' ')
+		}
+	}
+	for (let line of gradient_text) {
+		for (let [index, word] of line.entries()) {
+			line[index] = word.concat(' ')
+		}
+	}
+	for (let x = 0; x < lines.length; x++) {
+		let line = lines[x]
+		for (let i = 0; i < line.length + arr.length - 1; i++) {
+			shiftArray(arr, '', true, line)
+			shiftArray(arr2, ['', '', 0, 0,], false)
+			arr2[arr2.length - 1] = [cursorPos, arr[arr.length - 1]]
+			for (let i = arr.length - 1; i > - 1; i--) {
+				if (!(i === 0)) {
+					if (arr2[i][0]) {
+						if (arr2[i][1][0]) terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1][0])}`);
+						await new Promise(resolve => setTimeout(resolve, speed))
+					}
+				} else if (i === 0) {
+					if (arr2[i][0]) {
+						if (arr2[i][1][0]) terminal.writeSync(`[${arr2[i][0]}G${gradient_text[arr2[i][1][2]][arr2[i][1][1]]}`);
+						await new Promise(resolve => setTimeout(resolve, speed))
+					}
+				}
+			}
+			try {
+				cursorPos = cursorPos += arr[arr.length - 1][0].length
+			} catch (error) {
+				cursorPos = cursorPos += 0
+			}
+		}
+		if (!(x === lines.length - 1)) terminal.writeSync('\n');
+		cursorPos = 1
 
-  }
+	}
 }
 //
 //  TERMINAL WRITE FUNCTIONS
@@ -858,11 +866,11 @@ XTermTestv2.writeSync('[?25l')
 logs.writeSync('[?25l')
 
 function toggleUi() {
-  form_thing.toggle()
-  XTermTestv2.toggle()
-  logs.toggle()
-  stats.toggle()
-  actions.toggle()
+	form_thing.toggle()
+	XTermTestv2.toggle()
+	logs.toggle()
+	stats.toggle()
+	actions.toggle()
 }
 toggleUi()
 screen.render()
@@ -871,37 +879,30 @@ stats.focus()
 screen.render()
 //stats box
 const box = blessed.box({
-  top: 'center',
-  left: 'center',
-  width: '40%',
-  height: 10,
-  tags: true,
-  keys: true,
-  content: '{bold}hmm{/bold}!',
-  border: {
-    type: 'line'
-  },
-  style: {
-    fg: 'white',
-    //bg: 'magenta',
-    border: {
-      //fg: '#4b0082',
-      //bg: '#4b0082',
-    },
-    hover: {
-      bg: 'green'
-    }
-  }
+	top: 'center',
+	left: 'center',
+	width: '40%',
+	height: 10,
+	tags: true,
+	keys: true,
+	content: '{bold}hmm{/bold}!',
+	border: {
+		type: 'line'
+	},
+	style: {
+		fg: 'white',
+		//bg: 'magenta',
+		border: {
+			//fg: '#4b0082',
+			//bg: '#4b0082',
+		},
+		hover: {
+			bg: 'green'
+		}
+	}
 });
-// perhaps pass to constructer later but unessential
+
 let thePlayer = new Player("name")
-thePlayer.str = rollStat();
-thePlayer.hp = 10 + thePlayer.str;
-thePlayer.hpMax = thePlayer.hp;
-thePlayer.int = rollStat();
-thePlayer.dex = rollStat();
-thePlayer.cha = rollStat();
-thePlayer.basedamage = thePlayer.str + 5
 
 screen.append(box);
 screen.render()
@@ -925,14 +926,14 @@ box.pushLine(`\n${' '.repeat(Math.floor(box.width / 2) - Math.floor('[ ENTER to 
 screen.render()
 box.focus()
 box.key('enter', function () {
-  toggleUi()
-  box.hide()
+	toggleUi()
+	box.hide()
 }
 )
 
 function refreshStats(player = thePlayer) {
-  stats.setContent(
-    `{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
+	stats.setContent(
+		`{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
 {bold}${chalk.green("AC ")}{/bold} = ${thePlayer.ac}
 ${chalk.yellowBright('str')} = ${thePlayer.str}
 ${chalk.grey('int')} = ${thePlayer.int}
@@ -940,7 +941,7 @@ ${chalk.hex('000080')('dex')} = ${thePlayer.dex}
 ${chalk.hex('630330')('cha')} = ${thePlayer.cha} 
 ${chalk.magenta("dmg")} = ${thePlayer.basedamage}
 ${chalk.magenta("mag")} =`)
-  screen.render()
+	screen.render()
 }
 
 refreshStats()
@@ -1003,7 +1004,7 @@ mountain = `[37m[40m                        [97m[40m░░[37m[40m        
 
 //test string
 let lorem =
-  `Lorem ipsum dolor sit amet,
+	`Lorem ipsum dolor sit amet,
 consectetur adipiscing elit. 
 Morbi varius ut augue ac sagittis. 
 Vivamus lectus lacus, commodo eu ligula pulvinar, 
@@ -1026,6 +1027,10 @@ pulvinar id tellus.`
 var pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978']
 
 pgrad.reverse()
+
+thePlayer.changeWeapon()
+refreshStats(thePlayer)
+screen.render()
 
 //retro: {colors: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'], options: {}},
 //vice: {colors: ['#5ee7df', '#b490ca'], options: {interpolation: 'hsv'}},

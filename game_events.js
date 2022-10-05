@@ -69,3 +69,6 @@ export class game_event_skillcheck extends game_event {
 }
 // run away skill check if suceed goto random room same depth
 const combatButtons = [[], [], [],]
+
+
+

@@ -15,6 +15,7 @@ class monster {
         this.rarity = rarity;
         this.hp = chance1.rpg(`${this.hitDie}d6`);
     }
+
 }
 function copyMonster(monsterToCopy) {
     return new monster(

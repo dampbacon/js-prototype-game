@@ -3,14 +3,21 @@ export const WEAPONS = Object.freeze({
     DAGGER: 'DAGGER',
     SCIMITAR: 'SCIMITAR',
     SWORD: 'SWORD',
+    BATTLE_AXE: 'BATTLE_AXE',
+    GREAT_SWORD: 'GREAT_SWORD',
+    BARE_HANDS: 'BARE_HANDS',
 
 })
 let WEAPONmap = {}
 //dmg dice d(amount)
-WEAPONmap[WEAPONS.SPEAR] = 8
-WEAPONmap[WEAPONS.SCIMITAR] = 10
-WEAPONmap[WEAPONS.DAGGER] = 4
-WEAPONmap[WEAPONS.SWORD] = 10
+WEAPONmap[WEAPONS.SPEAR] = '1d6'
+WEAPONmap[WEAPONS.SCIMITAR] = '2d4'
+WEAPONmap[WEAPONS.DAGGER] = '1d4'
+WEAPONmap[WEAPONS.SWORD] = '1d8'
+WEAPONmap[WEAPONS.BATTLE_AXE] = '1d10'
+WEAPONmap[WEAPONS.GREAT_SWORD] = '2d6'
+WEAPONmap[WEAPONS.BARE_HANDS] = '1d2' //coin flip
+
 export { WEAPONmap };
 
 export const ARMOUR = Object.freeze({

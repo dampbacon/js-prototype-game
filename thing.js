@@ -620,16 +620,22 @@ function eventHandler(gameEvent = temp_event1) {
 }
 
 function combat(combatEvent) {
-
-	temp_button
-
-
-
-
-
-
-
-
+	if (!enemy){
+		return 0
+	}
+	const enemy = combatEvent.enemy
+	const enemyHp = enemy.hp
+	hostile = true
+	if (!hostile){
+		//provoke or somthing
+		return 0
+	}else{
+		createCombatButtons()
+	}
+	//combat buttons
+	//toggle button box while enemy takes turn
+	//turn has a short delay for enemy so it doesnt feel static
+	//maybe some effect
 	encounterCleared = false;
 	let someButton
 	someButton.on('press', () => {
@@ -638,7 +644,86 @@ function combat(combatEvent) {
 	})
 }
 
+function createCombatButtons(combatButtonsArr=[]){
 
+
+	
+	let attack = new blessed.button({
+		parent: form_thing,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		shrink: true,
+		name: item[1],
+		content: item[1],
+		//shadow: true,
+		style: {
+			bg: '#0066CC',
+			focus: {
+				bg: '#cc0066',
+			},
+			hover: {
+				bg: '#cc0066',
+			},
+		},
+	})
+	let flee = new blessed.button({
+		parent: form_thing,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		shrink: true,
+		name: item[1],
+		content: item[1],
+		//shadow: true,
+		style: {
+			bg: '#0066CC',
+			focus: {
+				bg: '#cc0066',
+			},
+			hover: {
+				bg: '#cc0066',
+			},
+		},
+	})
+	let chatUp = new blessed.button({
+		parent: form_thing,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		shrink: true,
+		name: item[1],
+		content: item[1],
+		//shadow: true,
+		style: {
+			bg: '#0066CC',
+			focus: {
+				bg: '#cc0066',
+			},
+			hover: {
+				bg: '#cc0066',
+			},
+		},
+	})
+}
 
 
 //CSI (Control Sequence Introducer) sequences TEST ~ will be used to animate in the future

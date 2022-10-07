@@ -28,10 +28,25 @@ const defaults = {
     },
     buttons: [[]],
 }
-//to factory event builder
 
+// wrap event groups with this eventually, like in a room a combat event, skill check event and loot event.
+export class eventPackage{
+    constructor({ id, events } = {id:0, events:[]}) {
+        this.id = eventPackage.id;
+        this.#eventMap = this.#createEventsMap(events);
+    }
+    #createEventsMap(eventsArrary = [], storyArr = {}) {
+        eventsArrary.forEach((element) => {
+            storyArr[element.id] = element
+        })
+        return storyArr;
+    }
+    eventsMap(){
+        return self.#eventMap;
+    }
+}
 export class game_event {
-    constructor({ id, body, toScreen, buttons } = { defaults }) {
+    constructor({ id, body, toScreen, buttons } = { ...defaults }) {
         this.id = id
         this.body = body
         this.toScreen = toScreen
@@ -53,10 +68,10 @@ export class game_event_gain_item extends game_event {
 }
 
 export class game_event_enemy extends game_event {
-    constructor({ id, body, toScreen, buttons, Enemy } = { ...defaults, Enemy: [] }) {
+    constructor({ id, body, toScreen, buttons, enemy } = { ...defaults, enemy: null }) {
         //make if enemy is hostile pass buttons to be created for combat
         super(id, body, toScreen, buttons)
-        this.Enemy = Enemy;
+        this.enemy = enemy;
     }
 }
 

@@ -13,7 +13,7 @@ class monster {
         this.dmgDie = dmgDie;
         this.aggro = aggro;
         this.rarity = rarity;
-        this.hp = chance1.rpg(`${this.hitDie}d6`);
+        this.hp = chance1.rpg(`${this.hitDie}d6`, { sum: true });
     }
 
 }

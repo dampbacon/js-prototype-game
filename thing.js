@@ -488,7 +488,7 @@ screen.key('y', function () {
 	buttonsArray = [];
 	stats.focus();
 	XTermApp.reset()
-	createButtons(temp_event1, buttonsArray, story);
+	createButtons(temp_event1, story);
 	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 	resizeButtons();
 	stats.focus();
@@ -521,7 +521,7 @@ resizeButtons()
 // if i attempt to remove all mentions of buttonsArray
 let combatEvent;
 let combatFlag = false;
-function createButtons(gameEvent, buttonsArr, storyObj = {}) {
+function createButtons(gameEvent, storyObj = {}) {
 	// halt execution if event is combat here instead of what i did before
 	// maybe move event handler call to here
 
@@ -559,7 +559,7 @@ function createButtons(gameEvent, buttonsArr, storyObj = {}) {
 				},
 			},
 		})
-		buttonsArr.push(temp)
+		buttonsArray.push(temp)
 		//make it handle different types of buttons that do not redirect to another event for example combat
 		// if temp.gameEvent== something
 		// or gameevent do something 
@@ -569,14 +569,12 @@ function createButtons(gameEvent, buttonsArr, storyObj = {}) {
 			XTermApp.clear()
 			XTermApp.reset()
 
-			buttonsArr.forEach((element) => { form_thing.remove(element); element.destroy() })
 			buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
-			buttonsArr = []
 			buttonsArray = []
 			//eventHandler(storyObj[item[0]])
 			
 			//logs.focus();
-			createButtons(storyObj[item[0]], buttonsArray, storyObj);
+			createButtons(storyObj[item[0]], storyObj);
 			resizeButtons();
 			stats.focus();
 			form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
@@ -647,7 +645,7 @@ function combat(combatEvent) {
 function createCombatButtons(combatButtonsArr=[]){
 
 
-	
+
 	let attack = new blessed.button({
 		parent: form_thing,
 		mouse: true,

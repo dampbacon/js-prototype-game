@@ -31,6 +31,7 @@ const defaults = {
 
 // wrap event groups with this eventually, like in a room a combat event, skill check event and loot event.
 export class eventPackage{
+    #eventMap
     constructor({ id, events } = {id:0, events:[]}) {
         this.id = eventPackage.id;
         this.#eventMap = this.#createEventsMap(events);

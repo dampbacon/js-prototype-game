@@ -1167,6 +1167,11 @@ screen.render()
 //function to scroll text via moving cursor to bottom and writting a few \n then set cursor to 0,0
 // scanlines(XTermTestv2,lorem,20,pgrad)
 //scanlines(XTermTestv2,"apples are disgusting",20,pgrad)
-//XTermTestv2.writeSync(gradient_scanlines(logs,"apples are disgusting",20,gradient.retro.multiline,pgrad))
+
+
+
+//gradient_scanlines(XTermTestv2,lorem.repeat(2),10,gradient.retro.multiline,pgrad)
+scanlines(XTermTestv2,lorem.repeat(2),10,pgrad)
+// ERROR AT CONDIMENTUM FOR SOME REASON IN GRADIENT_SCANLINES
 
 //rollLog()

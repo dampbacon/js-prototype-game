@@ -898,19 +898,23 @@ async function scanlines(terminal = XTermTestv2, text = '', speed = 5, colorArr 
 }
 
 async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, gradientFunction, colorArr = []) {
-	let lorem_lines = fitLines(text, terminal.term.cols)
+	let lorem_lines = fitLines(text, terminal.term.cols-1)
 	let multiline = ``
 	for (let line of lorem_lines) {
 		let line_str = line.join('')
-		line_str = line_str.concat('\n')
+		if (line_str){
+			line_str = line_str.concat('\n')
+		}
 		multiline = multiline.concat(line_str)
 	}
 	multiline = gradientFunction(multiline)
 	let cleaned = ''
-	let cleanUp = fitLines(text, terminal.term.cols)
+	let cleanUp = fitLines(text, terminal.term.cols-1)
 	for (let line of cleanUp) {
 		let line_str = line.join('')
-		line_str = line_str.concat('\n')
+		if (line_str){
+			line_str = line_str.concat('\n')
+		}
 		cleaned = cleaned.concat(line_str)
 	}
 	let texttoarr = multiline
@@ -933,12 +937,16 @@ async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, 
 	let arr = arr2.map((content, index, arr) => { arr[index] = [cursorPos, content, 0/*XposArr*/, 0/*YposArr*/] })
 	for (let line of lines) {
 		for (let [index, word] of line.entries()) {
-			line[index][0] = word[0].concat(' ')
+			if(line[index]!==line[-1]){
+				line[index][0] = word[0].concat(' ')
+			}
 		}
 	}
 	for (let line of gradient_text) {
 		for (let [index, word] of line.entries()) {
-			line[index] = word.concat(' ')
+			if(line[index]!==line[-1]){
+				line[index] = word.concat(' ')
+			}
 		}
 	}
 	for (let x = 0; x < lines.length; x++) {
@@ -1026,6 +1034,7 @@ let thePlayer = new Player("name")
 
 screen.append(box);
 screen.render()
+
 await new Promise(resolve => setTimeout(resolve, 1))
 box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - ' HP: '.length - 2)} hp: ${thePlayer.hp}`)
 screen.render()
@@ -1167,11 +1176,22 @@ screen.render()
 //function to scroll text via moving cursor to bottom and writting a few \n then set cursor to 0,0
 // scanlines(XTermTestv2,lorem,20,pgrad)
 //scanlines(XTermTestv2,"apples are disgusting",20,pgrad)
+let ch=`The Yuan Family.
+
+“Father, today, Brother Huang will leave to join the army. I’m going to go see him off,” said Yuan Luoyu respectfully. 
+
+Yuan Wutong immediately made his decision. “Take some presents with you. Stop by the treasury and pick out something good. Our gift might be intended for Huang Qianjun, but what matters is that Master Su will see it; we absolutely cannot be half-hearted about this. Let’s take this chance to display our Yuan Family’s sincerity.” 
+
+“Alright!” Yuan Luoyu straightforwardly agreed. 
+
+Yuan Wutong snorted coldly. “Last night, your expenditures at the Sand-Scouring Waves weren’t the least bit small. Out of respect for Master Su, I’ll let you off just this once, but you’d best hurry back to the Redscale Army, you brat!” `
+
+await new Promise(resolve => setTimeout(resolve, 1000));
+gradient_scanlines(XTermTestv2,ch.repeat(1),4,gradient.retro.multiline,pgrad)
+//ERROR bugs out at certain screen widths
+//make stricter add a buffer to collumn width
 
 
-
-//gradient_scanlines(XTermTestv2,lorem.repeat(2),10,gradient.retro.multiline,pgrad)
-scanlines(XTermTestv2,lorem.repeat(2),10,pgrad)
-// ERROR AT CONDIMENTUM FOR SOME REASON IN GRADIENT_SCANLINES
+//scanlines(XTermTestv2,lorem.repeat(2),10,pgrad)
 
 //rollLog()

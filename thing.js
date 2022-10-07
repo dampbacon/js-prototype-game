@@ -63,7 +63,7 @@ let temp_event1 = new game_event({
 			writeMode: 'gradientScanlines',
 			gradientFunction: gradient.retro.multiline,
 			gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
-			speed: 2,
+			speed: 1,
 		},
 		TextFile: {
 			exists: false,
@@ -528,16 +528,8 @@ function clearButtons(){
 	buttonsArray = []
 }
 async function createButtons(gameEvent, storyObj = {}) {
-	// halt execution if event is combat here instead of what i did before
-	// maybe move event handler call to here
-	// if i can make it work with promise i can remove flag
-	if (!(combatFlag)) {
-		// ????
-		//await listener
-	}
 	eventHandler(gameEvent)
 	await waitForClear();
-	// await(eventHandler(gameEvent))
 	gameEvent['buttons'].forEach(item => {
 		let temp = new blessed.button({
 			parent: form_thing,
@@ -565,20 +557,13 @@ async function createButtons(gameEvent, storyObj = {}) {
 			},
 		})
 		buttonsArray.push(temp)
-		
-		//make it handle different types of buttons that do not redirect to another event for example combat
-		// if temp.gameEvent== something
-		// or gameevent do something 
 		temp.on('press', function () {
-			//potential for random events in the future
-			//call event handler for the event assocaited with one the button directs to on press
 			clearButtons()
-			//eventHandler(storyObj[item[0]])
-			//logs.focus();
+			form_thing.setContent('')
+			screen.render();
 			createButtons(storyObj[item[0]], storyObj);
 			resizeButtons();
 			stats.focus();
-			form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 			screen.render();
 			
 		})
@@ -599,17 +584,18 @@ stats.focus()
 screen.render()
 
 //sloppy but easy way to make it work
-function eventHandler(gameEvent = temp_event1) {
+async function eventHandler(gameEvent = temp_event1) {
 	XTermApp.clear()
 	XTermApp.reset()
 	rollLog(logs)
-	let gbf = gameEvent.body.format
+	let gb  = gameEvent.body
+	let gbf = gb.format
 	//make enum thing later
-	if (gbf.writeMode = 'gradientScanlines') {
-		gradient_scanlines(logs, gameEvent.body.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr)
-	}
-
 	XTermTestv2.writeSync(gameEvent.toScreen.toScreen)
+	if (gbf.writeMode = 'gradientScanlines') {
+		await(gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
+	}
+	form_thing.setContent(` ${chalk.bold.yellow(gameEvent['buttons'].length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 
 	if (gameEvent instanceof (game_event_gain_item)) {
 
@@ -618,6 +604,8 @@ function eventHandler(gameEvent = temp_event1) {
 		combat(gameEvent)
 	} else if (gameEvent instanceof (game_event_gain_item)) {
 
+	} else {
+		resolver()
 	}
 	screen.key('n', function () {
 		resolver()
@@ -634,6 +622,7 @@ function resolver() {
   
 
 function combat(combatEvent) {
+	form_thing.setContent('')
 	if (!enemy){
 		return 0
 	}
@@ -1025,6 +1014,11 @@ function toggleUi() {
 	actions.toggle()
 }
 toggleUi()
+function toggleButtons() {
+	form_thing.toggle()
+}
+
+
 screen.render()
 //toggleUi()
 stats.focus()
@@ -1209,18 +1203,19 @@ Stop by the treasury and pick out something good.
 Our gift might be intended for Huang Qianjun, 
 but what matters is that Master Su will see it; 
 we absolutely cannot be half-hearted about this. 
-Let\’s take this chance to display our Yuan Family\’s sincerity.” 
+Let’s take this chance to display our Yuan Family\’s sincerity.” 
 
 “Alright!” Yuan Luoyu straightforwardly agreed. 
 
-Yuan Wutong snorted coldly. “Last night, your expenditures at the Sand-Scouring Waves weren\’t the least bit small. 
+Yuan Wutong snorted coldly. “Last night, your expenditures at the Sand-Scouring Waves weren’t the least bit small. 
 Out of respect for Master Su, 
-I\’ll let you off just this once, 
-but you\’d best hurry back to the Redscale Army, you brat!” `
+I’ll let you off just this once, 
+but you’d best hurry back to the Redscale Army, you brat!” `
 
 await new Promise(resolve => setTimeout(resolve, 1000));
-gradient_scanlines(XTermTestv2,ch.repeat(1),4,gradient.retro.multiline,pgrad)
-logs.writeSync(fitLines(ch,XTermTestv2.term.cols).toString())
+//toggleButtons()
+await(gradient_scanlines(XTermTestv2,ch.repeat(1),4,gradient.retro.multiline,pgrad))
+//toggleButtons()
 //ERROR bugs out at certain screen widths
 //make stricter add a buffer to collumn width
 

@@ -521,18 +521,21 @@ resizeButtons()
 // if i attempt to remove all mentions of buttonsArray
 let combatEvent;
 let combatFlag = false;
-function createButtons(gameEvent, storyObj = {}) {
+function clearButtons(){
+	buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
+	buttonsArray = []
+}
+async function createButtons(gameEvent, storyObj = {}) {
 	// halt execution if event is combat here instead of what i did before
 	// maybe move event handler call to here
-
 	// if i can make it work with promise i can remove flag
 	if (!(combatFlag)) {
 		// ????
 		//await listener
 	}
 	eventHandler(gameEvent)
+	await waitForClear();
 	// await(eventHandler(gameEvent))
-
 	gameEvent['buttons'].forEach(item => {
 		let temp = new blessed.button({
 			parent: form_thing,
@@ -560,19 +563,15 @@ function createButtons(gameEvent, storyObj = {}) {
 			},
 		})
 		buttonsArray.push(temp)
+		
 		//make it handle different types of buttons that do not redirect to another event for example combat
 		// if temp.gameEvent== something
 		// or gameevent do something 
 		temp.on('press', function () {
 			//potential for random events in the future
 			//call event handler for the event assocaited with one the button directs to on press
-			XTermApp.clear()
-			XTermApp.reset()
-
-			buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
-			buttonsArray = []
+			clearButtons()
 			//eventHandler(storyObj[item[0]])
-			
 			//logs.focus();
 			createButtons(storyObj[item[0]], storyObj);
 			resizeButtons();
@@ -582,6 +581,7 @@ function createButtons(gameEvent, storyObj = {}) {
 			
 		})
 	})
+	resizeButtons()
 }
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded
@@ -598,6 +598,8 @@ screen.render()
 
 //sloppy but easy way to make it work
 function eventHandler(gameEvent = temp_event1) {
+	XTermApp.clear()
+	XTermApp.reset()
 	rollLog(logs)
 	let gbf = gameEvent.body.format
 	//make enum thing later
@@ -615,7 +617,19 @@ function eventHandler(gameEvent = temp_event1) {
 	} else if (gameEvent instanceof (game_event_gain_item)) {
 
 	}
+	screen.key('n', function () {
+		resolver()
+	})
 }
+//resume execution after combat
+let waitForClearResolve
+function waitForClear() {
+    return new Promise(resolve => waitForClearResolve = resolve);
+}
+function resolver() {
+	if (waitForClearResolve) waitForClearResolve();
+}
+  
 
 function combat(combatEvent) {
 	if (!enemy){
@@ -627,25 +641,28 @@ function combat(combatEvent) {
 	if (!hostile){
 		//provoke or somthing
 		return 0
-	}else{
-		createCombatButtons()
 	}
+	createCombatButtons()
 	//combat buttons
 	//toggle button box while enemy takes turn
 	//turn has a short delay for enemy so it doesnt feel static
 	//maybe some effect
 	encounterCleared = false;
-	let someButton
-	someButton.on('press', () => {
+	//should be attack buttons
+	buttonsArray[0].on('press', () => {
+		//attack placeholder
+		enemyHp-=1
+		if(enemyHp <= 0){
+			encounterCleared = true;
+			resolver()
+		}
 		//set flag combat done or something
 		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)
 	})
 }
 
-function createCombatButtons(combatButtonsArr=[]){
-
-
-
+function createCombatButtons(){
+	clearButtons()
 	let attack = new blessed.button({
 		parent: form_thing,
 		mouse: true,
@@ -658,16 +675,16 @@ function createCombatButtons(combatButtonsArr=[]){
 		left: 1,
 		top: 1,
 		shrink: true,
-		name: item[1],
-		content: item[1],
+		name: 'attack',
+		content: `attack (${chalk.bold.red(thePlayer.weapon)} + ${thePlayer.basedamage})`, //maybe add damage die
 		//shadow: true,
 		style: {
-			bg: '#0066CC',
+			bg: '#880808',
 			focus: {
-				bg: '#cc0066',
+				bg: '#ECE81A',
 			},
 			hover: {
-				bg: '#cc0066',
+				bg: '#ECE81A',
 			},
 		},
 	})
@@ -683,16 +700,16 @@ function createCombatButtons(combatButtonsArr=[]){
 		left: 1,
 		top: 1,
 		shrink: true,
-		name: item[1],
-		content: item[1],
+		name: 'flee',
+		content: `flee ${thePlayer.dex > -1? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`,
 		//shadow: true,
 		style: {
-			bg: '#0066CC',
+			bg: '#880808',
 			focus: {
-				bg: '#cc0066',
+				bg: '#ECE81A',
 			},
 			hover: {
-				bg: '#cc0066',
+				bg: '#ECE81A',
 			},
 		},
 	})
@@ -708,19 +725,25 @@ function createCombatButtons(combatButtonsArr=[]){
 		left: 1,
 		top: 1,
 		shrink: true,
-		name: item[1],
-		content: item[1],
+		name: 'chatUp',
+		content: `chat up ${thePlayer.dex > -1? chalk.bold.greenBright('cha check') : chalk.bold.redBright('cha check')}`,
 		//shadow: true,
 		style: {
-			bg: '#0066CC',
+			bg: '#880808',
 			focus: {
-				bg: '#cc0066',
+				bg: '#ECE81A',
 			},
 			hover: {
-				bg: '#cc0066',
+				bg: '#ECE81A',
 			},
 		},
 	})
+	buttonsArray.push(attack)
+	buttonsArray.push(flee)
+	buttonsArray.push(chatUp)
+	resizeButtons()
+	stats.focus()
+	screen.render()
 }
 
 

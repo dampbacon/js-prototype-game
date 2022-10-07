@@ -20,6 +20,8 @@ import smallGrad from 'tinygradient';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 
+import lodashC from 'lodash.compact';
+const {compact} = lodashC;
 
 // test content
 let
@@ -819,14 +821,32 @@ async function slowWrite(str = '', terminal, speed) {
 //animate ideas, queue of words that form gradient, Lines that form gradient, set sections are writen
 function fitLines(str = '', cols = 0) {
 	//various checks for characters that screw up the line wrapping
-	let str1 = str.replace(/\n+/g, '')
-	let str2 = str1.replace(/\\n+/g, '')
-	let str3 = str2.replace(/\r+/g, '')
-	let strArr = str3.split(/\b(?![\s.])/);
+	// regex screws up approstrophes
+	
+	//let str1 = begin.replace(/\n+/g, '')
+	//let str2 = str1.replace(/\\n+/g, '')
+	//let str3 = str2.replace(/\r+/g, '')
+	//let strArr = str3.split(/\b(?![\s.])/);
+	let strArr = str.split('\n')//(/\b(?![\n\r.])/); 
+	strArr = strArr.filter(n => n)
+	strArr = strArr.join(' ')
+	strArr = strArr.replace(/ +(?= )/g,'');
+	strArr = strArr.split(' ');	
+	strArr = strArr.filter(n => n)
+	let R = lodashC(strArr)
+	let K = []
+	for(let i = 0; i < R.length; i++) {
+		if(typeof R[i] === 'string' || R[i] instanceof String) {
+			if(R[i]!=='\n'&&R[i]!=='\r'&&R[i]!==' ') {
+				K.push(R[i].concat(' '))
+			}
+		}
+	}	
+
 	let lines = []
 	let rollingCount = 0
 	let line = []
-	for (let item of strArr) {
+	for (let item of K) {
 		rollingCount += item.length
 		if (rollingCount > cols) {
 			if (rollingCount - 1 === cols) {
@@ -835,9 +855,13 @@ function fitLines(str = '', cols = 0) {
 			lines.push(line)
 			rollingCount = item.length
 			line = []
-			line.push(item)
+			if(item){
+				line.push(item)
+			}
 		} else {
-			line.push(item)
+			if(item){
+				line.push(item)
+			}// later move to top to be more efficient
 		}
 	}
 	lines.push(line)
@@ -1178,16 +1202,25 @@ screen.render()
 //scanlines(XTermTestv2,"apples are disgusting",20,pgrad)
 let ch=`The Yuan Family.
 
-“Father, today, Brother Huang will leave to join the army. I’m going to go see him off,” said Yuan Luoyu respectfully. 
+“Father, today, Brother Huang will leave to join the army. I\’m going to go see him off,” said Yuan Luoyu respectfully. 
 
-Yuan Wutong immediately made his decision. “Take some presents with you. Stop by the treasury and pick out something good. Our gift might be intended for Huang Qianjun, but what matters is that Master Su will see it; we absolutely cannot be half-hearted about this. Let’s take this chance to display our Yuan Family’s sincerity.” 
+Yuan Wutong immediately made his decision. “Take some presents with you. 
+Stop by the treasury and pick out something good. 
+Our gift might be intended for Huang Qianjun, 
+but what matters is that Master Su will see it; 
+we absolutely cannot be half-hearted about this. 
+Let\’s take this chance to display our Yuan Family\’s sincerity.” 
 
 “Alright!” Yuan Luoyu straightforwardly agreed. 
 
-Yuan Wutong snorted coldly. “Last night, your expenditures at the Sand-Scouring Waves weren’t the least bit small. Out of respect for Master Su, I’ll let you off just this once, but you’d best hurry back to the Redscale Army, you brat!” `
+Yuan Wutong snorted coldly. “Last night, your expenditures at the Sand-Scouring Waves weren\’t the least bit small. 
+Out of respect for Master Su, 
+I\’ll let you off just this once, 
+but you\’d best hurry back to the Redscale Army, you brat!” `
 
 await new Promise(resolve => setTimeout(resolve, 1000));
 gradient_scanlines(XTermTestv2,ch.repeat(1),4,gradient.retro.multiline,pgrad)
+logs.writeSync(fitLines(ch,XTermTestv2.term.cols).toString())
 //ERROR bugs out at certain screen widths
 //make stricter add a buffer to collumn width
 

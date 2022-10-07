@@ -61,7 +61,7 @@ let temp_event1 = new game_event({
 			writeMode: 'gradientScanlines',
 			gradientFunction: gradient.retro.multiline,
 			gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
-			speed: 4,
+			speed: 2,
 		},
 		TextFile: {
 			exists: false,
@@ -488,7 +488,6 @@ screen.key('y', function () {
 	buttonsArray = [];
 	stats.focus();
 	XTermApp.reset()
-	eventHandler(temp_event1)
 	createButtons(temp_event1, buttonsArray, story);
 	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 	resizeButtons();
@@ -520,9 +519,20 @@ resizeButtons()
 // The problem trying to make this function more pure is that for some reason
 // the resize button cannot get a valid height and crashes on screen resize
 // if i attempt to remove all mentions of buttonsArray
-
+let combatEvent;
 let combatFlag = false;
 function createButtons(gameEvent, buttonsArr, storyObj = {}) {
+	// halt execution if event is combat here instead of what i did before
+	// maybe move event handler call to here
+
+	// if i can make it work with promise i can remove flag
+	if (!(combatFlag)) {
+		// ????
+		//await listener
+	}
+	eventHandler(gameEvent)
+	// await(eventHandler(gameEvent))
+
 	gameEvent['buttons'].forEach(item => {
 		let temp = new blessed.button({
 			parent: form_thing,
@@ -559,22 +569,19 @@ function createButtons(gameEvent, buttonsArr, storyObj = {}) {
 			XTermApp.clear()
 			XTermApp.reset()
 
-
-
 			buttonsArr.forEach((element) => { form_thing.remove(element); element.destroy() })
 			buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
 			buttonsArr = []
 			buttonsArray = []
-			eventHandler(storyObj[item[0]])
-
-			if (!(combatFlag)) {
-				//logs.focus();
-				createButtons(storyObj[item[0]], buttonsArray, storyObj);
-				resizeButtons();
-				stats.focus();
-				form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
-				screen.render();
-			}
+			//eventHandler(storyObj[item[0]])
+			
+			//logs.focus();
+			createButtons(storyObj[item[0]], buttonsArray, storyObj);
+			resizeButtons();
+			stats.focus();
+			form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
+			screen.render();
+			
 		})
 	})
 }
@@ -612,8 +619,23 @@ function eventHandler(gameEvent = temp_event1) {
 	}
 }
 
-function combat(gameEvent) {
+function combat(combatEvent) {
 
+	temp_button
+
+
+
+
+
+
+
+
+	encounterCleared = false;
+	let someButton
+	someButton.on('press', () => {
+		//set flag combat done or something
+		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)
+	})
 }
 
 
@@ -638,21 +660,11 @@ XTermTestv2.term.onScroll((apple) => { scrollPosition = apple.valueOf() })
 //  TERMINAL WRITE FUNCTIONS
 //  MOVE TO SEPERATE FILE LATER
 //
-function escLeftByNum(num) {
-	return `[${num}D`
-}
-function escRightByNum(num) {
-	return `[${num}C`
-}
-function escUpByNum(num) {
-	return `[${num}A`
-}
-function escDownByNum(num) {
-	return `[${num}B`
-}
-function findCursor(terminal = XTermTestv2) {
-	return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY];
-}
+function escLeftByNum(num) {return `[${num}D`}
+function escRightByNum(num) {return `[${num}C`}
+function escUpByNum(num) {return `[${num}A`}
+function escDownByNum(num) {return `[${num}B`}
+function findCursor(terminal = XTermTestv2) {return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY]}
 function goToTermPosStr(arr1, terminal = XTermTestv2) {
 	let arr2 = findCursor(terminal)
 	let Xpos = arr1[0] - arr2[0]
@@ -745,6 +757,8 @@ function mapTextPosition(textArr) {
 }
 
 function rollLog(terminal = XTermTestv2) {
+	//set scroll to bottom
+	terminal.term.scrollToBottom()
 	let scrollAmount = terminal.term.buffer.active.cursorY + 1
 	// \ after \r to escape the hidden newline character
 	terminal.writeSync(`${escDownByNum((terminal.term.rows - 1) - terminal.term.buffer.active.cursorY)}\r\

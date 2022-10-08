@@ -20,7 +20,7 @@ import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
-const {compact} = lodashC;
+const { compact } = lodashC;
 
 // test content
 let
@@ -516,7 +516,7 @@ resizeButtons()
 // if i attempt to remove all mentions of buttonsArray
 let combatEvent;
 let combatFlag = false;
-function clearButtons(){
+function clearButtons() {
 	buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
 	buttonsArray = []
 }
@@ -558,7 +558,7 @@ async function createButtons(gameEvent, storyObj = {}) {
 			resizeButtons();
 			stats.focus();
 			screen.render();
-			
+
 		})
 	})
 	resizeButtons()
@@ -581,12 +581,12 @@ async function eventHandler(gameEvent = temp_event1) {
 	XTermApp.clear()
 	XTermApp.reset()
 	rollLog(logs)
-	let gb  = gameEvent.body
+	let gb = gameEvent.body
 	let gbf = gb.format
 	//make enum thing later
 	XTermTestv2.writeSync(gameEvent.toScreen.toScreen)
 	if (gbf.writeMode = 'gradientScanlines') {
-		await(gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
+		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 	}
 	form_thing.setContent(` ${chalk.bold.yellow(gameEvent['buttons'].length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 
@@ -610,7 +610,7 @@ async function eventHandler(gameEvent = temp_event1) {
 // enounter clear promise
 let waitForClearResolve
 function waitForClear() {
-    return new Promise(resolve => waitForClearResolve = resolve);
+	return new Promise(resolve => waitForClearResolve = resolve);
 }
 function resolver() {
 	if (waitForClearResolve) waitForClearResolve();
@@ -620,7 +620,7 @@ function resolver() {
 //TURNS PROMISES
 let waitForEnemyTurnResolve
 function waitForTurn() {
-    return new Promise(resolve => waitForEnemyTurnResolve = resolve);
+	return new Promise(resolve => waitForEnemyTurnResolve = resolve);
 }
 function turnResolver() {
 	if (waitForEnemyTurnResolve) waitForEnemyTurnResolve();
@@ -633,7 +633,7 @@ function combat(combatEvent) {
 	let enemyHp = 10
 	//not always true but a to simplify for now
 	let hostile = true
-	if (!hostile){
+	if (!hostile) {
 		//provoke or somthing
 		return 0
 	}
@@ -643,20 +643,20 @@ function combat(combatEvent) {
 	//turn has a short delay for enemy so it doesnt feel static
 	//maybe some effect
 	let encounterCleared = false;
-	[enemyHp,encounterCleared]=CombatButtonsListeners(enemyHp,encounterCleared)
+	[enemyHp, encounterCleared] = CombatButtonsListeners(enemyHp, encounterCleared)
 	//should be attack buttons
-	
+
 }
-function CombatButtonsListeners(enemyHp, encounterClr){
+function CombatButtonsListeners(enemyHp, encounterClr) {
 	buttonsArray[0].on('press', async () => {
 		//attack placeholder
-		enemyHp-=1
+		enemyHp -= 1
 		clearButtons();
 		logs.writeSync(`\nYou attack the enemy!\nenemy hp ${enemyHp}`);
 		await new Promise(resolve => setTimeout(resolve, 1000))
 		createCombatButtons()
-		CombatButtonsListeners(enemyHp,encounterClr)
-		if(enemyHp <= 0){
+		CombatButtonsListeners(enemyHp, encounterClr)
+		if (enemyHp <= 0) {
 			encounterClr = true;
 			clearButtons();
 			resolver()
@@ -664,13 +664,13 @@ function CombatButtonsListeners(enemyHp, encounterClr){
 		//set flag combat done or something
 		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)
 	})
-	return [enemyHp,encounterClr]
+	return [enemyHp, encounterClr]
 }
 
 
 
 
-function createCombatButtons(){
+function createCombatButtons() {
 	clearButtons()
 	let attack = new blessed.button({
 		parent: form_thing,
@@ -710,7 +710,7 @@ function createCombatButtons(){
 		top: 1,
 		shrink: true,
 		name: 'flee',
-		content: `flee ${thePlayer.dex > -1? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`,
+		content: `flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`,
 		//shadow: true,
 		style: {
 			bg: '#880808',
@@ -735,7 +735,7 @@ function createCombatButtons(){
 		top: 1,
 		shrink: true,
 		name: 'chatUp',
-		content: `chat up ${thePlayer.dex > -1? chalk.bold.greenBright('cha check') : chalk.bold.redBright('cha check')}`,
+		content: `chat up ${thePlayer.dex > -1 ? chalk.bold.greenBright('cha check') : chalk.bold.redBright('cha check')}`,
 		//shadow: true,
 		style: {
 			bg: '#880808',
@@ -775,11 +775,11 @@ XTermTestv2.term.onScroll((apple) => { scrollPosition = apple.valueOf() })
 //  TERMINAL WRITE FUNCTIONS
 //  MOVE TO SEPERATE FILE LATER
 //
-function escLeftByNum(num) {return `[${num}D`}
-function escRightByNum(num) {return `[${num}C`}
-function escUpByNum(num) {return `[${num}A`}
-function escDownByNum(num) {return `[${num}B`}
-function findCursor(terminal = XTermTestv2) {return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY]}
+function escLeftByNum(num) { return `[${num}D` }
+function escRightByNum(num) { return `[${num}C` }
+function escUpByNum(num) { return `[${num}A` }
+function escDownByNum(num) { return `[${num}B` }
+function findCursor(terminal = XTermTestv2) { return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY] }
 function goToTermPosStr(arr1, terminal = XTermTestv2) {
 	let arr2 = findCursor(terminal)
 	let Xpos = arr1[0] - arr2[0]
@@ -824,16 +824,16 @@ function fitLines(str = '', cols = 0) {
 	let strArr = str.split('\n')
 	strArr = strArr.filter(n => n)
 	strArr = strArr.join(' ')
-	strArr = strArr.replace(/ +(?= )/g,'');
-	strArr = strArr.split(' ');	
+	strArr = strArr.replace(/ +(?= )/g, '');
+	strArr = strArr.split(' ');
 	strArr = strArr.filter(n => n)
 	let R = lodashC(strArr)
 	let K = []
-	for(let i = 0; i < R.length; i++) {
-		if(typeof R[i] === 'string' || R[i] instanceof String) {
+	for (let i = 0; i < R.length; i++) {
+		if (typeof R[i] === 'string' || R[i] instanceof String) {
 			K.push(R[i].concat(' '))
 		}
-	}	
+	}
 
 	let lines = []
 	let rollingCount = 0
@@ -847,11 +847,11 @@ function fitLines(str = '', cols = 0) {
 			lines.push(line)
 			rollingCount = item.length
 			line = []
-			if(item){
+			if (item) {
 				line.push(item)
 			}
 		} else {
-			if(item){
+			if (item) {
 				line.push(item)
 			}// later move to top to be more efficient
 		}
@@ -914,21 +914,21 @@ async function scanlines(terminal = XTermTestv2, text = '', speed = 5, colorArr 
 }
 
 async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, gradientFunction, colorArr = []) {
-	let lorem_lines = fitLines(text, terminal.term.cols-1)
+	let lorem_lines = fitLines(text, terminal.term.cols - 1)
 	let multiline = ``
 	for (let line of lorem_lines) {
 		let line_str = line.join('')
-		if (line_str){
+		if (line_str) {
 			line_str = line_str.concat('\n')
 		}
 		multiline = multiline.concat(line_str)
 	}
 	multiline = gradientFunction(multiline)
 	let cleaned = ''
-	let cleanUp = fitLines(text, terminal.term.cols-1)
+	let cleanUp = fitLines(text, terminal.term.cols - 1)
 	for (let line of cleanUp) {
 		let line_str = line.join('')
-		if (line_str){
+		if (line_str) {
 			line_str = line_str.concat('\n')
 		}
 		cleaned = cleaned.concat(line_str)
@@ -953,14 +953,14 @@ async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, 
 	let arr = arr2.map((content, index, arr) => { arr[index] = [cursorPos, content, 0/*XposArr*/, 0/*YposArr*/] })
 	for (let line of lines) {
 		for (let [index, word] of line.entries()) {
-			if(line[index]!==line[-1]){
+			if (line[index] !== line[-1]) {
 				line[index][0] = word[0].concat(' ')
 			}
 		}
 	}
 	for (let line of gradient_text) {
 		for (let [index, word] of line.entries()) {
-			if(line[index]!==line[-1]){
+			if (line[index] !== line[-1]) {
 				line[index] = word.concat(' ')
 			}
 		}
@@ -1056,7 +1056,7 @@ let thePlayer = new Player("name")
 screen.append(box);
 screen.render()
 // maybe make into an inventory screen later~
-async function fillStatsRollBox(speed=2,player=thePlayer,startBox=box) {
+async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	await new Promise(resolve => setTimeout(resolve, speed))
 	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - ' HP: '.length - 2)} hp: ${player.hp}`)
 	screen.render()
@@ -1078,7 +1078,7 @@ async function fillStatsRollBox(speed=2,player=thePlayer,startBox=box) {
 	startBox.focus()
 }
 
-await(fillStatsRollBox())
+await (fillStatsRollBox())
 box.key('enter', function () {
 	toggleUi()
 	box.hide()
@@ -1182,7 +1182,7 @@ refreshStats(thePlayer)
 screen.render()
 
 
-let ch=`The Yuan Family.
+let ch = `The Yuan Family.
 
 “Father, today, Brother Huang will leave to join the army. I\’m going to go see him off,” said Yuan Luoyu respectfully. 
 
@@ -1202,7 +1202,7 @@ but you’d best hurry back to the Redscale Army, you brat!” `
 
 await new Promise(resolve => setTimeout(resolve, 1000));
 //toggleButtons()
-await(gradient_scanlines(XTermTestv2,ch.repeat(1),4,gradient.retro.multiline,pgrad))
+await (gradient_scanlines(XTermTestv2, ch.repeat(1), 4, gradient.retro.multiline, pgrad))
 //toggleButtons()
 //ERROR bugs out at certain screen widths
 //make stricter add a buffer to collumn width

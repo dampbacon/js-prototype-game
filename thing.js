@@ -17,10 +17,9 @@ import * as scroll from './blessed/scroll.cjs';
 import fs from 'fs';
 import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
+import lodashC from 'lodash.compact';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
-
-import lodashC from 'lodash.compact';
 const {compact} = lodashC;
 
 // test content
@@ -477,12 +476,6 @@ screen.key('p', function () {
 	screen.focusNext();
 });
 
-screen.key('s', function () {
-});
-
-screen.key('w', function () {
-});
-
 //test content key listener
 screen.key('y', function () {
 	form_thing.resetScroll()
@@ -600,18 +593,21 @@ async function eventHandler(gameEvent = temp_event1) {
 	if (gameEvent instanceof (game_event_gain_item)) {
 
 	} else if (gameEvent instanceof (game_event_enemy)) {
-		combatFlag = true;
+		//combatFlag = true;
 		combat(gameEvent)
+		//await something
 	} else if (gameEvent instanceof (game_event_gain_item)) {
 
 	} else {
-		resolver()
+		// test code
+		combat(gameEvent)
 	}
 	screen.key('n', function () {
 		resolver()
 	})
 }
-//resume execution after combat
+// resume execution after combat 
+// enounter clear promise
 let waitForClearResolve
 function waitForClear() {
     return new Promise(resolve => waitForClearResolve = resolve);
@@ -619,16 +615,24 @@ function waitForClear() {
 function resolver() {
 	if (waitForClearResolve) waitForClearResolve();
 }
-  
+
+
+//TURNS PROMISES
+let waitForEnemyTurnResolve
+function waitForTurn() {
+    return new Promise(resolve => waitForEnemyTurnResolve = resolve);
+}
+function turnResolver() {
+	if (waitForEnemyTurnResolve) waitForEnemyTurnResolve();
+}
 
 function combat(combatEvent) {
 	form_thing.setContent('')
-	if (!enemy){
-		return 0
-	}
-	const enemy = combatEvent.enemy
-	const enemyHp = enemy.hp
-	hostile = true
+	// const enemy = combatEvent.enemy
+	// const enemyHp = enemy.hp
+	let enemyHp = 10
+	//not always true but a to simplify for now
+	let hostile = true
 	if (!hostile){
 		//provoke or somthing
 		return 0
@@ -638,19 +642,33 @@ function combat(combatEvent) {
 	//toggle button box while enemy takes turn
 	//turn has a short delay for enemy so it doesnt feel static
 	//maybe some effect
-	encounterCleared = false;
+	let encounterCleared = false;
+	[enemyHp,encounterCleared]=CombatButtonsListeners(enemyHp,encounterCleared)
 	//should be attack buttons
-	buttonsArray[0].on('press', () => {
+	
+}
+function CombatButtonsListeners(enemyHp, encounterClr){
+	buttonsArray[0].on('press', async () => {
 		//attack placeholder
 		enemyHp-=1
+		clearButtons();
+		logs.writeSync(`\nYou attack the enemy!\nenemy hp ${enemyHp}`);
+		await new Promise(resolve => setTimeout(resolve, 1000))
+		createCombatButtons()
+		CombatButtonsListeners(enemyHp,encounterClr)
 		if(enemyHp <= 0){
-			encounterCleared = true;
+			encounterClr = true;
+			clearButtons();
 			resolver()
 		}
 		//set flag combat done or something
 		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)
 	})
+	return [enemyHp,encounterClr]
 }
+
+
+
 
 function createCombatButtons(){
 	clearButtons()
@@ -800,23 +818,10 @@ async function slowWrite(str = '', terminal, speed) {
 		}
 	}
 }
-//  
-// TEST CODE
-//
-//slowWrite(test1,XTermTestv2,20)
-//await new Promise(resolve => setTimeout(resolve, 1500))
-
-//XTermTestv2.writeSync(`\n`)
-//animate ideas, queue of words that form gradient, Lines that form gradient, set sections are writen
 function fitLines(str = '', cols = 0) {
 	//various checks for characters that screw up the line wrapping
 	// regex screws up approstrophes
-	
-	//let str1 = begin.replace(/\n+/g, '')
-	//let str2 = str1.replace(/\\n+/g, '')
-	//let str3 = str2.replace(/\r+/g, '')
-	//let strArr = str3.split(/\b(?![\s.])/);
-	let strArr = str.split('\n')//(/\b(?![\n\r.])/); 
+	let strArr = str.split('\n')
 	strArr = strArr.filter(n => n)
 	strArr = strArr.join(' ')
 	strArr = strArr.replace(/ +(?= )/g,'');
@@ -826,9 +831,7 @@ function fitLines(str = '', cols = 0) {
 	let K = []
 	for(let i = 0; i < R.length; i++) {
 		if(typeof R[i] === 'string' || R[i] instanceof String) {
-			if(R[i]!=='\n'&&R[i]!=='\r'&&R[i]!==' ') {
-				K.push(R[i].concat(' '))
-			}
+			K.push(R[i].concat(' '))
 		}
 	}	
 
@@ -1052,26 +1055,30 @@ let thePlayer = new Player("name")
 
 screen.append(box);
 screen.render()
+// maybe make into an inventory screen later~
+async function fillStatsRollBox(speed=2,player=thePlayer,startBox=box) {
+	await new Promise(resolve => setTimeout(resolve, speed))
+	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - ' HP: '.length - 2)} hp: ${player.hp}`)
+	screen.render()
+	await new Promise(resolve => setTimeout(resolve, speed))
+	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - 'str: '.length - 2)}str: ${player.str}`)
+	screen.render()
+	await new Promise(resolve => setTimeout(resolve, speed))
+	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - 'dex: '.length - 2)}dex: ${player.dex}`)
+	screen.render()
+	await new Promise(resolve => setTimeout(resolve, speed))
+	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - 'int: '.length - 2)}int: ${player.int}`)
+	screen.render()
+	await new Promise(resolve => setTimeout(resolve, speed))
+	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - 'cha: '.length - 2)}cha: ${player.cha}`)
+	screen.render()
+	await new Promise(resolve => setTimeout(resolve, speed))
+	startBox.pushLine(`\n${' '.repeat(Math.floor(startBox.width / 2) - Math.floor('[ ENTER to continue ]'.length / 2) - 3)}[ ENTER to continue ]`)
+	screen.render()
+	startBox.focus()
+}
 
-await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - ' HP: '.length - 2)} hp: ${thePlayer.hp}`)
-screen.render()
-await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - 'str: '.length - 2)}str: ${thePlayer.str}`)
-screen.render()
-await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - 'dex: '.length - 2)}dex: ${thePlayer.dex}`)
-screen.render()
-await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - 'int: '.length - 2)}int: ${thePlayer.int}`)
-screen.render()
-await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`${' '.repeat(Math.floor(box.width / 2) - 'cha: '.length - 2)}cha: ${thePlayer.cha}`)
-screen.render()
-await new Promise(resolve => setTimeout(resolve, 1))
-box.pushLine(`\n${' '.repeat(Math.floor(box.width / 2) - Math.floor('[ ENTER to continue ]'.length / 2) - 3)}[ ENTER to continue ]`)
-screen.render()
-box.focus()
+await(fillStatsRollBox())
 box.key('enter', function () {
 	toggleUi()
 	box.hide()
@@ -1165,12 +1172,7 @@ Mauris vitae pellentesque tellus.
 Integer velit neque, 
 fermentum vel tempus non, 
 pulvinar id tellus.`
-// var grad = smallGrad(['#5ee7df', '#b490ca']);
-// var grad2 = grad.hsv(6);
-// grad2.forEach((color, i, arr) => {
-// 	arr[i]=color.toHex()
-// })
-// grad2.reverse()
+
 var pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978']
 
 pgrad.reverse()
@@ -1179,21 +1181,7 @@ thePlayer.changeWeapon()
 refreshStats(thePlayer)
 screen.render()
 
-//retro: {colors: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'], options: {}},
-//vice: {colors: ['#5ee7df', '#b490ca'], options: {interpolation: 'hsv'}},
-//pastel: {colors: ['#74ebd5', '#74ecd5'], options: {interpolation: 'hsv', hsvSpin: 'long'}}
 
-
-// await new Promise(resolve => setTimeout(resolve, 10000));
-// logs.writeSync('Y= '+XTermTestv2.term.buffer.active.cursorY+', x= '+XTermTestv2.term.buffer.active.cursorX+
-// ', terminal height ='+XTermTestv2.term.rows+', terminal width ='+XTermTestv2.term.cols)
-
-
-//18 is bottom count starts from 0 inclusive
-//start event, display mountain, goto mountian or goto village
-//function to scroll text via moving cursor to bottom and writting a few \n then set cursor to 0,0
-// scanlines(XTermTestv2,lorem,20,pgrad)
-//scanlines(XTermTestv2,"apples are disgusting",20,pgrad)
 let ch=`The Yuan Family.
 
 “Father, today, Brother Huang will leave to join the army. I\’m going to go see him off,” said Yuan Luoyu respectfully. 
@@ -1218,8 +1206,4 @@ await(gradient_scanlines(XTermTestv2,ch.repeat(1),4,gradient.retro.multiline,pgr
 //toggleButtons()
 //ERROR bugs out at certain screen widths
 //make stricter add a buffer to collumn width
-
-
-//scanlines(XTermTestv2,lorem.repeat(2),10,pgrad)
-
-//rollLog()
+//done but keeping comments incase i see another error

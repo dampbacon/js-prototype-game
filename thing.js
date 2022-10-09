@@ -628,7 +628,16 @@ function encounterResolver() {
 }
 //({name = '', hitDie = 1, ac = 8, morale=6, weapon='stick', dmgDie=6, aggro=6, rarity=1}) {
 
-let tempMonster= new monster({name:"testCreature", hitDie:1, ac:8, morale:6, weapon:"ruler" ,dmgDie:6, aggro:1 , rarity:1})
+let tempMonster = new monster({
+	name: "testCreature",
+	hitDie: 1,
+	ac: 8,
+	morale: 6,
+	weapon: "ruler",
+	dmgDie: 6,
+	aggro: 1,
+	rarity: 1
+})
 
 async function combat(combatEvent) {
 	form_thing.setContent('')
@@ -650,12 +659,12 @@ async function combat(combatEvent) {
 	let monster = copyMonster(tempMonster)
 	combatLogic(monster, encounterCleared)
 	//should be attack buttons
-	await(waitForCombat())
+	await (waitForCombat())
 	//console.log("encounter cleared")
 	resolver()
 }
 // moster picker in random event later
-function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePlayer) {
+function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer) {
 	let monster = monsterCopy
 	logs.writeSync(`\nmHP : ${monster.hp}`)
 	//
@@ -668,9 +677,9 @@ function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePl
 		//attack placeholder
 		clearButtons();
 		logs.writeSync(chalk.greenBright(`${(`\nYou attack the enemy`)} with your ${player.weaponName.toLowerCase()}!`));
-		let TOHIT=player.rollToHit()
+		let TOHIT = player.rollToHit()
 		//logs.writeSync(`\nTOHIT : ${TOHIT}, MONSTERAC : ${monster.ac}`)
-		if (TOHIT>=monster.ac){
+		if (TOHIT >= monster.ac) {
 			let playerDamage = player.rollDamage()
 			//make negative damage subtract from attack damage but not heal
 			monster.hp -= playerDamage
@@ -678,40 +687,40 @@ function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePl
 			logs.writeSync(chalk.greenBright(`\nYou hit for ${playerDamage} damage!     ___DEBUGenemyhp=${monster.hp}`));
 			await new Promise(resolve => setTimeout(resolve, 100))
 			//logs.writeSync(`\n${player.weapon} ${player.basedamage> -1 ? '+ ' : ''}${player.basedamage} = ${playerDamage}`)
-		}else{
+		} else {
 			logs.writeSync(chalk.greenBright(`\nYou miss!    ____DEBUGenemyhp=${monster.hp}`));
 		}
 		if (monster.hp > 0) {
 			await new Promise(resolve => setTimeout(resolve, 1000))
-			logs.writeSync(chalk.red(`\n${monster.name} attacks! with ${monster.weapon}`))
-			if(monster.rollToHit()>=player.ac){
+			logs.writeSync(chalk.red(`\n${monster.name} attacks you with ${monster.weapon}!`))
+			if (monster.rollToHit() >= player.ac) {
 				let monsterDamage = monster.rollDamage()
 				await new Promise(resolve => setTimeout(resolve, 100))
 				logs.writeSync(chalk.red(`\n${monster.name} hits you for ${monsterDamage} damage!`))
 				player.hp -= monsterDamage
 				refreshStats(player)
 				// add call to game over function
-			}else{
+			} else {
 				await new Promise(resolve => setTimeout(resolve, 100))
 				logs.writeSync(chalk.red(`\n${monster.name} misses you!`))
 			}
-			
+
 			await new Promise(resolve => setTimeout(resolve, 1000))
 		}
 		await new Promise(resolve => setTimeout(resolve, 50))
 
 		// add potion button
-		
+
 		if (monster.hp <= 0) {
 			await new Promise(resolve => setTimeout(resolve, 1000))
 			encounterClr = true;
 			clearButtons();
 			encounterResolver()
-			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols-1))}`);
+			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
 			logs.writeSync(`\n${chalk.yellow(`You defeated the enemy!`)}`);
-			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols-1))}`);
+			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
 			return encounterClr
-		}else{
+		} else {
 			createCombatButtons()
 			combatLogic(monster, encounterClr)
 		}

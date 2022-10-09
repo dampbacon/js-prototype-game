@@ -18,6 +18,7 @@ import fs from 'fs';
 import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
+import { monster, copyMonster } from './mobs.js';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
@@ -618,20 +619,22 @@ function resolver() {
 
 
 //TURNS PROMISES
-let waitForEnemyTurnResolve
-function waitForTurn() {
-	return new Promise(resolve => waitForEnemyTurnResolve = resolve);
+let waitForCombatResolve
+function waitForCombat() {
+	return new Promise(resolve => waitForCombatResolve = resolve);
 }
-function turnResolver() {
-	if (waitForEnemyTurnResolve) waitForEnemyTurnResolve();
+function encounterResolver() {
+	if (waitForCombatResolve) waitForCombatResolve();
 }
+//name = '', hitDie = 2, ac = 10, aggro, morale, weapon, dmgDie, rarity
+let tempMonster= new monster("testCreature", 1, 8, 6, 6, "ruler", 1 ,0)
 
-function combat(combatEvent) {
+async function combat(combatEvent) {
 	form_thing.setContent('')
 	// const enemy = combatEvent.enemy
 	// const enemyHp = enemy.hp
-	let enemyHp = 10
 	//not always true but a to simplify for now
+	//let enemyHp=10
 	let hostile = true
 	if (!hostile) {
 		//provoke or somthing
@@ -643,28 +646,68 @@ function combat(combatEvent) {
 	//turn has a short delay for enemy so it doesnt feel static
 	//maybe some effect
 	let encounterCleared = false;
-	[enemyHp, encounterCleared] = CombatButtonsListeners(enemyHp, encounterCleared)
+	let monster = copyMonster(tempMonster)
+	combatLogic(monster, encounterCleared)
 	//should be attack buttons
-
+	await(waitForCombat())
+	//console.log("encounter cleared")
+	resolver()
 }
-function CombatButtonsListeners(enemyHp, encounterClr) {
+// moster picker in random event later
+function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePlayer) {
+	let monster = monsterCopy
+	logs.writeSync(`\nmHP : ${monster.hp}`)
+	//
+	// REMEMBER TO IMPLEMENT TO HIT ROLLS AND AC FOR BOTH PLAYER AND MONSTER
+	// REMEMBER TO IMPLEMENT TO HIT ROLLS AND AC FOR BOTH PLAYER AND MONSTER
+	// REMEMBER TO IMPLEMENT TO HIT ROLLS AND AC FOR BOTH PLAYER AND MONSTER
+	//
+	//if (inititve<enemy)
 	buttonsArray[0].on('press', async () => {
 		//attack placeholder
-		enemyHp -= 1
+		let playerDamage = player.rollDamage()
+		//make negative damage subtract from attack damage but not heal
+		monster.hp -= playerDamage
 		clearButtons();
-		logs.writeSync(`\nYou attack the enemy!\nenemy hp ${enemyHp}`);
-		await new Promise(resolve => setTimeout(resolve, 1000))
+		logs.writeSync(`${(`\nYou attack the enemy!`)}\nenemy hp ${monster.hp}`);
+		logs.writeSync(`\n${player.weapon} ${player.basedamage> -1 ? '+ ' : ''}${player.basedamage} = ${playerDamage}`)
+		if (monster.hp > 0) {
+			await new Promise(resolve => setTimeout(resolve, 1000))
+			logs.writeSync(`\n${monster.name} attacks! with ${monster.weapon}`)
+			if(monster.rollToHit()>=player.ac){
+				let monsterDamage = monster.rollDamage()
+				await new Promise(resolve => setTimeout(resolve, 500))
+				logs.writeSync(`\n${monster.name} hits you for ${monsterDamage} damage!`)
+				player.hp -= monsterDamage
+				refreshStats(player)
+				// add call to game over function
+			}else{
+				await new Promise(resolve => setTimeout(resolve, 500))
+				logs.writeSync(`\n${monster.name} misses you!`)
+			}
+			
+			await new Promise(resolve => setTimeout(resolve, 1000))
+		}
+		
 		createCombatButtons()
-		CombatButtonsListeners(enemyHp, encounterClr)
-		if (enemyHp <= 0) {
+		// add potion button
+		combatLogic(monster, encounterClr)
+		if (monster.hp <= 0) {
 			encounterClr = true;
 			clearButtons();
-			resolver()
+			encounterResolver()
+			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols-1))}`);
+			logs.writeSync(`\n${chalk.yellow(`You defeated the enemy!`)}`);
+			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols-1))}`);
+			return encounterClr
+
+
 		}
 		//set flag combat done or something
 		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)
 	})
-	return [enemyHp, encounterClr]
+	return encounterClr
+	//change to promise later
 }
 
 
@@ -1177,7 +1220,7 @@ var pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '
 
 pgrad.reverse()
 
-thePlayer.changeWeapon()
+//thePlayer.changeWeapon()
 refreshStats(thePlayer)
 screen.render()
 

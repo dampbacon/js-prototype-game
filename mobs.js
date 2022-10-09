@@ -1,11 +1,11 @@
 
 import Chance from 'chance';
-import { Player } from './player';
+import { Player } from './player.js';
 const chance1 = new Chance();
 //make roll initiative function in main file
 
-class monster {
-    constructor(name = '', hitDie = 2, ac = 10, aggro/*12always hostile 0 inverse */, morale, weapon, dmgDie, rarity) {
+export class monster {/*12always hostile 0 inverse */
+    constructor(name = '', hitDie = 2, ac = 10, aggro, morale, weapon, dmgDie, rarity) {
         this.name = name;
         this.hitDie = hitDie;
         this.ac = ac;
@@ -16,28 +16,29 @@ class monster {
         this.rarity = rarity;
         this.hp = chance1.rpg(`${this.hitDie}d6`, { sum: true });
     }
-    attack(target=new(Player)){
-        if (this.#rollToHit() >= target.ac) {
-            target.decreaseHP(this.#rollDamage())
-        }
+    // attack(target=new(Player)){
+    //     if (this.#rollToHit() >= target.ac) {
+    //         target.decreaseHP(this.#rollDamage())
+    //     }
+    // }
+    rollDamage() {
+        // later change to bring consistancy simaler to player class
+        return chance1.rpg(`1d${this.dmgDie}`, { sum: true })
     }
-    #rollDamage() {
-        return chance1.rpg(this.dmgDie, { sum: true })
-    }
-    #rollToHit() {
-        return chance1.rpg(this.weapon, { sum: true }) 
+    rollToHit() {
+        return chance1.rpg(`1d20`, { sum: true }) + chance1.rpg(`${this.hitDie}d6`, { sum: true })
     }
 
 }
-function copyMonster(monsterToCopy) {
+export function copyMonster(monsterToCopy) {
     return new monster(
         monsterToCopy.name,
         monsterToCopy.hitDie,
         monsterToCopy.AC,
+        monsterToCopy.aggro,
         monsterToCopy.morale,
         monsterToCopy.weapon,
         monsterToCopy.dmgDie,
-        monsterToCopy.aggro,
         monsterToCopy.rarity
     )
 }

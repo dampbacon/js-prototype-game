@@ -41,7 +41,7 @@ export class Player {
         this.hpMax = this.hp;
         this.slots = { weapon: true, shield: false, head: false, armor: true, ring: false }
         //this.items = Array(5).fill(0)
-        this.basedamage = this.str>0?this.str:0
+        this.basedamage = this.str
         this.persuade = this.cha + skillBonus(this.cha)
         this.weapon = WEAPONmap[WEAPONS.SWORD]
         this.armour = ARMOURmap[ARMOUR.LOIN_CLOTH]
@@ -92,8 +92,11 @@ export class Player {
         return chance2.rpg('2d6',{sum: true})+this.cha
     }
     rollDamage(){
-        return Player.basedamage + chance2.rpg(Player.weapon)
+        let damage = this.basedamage + chance2.rpg(this.weapon,{sum: true})
+        damage = damage<0 ? 0 : damage
+        return damage
     }
+    //`${this.weapon} + ${this.basedamage} :` + 
 }
 
 class inventory {

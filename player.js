@@ -97,7 +97,7 @@ export class Player {
     }
     rollDamage(){
         let damage = this.basedamage + chance2.rpg(this.weapon,{sum: true})
-        damage = damage<0 ? 1 : damage
+        damage = damage<1 ? 1 : damage
         return damage
     }
     rollToHit(){

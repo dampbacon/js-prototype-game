@@ -674,7 +674,7 @@ function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = the
 	//logs.writeSync(`\nmHP : ${monster.hp}`)
 
 
-	// initiative~
+	// initiative~ ────────────────────────
 	//if (inititve<enemy)
 	buttonsArray[0].on('press', async () => {
 		//attack placeholder
@@ -698,6 +698,7 @@ function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = the
 			logs.writeSync(chalk.greenBright(`\nYou miss!    ____DEBUGenemyhp=${monster.hp}`));
 		}
 		if (monster.hp > 0) {
+			logs.writeSync(`\n${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}`);
 			await new Promise(resolve => setTimeout(resolve, 300))
 			logs.writeSync(chalk.red(`\n${monster.name} attacks you with ${monster.weapon}!`))
 			if (monster.rollToHit() >= player.ac) {
@@ -713,11 +714,8 @@ function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = the
 			}
 
 			//await new Promise(resolve => setTimeout(resolve, 1000))
-		}
+		}// MERGE WITH IF BELLOW LATER
 		await new Promise(resolve => setTimeout(resolve, 50))
-
-		// add potion button
-
 		if (monster.hp <= 0) {
 			await new Promise(resolve => setTimeout(resolve, 100))
 			encounterClr = true;
@@ -728,6 +726,7 @@ function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = the
 			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
 			return encounterClr
 		} else {
+			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 			createCombatButtons()
 			combatLogic(monster, encounterClr)
 		}
@@ -755,11 +754,11 @@ function createCombatButtons() {
 		left: 1,
 		top: 1,
 		shrink: true,
-		name: 'attack',
-		content: `attack (${chalk.bold.red(thePlayer.weapon)} + ${thePlayer.basedamage})`, //maybe add damage die
+		name: `attack`,
+		content: `${chalk.bold.white('attack ')}${chalk.bold.green(thePlayer.weapon)}${thePlayer.basedamage<0?chalk.bold.white(' - '):chalk.bold.white(' + ')}${chalk.bold.white(Math.abs(thePlayer.basedamage))}`, //maybe add damage die
 		//shadow: true,
 		style: {
-			bg: '#880808',
+			bg: 'red',
 			focus: {
 				bg: '#ECE81A',
 			},
@@ -1271,9 +1270,9 @@ Out of respect for Master Su,
 I’ll let you off just this once, 
 but you’d best hurry back to the Redscale Army, you brat!” `
 
-await new Promise(resolve => setTimeout(resolve, 1000));
+//await new Promise(resolve => setTimeout(resolve, 1000));
 //toggleButtons()
-await (gradient_scanlines(XTermTestv2, ch.repeat(1), 4, gradient.retro.multiline, pgrad))
+//await (gradient_scanlines(XTermTestv2, ch.repeat(1), 4, gradient.retro.multiline, pgrad))
 //toggleButtons()
 //ERROR bugs out at certain screen widths
 //make stricter add a buffer to collumn width

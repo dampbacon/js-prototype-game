@@ -630,8 +630,8 @@ function encounterResolver() {
 
 let tempMonster = new monster({
 	name: "testCreature",
-	hitDie: 1,
-	ac: 8,
+	hitDie: 3,
+	ac: 10,
 	morale: 6,
 	weapon: "ruler",
 	dmgDie: 6,
@@ -645,6 +645,10 @@ async function combat(combatEvent) {
 	// const enemyHp = enemy.hp
 	//not always true but a to simplify for now
 	//let enemyHp=10
+	logs.writeSync(escUpByNum(1))
+	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
+	logs.writeSync(`\n${chalk.yellow(`Combat Start!`)}`);
+	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 	let hostile = true
 	if (!hostile) {
 		//provoke or somthing
@@ -666,49 +670,56 @@ async function combat(combatEvent) {
 // moster picker in random event later
 function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer) {
 	let monster = monsterCopy
-	logs.writeSync(`\nmHP : ${monster.hp}`)
+	//debug
+	//logs.writeSync(`\nmHP : ${monster.hp}`)
+
+
 	// initiative~
 	//if (inititve<enemy)
 	buttonsArray[0].on('press', async () => {
 		//attack placeholder
+		if((logs.term.rows-2)<=logs.term.buffer.active.cursorY){
+			logs.writeSync(escUpByNum(1))
+			rollLog(logs)
+		}
 		clearButtons();
-		logs.writeSync(chalk.greenBright(`${(`\nYou attack the enemy`)} with your ${player.weaponName.toLowerCase()}!`));
+		logs.writeSync(chalk.greenBright(`${escLeftByNum(2)}You attack the enemy with your ${player.weaponName.toLowerCase()}!`));
 		let TOHIT = player.rollToHit()
 		//logs.writeSync(`\nTOHIT : ${TOHIT}, MONSTERAC : ${monster.ac}`)
 		if (TOHIT >= monster.ac) {
 			let playerDamage = player.rollDamage()
 			//make negative damage subtract from attack damage but not heal
 			monster.hp -= playerDamage
-			await new Promise(resolve => setTimeout(resolve, 100))
+			//await new Promise(resolve => setTimeout(resolve, 100))
 			logs.writeSync(chalk.greenBright(`\nYou hit for ${playerDamage} damage!     ___DEBUGenemyhp=${monster.hp}`));
-			await new Promise(resolve => setTimeout(resolve, 100))
+			//await new Promise(resolve => setTimeout(resolve, 100))
 			//logs.writeSync(`\n${player.weapon} ${player.basedamage> -1 ? '+ ' : ''}${player.basedamage} = ${playerDamage}`)
 		} else {
 			logs.writeSync(chalk.greenBright(`\nYou miss!    ____DEBUGenemyhp=${monster.hp}`));
 		}
 		if (monster.hp > 0) {
-			await new Promise(resolve => setTimeout(resolve, 1000))
+			await new Promise(resolve => setTimeout(resolve, 300))
 			logs.writeSync(chalk.red(`\n${monster.name} attacks you with ${monster.weapon}!`))
 			if (monster.rollToHit() >= player.ac) {
 				let monsterDamage = monster.rollDamage()
-				await new Promise(resolve => setTimeout(resolve, 100))
-				logs.writeSync(chalk.red(`\n${monster.name} hits you for ${monsterDamage} damage!`))
+				//await new Promise(resolve => setTimeout(resolve, 100))
+				logs.writeSync(chalk.red(`\n${monster.name} hits you for ${monsterDamage} damage!\n`))
 				player.hp -= monsterDamage
 				refreshStats(player)
 				// add call to game over function
 			} else {
-				await new Promise(resolve => setTimeout(resolve, 100))
-				logs.writeSync(chalk.red(`\n${monster.name} misses you!`))
+				//await new Promise(resolve => setTimeout(resolve, 100))
+				logs.writeSync(chalk.red(`\n${monster.name} misses you!\n`))
 			}
 
-			await new Promise(resolve => setTimeout(resolve, 1000))
+			//await new Promise(resolve => setTimeout(resolve, 1000))
 		}
 		await new Promise(resolve => setTimeout(resolve, 50))
 
 		// add potion button
 
 		if (monster.hp <= 0) {
-			await new Promise(resolve => setTimeout(resolve, 1000))
+			await new Promise(resolve => setTimeout(resolve, 100))
 			encounterClr = true;
 			clearButtons();
 			encounterResolver()

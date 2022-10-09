@@ -626,8 +626,9 @@ function waitForCombat() {
 function encounterResolver() {
 	if (waitForCombatResolve) waitForCombatResolve();
 }
-//name = '', hitDie = 2, ac = 10, aggro, morale, weapon, dmgDie, rarity
-let tempMonster= new monster("testCreature", 1, 8, 6, 6, "ruler", 1 ,0)
+//({name = '', hitDie = 1, ac = 8, morale=6, weapon='stick', dmgDie=6, aggro=6, rarity=1}) {
+
+let tempMonster= new monster({name:"testCreature", hitDie:1, ac:8, morale:6, weapon:"ruler" ,dmgDie:6, aggro:1 , rarity:1})
 
 async function combat(combatEvent) {
 	form_thing.setContent('')
@@ -665,19 +666,26 @@ function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePl
 	//if (inititve<enemy)
 	buttonsArray[0].on('press', async () => {
 		//attack placeholder
-		let playerDamage = player.rollDamage()
-		//make negative damage subtract from attack damage but not heal
-		monster.hp -= playerDamage
-		clearButtons();
-		logs.writeSync(`${(`\nYou attack the enemy!`)}\nenemy hp ${monster.hp}`);
-		logs.writeSync(`\n${player.weapon} ${player.basedamage> -1 ? '+ ' : ''}${player.basedamage} = ${playerDamage}`)
+		logs.writeSync(`${(`\nYou attack the enemy`)} with your ${player.weaponName.toLowerCase()}!`);
+		let TOHIT=player.rollToHit()
+		logs.writeSync(`\nTOHIT : ${TOHIT}, MONSTERAC : ${monster.ac}`)
+		if (TOHIT>=monster.ac){
+			let playerDamage = player.rollDamage()
+			//make negative damage subtract from attack damage but not heal
+			monster.hp -= playerDamage
+			clearButtons();
+			logs.writeSync(`\nYou hit for ${playerDamage} damage!\nenemyhp=${monster.hp}`);
+			logs.writeSync(`\n${player.weapon} ${player.basedamage> -1 ? '+ ' : ''}${player.basedamage} = ${playerDamage}`)
+		}else{
+			logs.writeSync(`\nYou miss!\nenemyhp=${monster.hp}`);
+		}
 		if (monster.hp > 0) {
 			await new Promise(resolve => setTimeout(resolve, 1000))
-			logs.writeSync(`\n${monster.name} attacks! with ${monster.weapon}`)
+			logs.writeSync(`\n${monster.name}attacks! with ${monster.weapon}`)
 			if(monster.rollToHit()>=player.ac){
 				let monsterDamage = monster.rollDamage()
 				await new Promise(resolve => setTimeout(resolve, 500))
-				logs.writeSync(`\n${monster.name} hits you for ${monsterDamage} damage!`)
+				logs.writeSync(`\n${monster.name}hits you for ${monsterDamage} damage!`)
 				player.hp -= monsterDamage
 				refreshStats(player)
 				// add call to game over function

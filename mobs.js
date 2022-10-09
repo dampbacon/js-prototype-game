@@ -3,9 +3,9 @@ import Chance from 'chance';
 import { Player } from './player.js';
 const chance1 = new Chance();
 //make roll initiative function in main file
-
+const defaults={name:'', hitDie:1, ac:8, morale:6, weapon:'stick', dmgDie:6, aggro:6, rarity:1}
 export class monster {/*12always hostile 0 inverse */
-    constructor(name = '', hitDie = 2, ac = 10, aggro, morale, weapon, dmgDie, rarity) {
+    constructor({name, hitDie, ac, morale, weapon, dmgDie, aggro, rarity}={...defaults}) {
         this.name = name;
         this.hitDie = hitDie;
         this.ac = ac;
@@ -32,14 +32,16 @@ export class monster {/*12always hostile 0 inverse */
 }
 export function copyMonster(monsterToCopy) {
     return new monster(
-        monsterToCopy.name,
-        monsterToCopy.hitDie,
-        monsterToCopy.AC,
-        monsterToCopy.aggro,
-        monsterToCopy.morale,
-        monsterToCopy.weapon,
-        monsterToCopy.dmgDie,
-        monsterToCopy.rarity
+        {
+        name:monsterToCopy.name,
+        hitDie:monsterToCopy.hitDie,
+        ac:monsterToCopy.ac,
+        morale:monsterToCopy.morale,
+        weapon:monsterToCopy.weapon,
+        dmgDie:monsterToCopy.dmgDie,
+        aggro:monsterToCopy.aggro,
+        rarity:monsterToCopy.rarity,
+        }
     )
 }
 

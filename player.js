@@ -44,6 +44,8 @@ export class Player {
         this.basedamage = this.str
         this.persuade = this.cha + skillBonus(this.cha)
         this.weapon = WEAPONmap[WEAPONS.SWORD]
+        this.weaponName = WEAPONS.SWORD
+        //change weapon later to be simaler to monster class
         this.armour = ARMOURmap[ARMOUR.LOIN_CLOTH]
         this.ac = this.armour ? this.armour : 10
         this.depth = 0;
@@ -51,10 +53,12 @@ export class Player {
     changeWeapon(weapon) {
         //update basedamage and equip slot
         if (weapon) {
+            this.weaponName= weapon
             this.weapon = WEAPONmap[weapon]
             this.slots.weapon = true
         }else{
             //make hands a zero dmg weapon later make hands into a secret that scales with less armour and more dex
+            this.weaponName= WEAPONS.SWORD
             this.weapon = WEAPONmap[WEAPONS.BARE_HANDS]
             this.slots.weapon = false
             if(this.str>1){
@@ -95,6 +99,10 @@ export class Player {
         let damage = this.basedamage + chance2.rpg(this.weapon,{sum: true})
         damage = damage<0 ? 0 : damage
         return damage
+    }
+    rollToHit(){
+        let bonus=this.level>4 ?4:this.level
+        return chance2.rpg('1d20',{sum: true})+this.dex+bonus
     }
     //`${this.weapon} + ${this.basedamage} :` + 
 }

@@ -667,36 +667,38 @@ function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePl
 	buttonsArray[0].on('press', async () => {
 		//attack placeholder
 		clearButtons();
-		logs.writeSync(`${(`\nYou attack the enemy`)} with your ${player.weaponName.toLowerCase()}!`);
+		logs.writeSync(chalk.greenBright(`${(`\nYou attack the enemy`)} with your ${player.weaponName.toLowerCase()}!`));
 		let TOHIT=player.rollToHit()
-		logs.writeSync(`\nTOHIT : ${TOHIT}, MONSTERAC : ${monster.ac}`)
+		//logs.writeSync(`\nTOHIT : ${TOHIT}, MONSTERAC : ${monster.ac}`)
 		if (TOHIT>=monster.ac){
 			let playerDamage = player.rollDamage()
 			//make negative damage subtract from attack damage but not heal
 			monster.hp -= playerDamage
-			logs.writeSync(`\nYou hit for ${playerDamage} damage!\nenemyhp=${monster.hp}`);
-			logs.writeSync(`\n${player.weapon} ${player.basedamage> -1 ? '+ ' : ''}${player.basedamage} = ${playerDamage}`)
+			await new Promise(resolve => setTimeout(resolve, 100))
+			logs.writeSync(chalk.greenBright(`\nYou hit for ${playerDamage} damage!     ___DEBUGenemyhp=${monster.hp}`));
+			await new Promise(resolve => setTimeout(resolve, 100))
+			//logs.writeSync(`\n${player.weapon} ${player.basedamage> -1 ? '+ ' : ''}${player.basedamage} = ${playerDamage}`)
 		}else{
-			logs.writeSync(`\nYou miss!\nenemyhp=${monster.hp}`);
+			logs.writeSync(chalk.greenBright(`\nYou miss!    ____DEBUGenemyhp=${monster.hp}`));
 		}
 		if (monster.hp > 0) {
 			await new Promise(resolve => setTimeout(resolve, 1000))
-			logs.writeSync(`\n${monster.name}attacks! with ${monster.weapon}`)
+			logs.writeSync(chalk.red(`\n${monster.name} attacks! with ${monster.weapon}`))
 			if(monster.rollToHit()>=player.ac){
 				let monsterDamage = monster.rollDamage()
-				await new Promise(resolve => setTimeout(resolve, 500))
-				logs.writeSync(`\n${monster.name}hits you for ${monsterDamage} damage!`)
+				await new Promise(resolve => setTimeout(resolve, 100))
+				logs.writeSync(chalk.red(`\n${monster.name} hits you for ${monsterDamage} damage!`))
 				player.hp -= monsterDamage
 				refreshStats(player)
 				// add call to game over function
 			}else{
-				await new Promise(resolve => setTimeout(resolve, 500))
-				logs.writeSync(`\n${monster.name} misses you!`)
+				await new Promise(resolve => setTimeout(resolve, 100))
+				logs.writeSync(chalk.red(`\n${monster.name} misses you!`))
 			}
 			
 			await new Promise(resolve => setTimeout(resolve, 1000))
 		}
-		await new Promise(resolve => setTimeout(resolve, 2000))
+		await new Promise(resolve => setTimeout(resolve, 50))
 
 		// add potion button
 		

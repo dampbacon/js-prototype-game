@@ -667,11 +667,7 @@ async function combat(combatEvent) {
 function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer) {
 	let monster = monsterCopy
 	logs.writeSync(`\nmHP : ${monster.hp}`)
-	//
-	// REMEMBER TO IMPLEMENT TO HIT ROLLS AND AC FOR BOTH PLAYER AND MONSTER
-	// REMEMBER TO IMPLEMENT TO HIT ROLLS AND AC FOR BOTH PLAYER AND MONSTER
-	// REMEMBER TO IMPLEMENT TO HIT ROLLS AND AC FOR BOTH PLAYER AND MONSTER
-	//
+	// initiative~
 	//if (inititve<enemy)
 	buttonsArray[0].on('press', async () => {
 		//attack placeholder

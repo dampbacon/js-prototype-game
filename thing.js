@@ -666,6 +666,7 @@ function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePl
 	//if (inititve<enemy)
 	buttonsArray[0].on('press', async () => {
 		//attack placeholder
+		clearButtons();
 		logs.writeSync(`${(`\nYou attack the enemy`)} with your ${player.weaponName.toLowerCase()}!`);
 		let TOHIT=player.rollToHit()
 		logs.writeSync(`\nTOHIT : ${TOHIT}, MONSTERAC : ${monster.ac}`)
@@ -673,7 +674,6 @@ function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePl
 			let playerDamage = player.rollDamage()
 			//make negative damage subtract from attack damage but not heal
 			monster.hp -= playerDamage
-			clearButtons();
 			logs.writeSync(`\nYou hit for ${playerDamage} damage!\nenemyhp=${monster.hp}`);
 			logs.writeSync(`\n${player.weapon} ${player.basedamage> -1 ? '+ ' : ''}${player.basedamage} = ${playerDamage}`)
 		}else{
@@ -696,11 +696,12 @@ function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePl
 			
 			await new Promise(resolve => setTimeout(resolve, 1000))
 		}
-		
-		createCombatButtons()
+		await new Promise(resolve => setTimeout(resolve, 2000))
+
 		// add potion button
-		combatLogic(monster, encounterClr)
+		
 		if (monster.hp <= 0) {
+			await new Promise(resolve => setTimeout(resolve, 1000))
 			encounterClr = true;
 			clearButtons();
 			encounterResolver()
@@ -708,8 +709,9 @@ function combatLogic(monsterCopy /*make into enemy*/ , encounterClr,player=thePl
 			logs.writeSync(`\n${chalk.yellow(`You defeated the enemy!`)}`);
 			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols-1))}`);
 			return encounterClr
-
-
+		}else{
+			createCombatButtons()
+			combatLogic(monster, encounterClr)
 		}
 		//set flag combat done or something
 		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)

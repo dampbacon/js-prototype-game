@@ -16,11 +16,6 @@ export class monster {/*12always hostile 0 inverse */
         this.rarity = rarity;
         this.hp = chance1.rpg(`${this.hitDie}d6`, { sum: true });
     }
-    // attack(target=new(Player)){
-    //     if (this.#rollToHit() >= target.ac) {
-    //         target.decreaseHP(this.#rollDamage())
-    //     }
-    // }
     rollDamage() {
         // later change to bring consistancy simaler to player class
         return chance1.rpg(`1d${this.dmgDie}`, { sum: true })

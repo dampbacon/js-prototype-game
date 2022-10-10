@@ -11,7 +11,6 @@
                 "no-unused-vars": "off",
                 "no-empty": "off",
                 "no-useless-escape": "off"
-                
             }
         }
     ],

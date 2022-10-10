@@ -992,8 +992,8 @@ async function scanlines(terminal = XTermTestv2, text = '', speed = 5, colorArr 
 }
 
 async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, gradientFunction, colorArr = []) {
-	let lorem_lines = fitLines(text, terminal.term.cols - 1)
 	let multiline = ``
+	let lorem_lines = fitLines(text, terminal.term.cols - 1)
 	for (let line of lorem_lines) {
 		let line_str = line.join('')
 		if (line_str) {
@@ -1011,10 +1011,8 @@ async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, 
 		}
 		cleaned = cleaned.concat(line_str)
 	}
-	let texttoarr = multiline
-	let texttoarr2 = cleaned
-	let strArr = texttoarr.split("\n");
-	let strArr2 = texttoarr2.split("\n");
+	let strArr = multiline.split("\n");
+	let strArr2 = cleaned.split("\n");
 	for (let i = 0; i < strArr.length; i++) {
 		strArr[i] = strArr[i].split(" ")
 		strArr2[i] = strArr2[i].split(" ")

@@ -1,3 +1,24 @@
+
+//
+// Weapon objects
+//
+//
+
+
+
+class weapon {
+    constructor({name, dmgDie, dmgType, rarity}) {
+        this.name = name;
+        this.dmgDie = dmgDie;
+        this.dmgType = dmgType;
+        this.rarity = rarity;
+        this.enchant = 0;
+    }
+}
+
+
+
+
 export const WEAPONS = Object.freeze({
     SPEAR: 'SPEAR',
     DAGGER: 'DAGGER',
@@ -17,7 +38,6 @@ WEAPONmap[WEAPONS.SWORD] = '1d8'
 WEAPONmap[WEAPONS.BATTLE_AXE] = '1d10'
 WEAPONmap[WEAPONS.GREAT_SWORD] = '2d6'
 WEAPONmap[WEAPONS.BARE_HANDS] = '1d2' //coin flip
-
 export { WEAPONmap };
 
 export const ARMOUR = Object.freeze({
@@ -38,4 +58,6 @@ ARMOURmap[ARMOUR.LABCOAT] = 16
 ARMOURmap[ARMOUR.PLATE] = 18
 ARMOURmap[ARMOUR.GANDALFS_WHITE_ROBES] = 20
 ARMOURmap[ARMOUR.CHAINMAIL] = 22
+
+
 export { ARMOURmap };

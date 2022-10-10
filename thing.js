@@ -19,6 +19,7 @@ import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
 import { monster, copyMonster } from './mobs.js';
+import {spawn} from 'child_process';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
@@ -302,7 +303,7 @@ const actions = grid.set(0, 10, 6, 2, blessed.list, {
 })
 
 //button container
-const form_thing = grid.set(0, 6, 6, 3, blessed.form = blessed.form, ({
+const form_thing = grid.set(0, 6, 6, 3, blessed.form, ({
 	parent: screen,
 	keys: true,
 	label: `choose ~ ${chalk.green('w s')} to scroll`,
@@ -345,7 +346,6 @@ let button1 = blessed.button({
 	},
 	left: 1,
 	top: 1,
-	shrink: true,
 	name: 'submit',
 	content: 'decide to be silly and eat a spud',
 	style: {
@@ -394,7 +394,6 @@ let button3 = blessed.button({
 	},
 	left: 1,
 	top: 7,
-	shrink: true,
 	name: 'cancel',
 	content: 'button',
 	style: {
@@ -419,7 +418,6 @@ let button4 = blessed.button({
 	},
 	left: 1,
 	top: 10,
-	shrink: true,
 	name: 'cancel',
 	content: 'button 444444444~~~',
 	style: {
@@ -536,7 +534,6 @@ async function createButtons(gameEvent, storyObj = {}) {
 			},
 			left: 1,
 			top: 1,
-			shrink: true,
 			name: item[1],
 			content: item[1],
 			//shadow: true,
@@ -577,8 +574,25 @@ createEventsMap(testEventArr, story)
 stats.focus()
 screen.render()
 
+
+
+// reads event package and sees which buttons to create only called after a combat
+function EPcontiansCombat(eventPackage) {
+	let events = eventPackage.eventsMap()
+	for (const [key, value] of Object.entries(events)) {
+		console.log(key, value);
+	}
+}
+function eventPackageButtons(eventPackage){
+
+}
+
 //sloppy but easy way to make it work
-async function eventHandler(gameEvent = temp_event1) {
+async function eventHandler(gameEvent = temp_event1,) {
+	//
+	// WRITE EVENT PACKAGE HANDLING CODE
+	//
+	//
 	XTermApp.clear()
 	XTermApp.reset()
 	rollLog(logs)
@@ -586,14 +600,13 @@ async function eventHandler(gameEvent = temp_event1) {
 	let gbf = gb.format
 	//make enum thing later
 	XTermTestv2.writeSync(gameEvent.toScreen.toScreen)
-	if (gbf.writeMode = 'gradientScanlines') {
+	if (gbf.writeMode === 'gradientScanlines') {
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 	}
 	form_thing.setContent(` ${chalk.bold.yellow(gameEvent['buttons'].length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 
-	if (gameEvent instanceof (game_event_gain_item)) {
 
-	} else if (gameEvent instanceof (game_event_enemy)) {
+	if (gameEvent instanceof (game_event_enemy)) {
 		//combatFlag = true;
 		combat(gameEvent)
 		//await something
@@ -603,6 +616,8 @@ async function eventHandler(gameEvent = temp_event1) {
 		// test code
 		combat(gameEvent)
 	}
+
+
 	screen.key('n', function () {
 		resolver()
 	})
@@ -670,9 +685,6 @@ async function combat(combatEvent) {
 // moster picker in random event later
 function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer) {
 	let monster = monsterCopy
-	//debug
-	//logs.writeSync(`\nmHP : ${monster.hp}`)
-
 
 	// initiative~ ────────────────────────
 	//if (inititve<enemy)
@@ -734,7 +746,6 @@ function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = the
 		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)
 	})
 	return encounterClr
-	//change to promise later
 }
 
 
@@ -753,7 +764,6 @@ function createCombatButtons() {
 		},
 		left: 1,
 		top: 1,
-		shrink: true,
 		name: `attack`,
 		content: `${chalk.bold.white('attack ')}${chalk.bold.green(thePlayer.weapon)}${thePlayer.basedamage<0?chalk.bold.white(' - '):chalk.bold.white(' + ')}${chalk.bold.white(Math.abs(thePlayer.basedamage))}`, //maybe add damage die
 		//shadow: true,
@@ -778,7 +788,6 @@ function createCombatButtons() {
 		},
 		left: 1,
 		top: 1,
-		shrink: true,
 		name: 'flee',
 		content: `flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`,
 		//shadow: true,
@@ -803,7 +812,6 @@ function createCombatButtons() {
 		},
 		left: 1,
 		top: 1,
-		shrink: true,
 		name: 'chatUp',
 		content: `chat up ${thePlayer.dex > -1 ? chalk.bold.greenBright('cha check') : chalk.bold.redBright('cha check')}`,
 		//shadow: true,
@@ -867,11 +875,11 @@ async function slowWrite(str = '', terminal, speed) {
 		let cursorX = terminal.term.buffer.active.cursorX;
 		let tempStrLength = tempStr.length
 		let numCols = terminal.term.cols
-		if (index === 0) {
+		if (index === 0) {1
 		}
-		else if (index === strArr.length - 1) {
+		else if (index === strArr.length - 1) {1
 		}
-		if (cursorX === (numCols - 1)) {
+		if (cursorX === (numCols - 1)) {1
 		}
 		if (1 + cursorX + tempStrLength <= numCols) {
 			terminal.writeSync(chalk.hex('909090')(tempStr))

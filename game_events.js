@@ -43,7 +43,7 @@ export class eventPackage{
         return storyArr;
     }
     eventsMap(){
-        return self.#eventMap;
+        return this.#eventMap;
     }
 }
 export class game_event {

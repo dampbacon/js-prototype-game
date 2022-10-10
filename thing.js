@@ -7,9 +7,9 @@ import chalk from 'chalk';
 import BlessedContrib from 'blessed-contrib';
 import gradient from 'gradient-string';
 import chalkAnimation from 'chalk-animation';
-import { game_event, game_event_enemy, game_event_gain_item } from './game_events.js'
+import { game_event, game_event_enemy, game_event_gain_item } from './game-objects/game_events.js'
 import { clearInterval } from 'timers';
-import { Player } from './player.js';
+import { Player } from './game-objects/player.js';
 import { hrtime } from 'node:process';
 import os from 'os'
 import './blessed/patches.cjs';
@@ -18,7 +18,7 @@ import fs from 'fs';
 import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
-import { monster, copyMonster } from './mobs.js';
+import { monster, copyMonster } from './game-objects/mobs.js';
 import {spawn} from 'child_process';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;

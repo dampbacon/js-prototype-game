@@ -3,12 +3,17 @@
 // Weapon objects
 //
 //
-
+import {chance2} from '../game-objects/player.js'
 class dmgType{
-    constructor(name, dmg, color){
+    constructor({name, effectProperties, color,effectDuration,applyEffect}){
         this.name = name;
-        this.dmg = dmg;
+        //can be a normal number but can be a list with apply effect function callback
+        this.effectProperties = effectProperties?effectProperties:null;
         this.color = color;
+        this.effectDuration = effectDuration?effectDuration:0;
+        //callback function to apply effect passed as argument
+        //
+        this.applyEffect = applyEffect?applyEffect:null;
     }
 }
 
@@ -17,7 +22,7 @@ class weapon {
     constructor({name, dmgDie, dmgType, rarity, enchant, description}) {
         this.name = name?name:'Stick';
         this.dmgDie = dmgDie?dmgDie:'1d4';
-        this.dmgType = dmgType?dmgType:new dmgType('bludgeoning', 0, 'black');
+        this.dmgType = dmgType?dmgType:new dmgType({name:'blunt',color:'ffffff'});
         this.rarity = rarity?rarity:1;
         this.enchant = enchant?enchant:0;
         this.description = description?description: this.generateDescription();

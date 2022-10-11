@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 'use strict';
 
-import XTermNew from './blessed-xterm/blessed-xterm.js'
+import XTermNew from './blessed-xterm/blessed-xterm.js';
 import blessed from 'blessed';
 import chalk from 'chalk';
 import BlessedContrib from 'blessed-contrib';
 import gradient from 'gradient-string';
 import chalkAnimation from 'chalk-animation';
-import { game_event, game_event_enemy, game_event_gain_item } from './game-objects/game_events.js'
+import { game_event, game_event_enemy, game_event_gain_item } from './game-objects/game_events.js';
 import { clearInterval } from 'timers';
 import { Player } from './game-objects/player.js';
 import { hrtime } from 'node:process';
-import os from 'os'
+import os from 'os';
 import './blessed/patches.cjs';
 import * as scroll from './blessed/scroll.cjs';
 import fs from 'fs';

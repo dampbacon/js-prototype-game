@@ -3,7 +3,7 @@ import Chance from 'chance';
 //set seed for stats roll
 const chance1 = new Chance();
 //diff object for dice
-const chance2 = new Chance();
+export const chance2 = new Chance();
 //diff object for map generation
 const chance3 = new Chance('hello');
 console.log(chance1.random());

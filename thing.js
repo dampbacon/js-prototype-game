@@ -645,8 +645,8 @@ function encounterResolver() {
 
 let tempMonster = new monster({
 	name: "testCreature",
-	hitDie: 3,
-	ac: 10,
+	hitDie: 2,
+	ac: 6,
 	morale: 6,
 	weapon: "ruler",
 	dmgDie: 6,
@@ -682,8 +682,39 @@ async function combat(combatEvent) {
 	resolver()
 }
 // moster picker in random event later
-function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer, firstLoop=true) {
+async function enemyAtack(monster,player,first=false) {
+	if(!first){
+		logs.writeSync(`\n${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}`);
+	}
+	await new Promise(resolve => setTimeout(resolve, 300))
+	logs.writeSync(chalk.red(`${!first?`\n`:``}${monster.name} attacks you with ${monster.weapon}!`))
+	if (monster.rollToHit() >= player.ac) {
+		let monsterDamage = monster.rollDamage()
+		//await new Promise(resolve => setTimeout(resolve, 100))
+		logs.writeSync(chalk.red(`\n${monster.name} hits you for ${monsterDamage} damage!\n`))
+		player.hp -= monsterDamage
+		refreshStats(player)
+		// add call to game over function
+	} else {
+		//await new Promise(resolve => setTimeout(resolve, 100))
+		logs.writeSync(chalk.red(`\n${monster.name} misses you!${!first?'\n':''}`))
+	}
+	if(first){
+		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}`);
+	}
+}
+
+
+async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer, firstLoop=true) {
 	let monster = monsterCopy
+	if (firstLoop){
+		let player_initiative = player.rollInitiative()
+		let monster_initiative = monster.rollInitiative()
+		logs.writeSync(`|| ${chalk.red(monster_initiative)}     ${chalk.blue(player_initiative)}\n`)
+		if (monster_initiative > player_initiative) {
+			await enemyAtack(monster,player,true)
+		}
+	}
 	createCombatButtons()
 	// initiative~ ────────────────────────
 	//if (inititve<enemy)
@@ -709,22 +740,8 @@ function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = the
 			logs.writeSync(chalk.greenBright(`\nYou miss!    ____DEBUGenemyhp=${monster.hp}`));
 		}
 		if (monster.hp > 0) {
-			logs.writeSync(`\n${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}`);
-			await new Promise(resolve => setTimeout(resolve, 300))
-			logs.writeSync(chalk.red(`\n${monster.name} attacks you with ${monster.weapon}!`))
-			if (monster.rollToHit() >= player.ac) {
-				let monsterDamage = monster.rollDamage()
-				//await new Promise(resolve => setTimeout(resolve, 100))
-				logs.writeSync(chalk.red(`\n${monster.name} hits you for ${monsterDamage} damage!\n`))
-				player.hp -= monsterDamage
-				refreshStats(player)
-				// add call to game over function
-			} else {
-				//await new Promise(resolve => setTimeout(resolve, 100))
-				logs.writeSync(chalk.red(`\n${monster.name} misses you!\n`))
-			}
-
-			//await new Promise(resolve => setTimeout(resolve, 1000))
+			await enemyAtack(monster,player)
+		//await new Promise(resolve => setTimeout(resolve, 1000))
 		}// MERGE WITH IF BELLOW LATER
 		await new Promise(resolve => setTimeout(resolve, 50))
 		if (monster.hp <= 0) {

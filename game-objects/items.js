@@ -30,7 +30,7 @@ class weapon {
     generateDescription() {
         return 'A weapon';
     }
-
+    
 }
 
 

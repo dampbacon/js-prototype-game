@@ -61,11 +61,6 @@ export class Player {
             this.weaponName= WEAPONS.SWORD
             this.weapon = WEAPONmap[WEAPONS.BARE_HANDS]
             this.slots.weapon = false
-            if(this.str>1){
-                this.basedamage = this.str
-            }else{
-                this.basedamage = 0
-            }
         }
     }
     changeArmour(armour) {
@@ -103,6 +98,9 @@ export class Player {
     rollToHit(){
         let bonus=this.level>4 ?4:this.level
         return chance2.rpg('1d20',{sum: true})+this.dex+bonus
+    }
+    rollInitiative(){
+        return chance2.rpg('1d20',{sum: true})
     }
     //`${this.weapon} + ${this.basedamage} :` + 
 }

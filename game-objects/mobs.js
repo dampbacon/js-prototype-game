@@ -23,6 +23,9 @@ export class monster {/*12always hostile 0 inverse */
     rollToHit() {
         return chance1.rpg(`1d20`, { sum: true }) + chance1.rpg(`${this.hitDie}d6`, { sum: true })
     }
+    rollInitiative(){
+        return chance1.rpg('1d20',{sum: true})
+    }
 
 }
 export function copyMonster(monsterToCopy) {

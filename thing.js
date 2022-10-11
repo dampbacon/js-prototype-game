@@ -20,6 +20,7 @@ import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
 import { monster, copyMonster } from './game-objects/mobs.js';
 import {spawn} from 'child_process';
+import { resetRandoms } from './game-objects/random_nums.js';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
@@ -475,6 +476,10 @@ screen.key('p', function () {
 	screen.focusNext();
 });
 
+screen.key('r', function () {
+	reset()
+});
+
 //test content key listener
 screen.key('y', function () {
 	form_thing.resetScroll()
@@ -632,22 +637,12 @@ async function eventHandler(gameEvent = temp_event1,) {
 // resume execution after combat 
 // enounter clear promise
 let waitForClearResolve
-function waitForClear() {
-	return new Promise(resolve => waitForClearResolve = resolve);
-}
-function resolver() {
-	if (waitForClearResolve) waitForClearResolve();
-}
+function waitForClear() {return new Promise((resolve) => {waitForClearResolve = resolve})}
+function resolver() {if (waitForClearResolve) waitForClearResolve();}
 //TURNS PROMISES
 let waitForCombatResolve
-function waitForCombat() {
-	return new Promise(resolve => waitForCombatResolve = resolve);
-}
-function encounterResolver() {
-	if (waitForCombatResolve) waitForCombatResolve();
-}
-//({name = '', hitDie = 1, ac = 8, morale=6, weapon='stick', dmgDie=6, aggro=6, rarity=1}) {
-
+function waitForCombat() {return new Promise((resolve) => {waitForCombatResolve = resolve});}
+function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve();}
 let tempMonster = new monster({
 	name: "testCreature",
 	hitDie: 1,
@@ -1138,40 +1133,43 @@ function toggleUi() {
 	stats.toggle()
 	actions.toggle()
 }
-toggleUi()
 function toggleButtons() {
 	form_thing.toggle()
 }
 
+toggleUi()
 
 screen.render()
 //toggleUi()
 stats.focus()
 screen.render()
 //stats box
-const box = blessed.box({
-	top: 'center',
-	left: 'center',
-	width: '40%',
-	height: 10,
-	tags: true,
-	keys: true,
-	content: '{bold}hmm{/bold}!',
-	border: {
-		type: 'line'
-	},
-	style: {
-		fg: 'white',
-		//bg: 'magenta',
+let box = createStatsBox()
+function createStatsBox() {
+	return blessed.box({
+		top: 'center',
+		left: 'center',
+		width: '40%',
+		height: 10,
+		tags: true,
+		keys: true,
+		content: '{bold}hmm{/bold}!',
 		border: {
-			//fg: '#4b0082',
-			//bg: '#4b0082',
+			type: 'line'
 		},
-		hover: {
-			bg: 'green'
+		style: {
+			fg: 'white',
+			//bg: 'magenta',
+			border: {
+				//fg: '#4b0082',
+				//bg: '#4b0082',
+			},
+			hover: {
+				bg: 'green'
+			}
 		}
-	}
-});
+	});
+}
 
 let thePlayer = new Player("name")
 
@@ -1199,13 +1197,16 @@ async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	screen.render()
 	startBox.focus()
 }
-
-await (fillStatsRollBox())
+await (fillStatsRollBox(40, thePlayer, box))
 box.key('enter', function () {
 	toggleUi()
 	box.hide()
-}
-)
+	box.destroy()
+	box=null
+	screen.render()
+})
+
+
 
 function refreshStats(player = thePlayer) {
 	stats.setContent(
@@ -1329,3 +1330,41 @@ but you’d best hurry back to the Redscale Army, you brat!” `
 //ERROR bugs out at certain screen widths
 //make stricter add a buffer to collumn width
 //done but keeping comments incase i see another error
+function creatething(){
+	box.key('enter', function () {
+		toggleUi()
+		box.hide()
+		box.destroy()
+		box=null
+		screen.render()
+		resolver()
+	})
+}
+async function reset(){
+	resetRandoms()
+	thePlayer = thePlayer.rollNewPlayer()
+	refreshStats(thePlayer)
+	clearButtons()
+	logs.reset()
+	XTermTestv2.reset()
+	toggleUi()
+	screen.render()
+	box = createStatsBox()
+	screen.append(box)
+	screen.render()
+	box.setContent('')
+	await(fillStatsRollBox(40,thePlayer,box))
+	creatething()
+	await waitForClear();
+
+	//sample start code
+	buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
+	buttonsArray = [];
+	stats.focus();
+	XTermApp.reset()
+	createButtons(temp_event1, story);
+	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
+	resizeButtons();
+	stats.focus();
+	
+}

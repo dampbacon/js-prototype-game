@@ -24,7 +24,7 @@ import { resetRandoms } from './game-objects/random_nums.js';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
-
+let death = false;
 // test content
 let
 	mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
@@ -527,44 +527,48 @@ function clearButtons() {
 async function createButtons(gameEvent, storyObj = {}) {
 	eventHandler(gameEvent)
 	await waitForClear();
-	gameEvent['buttons'].forEach(item => {
-		let temp = new blessed.button({
-			parent: form_thing,
-			mouse: true,
-			keys: true,
-			shrink: true,
-			padding: {
+	if (!death){
+		gameEvent['buttons'].forEach(item => {
+			let temp = new blessed.button({
+				parent: form_thing,
+				mouse: true,
+				keys: true,
+				shrink: true,
+				padding: {
+					left: 1,
+					right: 1
+				},
 				left: 1,
-				right: 1
-			},
-			left: 1,
-			top: 1,
-			name: item[1],
-			content: item[1],
-			//shadow: true,
-			style: {
-				bg: '#0066CC',
-				focus: {
-					bg: '#cc0066',
+				top: 1,
+				name: item[1],
+				content: item[1],
+				//shadow: true,
+				style: {
+					bg: '#0066CC',
+					focus: {
+						bg: '#cc0066',
+					},
+					hover: {
+						bg: '#cc0066',
+					},
 				},
-				hover: {
-					bg: '#cc0066',
-				},
-			},
-		})
-		buttonsArray.push(temp)
-		temp.on('press', function () {
-			clearButtons()
-			form_thing.setContent('')
-			screen.render();
-			createButtons(storyObj[item[0]], storyObj);
-			resizeButtons();
-			stats.focus();
-			screen.render();
+			})
+			buttonsArray.push(temp)
+			temp.on('press', function () {
+				clearButtons()
+				form_thing.setContent('')
+				screen.render();
+				createButtons(storyObj[item[0]], storyObj);
+				resizeButtons();
+				stats.focus();
+				screen.render();
 
+			})
 		})
-	})
-	resizeButtons()
+		resizeButtons()
+	}else{
+		reset()
+	}
 }
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded
@@ -621,28 +625,46 @@ async function eventHandler(gameEvent = temp_event1,) {
 		// test code
 		combat(gameEvent)
 	}
-	await (waitForCombat())
-	await new Promise(r => setTimeout(r, 500));
-	await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
-	logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
 
+	await (waitForCombat())
+	//rollLog(XTermTestv2)
+	//XTermTestv2.writeSync("DEATH"+ death)
+	// extend somehow to rest later
+	if(death===false){
+		await new Promise(r => setTimeout(r, 500));
+		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
+		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
+	}
 	resolver()
 
 
 
-	screen.key('n', function () {
-		resolver()
-	})
+	
 }
+
+
+screen.key('n', async function () {
+	clearButtons()
+	death = true;
+	encounterResolver()
+})
+
+function kill(){
+	clearButtons()
+	death = true;
+	encounterResolver()
+}
+
+let test=3
 // resume execution after combat 
 // enounter clear promise
 let waitForClearResolve
 function waitForClear() {return new Promise((resolve) => {waitForClearResolve = resolve})}
-function resolver() {if (waitForClearResolve) waitForClearResolve();}
+function resolver() {if (waitForClearResolve) {waitForClearResolve()}}
 //TURNS PROMISES
 let waitForCombatResolve
 function waitForCombat() {return new Promise((resolve) => {waitForCombatResolve = resolve});}
-function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve();}
+function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve()}
 let tempMonster = new monster({
 	name: "testCreature",
 	hitDie: 1,
@@ -692,6 +714,11 @@ async function enemyAtack(monster,player,first=false) {
 		logs.writeSync(chalk.red(`\n${monster.name} hits you for ${monsterDamage} damage!\n`))
 		player.hp -= monsterDamage
 		refreshStats(player)
+		if(player.hp<=0){
+			logs.writeSync(chalk.red(`${escLeftByNum(3)}${monster.name} kills you!\n`))
+			await new Promise(resolve => setTimeout(resolve, 2000))
+			kill()
+		}
 		// add call to game over function
 	} else {
 		//await new Promise(resolve => setTimeout(resolve, 100))
@@ -938,6 +965,7 @@ async function slowWrite(str = '', terminal, speed) {
 		}
 	}
 }
+
 function fitLines(str = '', cols = 0) {
 	//various checks for characters that screw up the line wrapping
 	// regex screws up approstrophes
@@ -1342,6 +1370,7 @@ function creatething(){
 }
 async function reset(){
 	resetRandoms()
+	death = false
 	thePlayer = thePlayer.rollNewPlayer()
 	refreshStats(thePlayer)
 	clearButtons()

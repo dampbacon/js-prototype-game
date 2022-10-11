@@ -6,7 +6,7 @@ export var chance1 = new Chance();
 //player rolls die
 export var chance2 = new Chance();
 
-function resetRandoms(seed){
+export function resetRandoms(seed){
     if(seed){
         monsterRandom = new Chance(seed);
         chance1 = new Chance(seed);

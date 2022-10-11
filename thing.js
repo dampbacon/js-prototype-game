@@ -633,7 +633,7 @@ async function eventHandler(gameEvent = temp_event1,) {
 	if(death===false){
 		await new Promise(r => setTimeout(r, 500));
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
-		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
+		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
 	resolver()
 

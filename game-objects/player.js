@@ -43,8 +43,9 @@ export class Player {
         //this.items = Array(5).fill(0)
         this.basedamage = this.str
         this.persuade = this.cha + skillBonus(this.cha)
-        this.weapon = WEAPONmap[WEAPONS.SWORD]
-        this.weaponName = WEAPONS.SWORD
+        this.weaponName = WEAPONS.GREAT_SWORD
+        this.weapon = WEAPONmap[this.weaponName]
+
         //change weapon later to be simaler to monster class
         this.armour = ARMOURmap[ARMOUR.LOIN_CLOTH]
         this.ac = this.armour ? this.armour : 10

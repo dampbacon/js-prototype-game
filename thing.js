@@ -650,7 +650,7 @@ function encounterResolver() {
 
 let tempMonster = new monster({
 	name: "testCreature",
-	hitDie: 2,
+	hitDie: 1,
 	ac: 6,
 	morale: 6,
 	weapon: "ruler",
@@ -710,12 +710,15 @@ async function enemyAtack(monster,player,first=false) {
 
 async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer, firstLoop=true) {
 	let monster = monsterCopy
+	let playerWonInitiative = false
 	if (firstLoop){
 		let player_initiative = player.rollInitiative()
 		let monster_initiative = monster.rollInitiative()
 		logs.writeSync(`|| ${chalk.red(monster_initiative)}     ${chalk.blue(player_initiative)}\n`)
 		if (monster_initiative > player_initiative) {
 			await enemyAtack(monster,player,true)
+		}else{
+			playerWonInitiative = true
 		}
 	}
 	createCombatButtons()
@@ -762,6 +765,32 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 		}
 		//set flag combat done or something
 		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)
+	})
+	buttonsArray[1].on('press', async () => {
+		let dexSave=player.rollSkillCheck(player.dex)
+		if(dexSave>=10 + monster.hitDie){
+			logs.writeSync(`${!playerWonInitiative&&firstLoop?escUpByNum(1)+'\r':''}${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
+			logs.writeSync(`${chalk.yellow(`You escaped through a random tunnel`)}\n`);
+			logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
+			// random deeper or surface
+			encounterClr = true;
+			clearButtons();
+			encounterResolver()
+			return encounterClr
+
+		}
+		else{
+			clearButtons();
+			if(playerWonInitiative&&firstLoop){
+				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+			}else if(!firstLoop){
+				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+			}
+
+			logs.writeSync(`${chalk.yellow(`${monster.name} prevented your escape!`)}`);
+			await enemyAtack(monster,player)
+			combatLogic(monster, encounterClr, player, false)
+		}
 	})
 	return encounterClr
 }

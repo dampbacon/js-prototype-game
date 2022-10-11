@@ -591,7 +591,7 @@ function eventPackageButtons(eventPackage){
 async function eventHandler(gameEvent = temp_event1,) {
 	//
 	// WRITE EVENT PACKAGE HANDLING CODE
-	//
+	// probably easier to do recursively?
 	//
 	XTermApp.clear()
 	XTermApp.reset()

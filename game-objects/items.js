@@ -3,7 +3,7 @@
 // Weapon objects
 //
 //
-import {chance2} from '../game-objects/player.js'
+import {chance2} from "./random_nums.js";
 class dmgType{
     constructor({name, effectProperties, color,effectDuration,applyEffect}){
         this.name = name;

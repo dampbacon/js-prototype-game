@@ -1,13 +1,7 @@
 //var seedrandom = require('seedrandom');
-import Chance from 'chance';
-//set seed for stats roll
-const chance1 = new Chance();
-//diff object for dice
-export const chance2 = new Chance();
+import {ARMOUR, ARMOURmap, WEAPONmap, WEAPONS} from "./items.js";
+import {chance1, chance2} from "./random_nums.js";
 //diff object for map generation
-const chance3 = new Chance('hello');
-console.log(chance1.random());
-console.log(chance1.random());
 chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 
 // chance.rpg('#d#')
@@ -15,14 +9,6 @@ chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 
 //
 
-
-import {
-    ARMOURmap, WEAPONmap, WEAPONS, ARMOUR
-} from "./items.js";
-
-function rollStat() {
-    return skillBonus(chance1.rpg('3d6', { sum: true }))
-}
 export class Player {
     constructor(name = 'apples') {
         this.level = 0;
@@ -30,12 +16,12 @@ export class Player {
         this.nextLvlxp = 200
         this.name = name;
         //damage
-        this.str= rollStat();
+        this.str= this.rollStat();
         //hp modifier
         //tohit
-        this.dex= rollStat();
-        this.cha= rollStat();
-        this.int= rollStat();
+        this.dex= this.rollStat();
+        this.cha= this.rollStat();
+        this.int= this.rollStat();
 
         this.hp = (chance1.rpg('2d6',{sum: true})+this.str)>0?(chance1.rpg('2d6',{sum: true})+this.str):1;
         this.hpMax = this.hp;
@@ -64,6 +50,10 @@ export class Player {
             this.slots.weapon = false
         }
     }
+    rollStat() {
+        return skillBonus(chance1.rpg('3d6', { sum: true }))
+    }
+
     changeArmour(armour) {
         //update ac and equip slot
     }
@@ -107,6 +97,9 @@ export class Player {
     rollSkillCheck(skill=0){
         return chance2.rpg('1d20',{sum: true})+skillBonus(skill)
     } 
+    rollNewPlayer(){
+        return new Player(this.name)
+    }
 }
 
 class inventory {

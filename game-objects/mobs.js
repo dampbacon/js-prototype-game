@@ -1,7 +1,6 @@
 
-import Chance from 'chance';
+import { monsterRandom } from './random_nums.js';
 import { Player } from './player.js';
-const chance1 = new Chance();
 //make roll initiative function in main file
 const defaults={name:'', hitDie:1, ac:8, morale:6, weapon:'stick', dmgDie:6, aggro:6, rarity:1}
 export class monster {/*12always hostile 0 inverse */
@@ -14,17 +13,17 @@ export class monster {/*12always hostile 0 inverse */
         this.dmgDie = dmgDie;
         this.aggro = aggro;
         this.rarity = rarity;
-        this.hp = chance1.rpg(`${this.hitDie}d6`, { sum: true });
+        this.hp = monsterRandom.rpg(`${this.hitDie}d6`, { sum: true });
     }
     rollDamage() {
         // later change to bring consistancy simaler to player class
-        return chance1.rpg(`1d${this.dmgDie}`, { sum: true })
+        return monsterRandom.rpg(`1d${this.dmgDie}`, { sum: true })
     }
     rollToHit() {
-        return chance1.rpg(`1d20`, { sum: true }) + chance1.rpg(`${this.hitDie}d6`, { sum: true })
+        return monsterRandom.rpg(`1d20`, { sum: true }) + monsterRandom.rpg(`${this.hitDie}d6`, { sum: true })
     }
     rollInitiative(){
-        return chance1.rpg('1d20',{sum: true})
+        return monsterRandom.rpg('1d20',{sum: true})
     }
 
 }

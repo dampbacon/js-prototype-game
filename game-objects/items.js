@@ -4,19 +4,29 @@
 //
 //
 
-
-
-class weapon {
-    constructor({name, dmgDie, dmgType, rarity}) {
+class dmgType{
+    constructor(name, dmg, color){
         this.name = name;
-        this.dmgDie = dmgDie;
-        this.dmgType = dmgType;
-        this.rarity = rarity;
-        this.enchant = 0;
+        this.dmg = dmg;
+        this.color = color;
     }
 }
 
 
+class weapon {
+    constructor({name, dmgDie, dmgType, rarity, enchant, description}) {
+        this.name = name?name:'Stick';
+        this.dmgDie = dmgDie?dmgDie:'1d4';
+        this.dmgType = dmgType?dmgType:new dmgType('bludgeoning', 0, 'black');
+        this.rarity = rarity?rarity:1;
+        this.enchant = enchant?enchant:0;
+        this.description = description?description: this.generateDescription();
+    }
+    generateDescription() {
+        return 'A weapon';
+    }
+
+}
 
 
 export const WEAPONS = Object.freeze({

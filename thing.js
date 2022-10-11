@@ -912,7 +912,6 @@ function fitLines(str = '', cols = 0) {
 			K.push(R[i].concat(' '))
 		}
 	}
-
 	let lines = []
 	let rollingCount = 0
 	let line = []

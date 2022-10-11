@@ -1,1 +1,1 @@
-//random words to descibe mobs, enemies, and items
+//random words and phrases to descibe room, mobs, enemies, and items

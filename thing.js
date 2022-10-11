@@ -669,7 +669,6 @@ async function combat(combatEvent) {
 		//provoke or somthing
 		return 0
 	}
-	createCombatButtons()
 	//combat buttons
 	//toggle button box while enemy takes turn
 	//turn has a short delay for enemy so it doesnt feel static
@@ -683,9 +682,9 @@ async function combat(combatEvent) {
 	resolver()
 }
 // moster picker in random event later
-function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer) {
+function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer, firstLoop=true) {
 	let monster = monsterCopy
-
+	createCombatButtons()
 	// initiative~ ────────────────────────
 	//if (inititve<enemy)
 	buttonsArray[0].on('press', async () => {
@@ -739,8 +738,7 @@ function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = the
 			return encounterClr
 		} else {
 			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
-			createCombatButtons()
-			combatLogic(monster, encounterClr)
+			combatLogic(monster, encounterClr, player, false)
 		}
 		//set flag combat done or something
 		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)

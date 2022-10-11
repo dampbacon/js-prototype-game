@@ -69,10 +69,11 @@ export class game_event_gain_item extends game_event {
 }
 
 export class game_event_enemy extends game_event {
-    constructor({ id, body, toScreen, buttons, enemy } = { ...defaults, enemy: null }) {
+    constructor({ id, body, toScreen, buttons, enemy, cleared } = { ...defaults, enemy: null, cleared: false }) {
         //make if enemy is hostile pass buttons to be created for combat
         super(id, body, toScreen, buttons)
         this.enemy = enemy;
+        this.cleared = cleared;
     }
 }
 

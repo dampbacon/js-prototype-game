@@ -616,6 +616,13 @@ async function eventHandler(gameEvent = temp_event1,) {
 		// test code
 		combat(gameEvent)
 	}
+	await (waitForCombat())
+	await new Promise(r => setTimeout(r, 500));
+	await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
+	logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
+
+	resolver()
+
 
 
 	screen.key('n', function () {
@@ -631,8 +638,6 @@ function waitForClear() {
 function resolver() {
 	if (waitForClearResolve) waitForClearResolve();
 }
-
-
 //TURNS PROMISES
 let waitForCombatResolve
 function waitForCombat() {
@@ -677,9 +682,7 @@ async function combat(combatEvent) {
 	let monster = copyMonster(tempMonster)
 	combatLogic(monster, encounterCleared)
 	//should be attack buttons
-	await (waitForCombat())
 	//console.log("encounter cleared")
-	resolver()
 }
 // moster picker in random event later
 async function enemyAtack(monster,player,first=false) {
@@ -697,10 +700,10 @@ async function enemyAtack(monster,player,first=false) {
 		// add call to game over function
 	} else {
 		//await new Promise(resolve => setTimeout(resolve, 100))
-		logs.writeSync(chalk.red(`\n${monster.name} misses you!${!first?'\n':''}`))
+		logs.writeSync(chalk.red(`\n${monster.name} misses you!${'\n'}`))
 	}
 	if(first){
-		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}`);
+		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
 }
 
@@ -751,7 +754,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			encounterResolver()
 			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
 			logs.writeSync(`\n${chalk.yellow(`You defeated the enemy!`)}`);
-			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
+			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 			return encounterClr
 		} else {
 			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);

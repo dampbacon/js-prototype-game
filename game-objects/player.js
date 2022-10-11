@@ -102,7 +102,10 @@ export class Player {
     rollInitiative(){
         return chance2.rpg('1d20',{sum: true})
     }
-    //`${this.weapon} + ${this.basedamage} :` + 
+    //`${this.weapon} + ${this.basedamage} :` +
+    rollSkillCheck(skill=0){
+        return chance2.rpg('1d20',{sum: true})+skillBonus(skill)
+    } 
 }
 
 class inventory {

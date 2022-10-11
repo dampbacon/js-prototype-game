@@ -28,7 +28,6 @@ export class Player {
         this.slots = { weapon: true, shield: false, head: false, armor: true, ring: false }
         //this.items = Array(5).fill(0)
         this.basedamage = this.str
-        this.persuade = this.cha + skillBonus(this.cha)
         this.weaponName = WEAPONS.GREAT_SWORD
         this.weapon = WEAPONmap[this.weaponName]
 

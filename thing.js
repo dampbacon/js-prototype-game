@@ -54,9 +54,6 @@ let
 [37m[40m                     [94m[40m░▓▒░░[37m[40m                            [m
 [37m[40m                                                      [m
 `
-
-
-
 let temp_event1 = new game_event({
 	id: 1,
 	body: {
@@ -85,8 +82,6 @@ let temp_event1 = new game_event({
 		//[3,"goto 3 lolololololololollolololololololol",true]
 	]
 })
-
-
 let temp_event2 = new game_event({
 	id: 2,
 	body: {
@@ -114,12 +109,9 @@ let temp_event2 = new game_event({
 		//[3,"goto 3 lolololololololollolololololololol",true]
 	]
 })
-
-
-
 let testEventArr = [temp_event1, temp_event2,]
-let story = {}
 
+let story = {}
 //test content
 let body =
 	`[0m\r
@@ -166,7 +158,6 @@ let caleb =
 [38;5;239;48;5;95m▄[38;5;238;48;5;240m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;238m▄[48;5;237m [38;5;237;48;5;237m▄▄▄[38;5;236;48;5;236m▄[38;5;235;48;5;236m▄[38;5;234;48;5;234m▄[38;5;234;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄▄[38;5;238;48;5;237m▄[38;5;236;48;5;237m▄[38;5;232;48;5;232m▄[38;5;0;48;5;232m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;233m▄[38;5;234;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄▄[38;5;234;48;5;234m▄[48;5;234m [38;5;234;48;5;234m▄▄[38;5;234;48;5;235m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄▄[m\r
 [38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m\r`
 let thing = chalk.blue('Hello') + ' World' + chalk.red('!')
-
 const program = blessed.program()
 program.cursorColor('000000')
 const screen = blessed.screen({
@@ -185,7 +176,7 @@ const screen = blessed.screen({
 screen.program.hideCursor(true);
 const grid = new BlessedContrib.grid({ rows: 12, cols: 12, screen: screen })
 
-screen.title = 'my window title';
+screen.title = '~game~';
 
 const XTermTestv2 = new XTermNew({
 	top: 0,
@@ -209,14 +200,6 @@ const XTermTestv2 = new XTermNew({
 	},
 }).with(scroll.scroll, scroll.throttle)
 screen.append(XTermTestv2)
-
-screen.render()
-let b = XTermTestv2.term.buffer
-XTermTestv2.writeSync("")
-XTermTestv2.scrollTo(0)
-
-screen.render()
-
 const XTermApp = XTermTestv2.term
 //might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
 //then write string on exit to a file so that log can be reloaded if desired
@@ -333,7 +316,6 @@ const form_thing = grid.set(0, 6, 6, 3, blessed.form, ({
 	}
 })).with(scroll.scroll, scroll.throttle)
 
-screen.render()
 
 //test button declarations
 let button1 = blessed.button({
@@ -431,12 +413,14 @@ let button4 = blessed.button({
 		}
 	}
 });
+let buttonsArray = [button1, button2, button3, button4];
 
 // term.write('\x1b')
 // // First \n will cancel any existing escape or go to new line
 // // Then the \n\r will put the cursor at the start of the next line
 // term.write('\n\n\r')
 // term.clear()
+screen.render()
 
 
 //Listeners for test buttons
@@ -492,7 +476,13 @@ screen.key('y', function () {
 	resizeButtons();
 	stats.focus();
 });
-let buttonsArray = [button1, button2, button3, button4];
+
+screen.key('n', async function () {
+	clearButtons()
+	death = true;
+	encounterResolver()
+})
+
 //test content
 //logs.setContent(caleb)
 screen.render();
@@ -518,8 +508,6 @@ resizeButtons()
 // The problem trying to make this function more pure is that for some reason
 // the resize button cannot get a valid height and crashes on screen resize
 // if i attempt to remove all mentions of buttonsArray
-let combatEvent;
-let combatFlag = false;
 function clearButtons() {
 	buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
 	buttonsArray = []
@@ -643,12 +631,6 @@ async function eventHandler(gameEvent = temp_event1,) {
 }
 
 
-screen.key('n', async function () {
-	clearButtons()
-	death = true;
-	encounterResolver()
-})
-
 function kill(){
 	clearButtons()
 	death = true;
@@ -695,9 +677,8 @@ async function combat(combatEvent) {
 	//toggle button box while enemy takes turn
 	//turn has a short delay for enemy so it doesnt feel static
 	//maybe some effect
-	let encounterCleared = false;
 	let monster = copyMonster(tempMonster)
-	combatLogic(monster, encounterCleared,thePlayer,true)
+	combatLogic(monster,thePlayer,true)
 	//should be attack buttons
 	//console.log("encounter cleared")
 }
@@ -739,7 +720,7 @@ function clearCombat(logs){
 
 
 
-async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer, firstLoop=true) {
+async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, firstLoop=true) {
 	let monster = monsterCopy
 	let playerWonInitiative = false
 	if (firstLoop){
@@ -753,8 +734,6 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 		}
 	}
 	createCombatButtons()
-	// initiative~ ────────────────────────
-	//if (inititve<enemy)
 	combatButtonsMap['attack'].on('press', async () => {
 		//attack placeholder
 		if((logs.term.rows-2)<=logs.term.buffer.active.cursorY){
@@ -783,15 +762,11 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 		await new Promise(resolve => setTimeout(resolve, 50))
 		if (monster.hp <= 0) {
 			await new Promise(resolve => setTimeout(resolve, 100))
-			encounterClr = true;
 			clearCombat(logs)
-			//return encounterClr
 		} else {
 			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
-			combatLogic(monster, encounterClr, player, false)
+			combatLogic(monster, player, false)
 		}
-		//set flag combat done or something
-		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)
 	})
 	combatButtonsMap['flee'].on('press', async () => {
 		let dexSave=player.rollSkillCheck(player.dex)
@@ -800,10 +775,8 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			logs.writeSync(`${chalk.yellow(`You escaped through a random tunnel`)}\n`);
 			logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 			// random deeper or surface
-			encounterClr = true;
 			clearButtons();
 			encounterResolver()
-			//return encounterClr
 		}
 		else{
 			clearButtons();
@@ -815,18 +788,27 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 
 			logs.writeSync(`${chalk.yellow(`${monster.name} prevented your escape!`)}`);
 			await enemyAtack(monster,player)
-			combatLogic(monster, encounterClr, player, false)
+			combatLogic(monster, player, false)
 		}
 	})
+	// combatButtonsMap['chatUp'].on('press', async () => {
+	// 	clearButtons();
+	// 	if(playerWonInitiative&&firstLoop){
+	// 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+	// 	}else if(!firstLoop){
+	// 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+	// 	}
+	// })
+
 	if('potion' in combatButtonsMap){
 		combatButtonsMap['potion'].on('press', async () => {
+			let heal=chance2.rpg('2d4', {sum: true})+4
 			clearButtons();
 			if(playerWonInitiative&&firstLoop){
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}else if(!firstLoop){
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
-			let heal=chance2.rpg('2d4', {sum: true})+4
 			logs.writeSync(thePlayer.hp+" "+thePlayer.hpMax)
 			if((thePlayer.hp+heal)>thePlayer.hpMax){
 				logs.writeSync(`${chalk.yellow(`AAAAAAA You drink a potion! you heal for ${thePlayer.hpMax-thePlayer.hp} hp!`)}`);
@@ -839,18 +821,18 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			await enemyAtack(monster,player)
 			if(player.potions<1){combatButtonsMap['potion'].destroy()}
 			screen.render()
-			combatLogic(monster, encounterClr, player, false)
+			combatLogic(monster, player, false)
 		})
 	}
 	if('oil' in combatButtonsMap){
 		combatButtonsMap['oil'].on('press', async () => {
+			let damage = chance2.rpg('4d6', {sum: true})+4
 			clearButtons();
 			if(playerWonInitiative&&firstLoop){
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}else if(!firstLoop){
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
-			let damage = chance2.rpg('4d6', {sum: true})+4
 			logs.writeSync(`${chalk.yellow(`You throw oil on the enemy! dealing 4d6+4:${damage} fire damage!`)}`);
 			monster.hp-=damage
 			thePlayer.oil--
@@ -862,12 +844,10 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			await new Promise(resolve => setTimeout(resolve, 50))
 			if (monster.hp <= 0) {
 				await new Promise(resolve => setTimeout(resolve, 100))
-				encounterClr = true;
 				clearCombat(logs)
-				//return encounterClr
 			} else {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
-				combatLogic(monster, encounterClr, player, false)
+				combatLogic(monster, player, false)
 			}
 		})
 	}
@@ -878,7 +858,6 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 	
 
 
-	return encounterClr
 }
 
 

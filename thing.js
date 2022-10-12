@@ -30,8 +30,6 @@ let story = {}
 let combatButtonsMap = {}
 let thePlayer = new Player("name")
 
-
-
 // test content
 let tempMonster = new monster({
 	name: "testCreature",

@@ -1,11 +1,12 @@
-import blessed from "blessed";
+import blessedpkg from "blessed";
 import chalk from "chalk";
 import * as scroll from "./blessed/scroll.cjs";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
 import BlessedContrib from "blessed-contrib";
+const {blessed} = blessedpkg
 
-export const program = blessed.program()
-export const screen = blessed.screen({
+export const program = blessedpkg.program()
+export const screen = blessedpkg.screen({
     program: program,
     fastCSR: true,
     dockBorders: true,
@@ -62,7 +63,7 @@ export const logs = new XTermNew({
         },
     },
 }).with(scroll.scroll, scroll.throttle)
-export const stats = grid.set(0, 9, 6, 1, blessed.box, {
+export const stats = grid.set(0, 9, 6, 1, blessedpkg.box, {
         tags: true,
         padding: {
             left: 1,
@@ -97,7 +98,7 @@ export const stats = grid.set(0, 9, 6, 1, blessed.box, {
     }
 ).with(scroll.scroll, scroll.throttle)
 //in the future will list inventory items
-export const InventoryBox = grid.set(0, 10, 6, 2, blessed.list, {
+export const InventoryBox = grid.set(0, 10, 6, 2, blessedpkg.list, {
     tags: true,
     scrollable: true,
     mouse: true,
@@ -118,7 +119,7 @@ export const InventoryBox = grid.set(0, 10, 6, 2, blessed.list, {
     }
 })
 //button container
-export const buttonsContainer = grid.set(0, 6, 6, 3, blessed.form, ({
+export const buttonsContainer = grid.set(0, 6, 6, 3, blessedpkg.form, ({
     parent: screen,
     keys: true,
     label: `choose ~ ${chalk.green('w s')} to scroll`,
@@ -150,7 +151,7 @@ export const buttonsContainer = grid.set(0, 6, 6, 3, blessed.form, ({
 
 //stats box
 export function createStatsBox() {
-    return blessed.box({
+    return blessedpkg.box({
         parent: screen,
         top: 'center',
         left: 'center',

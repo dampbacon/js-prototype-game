@@ -892,11 +892,10 @@ async function reset(){
 	// buttonsArray = [];
 	stats.focus();
 	ImageScreenTerm.term.reset()
-	createButtons(temp_event1, story);
-	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
-	resizeButtons();
-	stats.focus();
-	
+	await createButtons(temp_event1, story);
+	//buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
+	//resizeButtons();
+	//stats.focus();
 }
 //reminder how to convert ansi art to utf8
 //run script on cmder to convert my ansi art to utf8

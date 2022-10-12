@@ -22,7 +22,7 @@ export class Player {
         this.dex= this.rollStat();
         this.cha= this.rollStat();
         this.int= this.rollStat();
-        let initial = (chance1.rpg('2d6',{sum: true})+this.str)>0?(chance1.rpg('2d6',{sum: true})+this.str):1;
+        let initial = chance1.rpg('2d6',{sum: true})+this.str+6
         this.hp = initial
         this.hpMax = initial
         this.slots = { weapon: true, shield: false, head: false, armor: true, ring: false }

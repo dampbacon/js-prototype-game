@@ -19,7 +19,7 @@ export const screen = blessed.screen({
     }
 });
 const grid = new BlessedContrib.grid({rows: 12, cols: 12, screen: screen})
-export const XTermTestv2 = new XTermNew({
+export const ImageScreenTerm = new XTermNew({
     top: 0,
     bottom: 0,
     width: '50%',
@@ -97,12 +97,12 @@ export const stats = grid.set(0, 9, 6, 1, blessed.box, {
     }
 ).with(scroll.scroll, scroll.throttle)
 //in the future will list inventory items
-export const actions = grid.set(0, 10, 6, 2, blessed.list, {
+export const InventoryBox = grid.set(0, 10, 6, 2, blessed.list, {
     tags: true,
     scrollable: true,
     mouse: true,
     keys: true,
-    label: '{bold}actions{/bold}',
+    label: '{bold}Inventory{/bold}',
     content: 'thing',
     border: {
         type: 'line'
@@ -118,7 +118,7 @@ export const actions = grid.set(0, 10, 6, 2, blessed.list, {
     }
 })
 //button container
-export const form_thing = grid.set(0, 6, 6, 3, blessed.form, ({
+export const buttonsContainer = grid.set(0, 6, 6, 3, blessed.form, ({
     parent: screen,
     keys: true,
     label: `choose ~ ${chalk.green('w s')} to scroll`,

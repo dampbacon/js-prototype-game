@@ -12,7 +12,7 @@ import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
 import {copyMonster, monster} from './game-objects/mobs.js';
 import {chance2, resetRandoms} from './game-objects/random_nums.js';
-import {actions, createStatsBox, form_thing, logs, program, screen, stats, XTermTestv2} from "./ui.js";
+import {InventoryBox, createStatsBox, buttonsContainer, logs, program, screen, stats, ImageScreenTerm} from "./ui.js";
 
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
@@ -230,13 +230,13 @@ but you’d best hurry back to the Redscale Army, you brat!” `
 program.cursorColor('000000')
 screen.title = '~game~';
 screen.program.hideCursor(true);
-screen.append(XTermTestv2)
+screen.append(ImageScreenTerm)
 screen.append(logs)
 
 
 //test button declarations
 let button1 = blessed.button({
-	parent: form_thing,
+	parent: buttonsContainer,
 	mouse: true,
 	keys: true,
 	shrink: true,
@@ -260,7 +260,7 @@ let button1 = blessed.button({
 });
 
 let button2 = blessed.button({
-	parent: form_thing,
+	parent: buttonsContainer,
 	mouse: true,
 	keys: true,
 	shrink: true,
@@ -284,7 +284,7 @@ let button2 = blessed.button({
 });
 
 let button3 = blessed.button({
-	parent: form_thing,
+	parent: buttonsContainer,
 	mouse: true,
 	keys: true,
 	shrink: true,
@@ -308,7 +308,7 @@ let button3 = blessed.button({
 });
 
 let button4 = blessed.button({
-	parent: form_thing,
+	parent: buttonsContainer,
 	mouse: true,
 	keys: true,
 	shrink: true,
@@ -332,7 +332,7 @@ let button4 = blessed.button({
 });
 //screen.render is essential for the correct screenlines amount to calculate inorder to resize buttons
 function resizeButtons() {
-	buttonsArray.forEach((element) => { element.width = form_thing.width - 5 })
+	buttonsArray.forEach((element) => { element.width = buttonsContainer.width - 5 })
 	screen.render()
 	buttonsArray.forEach((element, index, array) => {
 		if (!(index === 0)) {
@@ -351,7 +351,7 @@ function resizeButtons() {
 // the resize button cannot get a valid height and crashes on screen resize
 // if i attempt to remove all mentions of buttonsArray
 function clearButtons() {
-	buttonsArray.forEach((element) => { form_thing.remove(element); element.destroy() })
+	buttonsArray.forEach((element) => { buttonsContainer.remove(element); element.destroy() })
 	buttonsArray = []
 }
 async function createButtons(gameEvent, storyObj = {}) {
@@ -363,7 +363,7 @@ async function createButtons(gameEvent, storyObj = {}) {
 	}
 	gameEvent['buttons'].forEach(item => {
 		let temp = new blessed.button({
-			parent: form_thing,
+			parent: buttonsContainer,
 			mouse: true,
 			keys: true,
 			shrink: true,
@@ -389,7 +389,7 @@ async function createButtons(gameEvent, storyObj = {}) {
 		buttonsArray.push(temp)
 		temp.on('press', function () {
 			clearButtons()
-			form_thing.setContent('')
+			buttonsContainer.setContent('')
 			screen.render();
 			createButtons(storyObj[item[0]], storyObj);
 			resizeButtons();
@@ -426,17 +426,17 @@ async function eventHandler(gameEvent = temp_event1,) {
 	// WRITE EVENT PACKAGE HANDLING CODE
 	// probably easier to do recursively?
 	//
-	XTermTestv2.term.clear()
-	XTermTestv2.term.reset()
+	ImageScreenTerm.term.clear()
+	ImageScreenTerm.term.reset()
 	rollLog(logs)
 	let gb = gameEvent.body
 	let gbf = gb.format
 	//make enum thing later
-	XTermTestv2.writeSync(gameEvent.toScreen.toScreen)
+	ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
 	if (gbf.writeMode === 'gradientScanlines') {
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 	}
-	form_thing.setContent(` ${chalk.bold.yellow(gameEvent['buttons'].length.toString()) + " " + chalk.bold.greenBright("choices")}`)
+	buttonsContainer.setContent(` ${chalk.bold.yellow(gameEvent['buttons'].length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 
 
 	if (gameEvent instanceof (game_event_enemy)) {
@@ -480,7 +480,7 @@ function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve()}
 
 
 async function combat(combatEvent) {
-	form_thing.setContent('')
+	buttonsContainer.setContent('')
 	logs.writeSync(escUpByNum(1))
 	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
 	logs.writeSync(`\n${chalk.yellow(`Combat Start!`)}`);
@@ -662,7 +662,7 @@ function createCombatButtons() {
 	combatButtonsMap = {}
 	let cbt=combatButtonsMap
 	let attack = new blessed.button({
-		parent: form_thing,
+		parent: buttonsContainer,
 		mouse: true,
 		keys: true,
 		shrink: true,
@@ -687,7 +687,7 @@ function createCombatButtons() {
 	})
 	cbt[attack.name] = attack
 	let flee = new blessed.button({
-		parent: form_thing,
+		parent: buttonsContainer,
 		mouse: true,
 		keys: true,
 		shrink: true,
@@ -712,7 +712,7 @@ function createCombatButtons() {
 	})
 	cbt[flee.name] = flee
 	let chatUp = new blessed.button({
-		parent: form_thing,
+		parent: buttonsContainer,
 		mouse: true,
 		keys: true,
 		shrink: true,
@@ -739,7 +739,7 @@ function createCombatButtons() {
 	let potion
 	if(thePlayer.potions>0){
 		potion = new blessed.button({
-			parent: form_thing,
+			parent: buttonsContainer,
 			mouse: true,
 			keys: true,
 			shrink: true,
@@ -767,7 +767,7 @@ function createCombatButtons() {
 	let oil
 	if(thePlayer.oil>0){
 		oil = new blessed.button({
-			parent: form_thing,
+			parent: buttonsContainer,
 			mouse: true,
 			keys: true,
 			shrink: true,
@@ -820,8 +820,8 @@ function escLeftByNum(num) { return `[${num}D` }
 function escRightByNum(num) { return `[${num}C` }
 function escUpByNum(num) { return `[${num}A` }
 function escDownByNum(num) { return `[${num}B` }
-function findCursor(terminal = XTermTestv2) { return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY] }
-function goToTermPosStr(arr1, terminal = XTermTestv2) {
+function findCursor(terminal = ImageScreenTerm) { return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY] }
+function goToTermPosStr(arr1, terminal = ImageScreenTerm) {
 	let arr2 = findCursor(terminal)
 	let Xpos = arr1[0] - arr2[0]
 	let Ypos = arr1[1] - arr2[1]
@@ -919,7 +919,7 @@ function mapTextPosition(textArr) {
 	}
 }
 
-function rollLog(terminal = XTermTestv2) {
+function rollLog(terminal = ImageScreenTerm) {
 	//set scroll to bottom
 	terminal.term.scrollToBottom()
 	let scrollAmount = terminal.term.buffer.active.cursorY + 1
@@ -928,7 +928,7 @@ function rollLog(terminal = XTermTestv2) {
   ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows - 1)}`)
 }
 
-async function scanlines(terminal = XTermTestv2, text = '', speed = 5, colorArr = []) {
+async function scanlines(terminal = ImageScreenTerm, text = '', speed = 5, colorArr = []) {
 	colorArr = colorArr ? colorArr : ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
 	let lines = fitLines(text, terminal.term.cols)
 	let arr2 = Array(colorArr.length).fill('')
@@ -952,7 +952,7 @@ async function scanlines(terminal = XTermTestv2, text = '', speed = 5, colorArr 
 	}
 }
 
-async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, gradientFunction, colorArr = []) {
+async function gradient_scanlines(terminal = ImageScreenTerm, text = "", speed = 5, gradientFunction, colorArr = []) {
 	let multiline = ``
 	let lorem_lines = fitLines(text, terminal.term.cols - 1)
 	for (let line of lorem_lines) {
@@ -1032,6 +1032,8 @@ async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, 
 
 	}
 }
+
+
 //
 //  TERMINAL WRITE FUNCTIONS
 //  END OF SECTION
@@ -1042,14 +1044,14 @@ async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, 
 //double check cursor is disabled on all subterminals and main one
 
 function toggleUi() {
-	form_thing.toggle()
-	XTermTestv2.toggle()
+	buttonsContainer.toggle()
+	ImageScreenTerm.toggle()
 	logs.toggle()
 	stats.toggle()
-	actions.toggle()
+	InventoryBox.toggle()
 }
 function toggleButtons() {
-	form_thing.toggle()
+	buttonsContainer.toggle()
 }
 
 async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
@@ -1112,7 +1114,7 @@ async function reset(){
 	refreshStats(thePlayer)
 	clearButtons()
 	logs.reset()
-	XTermTestv2.reset()
+	ImageScreenTerm.reset()
 	toggleUi()
 	screen.render()
 	box = createStatsBox()
@@ -1126,9 +1128,9 @@ async function reset(){
 	// buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
 	// buttonsArray = [];
 	stats.focus();
-	XTermTestv2.term.reset()
+	ImageScreenTerm.term.reset()
 	createButtons(temp_event1, story);
-	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
+	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 	resizeButtons();
 	stats.focus();
 	
@@ -1139,24 +1141,24 @@ async function reset(){
 //XTermTestv2.write(mountain)
 //Listeners for test buttons
 button1.on('press', function () {
-	form_thing.setContent('Canceled.');
-	XTermTestv2.term.clear();
-	XTermTestv2.term.reset();
-	XTermTestv2.writeSync(caleb);
+	buttonsContainer.setContent('Canceled.');
+	ImageScreenTerm.term.clear();
+	ImageScreenTerm.term.reset();
+	ImageScreenTerm.writeSync(caleb);
 	screen.render();
 });
 button2.on('press', function () {
 	//logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
-	XTermTestv2.term.clear()
-	XTermTestv2.term.reset()
-	XTermTestv2.writeSync(body)
+	ImageScreenTerm.term.clear()
+	ImageScreenTerm.term.reset()
+	ImageScreenTerm.writeSync(body)
 	screen.render();
 });
 
 //Listeners
 screen.on('resize', function () {
-	XTermTestv2.height = screen.height;
-	XTermTestv2.width = Math.floor(screen.width / 2);
+	ImageScreenTerm.height = screen.height;
+	ImageScreenTerm.width = Math.floor(screen.width / 2);
 	//logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
 	resizeButtons()
 });
@@ -1165,7 +1167,7 @@ screen.key(['escape', 'q', 'C-c'], function (ch, key) {
 	return process.exit(0);
 });
 screen.key('e', function () {
-	XTermTestv2.focus();
+	ImageScreenTerm.focus();
 	screen.render();
 });
 screen.key('p', function () {
@@ -1176,13 +1178,13 @@ screen.key('r', function () {
 });
 //test content key listener
 screen.key('y', function () {
-	form_thing.resetScroll()
-	buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
+	buttonsContainer.resetScroll()
+	buttonsArray.forEach((button) => { buttonsContainer.remove(button); button.destroy() })
 	buttonsArray = [];
 	stats.focus();
-	XTermTestv2.term.reset()
+	ImageScreenTerm.term.reset()
 	createButtons(temp_event1, story);
-	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
+	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 	resizeButtons();
 	stats.focus();
 });
@@ -1202,7 +1204,7 @@ screen.render()
 stats.focus()
 //check cursor hidden
 console.log('[?25l')
-XTermTestv2.writeSync('[?25l')
+ImageScreenTerm.writeSync('[?25l')
 logs.writeSync('[?25l')
 
 await (fillStatsRollBox(40, thePlayer, box))

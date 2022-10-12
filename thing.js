@@ -382,6 +382,34 @@ const form_thing = grid.set(0, 6, 6, 3, blessed.form, ({
 	}
 })).with(scroll.scroll, scroll.throttle)
 let box = createStatsBox()
+//stats box
+function createStatsBox() {
+	return blessed.box({
+		parent: screen,
+		top: 'center',
+		left: 'center',
+		width: '40%',
+		height: 10,
+		tags: true,
+		keys: true,
+		content: '{bold}hmm{/bold}!',
+		border: {
+			type: 'line'
+		},
+		style: {
+			fg: 'white',
+			//bg: 'magenta',
+			border: {
+				//fg: '#4b0082',
+				//bg: '#4b0082',
+			},
+			hover: {
+				bg: 'green'
+			}
+		}
+	});
+}
+
 
 //test button declarations
 let button1 = blessed.button({
@@ -608,10 +636,6 @@ async function eventHandler(gameEvent = temp_event1,) {
 		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
 	resolver()
-
-
-
-	
 }
 
 
@@ -1204,33 +1228,7 @@ function toggleUi() {
 function toggleButtons() {
 	form_thing.toggle()
 }
-//stats box
-function createStatsBox() {
-	return blessed.box({
-		parent: screen,
-		top: 'center',
-		left: 'center',
-		width: '40%',
-		height: 10,
-		tags: true,
-		keys: true,
-		content: '{bold}hmm{/bold}!',
-		border: {
-			type: 'line'
-		},
-		style: {
-			fg: 'white',
-			//bg: 'magenta',
-			border: {
-				//fg: '#4b0082',
-				//bg: '#4b0082',
-			},
-			hover: {
-				bg: 'green'
-			}
-		}
-	});
-}
+
 async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	await new Promise(resolve => setTimeout(resolve, speed))
 	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - ' HP: '.length - 2)} hp: ${player.hp}`)
@@ -1302,8 +1300,8 @@ async function reset(){
 	creatething()
 	await waitForClear();
 	//sample start code
-	buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
-	buttonsArray = [];
+	// buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
+	// buttonsArray = [];
 	stats.focus();
 	XTermTestv2.term.reset()
 	createButtons(temp_event1, story);

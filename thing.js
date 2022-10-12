@@ -14,7 +14,6 @@ import {copyMonster, monster} from './game-objects/mobs.js';
 import {chance2, resetRandoms} from './game-objects/random_nums.js';
 import {buttonsContainer, createStatsBox, ImageScreenTerm, InventoryBox, logs, program, screen, stats} from "./ui.js";
 import {escLeftByNum, escUpByNum, gradient_scanlines, rollLog} from "./writeMethods.js";
-
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
@@ -55,7 +54,7 @@ Integer velit neque,
 fermentum vel tempus non, 
 pulvinar id tellus.`
 
-var pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse()
+let pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse()
 
 
 let mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
@@ -163,8 +162,7 @@ let temp_event2 = new game_event({
 let testEventArr = [temp_event1, temp_event2,]
 
 //test content
-let body =
-	`[0m\r
+let body = `[0m\r
 \r
   [1;34m░░░░░░░░░░░░[0m\r
 [1;34m░░░░░[0m\r
@@ -182,8 +180,7 @@ let body =
     [1;31m♥♥♥♥[0m\r
 [1;31m♥♥♥♥♥[0m\r
 [1;31m♥♥[0m\r`
-let caleb =
-	`[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
+let caleb = `[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5;242;48;5;242m▄[48;5;242m [38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄▄[38;5;241;48;5;59m▄[38;5;241;48;5;241m▄▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[48;5;240m [38;5;240;48;5;240m▄[38;5;240;48;5;239m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m   [38;5;239;48;5;239m▄▄▄▄▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;239m▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄▄[m\r
 [38;5;241;48;5;241m▄[38;5;242;48;5;242m▄[48;5;242m  [38;5;242;48;5;242m▄▄[38;5;241;48;5;241m▄[48;5;241m  [38;5;59;48;5;241m▄[48;5;59m [38;5;59;48;5;59m▄[38;5;241;48;5;241m▄[48;5;241m [38;5;241;48;5;241m▄[38;5;241;48;5;59m▄[48;5;59m [38;5;240;48;5;241m▄[38;5;59;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[48;5;240m [38;5;240;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄▄▄[38;5;59;48;5;240m▄[38;5;240;48;5;240m▄▄[38;5;239;48;5;239m▄▄▄▄▄[48;5;239m  [38;5;239;48;5;239m▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;237m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄[48;5;239m [38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[m\r
 [38;5;241;48;5;241m▄▄[38;5;242;48;5;242m▄▄▄▄[38;5;241;48;5;241m▄▄[48;5;241m [38;5;241;48;5;59m▄▄▄[38;5;241;48;5;241m▄▄[38;5;242;48;5;241m▄[38;5;241;48;5;241m▄▄[38;5;241;48;5;59m▄▄[38;5;241;48;5;241m▄[38;5;59;48;5;59m▄[38;5;240;48;5;240m▄▄[38;5;59;48;5;240m▄[38;5;241;48;5;240m▄[38;5;240;48;5;59m▄▄[38;5;95;48;5;95m▄▄[38;5;240;48;5;59m▄[38;5;239;48;5;239m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄▄[38;5;239;48;5;240m▄[38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄▄▄▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄▄▄[38;5;239;48;5;238m▄[48;5;239m  [38;5;239;48;5;239m▄▄▄▄[m\r
 [38;5;59;48;5;59m▄[38;5;59;48;5;241m▄[38;5;241;48;5;241m▄▄[38;5;242;48;5;242m▄[38;5;241;48;5;242m▄[38;5;241;48;5;241m▄▄▄▄▄[38;5;59;48;5;59m▄[38;5;241;48;5;241m▄▄▄▄▄▄▄▄[38;5;241;48;5;59m▄[38;5;101;48;5;59m▄[38;5;101;48;5;95m▄▄[38;5;240;48;5;101m▄[38;5;239;48;5;95m▄[38;5;241;48;5;241m▄[38;5;95;48;5;95m▄[38;5;240;48;5;59m▄[38;5;238;48;5;239m▄[38;5;237;48;5;238m▄[38;5;236;48;5;237m▄[38;5;235;48;5;238m▄[38;5;235;48;5;237m▄[38;5;236;48;5;237m▄[38;5;236;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄▄[48;5;239m [38;5;239;48;5;239m▄[38;5;238;48;5;239m▄[38;5;238;48;5;238m▄[38;5;238;48;5;239m▄[38;5;239;48;5;239m▄▄▄▄▄▄▄▄▄▄▄[38;5;238;48;5;238m▄[m\r
@@ -345,12 +342,12 @@ function resizeButtons() {
 		screen.render()
 	})
 }
-// handling creating of buttons from an event. writing body etc
+// handling creating of buttons from an event. writing body etc.
 // event reader
 // multiple functions, exuction may differ based on event type
 // messy, remove redundant code in future
 // the resize button cannot get a valid height and crashes on screen resize
-// if i attempt to remove all mentions of buttonsArray
+// if I attempt to remove all mentions of buttonsArray
 function clearButtons() {
 	buttonsArray.forEach((element) => { buttonsContainer.remove(element); element.destroy() })
 	buttonsArray = []
@@ -359,7 +356,7 @@ async function createButtons(gameEvent, storyObj = {}) {
 	eventHandler(gameEvent)
 	await waitForClear();
 	if (death){
-		reset()
+		await reset()
 		return 0
 	}
 	gameEvent['buttons'].forEach(item => {
@@ -401,7 +398,7 @@ async function createButtons(gameEvent, storyObj = {}) {
 	})
 	resizeButtons()
 }
-// basically to map event to a object using the event id as a key, 
+// basically to map event to an object using the event id as a key,
 // this is so that events can be looked up by button param then loaded
 // idea is for events eventually to be read from a json file
 function createEventsMap(eventsArrary = [], storyArr = {}) {
@@ -516,7 +513,7 @@ async function enemyAtack(monster,player,first=false) {
 		// add call to game over function
 	} else {
 		//await new Promise(resolve => setTimeout(resolve, 100))
-		logs.writeSync(chalk.red(`\n${monster.name} misses you!${'\n'}`))
+		logs.writeSync(chalk.red(`\n${monster.name} misses you!\n`))
 	}
 	if(first){
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
@@ -813,9 +810,9 @@ function toggleUi() {
 	stats.toggle()
 	InventoryBox.toggle()
 }
-function toggleButtons() {
-	buttonsContainer.toggle()
-}
+// function toggleButtons() {
+// 	buttonsContainer.toggle()
+// }
 
 async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	await new Promise(resolve => setTimeout(resolve, speed))
@@ -925,7 +922,7 @@ screen.on('resize', function () {
 	resizeButtons()
 });
 // Quit on Escape, q, or Control-C.
-screen.key(['escape', 'q', 'C-c'], function (ch, key) {
+screen.key(['escape', 'q', 'C-c'], function () {
 	return process.exit(0);
 });
 screen.key('e', function () {

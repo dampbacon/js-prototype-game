@@ -483,67 +483,7 @@ let button4 = blessed.button({
 	}
 });
 
-//Listeners for test buttons
-button1.on('press', function () {
-	form_thing.setContent('Canceled.');
-	XTermTestv2.term.clear();
-	XTermTestv2.term.reset();
-	XTermTestv2.writeSync(caleb);
-	screen.render();
-});
-button2.on('press', function () {
-	//logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
-	XTermTestv2.term.clear()
-	XTermTestv2.term.reset()
-	XTermTestv2.writeSync(body)
-	screen.render();
-});
-
-//Listeners
-screen.on('resize', function () {
-	XTermTestv2.height = screen.height;
-	XTermTestv2.width = Math.floor(screen.width / 2);
-	//logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
-	resizeButtons()
-});
-// Quit on Escape, q, or Control-C.
-screen.key(['escape', 'q', 'C-c'], function (ch, key) {
-	return process.exit(0);
-});
-
-screen.key('e', function () {
-	XTermTestv2.focus();
-	screen.render();
-});
-
-screen.key('p', function () {
-	screen.focusNext();
-});
-
-screen.key('r', function () {
-	reset()
-});
-
-//test content key listener
-screen.key('y', function () {
-	form_thing.resetScroll()
-	buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
-	buttonsArray = [];
-	stats.focus();
-	XTermTestv2.term.reset()
-	createButtons(temp_event1, story);
-	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
-	resizeButtons();
-	stats.focus();
-});
-
-screen.key('n', async function () {
-	clearButtons()
-	death = true;
-	encounterResolver()
-})
-
-//screen.render is essential for the correct screenlines amount to calculate
+//screen.render is essential for the correct screenlines amount to calculate inorder to resize buttons
 function resizeButtons() {
 	buttonsArray.forEach((element) => { element.width = form_thing.width - 5 })
 	screen.render()
@@ -622,12 +562,6 @@ function createEventsMap(eventsArrary = [], storyArr = {}) {
 	})
 }
 //return maybe idek
-createEventsMap(testEventArr, story)
-stats.focus()
-screen.render()
-
-
-
 // reads event package and sees which buttons to create only called after a combat
 function EPcontiansCombat(eventPackage) {
 	let events = eventPackage.eventsMap()
@@ -1385,21 +1319,78 @@ async function reset(){
 	stats.focus();
 	
 }
-
-
 //reminder how to convert ansi art to utf8
 //run script on cmder to convert my ansi art to utf8
 //ansiart2utf8 mountain.ans > sometext.txt
 //XTermTestv2.write(mountain)
+//Listeners for test buttons
+button1.on('press', function () {
+	form_thing.setContent('Canceled.');
+	XTermTestv2.term.clear();
+	XTermTestv2.term.reset();
+	XTermTestv2.writeSync(caleb);
+	screen.render();
+});
+button2.on('press', function () {
+	//logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
+	XTermTestv2.term.clear()
+	XTermTestv2.term.reset()
+	XTermTestv2.writeSync(body)
+	screen.render();
+});
+
+//Listeners
+screen.on('resize', function () {
+	XTermTestv2.height = screen.height;
+	XTermTestv2.width = Math.floor(screen.width / 2);
+	//logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
+	resizeButtons()
+});
+// Quit on Escape, q, or Control-C.
+screen.key(['escape', 'q', 'C-c'], function (ch, key) {
+	return process.exit(0);
+});
+screen.key('e', function () {
+	XTermTestv2.focus();
+	screen.render();
+});
+screen.key('p', function () {
+	screen.focusNext();
+});
+screen.key('r', function () {
+	reset()
+});
+//test content key listener
+screen.key('y', function () {
+	form_thing.resetScroll()
+	buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
+	buttonsArray = [];
+	stats.focus();
+	XTermTestv2.term.reset()
+	createButtons(temp_event1, story);
+	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
+	resizeButtons();
+	stats.focus();
+});
+
+screen.key('n', async function () {
+	clearButtons()
+	death = true;
+	encounterResolver()
+})
+
+createEventsMap(testEventArr, story)
 buttonsArray = [button1, button2, button3, button4];
 screen.render()
 resizeButtons()
 toggleUi()
 screen.render()
 stats.focus()
+//check cursor hidden
 console.log('[?25l')
 XTermTestv2.writeSync('[?25l')
 logs.writeSync('[?25l')
+
 await (fillStatsRollBox(40, thePlayer, box))
 refreshStats(thePlayer)
 box.focus()

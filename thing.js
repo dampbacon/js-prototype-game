@@ -842,8 +842,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			combatLogic(monster, encounterClr, player, false)
 		})
 	}
-	if(thePlayer.oil<1){
-	}else{
+	if('oil' in combatButtonsMap){
 		combatButtonsMap['oil'].on('press', async () => {
 			clearButtons();
 			if(playerWonInitiative&&firstLoop){
@@ -1524,7 +1523,6 @@ async function reset(){
 	await(fillStatsRollBox(40,thePlayer,box))
 	creatething()
 	await waitForClear();
-
 	//sample start code
 	buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
 	buttonsArray = [];

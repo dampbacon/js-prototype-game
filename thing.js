@@ -1226,8 +1226,20 @@ async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	startBox.focus()
 }
 await (fillStatsRollBox(40, thePlayer, box))
-creatething()
-
+box.key('enter', function () {
+	toggleUi()
+	box.hide()
+	box.destroy()
+	box=null
+	screen.render()
+})
+box.on('click', function () {
+	toggleUi()
+	box.hide()
+	box.destroy()
+	box=null
+	screen.render()
+})
 
 
 function refreshStats(player = thePlayer) {

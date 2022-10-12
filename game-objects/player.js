@@ -31,7 +31,7 @@ export class Player {
         this.weaponName = WEAPONS.GREAT_SWORD
         this.weapon = WEAPONmap[this.weaponName]
 
-        //change weapon later to be simaler to monster class
+        //change weapon later to be similar to monster class
         this.armour = ARMOURmap[ARMOUR.LOIN_CLOTH]
         this.ac = this.armour ? this.armour : 10
         this.depth = 0;
@@ -42,7 +42,7 @@ export class Player {
         this.scrolls = 2;
     }
     changeWeapon(weapon) {
-        //update basedamage and equip slot
+        //update base-damage and equip slot
         if (weapon) {
             this.weaponName= weapon
             this.weapon = WEAPONmap[weapon]
@@ -97,7 +97,7 @@ export class Player {
     rollInitiative(){
         return chance2.rpg('1d20',{sum: true})
     }
-    //`${this.weapon} + ${this.basedamage} :` +
+    //`${this.weapon} + ${this.base-damage} :` +
     rollSkillCheck(skill=0){
         return chance2.rpg('1d20',{sum: true})+skillBonus(skill)
     } 
@@ -112,17 +112,16 @@ class inventory {
     }
 }
 function skillBonus(skill = 10) {
-    let val = skill % 2 === 0 ? (skill - 10) / 2 : skill > 0 ? (skill - 1 - 10) / 2 : (skill + 1 - 10)
-    return val
+    return skill % 2 === 0 ? (skill - 10) / 2 : skill > 0 ? (skill - 1 - 10) / 2 : (skill + 1 - 10)
 }
 
 function getRandom(max) {
     return Math.floor(Math.random() * max);
 }
-//dice function d for readability as dice are often short handed as d6 d4 d8
-function d(n) {
-    return 1 + getRandom(n)
-}
+//dice function d for readability as dice are often short-handed as d6 d4 d8
+// function d(n) {
+//     return 1 + getRandom(n)
+// }
 
 
 

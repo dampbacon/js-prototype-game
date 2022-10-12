@@ -527,48 +527,48 @@ function clearButtons() {
 async function createButtons(gameEvent, storyObj = {}) {
 	eventHandler(gameEvent)
 	await waitForClear();
-	if (!death){
-		gameEvent['buttons'].forEach(item => {
-			let temp = new blessed.button({
-				parent: form_thing,
-				mouse: true,
-				keys: true,
-				shrink: true,
-				padding: {
-					left: 1,
-					right: 1
-				},
-				left: 1,
-				top: 1,
-				name: item[1],
-				content: item[1],
-				//shadow: true,
-				style: {
-					bg: '#0066CC',
-					focus: {
-						bg: '#cc0066',
-					},
-					hover: {
-						bg: '#cc0066',
-					},
-				},
-			})
-			buttonsArray.push(temp)
-			temp.on('press', function () {
-				clearButtons()
-				form_thing.setContent('')
-				screen.render();
-				createButtons(storyObj[item[0]], storyObj);
-				resizeButtons();
-				stats.focus();
-				screen.render();
-
-			})
-		})
-		resizeButtons()
-	}else{
+	if (death){
 		reset()
+		return 0
 	}
+	gameEvent['buttons'].forEach(item => {
+		let temp = new blessed.button({
+			parent: form_thing,
+			mouse: true,
+			keys: true,
+			shrink: true,
+			padding: {
+				left: 1,
+				right: 1
+			},
+			left: 1,
+			top: 1,
+			name: item[1],
+			content: item[1],
+			//shadow: true,
+			style: {
+				bg: '#0066CC',
+				focus: {
+					bg: '#cc0066',
+				},
+				hover: {
+					bg: '#cc0066',
+				},
+			},
+		})
+		buttonsArray.push(temp)
+		temp.on('press', function () {
+			clearButtons()
+			form_thing.setContent('')
+			screen.render();
+			createButtons(storyObj[item[0]], storyObj);
+			resizeButtons();
+			stats.focus();
+			screen.render();
+
+		})
+	})
+	resizeButtons()
 }
 // basically to map event to a object using the event id as a key, 
 // this is so that events can be looked up by button param then loaded
@@ -697,7 +697,7 @@ async function combat(combatEvent) {
 	//maybe some effect
 	let encounterCleared = false;
 	let monster = copyMonster(tempMonster)
-	combatLogic(monster, encounterCleared)
+	combatLogic(monster, encounterCleared,thePlayer,true)
 	//should be attack buttons
 	//console.log("encounter cleared")
 }
@@ -729,6 +729,15 @@ async function enemyAtack(monster,player,first=false) {
 	}
 }
 
+function clearCombat(logs){
+	clearButtons();
+	encounterResolver()
+	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
+	logs.writeSync(`\n${chalk.yellow(`You defeated the enemy!`)}`);
+	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
+}
+
+
 
 async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player = thePlayer, firstLoop=true) {
 	let monster = monsterCopy
@@ -746,7 +755,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 	createCombatButtons()
 	// initiative~ ────────────────────────
 	//if (inititve<enemy)
-	buttonsArray[0].on('press', async () => {
+	combatButtonsMap['attack'].on('press', async () => {
 		//attack placeholder
 		if((logs.term.rows-2)<=logs.term.buffer.active.cursorY){
 			logs.writeSync(escUpByNum(1))
@@ -775,12 +784,8 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 		if (monster.hp <= 0) {
 			await new Promise(resolve => setTimeout(resolve, 100))
 			encounterClr = true;
-			clearButtons();
-			encounterResolver()
-			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
-			logs.writeSync(`\n${chalk.yellow(`You defeated the enemy!`)}`);
-			logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
-			return encounterClr
+			clearCombat(logs)
+			//return encounterClr
 		} else {
 			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 			combatLogic(monster, encounterClr, player, false)
@@ -788,7 +793,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 		//set flag combat done or something
 		//if (encounterCleared) createButtons(combatEvent, buttonsArray, story)
 	})
-	buttonsArray[1].on('press', async () => {
+	combatButtonsMap['flee'].on('press', async () => {
 		let dexSave=player.rollSkillCheck(player.dex)
 		if(dexSave>=10 + monster.hitDie){
 			logs.writeSync(`${!playerWonInitiative&&firstLoop?escUpByNum(1)+'\r':''}${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
@@ -798,8 +803,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			encounterClr = true;
 			clearButtons();
 			encounterResolver()
-			return encounterClr
-
+			//return encounterClr
 		}
 		else{
 			clearButtons();
@@ -814,9 +818,8 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			combatLogic(monster, encounterClr, player, false)
 		}
 	})
-	if(thePlayer.potions<1){
-	}else{
-		buttonsArray[3].on('press', async () => {
+	if('potion' in combatButtonsMap){
+		combatButtonsMap['potion'].on('press', async () => {
 			clearButtons();
 			if(playerWonInitiative&&firstLoop){
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
@@ -834,12 +837,14 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			thePlayer.potions--
 			refreshStats()
 			await enemyAtack(monster,player)
+			if(player.potions<1){combatButtonsMap['potion'].destroy()}
+			screen.render()
 			combatLogic(monster, encounterClr, player, false)
 		})
 	}
 	if(thePlayer.oil<1){
 	}else{
-		buttonsArray[4].on('press', async () => {
+		combatButtonsMap['oil'].on('press', async () => {
 			clearButtons();
 			if(playerWonInitiative&&firstLoop){
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
@@ -859,12 +864,8 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			if (monster.hp <= 0) {
 				await new Promise(resolve => setTimeout(resolve, 100))
 				encounterClr = true;
-				clearButtons();
-				encounterResolver()
-				logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
-				logs.writeSync(`\n${chalk.yellow(`You defeated the enemy!`)}`);
-				logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
-				return encounterClr
+				clearCombat(logs)
+				//return encounterClr
 			} else {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 				combatLogic(monster, encounterClr, player, false)
@@ -882,10 +883,11 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 }
 
 
-
-
+let combatButtonsMap = {}
 function createCombatButtons() {
 	clearButtons()
+	combatButtonsMap = {}
+	let cbt=combatButtonsMap
 	let attack = new blessed.button({
 		parent: form_thing,
 		mouse: true,
@@ -910,6 +912,7 @@ function createCombatButtons() {
 			},
 		},
 	})
+	cbt[attack.name] = attack
 	let flee = new blessed.button({
 		parent: form_thing,
 		mouse: true,
@@ -934,6 +937,7 @@ function createCombatButtons() {
 			},
 		},
 	})
+	cbt[flee.name] = flee
 	let chatUp = new blessed.button({
 		parent: form_thing,
 		mouse: true,
@@ -958,55 +962,66 @@ function createCombatButtons() {
 			},
 		},
 	})
-	let potion = new blessed.button({
-		parent: form_thing,
-		mouse: true,
-		keys: true,
-		shrink: true,
-		padding: {
+	cbt[chatUp.name] = chatUp
+	let potion
+	if(thePlayer.potions>0){
+		potion = new blessed.button({
+			parent: form_thing,
+			mouse: true,
+			keys: true,
+			shrink: true,
+			padding: {
+				left: 1,
+				right: 1
+			},
 			left: 1,
-			right: 1
-		},
-		left: 1,
-		top: 1,
-		name: 'potion',
-		content: `use potion, ${thePlayer.potions} left`,
-		//shadow: true,
-		style: {
-			bg: thePlayer.potions>0?'#880808':'#5A5A5A',
-			focus: {
-				bg: '#ECE81A',
+			top: 1,
+			name: 'potion',
+			content: `use potion, ${thePlayer.potions} left`,
+			//shadow: true,
+			style: {
+				bg: thePlayer.potions>0?'#880808':'#5A5A5A',
+				focus: {
+					bg: '#ECE81A',
+				},
+				hover: {
+					bg: '#ECE81A',
+				},
 			},
-			hover: {
-				bg: '#ECE81A',
+		})
+		cbt[potion.name] = potion
+	}
+	let oil
+	if(thePlayer.oil>0){
+		oil = new blessed.button({
+			parent: form_thing,
+			mouse: true,
+			keys: true,
+			shrink: true,
+			padding: {
+				left: 1,
+				right: 1
 			},
-		},
-	})
-	let oil = new blessed.button({
-		parent: form_thing,
-		mouse: true,
-		keys: true,
-		shrink: true,
-		padding: {
 			left: 1,
-			right: 1
-		},
-		left: 1,
-		top: 1,
-		name: 'oil',
-		content: `throw oil, ${thePlayer.oil} left`,
-		//shadow: true,
-		style: {
-			bg: thePlayer.oil>0?'#880808':'#5A5A5A',
-			focus: {
-				bg: '#ECE81A',
+			top: 1,
+			name: 'oil',
+			content: `throw oil, ${thePlayer.oil} left`,
+			//shadow: true,
+			style: {
+				bg: thePlayer.oil>0?'#880808':'#5A5A5A',
+				focus: {
+					bg: '#ECE81A',
+				},
+				hover: {
+					bg: '#ECE81A',
+				},
 			},
-			hover: {
-				bg: '#ECE81A',
-			},
-		},
-	})
-	buttonsArray.push(attack, flee, chatUp, potion, oil)
+		})
+		cbt[oil.name] = oil
+	}
+	for (const key in cbt) {
+		buttonsArray.push(cbt[key])
+	}
 	resizeButtons()
 	stats.focus()
 	screen.render()

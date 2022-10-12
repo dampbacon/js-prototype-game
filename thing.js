@@ -25,11 +25,24 @@ const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
 let death = false;
+let buttonsArray = [];
 let story = {}
+let combatButtonsMap = {}
+let thePlayer = new Player("name")
+
 
 
 // test content
-
+let tempMonster = new monster({
+	name: "testCreature",
+	hitDie: 1,
+	ac: 6,
+	morale: 6,
+	weapon: "ruler",
+	dmgDie: 6,
+	aggro: 1,
+	rarity: 1
+})
 let rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
 let rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
 
@@ -143,7 +156,7 @@ let temp_event2 = new game_event({
 		},
 	},
 	toScreen: {
-		toScreen: "~~~AAAA~~~~",
+		toScreen: bb,
 		AnsiFile: {
 			exists: false,
 			url: '',
@@ -371,6 +384,7 @@ const form_thing = grid.set(0, 6, 6, 3, blessed.form, ({
 	}
 })).with(scroll.scroll, scroll.throttle)
 
+let box = createStatsBox()
 
 //test button declarations
 let button1 = blessed.button({
@@ -468,16 +482,6 @@ let button4 = blessed.button({
 		}
 	}
 });
-let buttonsArray = [button1, button2, button3, button4];
-
-// term.write('\x1b')
-// // First \n will cancel any existing escape or go to new line
-// // Then the \n\r will put the cursor at the start of the next line
-// term.write('\n\n\r')
-// term.clear()
-screen.render()
-resizeButtons()
-
 
 //Listeners for test buttons
 button1.on('press', function () {
@@ -687,33 +691,19 @@ function kill(){
 	encounterResolver()
 }
 
-let test=3
 // resume execution after combat 
-// enounter clear promise
+// enounter clear promise/event package clear promise
 let waitForClearResolve
 function waitForClear() {return new Promise((resolve) => {waitForClearResolve = resolve})}
 function resolver() {if (waitForClearResolve) {waitForClearResolve()}}
-//TURNS PROMISES
+//combat promise
 let waitForCombatResolve
 function waitForCombat() {return new Promise((resolve) => {waitForCombatResolve = resolve});}
 function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve()}
-let tempMonster = new monster({
-	name: "testCreature",
-	hitDie: 1,
-	ac: 6,
-	morale: 6,
-	weapon: "ruler",
-	dmgDie: 6,
-	aggro: 1,
-	rarity: 1
-})
+
 
 async function combat(combatEvent) {
 	form_thing.setContent('')
-	// const enemy = combatEvent.enemy
-	// const enemyHp = enemy.hp
-	//not always true but a to simplify for now
-	//let enemyHp=10
 	logs.writeSync(escUpByNum(1))
 	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
 	logs.writeSync(`\n${chalk.yellow(`Combat Start!`)}`);
@@ -723,14 +713,9 @@ async function combat(combatEvent) {
 		//provoke or somthing
 		return 0
 	}
-	//combat buttons
-	//toggle button box while enemy takes turn
-	//turn has a short delay for enemy so it doesnt feel static
-	//maybe some effect
 	let monster = copyMonster(tempMonster)
 	combatLogic(monster,thePlayer,true)
-	//should be attack buttons
-	//console.log("encounter cleared")
+
 }
 // moster picker in random event later
 async function enemyAtack(monster,player,first=false) {
@@ -898,7 +883,6 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 }
 
 
-let combatButtonsMap = {}
 function createCombatButtons() {
 	clearButtons()
 	combatButtonsMap = {}
@@ -1041,8 +1025,6 @@ function createCombatButtons() {
 	stats.focus()
 	screen.render()
 }
-
-
 //CSI (Control Sequence Introducer) sequences TEST ~ will be used to animate in the future
 //test async
 //test code escape sequences \033[D\033[D\033[D. maybe use  char
@@ -1054,10 +1036,8 @@ function createCombatButtons() {
 //down - "\033[B"
 //left - "\033[D"
 //right - "\033[C"
-
-let scrollPosition = 0;
-XTermTestv2.term.onScroll((apple) => { scrollPosition = apple.valueOf() })
-
+// let scrollPosition = 0;
+// XTermTestv2.term.onScroll((apple) => { scrollPosition = apple.valueOf() })
 //
 //  TERMINAL WRITE FUNCTIONS
 //  MOVE TO SEPERATE FILE LATER
@@ -1282,8 +1262,6 @@ async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, 
 //  TERMINAL WRITE FUNCTIONS
 //  END OF SECTION
 //
-
-
 //ESC[?25l	make cursor invisible
 //ESC[?25h	make cursor visible
 //
@@ -1299,16 +1277,10 @@ function toggleUi() {
 function toggleButtons() {
 	form_thing.toggle()
 }
-
-toggleUi()
-screen.render()
-stats.focus()
 //stats box
-let box = createStatsBox()
-screen.append(box);
-screen.render()
 function createStatsBox() {
 	return blessed.box({
+		parent: screen,
 		top: 'center',
 		left: 'center',
 		width: '40%',
@@ -1332,13 +1304,6 @@ function createStatsBox() {
 		}
 	});
 }
-let thePlayer = new Player("name")
-console.log('[?25l')
-XTermTestv2.writeSync('[?25l')
-logs.writeSync('[?25l')
-
-
-// maybe make into an inventory screen later~
 async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	await new Promise(resolve => setTimeout(resolve, speed))
 	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - ' HP: '.length - 2)} hp: ${player.hp}`)
@@ -1360,21 +1325,7 @@ async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	screen.render()
 	startBox.focus()
 }
-await (fillStatsRollBox(40, thePlayer, box))
-box.key('enter', function () {
-	toggleUi()
-	box.hide()
-	box.destroy()
-	box=null
-	screen.render()
-})
-box.on('click', function () {
-	toggleUi()
-	box.hide()
-	box.destroy()
-	box=null
-	screen.render()
-})
+
 
 function refreshStats(player = thePlayer) {
 	stats.setContent(
@@ -1388,17 +1339,6 @@ ${chalk.magenta("dmg")} = ${thePlayer.basedamage}
 ${chalk.magenta("mag")} =`)
 	screen.render()
 }
-
-refreshStats()
-box.focus()
-
-
-//reminder how to convert ansi art to utf8
-//run script on cmder to convert my ansi art to utf8
-//ansiart2utf8 mountain.ans > sometext.txt
-//XTermTestv2.write(mountain)
-
-refreshStats(thePlayer)
 function creatething(){
 	box.key('enter', function () {
 		toggleUi()
@@ -1445,3 +1385,35 @@ async function reset(){
 	stats.focus();
 	
 }
+
+
+//reminder how to convert ansi art to utf8
+//run script on cmder to convert my ansi art to utf8
+//ansiart2utf8 mountain.ans > sometext.txt
+//XTermTestv2.write(mountain)
+buttonsArray = [button1, button2, button3, button4];
+screen.render()
+resizeButtons()
+toggleUi()
+screen.render()
+stats.focus()
+console.log('[?25l')
+XTermTestv2.writeSync('[?25l')
+logs.writeSync('[?25l')
+await (fillStatsRollBox(40, thePlayer, box))
+refreshStats(thePlayer)
+box.focus()
+box.key('enter', function () {
+	toggleUi()
+	box.hide()
+	box.destroy()
+	box=null
+	screen.render()
+})
+box.on('click', function () {
+	toggleUi()
+	box.hide()
+	box.destroy()
+	box=null
+	screen.render()
+})

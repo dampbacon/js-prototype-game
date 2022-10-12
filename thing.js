@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-import blessed from 'blessed';
+import blessedpkg from 'blessed';
 import chalk from 'chalk';
 import gradient from 'gradient-string';
 import {game_event, game_event_enemy, game_event_gain_item} from './game-objects/game_events.js';
@@ -17,6 +17,7 @@ import {escLeftByNum, escUpByNum, gradient_scanlines, rollLog} from "./writeMeth
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
+const {blessed} = blessedpkg
 let death = false;
 let buttonsArray = [];
 let story = {}
@@ -233,7 +234,7 @@ screen.append(logs)
 
 
 //test button declarations
-let button1 = blessed.button({
+let button1 = blessedpkg.button({
 	parent: buttonsContainer,
 	mouse: true,
 	keys: true,
@@ -257,7 +258,7 @@ let button1 = blessed.button({
 	}
 });
 
-let button2 = blessed.button({
+let button2 = blessedpkg.button({
 	parent: buttonsContainer,
 	mouse: true,
 	keys: true,
@@ -281,7 +282,7 @@ let button2 = blessed.button({
 	}
 });
 
-let button3 = blessed.button({
+let button3 = blessedpkg.button({
 	parent: buttonsContainer,
 	mouse: true,
 	keys: true,
@@ -305,7 +306,7 @@ let button3 = blessed.button({
 	}
 });
 
-let button4 = blessed.button({
+let button4 = blessedpkg.button({
 	parent: buttonsContainer,
 	mouse: true,
 	keys: true,
@@ -360,7 +361,7 @@ async function createButtons(gameEvent, storyObj = {}) {
 		return 0
 	}
 	gameEvent['buttons'].forEach(item => {
-		let temp = new blessed.button({
+		let temp = new blessedpkg.button({
 			parent: buttonsContainer,
 			mouse: true,
 			keys: true,
@@ -659,7 +660,7 @@ function createCombatButtons() {
 	clearButtons()
 	combatButtonsMap = {}
 	let cbt=combatButtonsMap
-	let attack = new blessed.button({
+	let attack = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
 		keys: true,
@@ -684,7 +685,7 @@ function createCombatButtons() {
 		},
 	})
 	cbt[attack.name] = attack
-	let flee = new blessed.button({
+	let flee = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
 		keys: true,
@@ -709,7 +710,7 @@ function createCombatButtons() {
 		},
 	})
 	cbt[flee.name] = flee
-	let chatUp = new blessed.button({
+	let chatUp = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
 		keys: true,
@@ -736,7 +737,7 @@ function createCombatButtons() {
 	cbt[chatUp.name] = chatUp
 	let potion
 	if(thePlayer.potions>0){
-		potion = new blessed.button({
+		potion = new blessedpkg.button({
 			parent: buttonsContainer,
 			mouse: true,
 			keys: true,
@@ -764,7 +765,7 @@ function createCombatButtons() {
 	}
 	let oil
 	if(thePlayer.oil>0){
-		oil = new blessed.button({
+		oil = new blessedpkg.button({
 			parent: buttonsContainer,
 			mouse: true,
 			keys: true,

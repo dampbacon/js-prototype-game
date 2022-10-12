@@ -381,7 +381,6 @@ const form_thing = grid.set(0, 6, 6, 3, blessed.form, ({
 		}
 	}
 })).with(scroll.scroll, scroll.throttle)
-
 let box = createStatsBox()
 
 //test button declarations
@@ -480,7 +479,6 @@ let button4 = blessed.button({
 		}
 	}
 });
-
 //screen.render is essential for the correct screenlines amount to calculate inorder to resize buttons
 function resizeButtons() {
 	buttonsArray.forEach((element) => { element.width = form_thing.width - 5 })
@@ -809,9 +807,6 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 
 
 	//generate listener for potion button if potions button exists
-	
-
-
 }
 
 
@@ -1020,7 +1015,7 @@ async function slowWrite(str = '', terminal, speed) {
 
 function fitLines(str = '', cols = 0) {
 	//various checks for characters that screw up the line wrapping
-	// regex screws up approstrophes
+	// regex screws up apostrophes
 	let strArr = str.split('\n')
 	strArr = strArr.filter(n => n)
 	strArr = strArr.join(' ')

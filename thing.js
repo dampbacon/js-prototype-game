@@ -1,26 +1,19 @@
 #!/usr/bin/env node
 'use strict';
 
-import XTermNew from './blessed-xterm/blessed-xterm.js';
 import blessed from 'blessed';
 import chalk from 'chalk';
-import BlessedContrib from 'blessed-contrib';
 import gradient from 'gradient-string';
-import chalkAnimation from 'chalk-animation';
-import { game_event, game_event_enemy, game_event_gain_item } from './game-objects/game_events.js';
-import { clearInterval } from 'timers';
-import { Player } from './game-objects/player.js';
-import { hrtime } from 'node:process';
-import os from 'os';
+import {game_event, game_event_enemy, game_event_gain_item} from './game-objects/game_events.js';
+import {Player} from './game-objects/player.js';
 import './blessed/patches.cjs';
-import * as scroll from './blessed/scroll.cjs';
-import fs from 'fs';
 import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
-import { monster, copyMonster } from './game-objects/mobs.js';
-import {spawn} from 'child_process';
-import { chance2, resetRandoms } from './game-objects/random_nums.js';
+import {copyMonster, monster} from './game-objects/mobs.js';
+import {chance2, resetRandoms} from './game-objects/random_nums.js';
+import {actions, createStatsBox, form_thing, logs, program, screen, stats, XTermTestv2} from "./ui.js";
+
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
@@ -29,7 +22,7 @@ let buttonsArray = [];
 let story = {}
 let combatButtonsMap = {}
 let thePlayer = new Player("name")
-
+let box=createStatsBox()
 // test content
 let tempMonster = new monster({
 	name: "testCreature",
@@ -234,181 +227,11 @@ but you’d best hurry back to the Redscale Army, you brat!” `
 
 
 
-const program = blessed.program()
 program.cursorColor('000000')
-const screen = blessed.screen({
-	program: program,
-	fastCSR: true,
-	dockBorders: true,
-	fullUnicode: true,
-	cursor: {
-		shape: {
-			bg: 'red',
-			fg: 'white',
-		},
-		blink: false
-	}
-});
 screen.title = '~game~';
 screen.program.hideCursor(true);
-const grid = new BlessedContrib.grid({ rows: 12, cols: 12, screen: screen })
-const XTermTestv2 = new XTermNew({
-	top: 0,
-	bottom: 0,
-	width: '50%',
-	align: 'left',
-	tags: true,
-	keys: true,
-	mouse: true,
-	border: 'line',
-	style: {
-		label: { bold: true },
-		focus: { border: { fg: "green" } }
-	},
-	scrollbar: {
-		ch: ' ',
-		style: { bg: 'white' },
-		track: {
-			style: { bg: 'grey' },
-		},
-	},
-}).with(scroll.scroll, scroll.throttle)
 screen.append(XTermTestv2)
-const logs = new XTermNew({
-	top: '50%',
-	bottom: 0,
-	left: '50%',
-	width: '50%',
-	align: 'left',
-	tags: true,
-	keys: true,
-	mouse: true,
-	border: 'line',
-	style: {
-		label: { bold: true },
-		focus: { border: { fg: "green" } }
-	},
-	scrollbar: {
-		ch: ' ',
-		style: { bg: 'white' },
-		track: {
-			style: { bg: 'grey' },
-		},
-	},
-}).with(scroll.scroll, scroll.throttle)
 screen.append(logs)
-const stats = grid.set(0, 9, 6, 1, blessed.box, {
-	tags: true,
-	padding: {
-		left: 1,
-	},
-	label: '{bold}stats{/bold}',
-	alwaysScroll: 'true',
-	scrollable: 'true',
-	scrollbars: 'true',
-	scrollbar: {
-		ch: ' ',
-		track: {
-			bg: 'blue'
-		},
-		style: {
-			inverse: true
-		}
-	},
-	keys: true,
-	border: {
-		type: 'line'
-	},
-	style: {
-		border: {
-			fg: '#f0f0f0'
-		},
-		hover: {
-			//bg: 'green'
-		},
-		focus: { border: { fg: "green" } }
-	}
-
-}
-).with(scroll.scroll, scroll.throttle)
-//in the future will list inventory items
-const actions = grid.set(0, 10, 6, 2, blessed.list, {
-	tags: true,
-	scrollable: true,
-	mouse: true,
-	keys: true,
-	label: '{bold}actions{/bold}',
-	content: 'thing',
-	border: {
-		type: 'line'
-	},
-	style: {
-		border: {
-			fg: 'magenta'
-		},
-		hover: {
-			//bg: 'green'
-		},
-		focus: { border: { fg: "green" } }
-	}
-})
-//button container
-const form_thing = grid.set(0, 6, 6, 3, blessed.form, ({
-	parent: screen,
-	keys: true,
-	label: `choose ~ ${chalk.green('w s')} to scroll`,
-	//content: 'test?',
-	padding: {
-		right: 0,
-	},
-	style: {
-		//bg: '#515151',
-		//border: {
-		//bg: '#000033'},
-		focus: { border: { fg: "green" } }
-	},
-	alwaysScroll: 'true',
-	scrollable: 'true',
-	scrollbars: 'true',
-	scrollbar: {
-		ch: chalk.green.bgBlueBright('\u2592'),
-		track: {
-			bg: '#630330',
-			fg: 'red'
-		},
-		style: {
-			inverse: true
-		}
-	}
-})).with(scroll.scroll, scroll.throttle)
-let box = createStatsBox()
-//stats box
-function createStatsBox() {
-	return blessed.box({
-		parent: screen,
-		top: 'center',
-		left: 'center',
-		width: '40%',
-		height: 10,
-		tags: true,
-		keys: true,
-		content: '{bold}hmm{/bold}!',
-		border: {
-			type: 'line'
-		},
-		style: {
-			fg: 'white',
-			//bg: 'magenta',
-			border: {
-				//fg: '#4b0082',
-				//bg: '#4b0082',
-			},
-			hover: {
-				bg: 'green'
-			}
-		}
-	});
-}
 
 
 //test button declarations

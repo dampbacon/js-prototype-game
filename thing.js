@@ -338,7 +338,7 @@ const actions = grid.set(0, 10, 6, 2, blessed.list, {
 	mouse: true,
 	keys: true,
 	label: '{bold}actions{/bold}',
-	content: thing,
+	content: 'thing',
 	border: {
 		type: 'line'
 	},

@@ -1226,13 +1226,7 @@ async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	startBox.focus()
 }
 await (fillStatsRollBox(40, thePlayer, box))
-box.key('enter', function () {
-	toggleUi()
-	box.hide()
-	box.destroy()
-	box=null
-	screen.render()
-})
+creatething()
 
 
 
@@ -1360,6 +1354,14 @@ but you’d best hurry back to the Redscale Army, you brat!” `
 //done but keeping comments incase i see another error
 function creatething(){
 	box.key('enter', function () {
+		toggleUi()
+		box.hide()
+		box.destroy()
+		box=null
+		screen.render()
+		resolver()
+	})
+	box.on('click', function () {
 		toggleUi()
 		box.hide()
 		box.destroy()

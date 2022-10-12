@@ -36,9 +36,9 @@ export class Player {
         this.ac = this.armour ? this.armour : 10
         this.depth = 0;
         this.gold = 0;
-        this.oil = 4;
+        this.oil = 2;
         //later include identify potion mechanic
-        this.potions = 4;
+        this.potions = 2;
         this.scrolls = 2;
     }
     changeWeapon(weapon) {

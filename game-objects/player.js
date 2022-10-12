@@ -22,9 +22,9 @@ export class Player {
         this.dex= this.rollStat();
         this.cha= this.rollStat();
         this.int= this.rollStat();
-
-        this.hp = (chance1.rpg('2d6',{sum: true})+this.str)>0?(chance1.rpg('2d6',{sum: true})+this.str):1;
-        this.hpMax = this.hp;
+        let initial = (chance1.rpg('2d6',{sum: true})+this.str)>0?(chance1.rpg('2d6',{sum: true})+this.str):1;
+        this.hp = initial
+        this.hpMax = initial
         this.slots = { weapon: true, shield: false, head: false, armor: true, ring: false }
         //this.items = Array(5).fill(0)
         this.basedamage = this.str
@@ -35,6 +35,11 @@ export class Player {
         this.armour = ARMOURmap[ARMOUR.LOIN_CLOTH]
         this.ac = this.armour ? this.armour : 10
         this.depth = 0;
+        this.gold = 0;
+        this.oil = 4;
+        //later include identify potion mechanic
+        this.potions = 4;
+        this.scrolls = 2;
     }
     changeWeapon(weapon) {
         //update basedamage and equip slot

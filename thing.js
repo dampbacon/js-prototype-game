@@ -20,7 +20,7 @@ import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
 import { monster, copyMonster } from './game-objects/mobs.js';
 import {spawn} from 'child_process';
-import { resetRandoms } from './game-objects/random_nums.js';
+import { chance2, resetRandoms } from './game-objects/random_nums.js';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
@@ -814,6 +814,70 @@ async function combatLogic(monsterCopy /*make into enemy*/, encounterClr, player
 			combatLogic(monster, encounterClr, player, false)
 		}
 	})
+	if(thePlayer.potions<1){
+	}else{
+		buttonsArray[3].on('press', async () => {
+			clearButtons();
+			if(playerWonInitiative&&firstLoop){
+				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+			}else if(!firstLoop){
+				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+			}
+			let heal=chance2.rpg('2d4', {sum: true})+4
+			logs.writeSync(thePlayer.hp+" "+thePlayer.hpMax)
+			if((thePlayer.hp+heal)>thePlayer.hpMax){
+				logs.writeSync(`${chalk.yellow(`AAAAAAA You drink a potion! you heal for ${thePlayer.hpMax-thePlayer.hp} hp!`)}`);
+			}else{
+				logs.writeSync(`${chalk.yellow(`BBBBBBB You drink a potion! you heal for ${heal} hp!`)}`);
+			}
+			thePlayer.increaseHP(heal)
+			thePlayer.potions--
+			refreshStats()
+			await enemyAtack(monster,player)
+			combatLogic(monster, encounterClr, player, false)
+		})
+	}
+	if(thePlayer.oil<1){
+	}else{
+		buttonsArray[4].on('press', async () => {
+			clearButtons();
+			if(playerWonInitiative&&firstLoop){
+				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+			}else if(!firstLoop){
+				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+			}
+			let damage = chance2.rpg('4d6', {sum: true})+4
+			logs.writeSync(`${chalk.yellow(`You throw oil on the enemy! dealing 4d6+4:${damage} fire damage!`)}`);
+			monster.hp-=damage
+			thePlayer.oil--
+			await new Promise(resolve => setTimeout(resolve, 100))
+			if (monster.hp > 0) {
+				await enemyAtack(monster,player)
+			//await new Promise(resolve => setTimeout(resolve, 1000))
+			}// MERGE WITH IF BELLOW LATER
+			await new Promise(resolve => setTimeout(resolve, 50))
+			if (monster.hp <= 0) {
+				await new Promise(resolve => setTimeout(resolve, 100))
+				encounterClr = true;
+				clearButtons();
+				encounterResolver()
+				logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
+				logs.writeSync(`\n${chalk.yellow(`You defeated the enemy!`)}`);
+				logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
+				return encounterClr
+			} else {
+				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
+				combatLogic(monster, encounterClr, player, false)
+			}
+		})
+	}
+
+
+
+	//generate listener for potion button if potions button exists
+	
+
+
 	return encounterClr
 }
 
@@ -894,9 +958,55 @@ function createCombatButtons() {
 			},
 		},
 	})
-	buttonsArray.push(attack)
-	buttonsArray.push(flee)
-	buttonsArray.push(chatUp)
+	let potion = new blessed.button({
+		parent: form_thing,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'potion',
+		content: `use potion, ${thePlayer.potions} left`,
+		//shadow: true,
+		style: {
+			bg: thePlayer.potions>0?'#880808':'#5A5A5A',
+			focus: {
+				bg: '#ECE81A',
+			},
+			hover: {
+				bg: '#ECE81A',
+			},
+		},
+	})
+	let oil = new blessed.button({
+		parent: form_thing,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'oil',
+		content: `throw oil, ${thePlayer.oil} left`,
+		//shadow: true,
+		style: {
+			bg: thePlayer.oil>0?'#880808':'#5A5A5A',
+			focus: {
+				bg: '#ECE81A',
+			},
+			hover: {
+				bg: '#ECE81A',
+			},
+		},
+	})
+	buttonsArray.push(attack, flee, chatUp, potion, oil)
 	resizeButtons()
 	stats.focus()
 	screen.render()

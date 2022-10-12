@@ -25,9 +25,35 @@ const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
 let death = false;
+let story = {}
+
+
 // test content
-let
-	mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
+
+let rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
+let rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
+
+//test string
+let lorem =
+	`Lorem ipsum dolor sit amet,
+consectetur adipiscing elit. 
+Morbi varius ut augue ac sagittis. 
+Vivamus lectus lacus, commodo eu ligula pulvinar, 
+tincidunt congue sapien. 
+Morbi fringilla sollicitudin ante eget accumsan. 
+Aliquam diam felis, 
+posuere sit amet felis id, 
+condimentum rutrum dolor. 
+Donec semper sagittis condimentum. 
+Mauris vitae pellentesque tellus. 
+Integer velit neque, 
+fermentum vel tempus non, 
+pulvinar id tellus.`
+
+var pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse()
+
+
+let mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
 [37m[40m                  [97m[40m▒░[37m[40m   [97m[40m░██▓▓[90m[40m░░[37m[40m                        [m
 [37m[40m                 [97m[40m█▓░░[37m[40m [97m[40m░▓█████▓▒░░[37m[40m [90m[40m░[37m[40m                   [m
 [37m[40m               [97m[40m▓▓▒░░▓███▒█▒▒███▓▒░[90m[40m░[37m[40m  [90m[40m░[37m[40m                [m
@@ -53,6 +79,26 @@ let
 [37m[40m [33m[40m▀▀[37m[43m▄▄[37m[40m▄▄▒    ▀▀▀▀▀     [94m[40m█▓█▒█▒[37m[40m                          [m
 [37m[40m                     [94m[40m░▓▒░░[37m[40m                            [m
 [37m[40m                                                      [m
+`
+let bb = `    ${chalk.bold(`THE VILLAGE`)}
+[37m[40m                                           [m
+[37m[40m                   [33m[40m▒▒▒░░[37m[40m                   [m
+[37m[40m                 [33m[40m▒▒▒▒░░░░░[37m[40m                 [m
+[37m[40m                [33m[40m██▓▓▓▓▓▓▓██[37m[40m                [m
+[37m[40m       [33m[40m▒▒▒░░[37m[40m    [33m[40m▐▓▒░█▒  ░▓▌[37m[40m                [m
+[37m[40m     [33m[40m▒▒▒▒░░░░░[37m[40m  [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m    [33m[40m▒▒▒░░[37m[40m       [m
+[37m[40m    [33m[40m██▓▓▓▓▓▓▓██[37m[40m         [93m[40m▄[37m[40m     [33m[40m▒▒▒░░░░░[37m[40m     [m
+[37m[40m    [33m[40m▐▓▒░█▒  ░▓▌[37m[40m         [91m[40m█[37m[40m   [33m[40m██▓▓▓▓▓▓▓██[37m[40m    [m
+[37m[40m    [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m             [33m[40m▐▓▒░█▒  ░▓▌[37m[40m    [m
+[37m[40m        [93m[40m▄[37m[40m     [33m[40m▒▒▒░░[37m[40m        [93m[40m▄[33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m    [m
+[37m[40m        [96m[40m█[37m[40m   [33m[40m▒▒▒▒░░░░░[37m[40m   [93m[40m▄[37m[40m  [95m[40m█[37m[40m               [m
+[37m[40m     [32m[40m░░[37m[40m    [33m[40m██▓▓▓▓▓▓▓██[37m[40m  [94m[40m█[37m[40m                  [m
+[37m[40m       [32m[40m░░[37m[40m  [33m[40m▐▓▒░█▒  ░▓▌[37m[40m    [32m[40m░░░[37m[40m    [33m[40m▒▒▒░░[37m[40m     [m
+[37m[40m           [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m   [32m[40m░[37m[40m     [33m[40m▒▒▒▒░░░░░[37m[40m   [m
+[37m[40m                              [33m[40m██▓▓▓▓▓▓▓██[37m[40m  [m
+[37m[40m         [32m[40m░[37m[40m [32m[40m░[37m[40m [32m[40m░[37m[40m                [33m[40m▐▓▒░█▒  ░▓▌[37m[40m  [m
+[37m[40m                     [32m[40m░░░░░[37m[40m    [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m  [m
+[37m[40m                                           [m
 `
 let temp_event1 = new game_event({
 	id: 1,
@@ -111,7 +157,6 @@ let temp_event2 = new game_event({
 })
 let testEventArr = [temp_event1, temp_event2,]
 
-let story = {}
 //test content
 let body =
 	`[0m\r
@@ -158,6 +203,26 @@ let caleb =
 [38;5;239;48;5;95m▄[38;5;238;48;5;240m▄[38;5;238;48;5;238m▄▄[38;5;237;48;5;238m▄[48;5;237m [38;5;237;48;5;237m▄▄▄[38;5;236;48;5;236m▄[38;5;235;48;5;236m▄[38;5;234;48;5;234m▄[38;5;234;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;239;48;5;238m▄[38;5;238;48;5;238m▄[38;5;237;48;5;238m▄[38;5;237;48;5;237m▄▄[38;5;238;48;5;237m▄[38;5;236;48;5;237m▄[38;5;232;48;5;232m▄[38;5;0;48;5;232m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;233m▄[38;5;234;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄[38;5;234;48;5;235m▄▄[38;5;234;48;5;234m▄[48;5;234m [38;5;234;48;5;234m▄▄[38;5;234;48;5;235m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄▄[m\r
 [38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m\r`
 let thing = chalk.blue('Hello') + ' World' + chalk.red('!')
+let ch = `The Yuan Family.
+
+“Father, today, Brother Huang will leave to join the army. I\’m going to go see him off,” said Yuan Luoyu respectfully. 
+
+Yuan Wutong immediately made his decision. “Take some presents with you. 
+Stop by the treasury and pick out something good. 
+Our gift might be intended for Huang Qianjun, 
+but what matters is that Master Su will see it; 
+we absolutely cannot be half-hearted about this. 
+Let’s take this chance to display our Yuan Family\’s sincerity.” 
+
+“Alright!” Yuan Luoyu straightforwardly agreed. 
+
+Yuan Wutong snorted coldly. “Last night, your expenditures at the Sand-Scouring Waves weren’t the least bit small. 
+Out of respect for Master Su, 
+I’ll let you off just this once, 
+but you’d best hurry back to the Redscale Army, you brat!” `
+
+
+
 const program = blessed.program()
 program.cursorColor('000000')
 const screen = blessed.screen({
@@ -173,11 +238,9 @@ const screen = blessed.screen({
 		blink: false
 	}
 });
+screen.title = '~game~';
 screen.program.hideCursor(true);
 const grid = new BlessedContrib.grid({ rows: 12, cols: 12, screen: screen })
-
-screen.title = '~game~';
-
 const XTermTestv2 = new XTermNew({
 	top: 0,
 	bottom: 0,
@@ -200,12 +263,6 @@ const XTermTestv2 = new XTermNew({
 	},
 }).with(scroll.scroll, scroll.throttle)
 screen.append(XTermTestv2)
-const XTermApp = XTermTestv2.term
-//might change to an xterm in the future to make it a rolling log, store whats writen to log in a long string
-//then write string on exit to a file so that log can be reloaded if desired
-//animimate wrting the log via slowly writing it and try this to animate it:
-//https://stackoverflow.com/questions/10264261/move-one-character-to-the-left-in-the-console
-
 const logs = new XTermNew({
 	top: '50%',
 	bottom: 0,
@@ -229,7 +286,6 @@ const logs = new XTermNew({
 	},
 }).with(scroll.scroll, scroll.throttle)
 screen.append(logs)
-
 const stats = grid.set(0, 9, 6, 1, blessed.box, {
 	tags: true,
 	padding: {
@@ -264,7 +320,7 @@ const stats = grid.set(0, 9, 6, 1, blessed.box, {
 
 }
 ).with(scroll.scroll, scroll.throttle)
-//in the future will be a table with options to view/manage inventory and attack
+//in the future will list inventory items
 const actions = grid.set(0, 10, 6, 2, blessed.list, {
 	tags: true,
 	scrollable: true,
@@ -285,7 +341,6 @@ const actions = grid.set(0, 10, 6, 2, blessed.list, {
 		focus: { border: { fg: "green" } }
 	}
 })
-
 //button container
 const form_thing = grid.set(0, 6, 6, 3, blessed.form, ({
 	parent: screen,
@@ -421,20 +476,21 @@ let buttonsArray = [button1, button2, button3, button4];
 // term.write('\n\n\r')
 // term.clear()
 screen.render()
+resizeButtons()
 
 
 //Listeners for test buttons
 button1.on('press', function () {
 	form_thing.setContent('Canceled.');
-	XTermApp.clear();
-	XTermApp.reset();
+	XTermTestv2.term.clear();
+	XTermTestv2.term.reset();
 	XTermTestv2.writeSync(caleb);
 	screen.render();
 });
 button2.on('press', function () {
 	//logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
-	XTermApp.clear()
-	XTermApp.reset()
+	XTermTestv2.term.clear()
+	XTermTestv2.term.reset()
 	XTermTestv2.writeSync(body)
 	screen.render();
 });
@@ -470,7 +526,7 @@ screen.key('y', function () {
 	buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
 	buttonsArray = [];
 	stats.focus();
-	XTermApp.reset()
+	XTermTestv2.term.reset()
 	createButtons(temp_event1, story);
 	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 	resizeButtons();
@@ -483,9 +539,6 @@ screen.key('n', async function () {
 	encounterResolver()
 })
 
-//test content
-//logs.setContent(caleb)
-screen.render();
 //screen.render is essential for the correct screenlines amount to calculate
 function resizeButtons() {
 	buttonsArray.forEach((element) => { element.width = form_thing.width - 5 })
@@ -500,12 +553,10 @@ function resizeButtons() {
 		screen.render()
 	})
 }
-resizeButtons()
 // handling creating of buttons from an event. writing body etc
 // event reader
 // multiple functions, exuction may differ based on event type
 // messy, remove redundant code in future
-// The problem trying to make this function more pure is that for some reason
 // the resize button cannot get a valid height and crashes on screen resize
 // if i attempt to remove all mentions of buttonsArray
 function clearButtons() {
@@ -590,8 +641,8 @@ async function eventHandler(gameEvent = temp_event1,) {
 	// WRITE EVENT PACKAGE HANDLING CODE
 	// probably easier to do recursively?
 	//
-	XTermApp.clear()
-	XTermApp.reset()
+	XTermTestv2.term.clear()
+	XTermTestv2.term.reset()
 	rollLog(logs)
 	let gb = gameEvent.body
 	let gbf = gb.format
@@ -604,7 +655,6 @@ async function eventHandler(gameEvent = temp_event1,) {
 
 
 	if (gameEvent instanceof (game_event_enemy)) {
-		//combatFlag = true;
 		combat(gameEvent)
 		//await something
 	} else if (gameEvent instanceof (game_event_gain_item)) {
@@ -726,7 +776,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 	if (firstLoop){
 		let player_initiative = player.rollInitiative()
 		let monster_initiative = monster.rollInitiative()
-		logs.writeSync(`|| ${chalk.red(monster_initiative)}     ${chalk.blue(player_initiative)}\n`)
+		logs.writeSync(`Monster init${chalk.red(monster_initiative)} Player init${chalk.blue(player_initiative)}\n`)
 		if (monster_initiative > player_initiative) {
 			await enemyAtack(monster,player,true)
 		}else{
@@ -735,7 +785,6 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 	}
 	createCombatButtons()
 	combatButtonsMap['attack'].on('press', async () => {
-		//attack placeholder
 		if((logs.term.rows-2)<=logs.term.buffer.active.cursorY){
 			logs.writeSync(escUpByNum(1))
 			rollLog(logs)
@@ -743,27 +792,19 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 		clearButtons();
 		logs.writeSync(chalk.greenBright(`${escLeftByNum(2)}You attack the enemy with your ${player.weaponName.toLowerCase()}!`));
 		let TOHIT = player.rollToHit()
-		//logs.writeSync(`\nTOHIT : ${TOHIT}, MONSTERAC : ${monster.ac}`)
 		if (TOHIT >= monster.ac) {
 			let playerDamage = player.rollDamage()
-			//make negative damage subtract from attack damage but not heal
 			monster.hp -= playerDamage
-			//await new Promise(resolve => setTimeout(resolve, 100))
 			logs.writeSync(chalk.greenBright(`\nYou hit for ${playerDamage} damage!     ___DEBUGenemyhp=${monster.hp}`));
-			//await new Promise(resolve => setTimeout(resolve, 100))
-			//logs.writeSync(`\n${player.weapon} ${player.basedamage> -1 ? '+ ' : ''}${player.basedamage} = ${playerDamage}`)
 		} else {
 			logs.writeSync(chalk.greenBright(`\nYou miss!    ____DEBUGenemyhp=${monster.hp}`));
 		}
-		if (monster.hp > 0) {
-			await enemyAtack(monster,player)
-		//await new Promise(resolve => setTimeout(resolve, 1000))
-		}// MERGE WITH IF BELLOW LATER
-		await new Promise(resolve => setTimeout(resolve, 50))
 		if (monster.hp <= 0) {
 			await new Promise(resolve => setTimeout(resolve, 100))
 			clearCombat(logs)
 		} else {
+			await new Promise(resolve => setTimeout(resolve, 50))
+			await enemyAtack(monster,player)
 			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 			combatLogic(monster, player, false)
 		}
@@ -837,16 +878,12 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			monster.hp-=damage
 			thePlayer.oil--
 			await new Promise(resolve => setTimeout(resolve, 100))
-			if (monster.hp > 0) {
-				await enemyAtack(monster,player)
-			//await new Promise(resolve => setTimeout(resolve, 1000))
-			}// MERGE WITH IF BELLOW LATER
-			await new Promise(resolve => setTimeout(resolve, 50))
 			if (monster.hp <= 0) {
 				await new Promise(resolve => setTimeout(resolve, 100))
 				clearCombat(logs)
 			} else {
-				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
+				await enemyAtack(monster,player)
+				await new Promise(resolve => setTimeout(resolve, 50))
 				combatLogic(monster, player, false)
 			}
 		})
@@ -1137,8 +1174,6 @@ function rollLog(terminal = XTermTestv2) {
   ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows - 1)}`)
 }
 
-let rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
-let rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
 async function scanlines(terminal = XTermTestv2, text = '', speed = 5, colorArr = []) {
 	colorArr = colorArr ? colorArr : ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
 	let lines = fitLines(text, terminal.term.cols)
@@ -1253,9 +1288,6 @@ async function gradient_scanlines(terminal = XTermTestv2, text = "", speed = 5, 
 //ESC[?25h	make cursor visible
 //
 //double check cursor is disabled on all subterminals and main one
-console.log('[?25l')
-XTermTestv2.writeSync('[?25l')
-logs.writeSync('[?25l')
 
 function toggleUi() {
 	form_thing.toggle()
@@ -1269,13 +1301,12 @@ function toggleButtons() {
 }
 
 toggleUi()
-
 screen.render()
-//toggleUi()
 stats.focus()
-screen.render()
 //stats box
 let box = createStatsBox()
+screen.append(box);
+screen.render()
 function createStatsBox() {
 	return blessed.box({
 		top: 'center',
@@ -1301,11 +1332,12 @@ function createStatsBox() {
 		}
 	});
 }
-
 let thePlayer = new Player("name")
+console.log('[?25l')
+XTermTestv2.writeSync('[?25l')
+logs.writeSync('[?25l')
 
-screen.append(box);
-screen.render()
+
 // maybe make into an inventory screen later~
 async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	await new Promise(resolve => setTimeout(resolve, speed))
@@ -1344,7 +1376,6 @@ box.on('click', function () {
 	screen.render()
 })
 
-
 function refreshStats(player = thePlayer) {
 	stats.setContent(
 		`{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
@@ -1360,113 +1391,14 @@ ${chalk.magenta("mag")} =`)
 
 refreshStats()
 box.focus()
-screen.render()
 
-let bb = `    ${chalk.bold(`THE VILLAGE`)}
-[37m[40m                                           [m
-[37m[40m                   [33m[40m▒▒▒░░[37m[40m                   [m
-[37m[40m                 [33m[40m▒▒▒▒░░░░░[37m[40m                 [m
-[37m[40m                [33m[40m██▓▓▓▓▓▓▓██[37m[40m                [m
-[37m[40m       [33m[40m▒▒▒░░[37m[40m    [33m[40m▐▓▒░█▒  ░▓▌[37m[40m                [m
-[37m[40m     [33m[40m▒▒▒▒░░░░░[37m[40m  [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m    [33m[40m▒▒▒░░[37m[40m       [m
-[37m[40m    [33m[40m██▓▓▓▓▓▓▓██[37m[40m         [93m[40m▄[37m[40m     [33m[40m▒▒▒░░░░░[37m[40m     [m
-[37m[40m    [33m[40m▐▓▒░█▒  ░▓▌[37m[40m         [91m[40m█[37m[40m   [33m[40m██▓▓▓▓▓▓▓██[37m[40m    [m
-[37m[40m    [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m             [33m[40m▐▓▒░█▒  ░▓▌[37m[40m    [m
-[37m[40m        [93m[40m▄[37m[40m     [33m[40m▒▒▒░░[37m[40m        [93m[40m▄[33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m    [m
-[37m[40m        [96m[40m█[37m[40m   [33m[40m▒▒▒▒░░░░░[37m[40m   [93m[40m▄[37m[40m  [95m[40m█[37m[40m               [m
-[37m[40m     [32m[40m░░[37m[40m    [33m[40m██▓▓▓▓▓▓▓██[37m[40m  [94m[40m█[37m[40m                  [m
-[37m[40m       [32m[40m░░[37m[40m  [33m[40m▐▓▒░█▒  ░▓▌[37m[40m    [32m[40m░░░[37m[40m    [33m[40m▒▒▒░░[37m[40m     [m
-[37m[40m           [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m   [32m[40m░[37m[40m     [33m[40m▒▒▒▒░░░░░[37m[40m   [m
-[37m[40m                              [33m[40m██▓▓▓▓▓▓▓██[37m[40m  [m
-[37m[40m         [32m[40m░[37m[40m [32m[40m░[37m[40m [32m[40m░[37m[40m                [33m[40m▐▓▒░█▒  ░▓▌[37m[40m  [m
-[37m[40m                     [32m[40m░░░░░[37m[40m    [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m  [m
-[37m[40m                                           [m
-`
-
-mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
-[37m[40m                  [97m[40m▒░[37m[40m   [97m[40m░██▓▓[90m[40m░░[37m[40m                        [m
-[37m[40m                 [97m[40m█▓░░[37m[40m [97m[40m░▓█████▓▒░░[37m[40m [90m[40m░[37m[40m                   [m
-[37m[40m               [97m[40m▓▓▒░░▓███▒█▒▒███▓▒░[90m[40m░[37m[40m  [90m[40m░[37m[40m                [m
-[37m[40m             [97m[40m░▓░░[37m[40m [90m[40m░[97m[40m█▒█[90m[40m░[97m[40m░▒█[90m[40m░░▒░[97m[40m░█▓▒[90m[40m░[37m[40m  [90m[40m░░[37m[40m               [m
-[37m[40m           [97m[40m░▒▒░[37m[40m  [90m[40m░[97m[40m██[37m[40m▒░ [97m[40m░[90m[40m░░[37m[40m  [97m[40m▓▓▒[37m[40m [97m[40m░▓▓▒[37m[40m  [90m[40m░[37m[40m  [97m[40m▒▓[37m[40m           [m
-[37m[40m         [97m[40m░▒▒[37m[40m   [97m[40m░▓[90m[40m▓[37m[40m▒░░ [90m[40m░[37m[40m▒[90m[40m░[37m[40m   [90m[40m░▒[97m[40m▓▒░[37m[40m  [97m[40m▓[96m[40m▓░[90m[40m▒[97m[40m▒▒▒▒▓▒[37m[40m         [m
-[37m[40m   [97m[40m░▒▓▓▓▒▒[37m[40m   [97m[40m░▓█[37m[40m▓░░ ░▒░ [97m[40m█▓[37m[40m   [90m[40m░▒▒[97m[40m▓[90m[40m░[96m[40m▒███[97m[40m▓░[37m[40m    [97m[40m▓▓▒[37m[40m       [m
-[37m[40m  [97m[40m▒▓░[37m[40m [97m[40m░█▓▒░[37m[40m [97m[40m░█[90m[40m▒[37m[40m░░ ▒▒[90m[40m░[37m[40m  ▓▓[97m[40m▒▒░[37m[40m  [90m[40m░░[97m[40m▓[96m[40m▓▓██[90m[40m█▓░[37m[40m     [90m[40m░[97m[40m▓▒[37m[40m      [m
-[37m[40m [97m[40m▓▓░▒▒[90m[40m░[37m[40m  [97m[40m▒██▓[90m[40m░[37m[40m░░░▒[90m[40m░[37m[40m  [97m[40m░▒[37m[40m█▒░ [97m[40m▒▒[37m[40m  [96m[40m░▓███░[37m[40m [90m[40m▓█[37m[40m      [90m[40m░[97m[40m▓▓[37m[40m     [m
-[37m[40m [97m[40m░[37m[40m  [97m[40m░▒▒▒[90m[40m░[37m[40m  [90m[40m░[97m[40m▓▓▓▓[90m[40m░░[37m[40m  [97m[40m▒▒[90m[40m░░░░█[37m[40m [97m[40m▒▒[37m[40m [96m[40m░░█████░[90m[40m██▓░[37m[40m     [97m[40m▓▒[37m[40m    [m
-[37m[40m       [97m[40m▓▒▒░[90m[40m░[37m[40m   [97m[40m▓▒[90m[40m░[37m[40m ░[97m[40m▒[90m[40m░░[37m[40m  ▓[90m[40m░░[37m[40m [97m[40m░▒▒[37m[40m [96m[40m▒[37m[40m   [96m[40m▓█▒[37m[40m [90m[40m▒▓▓[37m[40m     [97m[40m▒▒▒[37m[40m  [m
-[37m[40m      [90m[40m░░[37m[40m [97m[40m░░[90m[40m░[37m[40m     [90m[40m░[37m[40m █[90m[40m░▓[37m[40m    ░[90m[40m░░[37m[40m  [97m[40m▒░[37m[40m    [96m[40m░██░[37m[40m  [90m[40m▒▓░[37m[40m     [97m[40m▒▒[90m[40m░[m
-[37m[40m     [90m[40m░░[37m[40m    [90m[40m░░▒░░░░[37m[40m ▒[90m[40m░[37m[40m       [90m[40m█[37m[40m░        [96m[40m█░[37m[40m    [90m[40m░░[37m[40m       [90m[40m░[m
-[37m[40m     [90m[40m░[37m[40m         [90m[40m░[37m[40m [33m[40m░░░░░░[37m[40m▒[33m[40m░░░░[32m[40m░░▒▒▒░[37m[40m [33m[40m░░[94m[40m▓▓▓[33m[40m░▒▒▒▒▒▒▒▒▒▒░░░[m
-[37m[40m [33m[40m░░░▒▒▒▒▒▒▒[32m[40m▓▓▓▓▒▒▒▒[33m[40m░░[32m[40m▒▒[37m[40m▓[32m[40m▒▓████▒[33m[40m░▒▒▒[34m[40m▓[94m[40m█▓[33m[40m░░░░[37m[40m            [m
-[37m[40m    [32m[40m░░░░░░▒▒░░▒▓▓▓▒▒▒▒[37m[40m▓░[32m[40m▓░[37m[40m  [32m[40m░▒▓▓▒▒▒[34m[40m▒▓[32m[40m▒▒░░░░░░░░░[37m[40m      [m
-[37m[40m        [32m[40m░▒▒█▓▒▒░░░▒▒██[37m[40m░[32m[40m▓▒░[37m[40m    [32m[40m░░░[37m[40m   [34m[40m░░▒▒▓▒[37m[40m            [m
-[37m[40m   [32m[40m▒▒▒░░▒▒▓█████▓████[37m[40m▓▓[32m[40m▒░[37m[40m [32m[40m░▒▒▒▒░░░░░░░[34m[40m▒░▒[32m[40m▒[37m[40m            [m
-[32m[40m▒▒[33m[40m░░░[32m[40m▓█▓▒▒░[37m[40m [33m[40m░░[32m[40m░██░[37m[40m ░▓      [32m[40m░▒░░░░░▒▒[34m[40m▓▓▓[37m[40m  [32m[40m▒▓░[37m[40m          [m
-[37m[40m  [37m[43m▄▄▄[37m[40m▄[33m[40m░░░[32m[40m▒▒░[37m[43m▄[33m[40m▀[37m[40m    ░█░    [94m[40m▒▒▒[34m[40m▓[94m[40m███▓▓▒[34m[40m▒▒[32m[40m░▓▓▒░[37m[40m            [m
-[37m[40m [33m[40m░░░░[37m[40m▒[33m[40m███[37m[40m   ▒     █▀   [94m[40m░█▓▓████▒███▓▒[37m[40m [32m[40m░░░░▓[37m[40m           [m
-[37m[40m [33m[40m████[37m[40m▀▀▒▄▄▄▒▒   ▄▀▀   [94m[40m▒░█▒▒█▒▓███▒░█▒[37m[40m     [32m[40m▓[37m[40m           [m
-[37m[40m [33m[40m▀▀[37m[43m▄▄[37m[40m▄▄▒    ▀▀▀▀▀     [94m[40m█▓█▒█▒[37m[40m                          [m
-[37m[40m                     [94m[40m░▓▒░░[37m[40m                            [m
-[37m[40m                                                      [m
-`
 
 //reminder how to convert ansi art to utf8
 //run script on cmder to convert my ansi art to utf8
 //ansiart2utf8 mountain.ans > sometext.txt
 //XTermTestv2.write(mountain)
 
-//test string
-let lorem =
-	`Lorem ipsum dolor sit amet,
-consectetur adipiscing elit. 
-Morbi varius ut augue ac sagittis. 
-Vivamus lectus lacus, commodo eu ligula pulvinar, 
-tincidunt congue sapien. 
-Morbi fringilla sollicitudin ante eget accumsan. 
-Aliquam diam felis, 
-posuere sit amet felis id, 
-condimentum rutrum dolor. 
-Donec semper sagittis condimentum. 
-Mauris vitae pellentesque tellus. 
-Integer velit neque, 
-fermentum vel tempus non, 
-pulvinar id tellus.`
-
-var pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978']
-
-pgrad.reverse()
-
-//thePlayer.changeWeapon()
 refreshStats(thePlayer)
-screen.render()
-
-
-let ch = `The Yuan Family.
-
-“Father, today, Brother Huang will leave to join the army. I\’m going to go see him off,” said Yuan Luoyu respectfully. 
-
-Yuan Wutong immediately made his decision. “Take some presents with you. 
-Stop by the treasury and pick out something good. 
-Our gift might be intended for Huang Qianjun, 
-but what matters is that Master Su will see it; 
-we absolutely cannot be half-hearted about this. 
-Let’s take this chance to display our Yuan Family\’s sincerity.” 
-
-“Alright!” Yuan Luoyu straightforwardly agreed. 
-
-Yuan Wutong snorted coldly. “Last night, your expenditures at the Sand-Scouring Waves weren’t the least bit small. 
-Out of respect for Master Su, 
-I’ll let you off just this once, 
-but you’d best hurry back to the Redscale Army, you brat!” `
-
-//await new Promise(resolve => setTimeout(resolve, 1000));
-//toggleButtons()
-//await (gradient_scanlines(XTermTestv2, ch.repeat(1), 4, gradient.retro.multiline, pgrad))
-//toggleButtons()
-//ERROR bugs out at certain screen widths
-//make stricter add a buffer to collumn width
-//done but keeping comments incase i see another error
 function creatething(){
 	box.key('enter', function () {
 		toggleUi()
@@ -1506,7 +1438,7 @@ async function reset(){
 	buttonsArray.forEach((button) => { form_thing.remove(button); button.destroy() })
 	buttonsArray = [];
 	stats.focus();
-	XTermApp.reset()
+	XTermTestv2.term.reset()
 	createButtons(temp_event1, story);
 	form_thing.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 	resizeButtons();

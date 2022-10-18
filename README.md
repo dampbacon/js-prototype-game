@@ -17,7 +17,7 @@ do a npm install
 run either ./thing.js if you chmod +x
 or node thing.js
 
-to test basic event combat loop press y instead of just displaying the test buttons
+to test basic event combat loop press 'y' instead of just displaying the test buttons
 
 # Branch details.
 both branches the code is ....messy

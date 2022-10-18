@@ -19,7 +19,7 @@ or node thing.js
 
 to test basic event combat loop press y instead of just displaying the test buttons
 
-#Branch details.
+# Branch details.
 both branches the code is ....messy
 main branch execution loop is spaghetti code.
 rather than be purely event driven a function pauses execution till a promise is returned

@@ -33,6 +33,7 @@ export class Player {
 
         //change weapon later to be similar to monster class
         this.armour = ARMOURmap[ARMOUR.LOIN_CLOTH]
+        this.armourName = ARMOUR.LOIN_CLOTH
         this.ac = this.armour ? this.armour : 10
         this.depth = 0;
         this.gold = 0;

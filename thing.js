@@ -641,6 +641,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			thePlayer.increaseHP(heal)
 			thePlayer.potions--
 			refreshStats()
+			refreshInventory()
 			await enemyAtack(monster,player)
 			if(player.potions<1){combatButtonsMap['potion'].destroy()}
 			screen.render()
@@ -659,6 +660,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			logs.writeSync(`${chalk.yellow(`You throw oil on the enemy! dealing 4d6+4:${damage} fire damage!`)}`);
 			monster.hp-=damage
 			thePlayer.oil--
+			refreshInventory()
 			await new Promise(resolve => setTimeout(resolve, 100))
 			if (monster.hp <= 0) {
 				await new Promise(resolve => setTimeout(resolve, 100))
@@ -871,6 +873,16 @@ ${chalk.magenta("dmg")} = ${thePlayer.basedamage}
 ${chalk.magenta("mag")} =`)
 	screen.render()
 }
+function refreshInventory(player = thePlayer) {
+	InventoryBox.setContent(
+`{bold}${chalk.red("Weapon ")}{/bold} = ${thePlayer.weaponName}
+{bold}${chalk.red("Armour ")}{/bold} = ${thePlayer.armourName}
+${chalk.red('oil')} = ${thePlayer.oil}
+${chalk.red('potions')} = ${thePlayer.potions}
+${chalk.red('scrolls')} = ${thePlayer.scrolls}
+${chalk.red('gp')} = ${thePlayer.gold}`)
+	screen.render()
+}
 function creatething(){
 	box.key('enter', function () {
 		toggleUi()
@@ -963,6 +975,7 @@ screen.key('y', function () {
 	buttonsArray.forEach((button) => { buttonsContainer.remove(button); button.destroy() })
 	buttonsArray = [];
 	stats.focus();
+	refreshInventory()
 	ImageScreenTerm.term.reset()
 	createButtons(temp_event1, story);
 	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)

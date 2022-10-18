@@ -92,7 +92,8 @@ export class Player {
     }
     rollToHit(){
         let bonus=this.level>4 ?4:this.level
-        return chance2.rpg('1d20',{sum: true})+this.dex+bonus
+        bonus+=this.dex
+        return [chance2.rpg('1d20',{sum: true}), bonus]
     }
     rollInitiative(){
         return chance2.rpg('1d20',{sum: true})

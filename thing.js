@@ -35,11 +35,11 @@ let tempMonster = new monster({
 	aggro: 1,
 	rarity: 1
 })
-let rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
-let rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
+const rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
+const rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
 
 //test string
-let lorem =
+const lorem =
 	`Lorem ipsum dolor sit amet,
 consectetur adipiscing elit. 
 Morbi varius ut augue ac sagittis. 
@@ -55,10 +55,10 @@ Integer velit neque,
 fermentum vel tempus non, 
 pulvinar id tellus.`
 
-let pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse()
+const pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse()
 
 
-let mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
+const mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
 [37m[40m                  [97m[40m▒░[37m[40m   [97m[40m░██▓▓[90m[40m░░[37m[40m                        [m
 [37m[40m                 [97m[40m█▓░░[37m[40m [97m[40m░▓█████▓▒░░[37m[40m [90m[40m░[37m[40m                   [m
 [37m[40m               [97m[40m▓▓▒░░▓███▒█▒▒███▓▒░[90m[40m░[37m[40m  [90m[40m░[37m[40m                [m
@@ -85,7 +85,20 @@ let mountain = `[37m[40m                        [97m[40m░░[37m[40m    
 [37m[40m                     [94m[40m░▓▒░░[37m[40m                            [m
 [37m[40m                                                      [m
 `
-let bb = `    ${chalk.bold(`THE VILLAGE`)}
+const dice=`[37m[40m          [97m[40m▄▄▄[37m[40m          [m
+[37m[40m      [97m[40m▄▄▀▀[37m[40m █ [97m[40m▀▀▄▄[37m[40m      [m
+[37m[40m  [97m[40m▄▄▀▀[90m[40m▄▄▄▄[90m[47m▀[90m[40m▀[90m[47m▀[90m[40m▄▄[37m[40m  [97m[40m▀▀▄▄[37m[40m  [m
+[37m[40m [90m[40m▄[97m[40m█[90m[40m▀▀▀[37m[40m   ▄▀ ▀▄ [90m[40m▀▀▀▄▄[97m[40m█[90m[40m▄[37m[40m [m
+[37m[40m [90m[40m█[97m[40m▀▄[37m[40m   ▄[91m[47m▄[91m[40m▄▄[37m[40m [91m[40m▄▄[91m[47m▄[37m[40m▄   [97m[40m▄▀[90m[40m█[37m[40m [m
+[37m[40m [90m[40m█[37m[40m [97m[40m█[37m[40m  ▄▀[91m[40m▄▄█[37m[40m [91m[40m█[37m[40m [91m[40m█[37m[40m▀▄  [97m[40m█[37m[40m [90m[40m█[37m[40m [m
+[37m[40m [90m[40m█[37m[40m  [97m[40m█[37m[40m█  [91m[40m█▄▄[37m[40m [91m[40m█▄█[37m[40m  █[97m[40m█[37m[40m  [90m[40m█[37m[40m [m
+[37m[40m [90m[40m█[37m[40m ▄[97m[40m▀[90m[47m▄[97m[40m▀▀▀▀[91m[47m▄▄▄[97m[40m▀▀▀▀[90m[47m▄[97m[40m▀[37m[40m▄ [90m[40m█[37m[40m [m
+[37m[40m [90m[40m▀[90m[47m▄[37m[40m   [90m[40m▀▄[37m[40m  [91m[40m█▄█[37m[40m  [90m[40m▄▀[37m[40m   [90m[47m▄[90m[40m▀[37m[40m [m
+[37m[40m   [90m[40m▀▀▄▄[37m[40m [90m[40m█[37m[40m [91m[40m█▄█[37m[40m [90m[40m█[37m[40m [90m[40m▄▄▀▀[37m[40m   [m
+[37m[40m       [90m[40m▀▀█▄[37m[40m [90m[40m▄█▀▀[37m[40m       [m
+[37m[40m           [90m[40m▀[37m[40m           [m
+`
+const bb = `    ${chalk.bold(`THE VILLAGE`)}
 [37m[40m                                           [m
 [37m[40m                   [33m[40m▒▒▒░░[37m[40m                   [m
 [37m[40m                 [33m[40m▒▒▒▒░░░░░[37m[40m                 [m
@@ -553,8 +566,16 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 		clearButtons();
 		logs.writeSync(chalk.greenBright(`${escLeftByNum(2)}You attack the enemy with your ${player.weaponName.toLowerCase()}!`));
 		let TOHIT = player.rollToHit()
-		if (TOHIT >= monster.ac) {
+		if (TOHIT[0] === 20) {
+			logs.writeSync(dice+escUpByNum(3)+gradient.rainbow(`\nCrit!\n\n`))
+			await new Promise(resolve => setTimeout(resolve, 1000))
+		}
+
+		if ((TOHIT[0]+TOHIT[1]) >= monster.ac) {
 			let playerDamage = player.rollDamage()
+			if (TOHIT[0] === 20) {
+				playerDamage+=player.rollDamage()
+			}
 			monster.hp -= playerDamage
 			logs.writeSync(chalk.greenBright(`\nYou hit for ${playerDamage} damage!     ___DEBUGenemyhp=${monster.hp}`));
 		} else {

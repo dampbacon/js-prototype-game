@@ -422,15 +422,6 @@ function createEventsMap(eventsArrary = [], storyArr = {}) {
 }
 //return maybe idek
 // reads event package and sees which buttons to create only called after a combat
-function EPcontiansCombat(eventPackage) {
-	let events = eventPackage.eventsMap()
-	for (const [key, value] of Object.entries(events)) {
-		console.log(key, value);
-	}
-}
-function eventPackageButtons(eventPackage){
-
-}
 
 //sloppy but easy way to make it work
 async function eventHandler(gameEvent = temp_event1,) {
@@ -450,7 +441,7 @@ async function eventHandler(gameEvent = temp_event1,) {
 	}
 	buttonsContainer.setContent(` ${chalk.bold.yellow(gameEvent['buttons'].length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 
-
+	//change to for loop eventually
 	if (gameEvent instanceof (game_event_enemy)) {
 		combat(gameEvent)
 		//await something

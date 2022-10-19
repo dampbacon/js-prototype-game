@@ -497,11 +497,6 @@ async function combat(combatEvent) {
 	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
 	logs.writeSync(`\n${chalk.yellow(`Combat Start!`)}`);
 	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
-	let hostile = true
-	if (!hostile) {
-		//provoke or somthing
-		return 0
-	}
 	let monster = copyMonster(tempMonster)
 	combatLogic(monster,thePlayer,true)
 
@@ -544,10 +539,21 @@ function clearCombat(logs){
 
 
 
-async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, firstLoop=true) {
+async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, firstLoop=true, hostile=false) {
 	let monster = monsterCopy
 	let playerWonInitiative = false
-	if (firstLoop){
+	let monsterHostile = hostile
+
+	if (/*room.forceHostile == -1 &&*/ monster.aggression < 12) {
+		// friendly
+	} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/) {
+		// hostile
+		monsterHostile = true;
+	} else {
+		// neutral, which is functionally the same as friendly
+	}
+
+	if (firstLoop&&monsterHostile){
 		let player_initiative = player.rollInitiative()
 		let monster_initiative = monster.rollInitiative()
 		logs.writeSync(`Monster init${chalk.red(monster_initiative)} Player init${chalk.blue(player_initiative)}\n`)
@@ -557,7 +563,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			playerWonInitiative = true
 		}
 	}
-	createCombatButtons()
+	createCombatButtons(monsterHostile)
 	combatButtonsMap['attack'].on('press', async () => {
 		if((logs.term.rows-2)<=logs.term.buffer.active.cursorY){
 			logs.writeSync(escUpByNum(1))
@@ -679,10 +685,11 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 }
 
 
-function createCombatButtons() {
+function createCombatButtons(hostile) {
+	clearButtons()
+	let monsterHostile=hostile
 	clearButtons()
 	combatButtonsMap = {}
-	let cbt=combatButtonsMap
 	let attack = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
@@ -695,19 +702,22 @@ function createCombatButtons() {
 		left: 1,
 		top: 1,
 		name: `attack`,
-		content: `${chalk.bold.white('attack ')}${chalk.bold.green(thePlayer.weapon)}${thePlayer.basedamage<0?chalk.bold.white(' - '):chalk.bold.white(' + ')}${chalk.bold.white(Math.abs(thePlayer.basedamage))}`, //maybe add damage die
+		content: `${chalk.bold.white('attack ')}${chalk.bold.green(thePlayer.weapon)}\
+${thePlayer.basedamage<0?chalk.bold.white(' - '):chalk.bold.white(' + ')}\
+${chalk.bold.white(Math.abs(thePlayer.basedamage))}\
+${monsterHostile?'':gradient.retro.multiline('\nattacking this enemy\nwill make it hostile')}`, //maybe add damage die
 		//shadow: true,
 		style: {
-			bg: 'red',
+			bg: '#5A5A5A',
 			focus: {
-				bg: '#ECE81A',
+				bg: '#880808',
 			},
 			hover: {
-				bg: '#ECE81A',
+				bg: '#880808',
 			},
 		},
 	})
-	cbt[attack.name] = attack
+	combatButtonsMap[attack.name] = attack
 	let flee = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
@@ -723,16 +733,16 @@ function createCombatButtons() {
 		content: `flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`,
 		//shadow: true,
 		style: {
-			bg: '#880808',
+			bg: '#5A5A5A',
 			focus: {
-				bg: '#ECE81A',
+				bg: '#880808',
 			},
 			hover: {
-				bg: '#ECE81A',
+				bg: '#880808',
 			},
 		},
 	})
-	cbt[flee.name] = flee
+	combatButtonsMap[flee.name] = flee
 	let chatUp = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
@@ -748,16 +758,16 @@ function createCombatButtons() {
 		content: `chat up ${thePlayer.dex > -1 ? chalk.bold.greenBright('cha check') : chalk.bold.redBright('cha check')}`,
 		//shadow: true,
 		style: {
-			bg: '#880808',
+			bg: '#5A5A5A',
 			focus: {
-				bg: '#ECE81A',
+				bg: '#880808',
 			},
 			hover: {
-				bg: '#ECE81A',
+				bg: '#880808',
 			},
 		},
 	})
-	cbt[chatUp.name] = chatUp
+	combatButtonsMap[chatUp.name] = chatUp
 	let potion
 	if(thePlayer.potions>0){
 		potion = new blessedpkg.button({
@@ -775,16 +785,16 @@ function createCombatButtons() {
 			content: `use potion, ${thePlayer.potions} left`,
 			//shadow: true,
 			style: {
-				bg: thePlayer.potions>0?'#880808':'#5A5A5A',
+				bg: '#5A5A5A',
 				focus: {
-					bg: '#ECE81A',
+					bg: '#880808',
 				},
 				hover: {
-					bg: '#ECE81A',
+					bg: '#880808',
 				},
 			},
 		})
-		cbt[potion.name] = potion
+		combatButtonsMap[potion.name] = potion
 	}
 	let oil
 	if(thePlayer.oil>0){
@@ -803,20 +813,24 @@ function createCombatButtons() {
 			content: `throw oil, ${thePlayer.oil} left`,
 			//shadow: true,
 			style: {
-				bg: thePlayer.oil>0?'#880808':'#5A5A5A',
+				bg: '#5A5A5A',
 				focus: {
-					bg: '#ECE81A',
+					bg: '#880808',
 				},
 				hover: {
-					bg: '#ECE81A',
+					bg: '#880808',
 				},
 			},
 		})
-		cbt[oil.name] = oil
+		combatButtonsMap[oil.name] = oil
 	}
-	for (const key in cbt) {
-		buttonsArray.push(cbt[key])
+	let names=['attack','flee','chatUp','potion','oil']
+	for (const name of names) {
+		if (name in combatButtonsMap){
+			buttonsArray.push(combatButtonsMap[name])
+		}
 	}
+	screen.render()
 	resizeButtons()
 	stats.focus()
 	screen.render()

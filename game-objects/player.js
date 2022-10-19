@@ -46,22 +46,11 @@ export class Player {
         this.potions = 2;
         this.scrolls = 2;
     }
-    // changeWeapon(weapon) {
-    //     //update base-damage and equip slot
-    //     if (weapon) {
-    //         this.weaponName= weapon
-    //         this.weapon = WEAPONmap[weapon]
-    //         this.slots.weapon = true
-    //     }else{
-    //         //make hands a zero dmg weapon later make hands into a secret that scales with less armour and more dex
-    //         this.weaponName= WEAPONS.SWORD
-    //         this.weapon = WEAPONmap[WEAPONS.BARE_HANDS]
-    //         this.slots.weapon = false
-    //     }
-    // }
+    
     rollStat() {
         return skillBonus(chance1.rpg('3d6', { sum: true }))
     }
+    //Weapon object
     changeWeapon(weapon){
         this.weapon=weapon
         this.weaponName=weapon.name

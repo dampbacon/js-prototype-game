@@ -578,7 +578,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			}
 			monster.hp -= playerDamage
 			logs.writeSync(chalk.greenBright(`You hit for ${playerDamage} damage!     ___DEBUGenemyhp=${monster.hp}\n`));
-			logs.writeSync(player.weapon.dmgType.applyEffect(monster,player.weapon.dmgType, crit, player));
+			logs.writeSync(player.weaponBonus.applyEffectWF(monster, crit, player));
 			
 			logs.writeSync(chalk.greenBright(`___DEBUGenemyhp=${monster.hp}\n`));
 		} else {

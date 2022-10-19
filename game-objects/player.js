@@ -32,6 +32,7 @@ export class Player {
         this.weapon= poison_sword
         this.weaponName = this.weapon.name
         this.weaponCooldown = 0
+        this.weaponBonus=this.weapon.dmgType
         // this.weapon = WEAPONmap[this.weaponName]
 
         //change weapon later to be similar to monster class

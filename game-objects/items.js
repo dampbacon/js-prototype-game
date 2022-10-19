@@ -14,12 +14,14 @@ class dmgTypeClass{
         //this.effectparams = effectparams?effectparams:null;
         this.color = color;
         this.effectDurationMax = effectDuration?effectDuration:0;
-
         //callback function to apply effect passed as argument
         //
         this.applyEffect = applyEffect?applyEffect:null; 
         this.chanceToApply = chanceToApply?chanceToApply:0
-   
+    }
+    
+    applyEffectWF(arg1,arg2,arg3){
+        return this.applyEffect(arg1,this,arg2,arg3)
     }
 }
 

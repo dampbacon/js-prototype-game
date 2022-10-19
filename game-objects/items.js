@@ -63,7 +63,7 @@ export let poison_damage = new dmgTypeClass({
     effectDuration: 5,
     applyEffect:(target, selfdmgtype, crit=false, target2)=>{
         let self=selfdmgtype
-        if(target2.weaponCooldown>0){
+        if((target2.weaponCooldown>0)&&!crit){
             --target2.weaponCooldown
             let bonusDamage=1
             target.hp-=bonusDamage

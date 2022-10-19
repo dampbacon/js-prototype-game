@@ -16,7 +16,7 @@ class dmgTypeClass{
         this.effectDurationMax = effectDuration?effectDuration:0;
         //callback function to apply effect passed as argument
         //
-        this.applyEffect = applyEffect?applyEffect:null; 
+        this.applyEffect = applyEffect?applyEffect:((arg1,this_,arg2,arg3)=>{return ''}); 
         this.chanceToApply = chanceToApply?chanceToApply:0
     }
     
@@ -80,7 +80,12 @@ export let poison_damage = new dmgTypeClass({
         }
     }
 })
-
+export let slash_damage = new dmgTypeClass({
+    name:'slash_damage',
+    color:'ffffff',
+    chanceToApply: 0,
+    effectDuration: 0,
+})
 
 
 
@@ -102,10 +107,17 @@ export let poison_sword = new weapon({
     dmgType:poison_damage,
     rarity:1,
     enchant:0,
-    description:'a flaming sword'
+    description:'a venomous sword'
 })
 
-
+export let sword = new weapon({
+    name:'sword',
+    dmgDie: '1d8',
+    dmgType:slash_damage,
+    rarity:1,
+    enchant:0,
+    description:'a sword'
+})
 
 
 

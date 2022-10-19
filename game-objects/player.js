@@ -1,5 +1,5 @@
 //var seedrandom = require('seedrandom');
-import {ARMOUR, ARMOURmap, flaming_sword, poison_sword, WEAPONmap, WEAPONS} from "./items.js";
+import {ARMOUR, ARMOURmap, flaming_sword, poison_sword, sword, WEAPONmap, WEAPONS} from "./items.js";
 import {chance1, chance2} from "./random_nums.js";
 //diff object for map generation
 chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
@@ -29,7 +29,7 @@ export class Player {
         //this.items = Array(5).fill(0)
         this.basedamage = this.str
 
-        this.weapon= poison_sword
+        this.weapon= sword
         this.weaponName = this.weapon.name
         this.weaponCooldown = 0
         this.wBonus=this.weapon.dmgType

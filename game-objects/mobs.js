@@ -2,7 +2,7 @@
 import { monsterRandom } from './random_nums.js';
 import { Player } from './player.js';
 //make roll initiative function in main file
-const defaults={name:'', hitDie:1, ac:8, morale:6, weapon:'stick', dmgDie:6, aggro:6, rarity:1}
+const defaults={name:'', hitDie:1, ac:8, morale:6, weapon:'stick', dmgDie:6, aggro:6, rarity:1, weaknesses:[]}
 export class monster {/*12always hostile 0 inverse */
     constructor({name, hitDie, ac, morale, weapon, dmgDie, aggro, rarity}={...defaults}) {
         this.name = name;

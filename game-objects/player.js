@@ -1,6 +1,6 @@
 //var seedrandom = require('seedrandom');
-import {ARMOUR, ARMOURmap, flaming_sword, poison_sword, sword, WEAPONmap, WEAPONS} from "./items.js";
 import {chance1, chance2} from "./random_nums.js";
+import {ARMOUR, ARMOURmap, flaming_sword, poison_sword, sword} from "./data.js";
 //diff object for map generation
 chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 

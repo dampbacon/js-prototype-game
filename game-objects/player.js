@@ -1,6 +1,6 @@
 //var seedrandom = require('seedrandom');
 import {chance1, chance2} from "./random_nums.js";
-import {ARMOUR, ARMOURmap, armourPicker, pickWeapon} from "./data.js";
+import {ARMOUR, ARMOURmap, armourPicker, pickWeapon, weapons} from "./data.js";
 //diff object for map generation
 chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 
@@ -23,8 +23,8 @@ export class Player {
         this.cha= this.rollStat();
         this.int= this.rollStat();
         let initial = chance1.rpg('2d6',{sum: true})+this.str+6
-        this.hp = 40//initial
-        this.hpMax =40// initial
+        this.hp = initial
+        this.hpMax = initial
         this.slots = { weapon: true, shield: false, head: false, armor: true, ring: false }
         //this.items = Array(5).fill(0)
         this.basedamage = this.str
@@ -62,9 +62,16 @@ export class Player {
     rollStat() {
         return skillBonus(chance1.rpg('3d6', { sum: true }))
     }
-
+    changeWeapon(weapon){
+        this.weapon=weapon
+        this.weaponName=weapon.name
+        this.wBonus=this.weapon.dmgType
+        this.weaponCooldown=0
+    }
+    //armour is string key
     changeArmour(armour) {
-        //update ac and equip slot
+        this.armourName=armour
+        this.armour=ARMOURmap[armour]
     }
     //not max
     increaseHP(amount) {
@@ -100,6 +107,7 @@ export class Player {
         bonus+=this.dex
         bonus+=this.weapon.enchant
         return [chance2.rpg('1d20',{sum: true}), bonus]
+        //return [20,bonus]
     }
     rollInitiative(){
         return chance2.rpg('1d20',{sum: true})

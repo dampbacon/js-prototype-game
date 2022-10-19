@@ -14,6 +14,7 @@ import {copyMonster, monster} from './game-objects/mobs.js';
 import {chance2, resetRandoms} from './game-objects/random_nums.js';
 import {buttonsContainer, createStatsBox, ImageScreenTerm, InventoryBox, logs, program, screen, stats} from "./ui.js";
 import {escLeftByNum, escUpByNum, gradient_scanlines, rollLog} from "./writeMethods.js";
+import XTermNew from "./blessed-xterm/blessed-xterm.js";
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
@@ -1013,12 +1014,19 @@ screen.key('y', function () {
 	resizeButtons();
 	stats.focus();
 });
+screen.key('z', function () {
+	logs.writeSync(escUpByNum(2))
+	//logs.writeSync('a')
+});
 
 screen.key('n', async function () {
 	clearButtons()
 	death = true;
 	encounterResolver()
 })
+
+
+
 
 program.cursorColor('000000')
 screen.title = '~game~';

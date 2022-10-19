@@ -62,6 +62,39 @@ export const damageTypes = Object.freeze({
             return ''
         }
     }),
+    weeb_damage : new dmgTypeClass({
+        name: 'weeb_damage',
+        //effectAdverb:'you set aflame',
+        color: 'fbe407',
+        chanceToApply: 0.1,
+        effectDuration: 5,
+        applyEffect: (target, selfdmgtype, crit = false, target2) => {
+            let self = selfdmgtype
+            let bonusChance=0
+            let critmult=0
+            if(crit){critmult=2}
+            if(target2.dex>0){bonusChance=(target2.dex/10)*2}
+            if ((target2.weaponCooldown > 0 && !crit)) {
+                let appendStr=``
+                let damage=0
+                for(let i=0; i<(target2.weaponCooldown*2); i++){
+                    let tempDam=chance2.rpg(`${1+(critmult)}d4`,{sum:true})
+                    appendStr+=`naruto spam ${tempDam} damage!\n`
+                    damage+=tempDam
+                }
+                --target2.weaponCooldown
+                target.hp -= damage
+                return `${chalk.hex(self.color)(`${appendStr}`)}`
+            }else if (chance2.bool({likelihood: (100 * (self.chanceToApply+bonusChance))}) || crit) {
+                let bonusDamage = crit ? chance2.rpg('2d8', {sum: true}) : chance2.rpg('1d8', {sum: true})
+                target2.weaponCooldown = crit ? 7 : selfdmgtype.effectDurationMax
+                target.hp -= bonusDamage
+                return `${chalk.hex(self.color)('naruto damage dealt: ')}${bonusDamage}\n`
+            } else {
+                return 'MISS@##@#'
+            }
+        }
+    }),
     slash_damage : new dmgTypeClass({
         name: 'slash_damage',
         color: 'ffffff',
@@ -92,6 +125,14 @@ export const damageTypes = Object.freeze({
 
 //WEAPONS
 export const weapons = Object.freeze({
+    fists: new weapon({
+        name: 'hand wraps',
+        dmgDie: '1d4',
+        dmgType: damageTypes.weeb_damage,
+        rarity: .1,
+        enchant: 0,
+        description: 'naruto powers'
+    }),
     flamberg: new weapon({
         name: 'flamberg',
         dmgDie: '2d6',

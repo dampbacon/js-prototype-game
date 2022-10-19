@@ -32,10 +32,12 @@ for(let i=0; i<20; i++){
     console.log(testplayer.hp)
     console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,false,testplayer))
 }
-testplayer.weapon.dmgType= damageTypes.fire_damage
-for(let i=0; i<20; i++){
+testplayer.weapon.dmgType= damageTypes.weeb_damage
+console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,true,testplayer))
+for(let i=0; i<40; i++){
     console.log(testplayer.hp)
     console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,false,testplayer))
+
 }
 console.log(armourArray)
 console.log(armourArrayWeights)

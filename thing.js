@@ -27,12 +27,12 @@ let box=createStatsBox()
 // test content
 let tempMonster = new monster({
 	name: "testCreature",
-	hitDie: 1,
+	hitDie: 3,
 	ac: 6,
 	morale: 6,
 	weapon: "ruler",
 	dmgDie: 6,
-	aggro: 1,
+	aggro: 12,
 	rarity: 1
 })
 const rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
@@ -270,7 +270,6 @@ let button1 = blessedpkg.button({
 		}
 	}
 });
-
 let button2 = blessedpkg.button({
 	parent: buttonsContainer,
 	mouse: true,
@@ -294,7 +293,6 @@ let button2 = blessedpkg.button({
 		}
 	}
 });
-
 let button3 = blessedpkg.button({
 	parent: buttonsContainer,
 	mouse: true,
@@ -318,7 +316,6 @@ let button3 = blessedpkg.button({
 		}
 	}
 });
-
 let button4 = blessedpkg.button({
 	parent: buttonsContainer,
 	mouse: true,
@@ -495,14 +492,14 @@ async function combat(combatEvent) {
 // moster picker in random event later
 async function enemyAtack(monster,player,first=false) {
 	if(!first){
-		logs.writeSync(`\n${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}`);
+		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
 	await new Promise(resolve => setTimeout(resolve, 300))
-	logs.writeSync(chalk.red(`${!first?`\n`:``}${monster.name} attacks you with ${monster.weapon}!`))
+	logs.writeSync(chalk.red(`${monster.name} attacks you with ${monster.weapon}!\n`))
 	if (monster.rollToHit() >= player.ac) {
 		let monsterDamage = monster.rollDamage()
 		//await new Promise(resolve => setTimeout(resolve, 100))
-		logs.writeSync(chalk.red(`\n${monster.name} hits you for ${monsterDamage} damage!\n`))
+		logs.writeSync(chalk.red(`${monster.name} hits you for ${monsterDamage} damage!\n`))
 		player.hp -= monsterDamage
 		refreshStats(player)
 		if(player.hp<=0){
@@ -513,7 +510,7 @@ async function enemyAtack(monster,player,first=false) {
 		// add call to game over function
 	} else {
 		//await new Promise(resolve => setTimeout(resolve, 100))
-		logs.writeSync(chalk.red(`\n${monster.name} misses you!\n`))
+		logs.writeSync(chalk.red(`${monster.name} misses you!\n`))
 	}
 	if(first){
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
@@ -523,25 +520,28 @@ async function enemyAtack(monster,player,first=false) {
 function clearCombat(logs){
 	clearButtons();
 	encounterResolver()
-	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
-	logs.writeSync(`\n${chalk.yellow(`You defeated the enemy!`)}`);
-	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
+	logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
+	logs.writeSync(`${chalk.yellow(`You defeated the enemy!`)}\n`);
+	logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 }
 
 
 
-async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, firstLoop=true, hostile=false) {
+async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, firstLoop=true, hostile=false, counter=0) {
 	let monster = monsterCopy
 	let playerWonInitiative = false
 	let monsterHostile = hostile
+	let turn = counter
 
-	if (/*room.forceHostile == -1 &&*/ monster.aggression < 12) {
-		// friendly
-	} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/) {
-		// hostile
-		monsterHostile = true;
-	} else {
-		// neutral, which is functionally the same as friendly
+	if(!firstLoop){
+		if (/*room.forceHostile == -1 &&*/ monster.aggression < 12) {
+			// friendly
+		} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/) {
+			// hostile
+			monsterHostile = true;
+		} else {
+			// neutral, which is functionally the same as friendly
+		}
 	}
 
 	if (firstLoop&&monsterHostile){
@@ -561,7 +561,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			rollLog(logs)
 		}
 		clearButtons();
-		logs.writeSync(chalk.greenBright(`${escLeftByNum(2)}You attack the enemy with your ${player.weaponName.toLowerCase()}!`));
+		logs.writeSync(chalk.greenBright(`${escLeftByNum(2)}You attack the enemy with your ${player.weaponName.toLowerCase()}!\n`));
 		let TOHIT = player.rollToHit()
 		if (TOHIT[0] === 20) {
 			logs.writeSync(dice+escUpByNum(3)+gradient.rainbow(`\nCrit!\n\n`))
@@ -570,13 +570,18 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 
 		if ((TOHIT[0]+TOHIT[1]) >= monster.ac) {
 			let playerDamage = player.rollDamage()
+			let crit = false
 			if (TOHIT[0] === 20) {
+				crit = true
 				playerDamage+=player.rollDamage()
 			}
 			monster.hp -= playerDamage
-			logs.writeSync(chalk.greenBright(`\nYou hit for ${playerDamage} damage!     ___DEBUGenemyhp=${monster.hp}`));
+			logs.writeSync(chalk.greenBright(`You hit for ${playerDamage} damage!     ___DEBUGenemyhp=${monster.hp}\n`));
+			logs.writeSync(player.weapon.dmgType.applyEffect(monster,player.weapon.dmgType, crit, player));
+			
+			logs.writeSync(chalk.greenBright(`___DEBUGenemyhp=${monster.hp}\n`));
 		} else {
-			logs.writeSync(chalk.greenBright(`\nYou miss!    ____DEBUGenemyhp=${monster.hp}`));
+			logs.writeSync(chalk.greenBright(`You miss!    ____DEBUGenemyhp=${monster.hp}\n`));
 		}
 		if (monster.hp <= 0) {
 			await new Promise(resolve => setTimeout(resolve, 100))
@@ -585,7 +590,8 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			await new Promise(resolve => setTimeout(resolve, 50))
 			await enemyAtack(monster,player)
 			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
-			combatLogic(monster, player, false)
+			logs.writeSync(`${chalk.bold.green(turn)}\n`);
+			combatLogic(monster, player, false, monsterHostile, ++turn)
 		}
 	})
 	combatButtonsMap['flee'].on('press', async () => {
@@ -608,7 +614,8 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 
 			logs.writeSync(`${chalk.yellow(`${monster.name} prevented your escape!`)}`);
 			await enemyAtack(monster,player)
-			combatLogic(monster, player, false)
+			logs.writeSync(`${chalk.bold.green(turn)}\n`);
+			combatLogic(monster, player, false, monsterHostile, ++turn)
 		}
 	})
 	// combatButtonsMap['chatUp'].on('press', async () => {
@@ -642,7 +649,8 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			await enemyAtack(monster,player)
 			if(player.potions<1){combatButtonsMap['potion'].destroy()}
 			screen.render()
-			combatLogic(monster, player, false)
+			logs.writeSync(`${chalk.bold.green(turn)}\n`);
+			combatLogic(monster, player, false, monsterHostile, ++turn)
 		})
 	}
 	if('oil' in combatButtonsMap){
@@ -665,7 +673,8 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			} else {
 				await enemyAtack(monster,player)
 				await new Promise(resolve => setTimeout(resolve, 50))
-				combatLogic(monster, player, false)
+				logs.writeSync(`${chalk.bold.green(turn)}\n`);
+				combatLogic(monster, player, false, monsterHostile, ++turn)
 			}
 		})
 	}
@@ -677,7 +686,6 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 
 
 function createCombatButtons(hostile) {
-	clearButtons()
 	let monsterHostile=hostile
 	clearButtons()
 	combatButtonsMap = {}
@@ -693,7 +701,7 @@ function createCombatButtons(hostile) {
 		left: 1,
 		top: 1,
 		name: `attack`,
-		content: `${chalk.bold.white('attack ')}${chalk.bold.green(thePlayer.weapon)}\
+		content: `${chalk.bold.white('attack ')}${chalk.bold.green(thePlayer.weapon.dmgDie)}\
 ${thePlayer.basedamage<0?chalk.bold.white(' - '):chalk.bold.white(' + ')}\
 ${chalk.bold.white(Math.abs(thePlayer.basedamage))}\
 ${monsterHostile?'':gradient.retro.multiline('\nattacking this enemy\nwill make it hostile')}`, //maybe add damage die
@@ -826,6 +834,29 @@ ${monsterHostile?'':gradient.retro.multiline('\nattacking this enemy\nwill make 
 	stats.focus()
 	screen.render()
 }
+
+
+
+
+//
+//
+// Treasure event
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
 
 //ESC[?25l	make cursor invisible
 //ESC[?25h	make cursor visible

@@ -518,6 +518,7 @@ async function enemyAtack(monster,player,first=false) {
 }
 
 function clearCombat(logs){
+	thePlayer.weaponCooldown=0
 	clearButtons();
 	encounterResolver()
 	logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);

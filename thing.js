@@ -239,13 +239,6 @@ but you’d best hurry back to the Redscale Army, you brat!” `
 
 
 
-program.cursorColor('000000')
-screen.title = '~game~';
-screen.program.hideCursor(true);
-screen.append(ImageScreenTerm)
-screen.append(logs)
-
-
 //test button declarations
 let button1 = blessedpkg.button({
 	parent: buttonsContainer,
@@ -613,7 +606,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
 
-			logs.writeSync(`${chalk.yellow(`${monster.name} prevented your escape!`)}`);
+			logs.writeSync(`${chalk.yellow(`${monster.name} prevented your escape!`)}\n`);
 			await enemyAtack(monster,player)
 			logs.writeSync(`${chalk.bold.green(turn)}\n`);
 			combatLogic(monster, player, false, monsterHostile, ++turn)
@@ -639,9 +632,9 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			}
 			logs.writeSync(thePlayer.hp+" "+thePlayer.hpMax)
 			if((thePlayer.hp+heal)>thePlayer.hpMax){
-				logs.writeSync(`${chalk.yellow(`AAAAAAA You drink a potion! you heal for ${thePlayer.hpMax-thePlayer.hp} hp!`)}`);
+				logs.writeSync(`${chalk.yellow(`AAAAAAA You drink a potion! you heal for ${thePlayer.hpMax-thePlayer.hp} hp!`)}\n`);
 			}else{
-				logs.writeSync(`${chalk.yellow(`BBBBBBB You drink a potion! you heal for ${heal} hp!`)}`);
+				logs.writeSync(`${chalk.yellow(`BBBBBBB You drink a potion! you heal for ${heal} hp!`)}\n`);
 			}
 			thePlayer.increaseHP(heal)
 			thePlayer.potions--
@@ -1025,6 +1018,12 @@ screen.key('n', async function () {
 	death = true;
 	encounterResolver()
 })
+
+program.cursorColor('000000')
+screen.title = '~game~';
+screen.program.hideCursor(true);
+screen.append(ImageScreenTerm)
+screen.append(logs)
 
 createEventsMap(testEventArr, story)
 buttonsArray = [button1, button2, button3, button4];

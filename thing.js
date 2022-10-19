@@ -641,7 +641,9 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			thePlayer.potions--
 			refreshStats()
 			refreshInventory()
-			await enemyAtack(monster,player)
+			if(monsterHostile){
+				await enemyAtack(monster,player)
+			}
 			if(player.potions<1){combatButtonsMap['potion'].destroy()}
 			screen.render()
 			logs.writeSync(`${chalk.bold.green(turn)}\n`);

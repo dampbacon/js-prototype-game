@@ -936,6 +936,7 @@ async function reset(){
 	death = false
 	thePlayer = thePlayer.rollNewPlayer()
 	refreshStats(thePlayer)
+	refreshInventory()
 	clearButtons()
 	logs.reset()
 	ImageScreenTerm.reset()

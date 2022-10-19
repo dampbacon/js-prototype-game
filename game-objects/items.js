@@ -70,7 +70,7 @@ export let poison_damage = new dmgTypeClass({
             return `${chalk.hex(self.color)('$$$$$$$$$ 1 poison damage: ')}${bonusDamage}\n`
         }else if(chance2.bool({ likelihood: (100*self.chanceToApply)}) || crit){
             let bonusDamage=crit?chance2.rpg('2d4',{sum: true}):chance2.rpg('1d4',{sum: true})
-            target2.weaponCooldown=selfdmgtype.effectDurationMax
+            target2.weaponCooldown= crit?0:selfdmgtype.effectDurationMax
             target.hp-=bonusDamage
             return `${chalk.hex(self.color)('DEFAULT poison damage: ')}${bonusDamage}__________________\n${target2.weaponCooldown}_______________\n`
         }else{

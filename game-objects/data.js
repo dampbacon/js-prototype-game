@@ -5,6 +5,7 @@ import _ from "lodash";
 import repeat from "repeat-string";
 import longest from "longest";
 import wrap from "word-wrap";
+import gradient from 'gradient-string';
 //var align = require('align-text');
 import align_text from 'align-text';
 //DAMAGE TYPES
@@ -352,8 +353,8 @@ export function padString(string, len){
 }
   //+'@'.repeat(Math.floor(len)/2)+'@'.repeat(Math.floor(len)%2)})
 
-export function textBoxNotUI(text){
-    let str= padString(text,15)
+export function textBoxNotUI(text,padding){
+    let str= padString(text,padding)
     str=align_text(str, centerAlign);
     let lines = str.split('\n');
     let max = longest(lines).length;

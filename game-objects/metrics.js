@@ -34,7 +34,7 @@ export class combatMetrics extends GlobalMetrics{
 
     }
     calculateHitMissAVG(){
-        console.log(_.sum(this.HMar))
+        console.assert(Number.isInteger(_.sum(this.HMar)), "SHit")
         return (_.sum(this.HMar)/this.HMar.length).toPrecision(5)
     }
     calculateTurnDmgAVG(){

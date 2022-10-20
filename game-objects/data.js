@@ -2,7 +2,11 @@ import {chance2, chance3} from "./random_nums.js";
 import chalk from "chalk";
 import {dmgTypeClass, weapon} from "./items.js";
 import _ from "lodash";
-
+import repeat from "repeat-string";
+import longest from "longest";
+import wrap from "word-wrap";
+//var align = require('align-text');
+import align_text from 'align-text';
 //DAMAGE TYPES
 export const damageTypes = Object.freeze({
     fire_damage : new dmgTypeClass({
@@ -268,7 +272,9 @@ export function armourPicker(){
 }
 
 const GenericEnemiesArt=Object.freeze({
-genericHumaniod:`[37m[40m   [90m[40m▄▄▄&*[32m[40m¿[90m[40m/▄▄▄▄▄▄▄▄░░░░░[m
+
+genericHumaniod:
+`[37m[40m   [90m[40m▄▄▄&*[32m[40m¿[90m[40m/▄▄▄▄▄▄▄▄░░░░░[m
 [37m[40m     [90m[40m&*[32m[40m¿[94m[40m¿[90m[40m/▒[37m[40m   [30m[40m░[37m[40m [90m[40m#▒[37m[40m≈÷≈  [m
 [37m[40m   [90m[40m**&[32m[40m¿[94m[40m¿[90m[40m░░▒[37m[40m  [30m[40m▒[31m[40m♦[30m[40m#[90m[40m#▒░░░░░[m
 [37m[40m [90m[40m*//&&[37m[40m [90m[40m/[32m[40m¿¿[90m[40m▒[37m[40m   [90m[40m░▒#▒[37m[40m≈÷≈  [m
@@ -278,7 +284,9 @@ genericHumaniod:`[37m[40m   [90m[40m▄▄▄&*[32m[40m¿[90m[40m/▄▄
 [37m[40m   [90m[40m/&&&[37m[40m   [90m[40m▒[30m[40m░▒[37m[40m [90m[40m░[37m[40m [90m[40m#▒[37m[40m≈÷≈  [m
 [37m[40m [90m[40m&&░█▒▓▓█▓▒[30m[40m░▒[37m[40m   [90m[40m#▓░░░░░[m
 [37m[40m   ########     #######[m`,
-amorphousBlob:`[90m[40m░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[37m[40m [m
+
+amorphousBlob:
+`[90m[40m░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[37m[40m [m
 [37m[40m  ≈÷≈[90m[40m▒[33m[40m║[37m[40m [30m[40m░[37m[40m   [90m[40m▒\[37m[40m  [90m[40m*[37m[40m@   [m
 [90m[40m░░░░░▒[33m[40m║[37m[40m     [90m[40m▒░░[37m[40m  [30m[40m⌂[90m[40m**[37m[40m [m
 [37m[40m  ≈÷≈[90m[40m▒[33m[40m║[37m[40m     [90m[40m▒[37m[40m [30m[40m⌂[93m[40m⌂[37m[40m  [93m[40m⌂[30m[40m⌂[90m[40m\[m
@@ -288,7 +296,9 @@ amorphousBlob:`[90m[40m░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄�
 [37m[40m  ≈÷≈[90m[40m▒[33m[40m║[37m[40mC[90m[40m░▒▓[37m[40mC[90m[40m▒[37m[40m   [90m[40m&&&\[37m[40m [m
 [90m[40m░░░░░▓[33m[40m║[37m[40m     [90m[40m▒▓█▓▓▒█░&[m
 [37m[40m#######     ######## [m`,
-amorphousBlobCave:`[37m[40m             [90m[40m####[37m[40m        [m
+
+amorphousBlobCave:
+`[37m[40m             [90m[40m####[37m[40m        [m
 [37m[40m       [90m[40m//[37m[40m [90m[40m###[37m[40m   [90m[40m##\[37m[40m      [m
 [37m[40m       [90m[40m/[37m[40m  [90m[40m#▒[37m[40m      [90m[40m##\\\[37m[40m  [m
 [37m[40m    [90m[40m////[37m[40m [90m[40m#▒[37m[40m          [90m[40m#\\[37m[40m [m
@@ -298,7 +308,9 @@ amorphousBlobCave:`[37m[40m             [90m[40m####[37m[40m        [m
 [90m[40m/[37m[40m  [90m[40m▒[37m[40m    [90m[40m░░░===█░░░░╥╥╥[37m[40m   [m
 [90m[40m/[37m[40m  [90m[40m▒[37m[40m   [90m[40m░░[37m[40m [90m[40m▒‼[37m[40mC[90m[40m░▒▓[37m[40mC[90m[40m‼░░░░[37m[40m   [m
 [90m[40m/[37m[40m [90m[40m▒[37m[40m     [90m[40m▀▒░▀░░░[37m[40m [90m[40m░░▀[37m[40m      [m`,
-guard:`[37m[40m           [90m[40m####[37m[40m             [m
+
+guard:
+`[37m[40m           [90m[40m####[37m[40m             [m
 [37m[40m         [90m[40m/##[37m[40m   [90m[40m###[37m[40m [90m[40m\\[37m[40m       [m
 [37m[40m     [90m[40m///##[37m[40m      [90m[40m▒#[37m[40m  [90m[40m\[37m[40m       [m
 [37m[40m    [90m[40m//#[37m[40m          [90m[40m▒#[37m[40m [90m[40m\\\\[37m[40m    [m
@@ -314,3 +326,53 @@ const artArray=Object.values(GenericEnemiesArt)
 export function PickEnemyArt(){
     return chance3.pickone(artArray)
 }
+
+
+export const border=
+`\
+╭╼────────────────────────╾╮
+│                          │
+│                          │
+│                          │
+│                          │
+│                          │
+╰╼────────────────────────╾╯
+`
+
+
+var str = `Lorem ipsum dolor sit amet,
+consectetur adipiscing elit,
+sed do eiusmod tempor 
+incididunt ut 
+labore et dolore 
+magna aliqua. 
+Ut enim 
+ad minim veniam, quis. 
+Lorem ipsum dolor 
+sit amet, 
+consectetur adipiscing elit, 
+sed do eiusmod tempor 
+incididunt ut labore
+et dolore magna aliqua. 
+Ut enim ad minim veniam, quis`;
+//adapted from jonschlinkert align-text examples (MIT)
+function centerAlign(len, longest, line, lines) {
+    return Math.floor((longest - len) / 2);
+}
+str=align_text(str, centerAlign);
+
+//var text = wrap(str, {width: 50, indent: ' '});
+var lines = str.split('\n');
+var max = longest(lines).length;
+
+lines = lines.map((line) => {
+  var diff = max - line.length;
+  return '│' + line + repeat(' ', diff) + '│';
+});
+
+var top = '╭╼'+repeat('─', lines[0].length-4)+'╾╮';
+var bot = '╰╼'+repeat('─', lines[0].length-4)+'╾╯';
+export var res = top + '\n'
+  + lines.join('\n') + '\n'
+  + bot;
+

@@ -7,10 +7,12 @@ let testplayer = new Player()
 // console.log(testplayer.hp)
 // console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,false,testplayer))}
 
-import { armourArray, armourArrayWeights, border, damageTypes, padString, pickWeapon, textBoxNotUI } from "./game-objects/data.js";
+import { armourArray, armourArrayWeights, border, damageTypes, padString, pickWeapon, testContent, textBoxNotUI } from "./game-objects/data.js";
 import { copyMonster, monster } from "./game-objects/mobs.js";
+import gradient from 'gradient-string';
 
 import longest from 'longest';
+import chalk from "chalk";
 
 //test array values
 // console.log(weaponsArray)
@@ -74,3 +76,5 @@ Ut enim ad minim veniam, quis`;
 let strArr = str.split('\n')
 //40 is stand in for terminal width
 console.log(textBoxNotUI(str,40-longest(strArr).length));
+console.log(testContent)
+console.log(padString(testContent,10));

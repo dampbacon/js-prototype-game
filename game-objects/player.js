@@ -1,6 +1,7 @@
 //var seedrandom = require('seedrandom');
 import {chance1, chance2} from "./random_nums.js";
 import {ARMOUR, ARMOURmap, armourPicker, pickWeapon, weapons} from "./data.js";
+import { combatMetrics, GlobalMetrics } from "./metrics.js";
 //diff object for map generation
 chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 
@@ -22,7 +23,7 @@ export class Player {
         this.dex= this.rollStat();
         this.cha= this.rollStat();
         this.int= this.rollStat();
-        let initial = chance1.rpg('2d6',{sum: true})+this.str+6
+        let initial = chance1.rpg('2d6',{sum: true})+this.str+6+     200
         this.hp = initial
         this.hpMax = initial
         this.slots = { weapon: true, shield: false, head: false, armor: true, ring: false }
@@ -45,6 +46,11 @@ export class Player {
         //later include identify potion mechanic
         this.potions = 20;
         this.scrolls = 2;
+        //metrics to keep track of progression and combat stats
+        //temp metric will be merged then cleared at end of every event
+        //this.globalMetrics = GlobalMetrics()
+        //encounterData
+        this.encDat=new combatMetrics()
     }
     
     rollStat() {

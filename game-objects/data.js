@@ -100,6 +100,7 @@ export const damageTypes = Object.freeze({
             }
         }
     }),
+
     slash_damage : new dmgTypeClass({
         name: 'slash_damage',
         color: 'ffffff',
@@ -354,7 +355,8 @@ export function padString(string, len){
   //+'@'.repeat(Math.floor(len)/2)+'@'.repeat(Math.floor(len)%2)})
 
 export function textBoxNotUI(text,padding){
-    let str= padString(text,padding)
+    //let str= padString(text,padding)
+    let str= text
     str=align_text(str, centerAlign);
     let lines = str.split('\n');
     let max = longest(lines).length;
@@ -373,5 +375,24 @@ export function textBoxNotUI(text,padding){
     return (res)
 }
 // turns taken, damage deal, damage taken
+
+export let testContent=
+`\
+╭╼────────────────────────────────────────────╾╮
+│   ${gradient.instagram("MonsterName")} ${chalk.blue(`deafeated in`)} ${chalk.greenBright(`${4} turns`)}
+│   <${'-'.repeat(38)}>
+│   XP earned:  ${chalk.greenBright(`545`)}
+│
+│   average hit rate: 99.999 % hit chance
+│   average damage dealt per turn: ${chalk.redBright(`999`)} smg
+|
+│   Total dmg dealt; ${chalk.redBright('9999 dmg')}
+│   Total dmg taken: ${chalk.greenBright(`-33`)} dmg
+│
+│   potions used ${chalk.green('  |')} ${chalk.cyan('Elixir')}
+│   scrolls used ${chalk.green('  |')} ${chalk.yellow('ScrollName')}
+│   oil flask used ${chalk.green('|')} ${chalk.redBright('FireOil')}
+╰╼────────────────────────────────────────────╾╯\
 `
-${''}`
+
+

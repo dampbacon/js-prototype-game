@@ -15,6 +15,8 @@ import {chance2, resetRandoms} from './game-objects/random_nums.js';
 import {buttonsContainer, createStatsBox, ImageScreenTerm, InventoryBox, logs, program, screen, stats} from "./ui.js";
 import {escLeftByNum, escUpByNum, gradient_scanlines, rollLog} from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
+import { testContent } from './game-objects/data.js';
+import { combatMetrics } from './game-objects/metrics.js';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
@@ -448,9 +450,37 @@ async function eventHandler(gameEvent = temp_event1,) {
 	//XTermTestv2.writeSync("DEATH"+ death)
 	// extend somehow to rest later
 	if(death===false){
+		let combatBanner=`\
+╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
+│   ${gradient.instagram(thePlayer.encDat.enmyName)} ${chalk.blue(`deafeated in`)} ${chalk.greenBright(`${thePlayer.encDat.turn} turns`)}
+│   <${'-'.repeat(38)}>
+│   XP earned:  ${chalk.greenBright(`545`)}
+│
+│   average hit rate: ${thePlayer.encDat.calculateHitMissAVG()*100} % hit chance
+│   average damage dealt per turn: ${chalk.redBright(thePlayer.encDat.calculateTurnDmgAVG())} dmg
+|
+│   Total dmg dealt; ${chalk.redBright(`${thePlayer.encDat.returnDamageDealt()} dmg`)}
+│   Total dmg taken: ${chalk.greenBright(`${thePlayer.encDat.returnDamageTaken()}`)} dmg
+│
+│   ${chalk.cyan('potions used')} ${chalk.green('   |')} ${thePlayer.encDat.pUse}
+│   ${chalk.yellow('scrolls used')} ${chalk.green('   |')} ${thePlayer.encDat.sUse}
+│   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encDat.fUse}
+╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
+`
+
+
+		thePlayer.encDat=new combatMetrics()
 		await new Promise(r => setTimeout(r, 500));
-		ImageScreenTerm.reset()
-		ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
+		//ImageScreenTerm.writeSync('\n'+testContent)
+		ImageScreenTerm.writeSync('\n'+combatBanner)
+
+		//ImageScreenTerm.writeSync(escLeftByNum(1))
+		//ImageScreenTerm.writeSync("#")
+		for(let i=0; i<=12; i++){
+			ImageScreenTerm.writeSync(escUpByNum(1)+escLeftByNum(1)+'│')
+		}
+		//ImageScreenTerm.reset()
+		//ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
@@ -482,13 +512,14 @@ async function combat(combatEvent) {
 	logs.writeSync(`\n${chalk.yellow(`Combat Start!`)}`);
 	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 	let monster = copyMonster(tempMonster)
+	thePlayer.encDat.enmyName=monster.name
 	ImageScreenTerm.reset()
 	ImageScreenTerm.writeSync(monster.art)
 	combatLogic(monster,thePlayer,true)
 
 }
 // moster picker in random event later
-async function enemyAtack(monster,player,first=false) {
+async function enemyAtack(monster,player=thePlayer,first=false) {
 	if(!first){
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
@@ -496,6 +527,8 @@ async function enemyAtack(monster,player,first=false) {
 	logs.writeSync(chalk.red(`${monster.name} attacks you with ${monster.weapon}!\n`))
 	if (monster.rollToHit() >= player.ac) {
 		let monsterDamage = monster.rollDamage()
+		
+		player.encDat.AdmgTkn(monsterDamage)
 		//await new Promise(resolve => setTimeout(resolve, 100))
 		logs.writeSync(chalk.red(`${monster.name} hits you for ${monsterDamage} damage!\n`))
 		player.hp -= monsterDamage
@@ -526,11 +559,13 @@ function clearCombat(logs){
 
 
 
-async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, firstLoop=true, hostile=false, counter=0) {
+async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, firstLoop=true, hostile=false, counter=1) {
 	let monster = monsterCopy
 	let playerWonInitiative = false
 	let monsterHostile = hostile
 	let turn = counter
+	thePlayer.encDat.turn=turn
+	logs.writeSync(`${chalk.bold.green(turn)}\n`);
 
 	if(!firstLoop){
 		if (/*room.forceHostile == -1 &&*/ monster.aggression < 12) {
@@ -568,8 +603,11 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 		}
 
 		if ((TOHIT[0]+TOHIT[1]) >= monster.ac) {
+			player.encDat.AHM(true)
+
 			let playerDamage = player.rollDamage()
 			let crit = false
+			player.encDat.ATdmg(playerDamage)
 			if (TOHIT[0] === 20) {
 				crit = true
 				playerDamage+=player.rollDamage()
@@ -580,6 +618,8 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			
 			logs.writeSync(chalk.greenBright(`___DEBUGenemyhp=${monster.hp}\n`));
 		} else {
+			player.encDat.AHM(false)
+
 			logs.writeSync(chalk.greenBright(`You miss!    ____DEBUGenemyhp=${monster.hp}\n`));
 		}
 		if (monster.hp <= 0) {
@@ -589,7 +629,6 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			await new Promise(resolve => setTimeout(resolve, 50))
 			await enemyAtack(monster,player)
 			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
-			logs.writeSync(`${chalk.bold.green(turn)}\n`);
 			combatLogic(monster, player, false, true, ++turn)
 		}
 	})
@@ -613,7 +652,6 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 
 			logs.writeSync(`${chalk.yellow(`${monster.name} prevented your escape!`)}\n`);
 			await enemyAtack(monster,player)
-			logs.writeSync(`${chalk.bold.green(turn)}\n`);
 			combatLogic(monster, player, false, monsterHostile, ++turn)
 		}
 	})
@@ -643,6 +681,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			}
 			thePlayer.increaseHP(heal)
 			thePlayer.potions--
+			thePlayer.encDat.APuse()
 			refreshStats()
 			refreshInventory()
 
@@ -654,13 +693,15 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			}
 			if(player.potions<1){combatButtonsMap['potion'].destroy()}
 			screen.render()
-			logs.writeSync(`${chalk.bold.green(turn)}\n`);
 			combatLogic(monster, player, false, testHostileDebug, ++turn)
 		})
 	}
 	if('oil' in combatButtonsMap){
 		combatButtonsMap['oil'].on('press', async () => {
+			
+			player.encDat.AHM(true)
 			let damage = chance2.rpg('4d6', {sum: true})+4
+			player.encDat.ATdmg(damage)
 			clearButtons();
 			if(playerWonInitiative&&firstLoop){
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
@@ -670,6 +711,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			logs.writeSync(`${chalk.yellow(`You throw oil on the enemy! dealing 4d6+4:${damage} fire damage!`)}`);
 			monster.hp-=damage
 			thePlayer.oil--
+			thePlayer.encDat.AfUse()
 			refreshInventory()
 			await new Promise(resolve => setTimeout(resolve, 100))
 			if (monster.hp <= 0) {
@@ -678,7 +720,6 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			} else {
 				await enemyAtack(monster,player)
 				await new Promise(resolve => setTimeout(resolve, 50))
-				logs.writeSync(`${chalk.bold.green(turn)}\n`);
 				combatLogic(monster, player, false, monsterHostile, ++turn)
 			}
 		})

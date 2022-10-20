@@ -23,7 +23,7 @@ export function escLeftByNum(num) {
     return `[${num}D`
 }
 
-function escRightByNum(num) {
+export function escRightByNum(num) {
     return `[${num}C`
 }
 
@@ -31,7 +31,7 @@ export function escUpByNum(num) {
     return `[${num}A`
 }
 
-function escDownByNum(num) {
+export function escDownByNum(num) {
     return `[${num}B`
 }
 

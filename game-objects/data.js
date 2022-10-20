@@ -340,39 +340,37 @@ export const border=
 `
 
 
-var str = `Lorem ipsum dolor sit amet,
-consectetur adipiscing elit,
-sed do eiusmod tempor 
-incididunt ut 
-labore et dolore 
-magna aliqua. 
-Ut enim 
-ad minim veniam, quis. 
-Lorem ipsum dolor 
-sit amet, 
-consectetur adipiscing elit, 
-sed do eiusmod tempor 
-incididunt ut labore
-et dolore magna aliqua. 
-Ut enim ad minim veniam, quis`;
+
 //adapted from jonschlinkert align-text examples (MIT)
 function centerAlign(len, longest, line, lines) {
     return Math.floor((longest - len) / 2);
 }
-str=align_text(str, centerAlign);
+export function padString(string, len){
+    return string.split('\n')
+    .map((val='',_a,_b)=>{return '*'.repeat(Math.floor(len)/2)+val+'*'.repeat(Math.floor(len)/2)})
+    .join('\n')
+}
+  //+'@'.repeat(Math.floor(len)/2)+'@'.repeat(Math.floor(len)%2)})
 
-//var text = wrap(str, {width: 50, indent: ' '});
-var lines = str.split('\n');
-var max = longest(lines).length;
+export function textBoxNotUI(text){
+    let str= padString(text,15)
+    str=align_text(str, centerAlign);
+    let lines = str.split('\n');
+    let max = longest(lines).length;
 
-lines = lines.map((line) => {
-  var diff = max - line.length;
-  return '│' + line + repeat(' ', diff) + '│';
-});
+    lines = lines.map((line,ind) => {
+        var diff = max - line.length;
+        if(ind===0){console.log(line)}
+        return '│' + line + repeat(' ', diff) + '│';
+    });
 
-var top = '╭╼'+repeat('─', lines[0].length-4)+'╾╮';
-var bot = '╰╼'+repeat('─', lines[0].length-4)+'╾╯';
-export var res = top + '\n'
-  + lines.join('\n') + '\n'
-  + bot;
-
+    let top = '╭╼'+repeat('─', lines[0].length-4)+'╾╮';
+    let bot = '╰╼'+repeat('─', lines[0].length-4)+'╾╯';
+    let res = top + '\n'
+    + lines.join('\n') + '\n'
+    + bot;
+    return (res)
+}
+// turns taken, damage deal, damage taken
+`
+${''}`

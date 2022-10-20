@@ -7,7 +7,7 @@ let testplayer = new Player()
 // console.log(testplayer.hp)
 // console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,false,testplayer))}
 
-import { armourArray, armourArrayWeights, border, damageTypes, pickWeapon, res } from "./game-objects/data.js";
+import { armourArray, armourArrayWeights, border, damageTypes, padString, pickWeapon, textBoxNotUI } from "./game-objects/data.js";
 import { copyMonster, monster } from "./game-objects/mobs.js";
 
 
@@ -55,4 +55,20 @@ let copy = copyMonster(tempMonster)
 console.log(tempMonster)
 console.log(copy)
 console.log(border)
-console.log(res);
+
+var str = `Lorem ipsum dolor sit amet,ew
+consectetur adipiscing elit,
+sed do eiusmod tempor
+incididunt ut
+labore et dolore
+magna aliqua.
+Ut enim
+ad minim veniam, quis.
+Lorem ipsum dolor
+sit amet,
+consectetur adipiscing elit,
+sed do eiusmod tempor
+incididunt ut labore
+et dolore magna aliqua.
+Ut enim ad minim veniam, quis`;
+console.log(textBoxNotUI(str));

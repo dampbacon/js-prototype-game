@@ -10,7 +10,7 @@ let testplayer = new Player()
 import { armourArray, armourArrayWeights, border, damageTypes, padString, pickWeapon, textBoxNotUI } from "./game-objects/data.js";
 import { copyMonster, monster } from "./game-objects/mobs.js";
 
-
+import longest from 'longest';
 
 //test array values
 // console.log(weaponsArray)
@@ -71,4 +71,6 @@ sed do eiusmod tempor
 incididunt ut labore
 et dolore magna aliqua.
 Ut enim ad minim veniam, quis`;
-console.log(textBoxNotUI(str));
+let strArr = str.split('\n')
+//40 is stand in for terminal width
+console.log(textBoxNotUI(str,40-longest(strArr).length));

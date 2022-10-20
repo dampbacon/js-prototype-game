@@ -7,12 +7,8 @@ let testplayer = new Player()
 // console.log(testplayer.hp)
 // console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,false,testplayer))}
 
-import { armourArray, armourArrayWeights, damageTypes, pickWeapon } from "./game-objects/data.js";
+import { armourArray, armourArrayWeights, border, damageTypes, pickWeapon, res } from "./game-objects/data.js";
 import { copyMonster, monster } from "./game-objects/mobs.js";
-
-
-
-
 
 
 
@@ -54,6 +50,9 @@ let tempMonster = new monster({
 	aggro: 6,
 	rarity: 1
 })
+
 let copy = copyMonster(tempMonster)
 console.log(tempMonster)
 console.log(copy)
+console.log(border)
+console.log(res);

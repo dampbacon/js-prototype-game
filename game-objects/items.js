@@ -31,12 +31,7 @@ export class weapon {
         this.enchant = enchant?enchant:0;
         this.description = description?description: this.generateDescription();
     }
-    // generateDescription() {
-    //     return 'A weapon';
-    // }
-    
 }
-
 
 
 

@@ -33,7 +33,7 @@ let tempMonster = new monster({
 	morale: 6,
 	weapon: "ruler",
 	dmgDie: 6,
-	aggro: 12,
+	aggro: 6,
 	rarity: 1
 })
 const rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
@@ -426,7 +426,7 @@ async function eventHandler(gameEvent = temp_event1,) {
 	let gb = gameEvent.body
 	let gbf = gb.format
 	//make enum thing later
-	ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
+	//ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
 	if (gbf.writeMode === 'gradientScanlines') {
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 	}
@@ -442,13 +442,15 @@ async function eventHandler(gameEvent = temp_event1,) {
 		// test code
 		combat(gameEvent)
 	}
-
 	await (waitForCombat())
+	//write event package content after event complete
 	//rollLog(XTermTestv2)
 	//XTermTestv2.writeSync("DEATH"+ death)
 	// extend somehow to rest later
 	if(death===false){
 		await new Promise(r => setTimeout(r, 500));
+		ImageScreenTerm.reset()
+		ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
@@ -480,6 +482,8 @@ async function combat(combatEvent) {
 	logs.writeSync(`\n${chalk.yellow(`Combat Start!`)}`);
 	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 	let monster = copyMonster(tempMonster)
+	ImageScreenTerm.reset()
+	ImageScreenTerm.writeSync(monster.art)
 	combatLogic(monster,thePlayer,true)
 
 }
@@ -586,12 +590,12 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			await enemyAtack(monster,player)
 			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 			logs.writeSync(`${chalk.bold.green(turn)}\n`);
-			combatLogic(monster, player, false, monsterHostile, ++turn)
+			combatLogic(monster, player, false, true, ++turn)
 		}
 	})
 	combatButtonsMap['flee'].on('press', async () => {
 		let dexSave=player.rollSkillCheck(player.dex)
-		if(dexSave>=10 + monster.hitDie){
+		if((dexSave>=(10 + monster.hitDie))||!monsterHostile){
 			logs.writeSync(`${!playerWonInitiative&&firstLoop?escUpByNum(1)+'\r':''}${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 			logs.writeSync(`${chalk.yellow(`You escaped through a random tunnel`)}\n`);
 			logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
@@ -641,13 +645,17 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			thePlayer.potions--
 			refreshStats()
 			refreshInventory()
+
+			let testHostileDebug=monsterHostile
 			if(monsterHostile){
 				await enemyAtack(monster,player)
+			}else{
+				testHostileDebug=false
 			}
 			if(player.potions<1){combatButtonsMap['potion'].destroy()}
 			screen.render()
 			logs.writeSync(`${chalk.bold.green(turn)}\n`);
-			combatLogic(monster, player, false, monsterHostile, ++turn)
+			combatLogic(monster, player, false, testHostileDebug, ++turn)
 		})
 	}
 	if('oil' in combatButtonsMap){

@@ -1,10 +1,11 @@
 
 import { monsterRandom } from './random_nums.js';
 import { Player } from './player.js';
+import { PickEnemyArt } from './data.js';
 //make roll initiative function in main file
 const defaults={name:'', hitDie:1, ac:8, morale:6, weapon:'stick', dmgDie:6, aggro:6, rarity:1, weaknesses:[]}
 export class monster {/*12always hostile 0 inverse */
-    constructor({name, hitDie, ac, morale, weapon, dmgDie, aggro, rarity}={...defaults}) {
+    constructor({name, hitDie, ac, morale, weapon, dmgDie, aggro, rarity, art}={...defaults}) {
         this.name = name;
         this.hitDie = hitDie;
         this.ac = ac;
@@ -13,6 +14,7 @@ export class monster {/*12always hostile 0 inverse */
         this.dmgDie = dmgDie;
         this.aggro = aggro;
         this.rarity = rarity;
+        this.art= art?art:PickEnemyArt()
         this.hp = monsterRandom.rpg(`${this.hitDie}d6`, { sum: true });
     }
     rollDamage() {

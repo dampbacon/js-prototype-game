@@ -43,7 +43,7 @@ export class Player {
         this.gold = 0;
         this.oil = 5;
         //later include identify potion mechanic
-        this.potions = 2;
+        this.potions = 20;
         this.scrolls = 2;
     }
     

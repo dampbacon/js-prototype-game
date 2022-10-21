@@ -30,15 +30,15 @@ The simplification is somehow unstable and i'm getting api errors with no traceb
 i will back port features i like into the main branch.
 
 ## todo:
-[] persausion and non hostile enemies (partialy done)
-[] different event types
-[] loot, trap, shrines, shop.
-[] random loot gen via weighted random picker from list in data file
-[] random enemy select from weighted random picker from list in data file
-[] random descriptions for everything
-[x] advanced weapons, implementtaion of weapon class.
-[] floor depth mechanic.
-[] home base, level up out of dungeon mechanic.
-[] animated ansi/ascii art as opposed to the current static images.
-[] external storage of data maybe.
+- [ ] persausion and non hostile enemies (partialy done)
+- [ ] different event types
+- [ ] loot, trap, shrines, shop.
+- [ ] random loot gen via weighted random picker from list in data file
+- [ ] random enemy select from weighted random picker from list in data file
+- [ ] random descriptions for everything
+- [x] advanced weapons, implementtaion of weapon class.
+- [ ] floor depth mechanic.
+- [ ] home base, level up out of dungeon mechanic.
+- [ ] animated ansi/ascii art as opposed to the current static images.
+- [ ] external storage of data maybe.
 

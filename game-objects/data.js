@@ -25,11 +25,42 @@ import align_text from 'align-text';
 ████████▀    ███    █▀   ▀█   ███   █▀    ███    █▀    ████████▀    ██████████         ▄████▀    ▀█████▀   ▄████▀        ██████████  ▄████████▀                                                                                                                                                   
 */
 //return array consist of str and dmg done
+export const DMG_TYPE= Object.freeze({
+    FIRE:'FIRE',
+    ICE:'ICE',
+    LIGHTNING:'LIGHTNING',
+    POISON:'POISON',
+    BLUNT:'BLUNT',
+    SLASH:'SLASH',
+    PIERCE:'PIERCE',
+    HOLY:'HOLY',
+    DARK:'DARK',
+    GRAVITY:'GRAVITY',
+    NARUTO:'NARUTO',
+})
+const DMG_COLOUR = {}
+DMG_COLOUR[DMG_TYPE.FIRE] = 'FFA500'
+DMG_COLOUR[DMG_TYPE.ICE] = '00FFFF'
+DMG_COLOUR[DMG_TYPE.LIGHTNING] = 'fad20c'
+DMG_COLOUR[DMG_TYPE.POISON] = '00FF00'
+DMG_COLOUR[DMG_TYPE.BLUNT] = 'FFFFFF'
+DMG_COLOUR[DMG_TYPE.SLASH] = 'FFFFFF'
+DMG_COLOUR[DMG_TYPE.PIERCE] = 'FFFFFF'
+DMG_COLOUR[DMG_TYPE.HOLY] = 'fef65b'
+DMG_COLOUR[DMG_TYPE.DARK] = '3d3d3d'
+DMG_COLOUR[DMG_TYPE.GRAVITY] = '7919e6'
+DMG_COLOUR[DMG_TYPE.NARUTO] = 'fbe407'
+Object.freeze(DMG_COLOUR)
+export {DMG_COLOUR}
+
+
+
+
 export const damageTypes = Object.freeze({
     fire_damage : new dmgTypeClass({
-        name: 'fire_damage',
+        name: DMG_TYPE.FIRE,
         //effectAdverb:'you set aflame',
-        color: 'FFA500',
+        color: DMG_COLOUR[DMG_TYPE.FIRE],
         chanceToApply: 0.50,
         effectDuration: 0,
         applyEffect: (target, selfdmgtype, crit = false, target2) => {
@@ -44,8 +75,8 @@ export const damageTypes = Object.freeze({
         }
     }),
     poison_damage : new dmgTypeClass({
-        name: 'poison_damage',
-        color: '89ff00',
+        name: DMG_TYPE.POISON,
+        color: DMG_COLOUR[DMG_TYPE.POISON],
         chanceToApply: 0.60,
         effectDuration: 5,
         applyEffect: (target, selfdmgtype, crit = false, target2) => {
@@ -66,9 +97,9 @@ export const damageTypes = Object.freeze({
         }
     }),
     gravity_damage : new dmgTypeClass({
-        name: 'gravity_damage',
+        name: DMG_TYPE.GRAVITY,
         //effectAdverb:'you set aflame',
-        color: '7919e6',
+        color: DMG_COLOUR[DMG_TYPE.GRAVITY],
         chanceToApply: 0.7,
         effectDuration: 0,
         applyEffect: (target, selfdmgtype, crit = false, target2) => {
@@ -84,9 +115,9 @@ export const damageTypes = Object.freeze({
         }
     }),
     weeb_damage : new dmgTypeClass({
-        name: 'weeb_damage',
+        name: DMG_TYPE.NARUTO,
         //effectAdverb:'you set aflame',
-        color: 'fbe407',
+        color: DMG_COLOUR[DMG_TYPE.NARUTO],
         chanceToApply: 0.1,
         effectDuration: 5,
         applyEffect: (target, selfdmgtype, crit = false, target2) => {
@@ -118,20 +149,20 @@ export const damageTypes = Object.freeze({
     }),
 
     slash_damage : new dmgTypeClass({
-        name: 'slash_damage',
-        color: 'ffffff',
+        name: DMG_TYPE.SLASH,
+        color: DMG_COLOUR[DMG_TYPE.SLASH],
         chanceToApply: 0,
         effectDuration: 0,
     }),
     blunt_damage : new dmgTypeClass({
-        name: 'blunt_damage',
-        color: 'ffffff',
+        name: DMG_TYPE.BLUNT,
+        color: DMG_COLOUR[DMG_TYPE.BLUNT],
         chanceToApply: 0,
         effectDuration: 0,
     }),
     piercing_damage : new dmgTypeClass({
-        name: 'piercing_damage',
-        color: 'ffffff',
+        name: DMG_TYPE.PIERCE,
+        color: DMG_COLOUR[DMG_TYPE.PIERCE],
         chanceToApply: 0,
         effectDuration: 0,
     })

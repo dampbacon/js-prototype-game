@@ -10,7 +10,8 @@ example from someone who terminal game compile to wasm https://arthursonzogni.co
 
 ## how to run
 use WSL, windows default terminal mode is incompatible.
-it works on WSL but running on Linux it is incompatible hilariously (dummy terminals that i use for logs and screen do not display escape sequences correctly however other elements do). \
+it works on WSL but running on Linux it is incompatible hilariously (dummy terminals that i use for logs and screen do not display escape sequences correctly however other elements do). 
+
 on wsl install node lts 16.\*\*.\*\* via NVM(node version manage) \
 apt intall DOES NOT INSTALL CORRECT VERSION OF NODE USE NVM \
 do a npm install in project root 

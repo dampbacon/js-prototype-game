@@ -2,6 +2,7 @@
 import {chance1, chance2} from "./random_nums.js";
 import {ARMOUR, ARMOURmap, armourPicker, pickWeapon, weapons} from "./data.js";
 import { combatMetrics, GlobalMetrics } from "./metrics.js";
+import { fireball, heal, kill, vitalize } from "./items.js";
 //diff object for map generation
 chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 
@@ -109,7 +110,7 @@ export class Player {
         return chance2.rpg('2d6',{sum: true})+this.cha
     }
     rollDamage(){
-        let damage = this.basedamage + chance2.rpg(this.weapon.dmgDie,{sum: true})
+        let damage = this.basedamage + chance2.rpg(this.weapon.dmgDie,{sum: true}) + this.weapon.enchant
         damage = damage<1 ? 1 : damage
         return damage
     }
@@ -129,6 +130,12 @@ export class Player {
     } 
     rollNewPlayer(){
         return new Player(this.name)
+    }
+    useScroll(params={}){
+        //getScroll()
+        //let scroll=fireball
+        let scroll=vitalize
+        return scroll.use(this,params)
     }
 }
 

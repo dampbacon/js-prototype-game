@@ -1,4 +1,4 @@
-import { Player } from "./game-objects/player.js";
+import { Player, playerState } from "./game-objects/player.js";
 // import {fire_damage, poison_damage} from "./game-objects/data.js";
 // console.log(poison_damage)
 let testplayer = new Player()
@@ -12,6 +12,7 @@ import { copyMonster, monster } from "./game-objects/mobs.js";
 import gradient from 'gradient-string';
 import longest from 'longest';
 import chalk from "chalk";
+import { fireball } from "./game-objects/items.js";
 
 //test array values
 // console.log(weaponsArray)
@@ -52,31 +53,41 @@ let tempMonster = new monster({
 	rarity: 1
 })
 
-let copy = copyMonster(tempMonster)
-console.log(tempMonster)
-console.log(copy)
-console.log(border)
 
-var str = `Lorem ipsum dolor sit amet,ew
-consectetur adipiscing elit,
-sed do eiusmod tempor
-incididunt ut
-labore et dolore
-magna aliqua.
-Ut enim
-ad minim veniam, quis.
-Lorem ipsum dolor
-sit amet,
-consectetur adipiscing elit,
-sed do eiusmod tempor
-incididunt ut labore
-et dolore magna aliqua.
-Ut enim ad minim veniam, quis`;
-let strArr = str.split('\n')
-//40 is stand in for terminal width
-console.log(textBoxNotUI(str,40-longest(strArr).length));
-console.log(testContent)
-console.log(padString(testContent,10));
-let ansi_escape = testContent2.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
-console.log(textBoxNotUI(ansi_escape))
-console.log(textBoxNotUI(testContent2))
+// console.log(border)
+
+// var str = `Lorem ipsum dolor sit amet,ew
+// consectetur adipiscing elit,
+// sed do eiusmod tempor
+// incididunt ut
+// labore et dolore
+// magna aliqua.
+// Ut enim
+// ad minim veniam, quis.
+// Lorem ipsum dolor
+// sit amet,
+// consectetur adipiscing elit,
+// sed do eiusmod tempor
+// incididunt ut labore
+// et dolore magna aliqua.
+// Ut enim ad minim veniam, quis`;
+// let strArr = str.split('\n')
+// //40 is stand in for terminal width
+// console.log(textBoxNotUI(str,40-longest(strArr).length));
+// console.log(testContent)
+// console.log(padString(testContent,10));
+// let ansi_escape = testContent2.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
+// console.log(textBoxNotUI(ansi_escape))
+// console.log(textBoxNotUI(testContent2))
+let a=fireball
+console.log(a)
+let copy = copyMonster(tempMonster)
+//console.log(tempMonster)
+console.log(copy)
+console.log(testplayer)
+console.log(testplayer.useScroll())
+
+testplayer.state=playerState.COMBAT
+testplayer.hp-=10
+console.log(testplayer.useScroll({monster:copy}))
+console.log(testplayer.hp)

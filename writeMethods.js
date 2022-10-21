@@ -18,6 +18,11 @@
 import lodashC from "lodash.compact";
 import {ImageScreenTerm} from "./ui.js";
 import chalk from "chalk";
+import typeOf from 'kind-of'
+import repeat from 'repeat-string'
+import longest from "longest";
+
+
 
 export function escLeftByNum(num) {
     return `[${num}D`
@@ -150,32 +155,6 @@ export function rollLog(terminal = ImageScreenTerm) {
   ${`\n`.repeat(scrollAmount)}${escUpByNum(terminal.term.rows - 1)}`)
 }
 
-async function scanlines(terminal = ImageScreenTerm, text = '', speed = 5, colorArr = []) {
-    colorArr = colorArr ? colorArr : ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
-    let lines = fitLines(text, terminal.term.cols)
-    let arr2 = Array(colorArr.length).fill('')
-    let cursorPos = 1
-    let arr = arr2.map((content, index, arr) => {
-        arr[index] = [cursorPos, content]
-    })
-    for (let line of lines) {
-        for (let i = 0; i < line.length + arr.length - 1; i++) {
-            shiftArray(arr, '', true, line)
-            shiftArray(arr2, ['', '',], false)
-            arr2[arr2.length - 1] = [cursorPos, arr[arr.length - 1]]
-            for (let i = arr.length - 1; i > -1; i--) {
-                if (arr2[i][0]) {
-                    terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1])}`)
-                    await new Promise(resolve => setTimeout(resolve, speed))
-                }
-            }
-            cursorPos = cursorPos += arr[arr.length - 1].length
-        }
-        terminal.writeSync('\n')
-        cursorPos = 1
-    }
-}
-
 //blank in future methods to write things to terminals in fancy ways wills be here instead of in the main file
 export async function gradient_scanlines(terminal = ImageScreenTerm, text = "", speed = 5, gradientFunction, colorArr = []) {
     let multiline = ``
@@ -259,3 +238,40 @@ export async function gradient_scanlines(terminal = ImageScreenTerm, text = "", 
 
     }
 }
+
+
+
+
+async function scanlines(terminal = ImageScreenTerm, text = '', speed = 5, colorArr = []) {
+    colorArr = colorArr ? colorArr : ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
+    let lines = fitLines(text, terminal.term.cols)
+    let arr2 = Array(colorArr.length).fill('')
+    let cursorPos = 1
+    let arr = arr2.map((content, index, arr) => {
+        arr[index] = [cursorPos, content]
+    })
+    for (let line of lines) {
+        for (let i = 0; i < line.length + arr.length - 1; i++) {
+            shiftArray(arr, '', true, line)
+            shiftArray(arr2, ['', '',], false)
+            arr2[arr2.length - 1] = [cursorPos, arr[arr.length - 1]]
+            for (let i = arr.length - 1; i > -1; i--) {
+                if (arr2[i][0]) {
+                    terminal.writeSync(`[${arr2[i][0]}G${chalk.hex(colorArr[i])(arr2[i][1])}`)
+                    await new Promise(resolve => setTimeout(resolve, speed))
+                }
+            }
+            cursorPos = cursorPos += arr[arr.length - 1].length
+        }
+        terminal.writeSync('\n')
+        cursorPos = 1
+    }
+}
+
+
+
+
+
+
+
+

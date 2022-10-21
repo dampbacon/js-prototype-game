@@ -15,6 +15,7 @@
     "chance": "^1.1.8",
     "gradient-string": "^2.0.2",
     "iconv-lite": "^0.6.3",
+    "kind-of": "^6.0.3",
     "lodash": "^4.17.21",
     "lodash.clonedeep": "^4.5.0",
     "lodash.compact": "^3.0.1",

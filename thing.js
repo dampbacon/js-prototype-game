@@ -15,7 +15,7 @@ import {chance2, resetRandoms} from './game-objects/random_nums.js';
 import {buttonsContainer, createStatsBox, ImageScreenTerm, InventoryBox, logs, program, screen, stats} from "./ui.js";
 import {escLeftByNum, escUpByNum, gradient_scanlines, rollLog} from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
-import { testContent } from './game-objects/data.js';
+import { padString, testContent } from './game-objects/data.js';
 import { combatMetrics } from './game-objects/metrics.js';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
@@ -128,8 +128,8 @@ let temp_event1 = new game_event({
 		format: {
 			writeMode: 'gradientScanlines',
 			gradientFunction: gradient.retro.multiline,
-			gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
-			speed: 1,
+			gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse(),
+			speed: 2,
 		},
 		TextFile: {
 			exists: false,
@@ -450,6 +450,7 @@ async function eventHandler(gameEvent = temp_event1,) {
 	//XTermTestv2.writeSync("DEATH"+ death)
 	// extend somehow to rest later
 	if(death===false){
+		let length ='╰╾────────────────────────────────────────────╼╯'.length
 		let combatBanner=`\
 ╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
 │   ${gradient.instagram(thePlayer.encDat.enmyName)} ${chalk.blue(`deafeated in`)} ${chalk.greenBright(`${thePlayer.encDat.turn} turns`)}
@@ -467,7 +468,7 @@ async function eventHandler(gameEvent = temp_event1,) {
 │   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encDat.fUse}
 ╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
 `
-
+		//combatBanner=padString(combatBanner,ImageScreenTerm.term.cols-length)
 
 		thePlayer.encDat=new combatMetrics()
 		await new Promise(r => setTimeout(r, 500));

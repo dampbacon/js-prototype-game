@@ -7,10 +7,9 @@ let testplayer = new Player()
 // console.log(testplayer.hp)
 // console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,false,testplayer))}
 
-import { armourArray, armourArrayWeights, border, damageTypes, padString, pickWeapon, testContent, textBoxNotUI } from "./game-objects/data.js";
+import { armourArray, armourArrayWeights, border, damageTypes, padString, pickWeapon, testContent, testContent2, textBoxNotUI } from "./game-objects/data.js";
 import { copyMonster, monster } from "./game-objects/mobs.js";
 import gradient from 'gradient-string';
-
 import longest from 'longest';
 import chalk from "chalk";
 
@@ -78,3 +77,6 @@ let strArr = str.split('\n')
 console.log(textBoxNotUI(str,40-longest(strArr).length));
 console.log(testContent)
 console.log(padString(testContent,10));
+let ansi_escape = testContent2.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
+console.log(textBoxNotUI(ansi_escape))
+console.log(textBoxNotUI(testContent2))

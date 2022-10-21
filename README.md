@@ -10,35 +10,37 @@ example from someone who terminal game compile to wasm https://arthursonzogni.co
 
 ## how to run
 use WSL, windows default terminal mode is incompatible.
-it works on WSL but running on Linux it is incompatible hilariously (dummy terminals that i use for logs and screen do not display escape sequences correctly however other elements do).
-on wsl install node lts 16.**.**
-do a npm install
+it works on WSL but running on Linux it is incompatible hilariously (dummy terminals that i use for logs and screen do not display escape sequences correctly however other elements do). 
 
-run either ./thing.js if you chmod +x
-or node thing.js
+on wsl install node lts 16.\*\*.\*\* via NVM(node version manage) \
+apt intall DOES NOT INSTALL CORRECT VERSION OF NODE USE NVM \
+do a npm install in project root 
 
-to test basic event combat loop press 'y' instead of just displaying the test buttons
+run either ./thing.js if you chmod +x \
+or node thing.js 
+
+to test basic event combat loop press 'y' instead of just displaying the test buttons 
 
 # Branch details.
-both branches the code is ....messy
-main branch execution loop is spaghetti code.
-rather than be purely event driven a function pauses execution till a promise is returned
-this is a mess.
+both branches the code is ....messy \
+main branch execution loop is spaghetti code. \
+rather than be purely event driven a function pauses execution till a promise is returned \
+this is a mess. 
 
 I attempted to make the other branch purely event driven and simpler, function calls on button listers when criteria is met i.e killed enemy or death.
 The simplification is somehow unstable and i'm getting api errors with no traceback to the code i declared making it nigh impossible to easily debug.
 i will back port features i like into the main branch.
 
 ## todo:
-* persausion and non hostile enemies
-* different event types
-* loot, trap, shrines, shop.
-* random loot gen via weighted random picker from list in data file
-* random enemy select from weighted random picker from list in data file
-* random descriptions for everything
-* advanced weapons, implementtaion of weapon class.
-* floor depth mechanic.
-* home base, level up out of dungeon mechanic.
-* animated ansi/ascii art as opposed to the current static images.
-* external storage of data maybe.
+- [ ] persausion and non hostile enemies (partialy done)
+- [ ] different event types
+- [ ] loot, trap, shrines, shop.
+- [ ] random loot gen via weighted random picker from list in data file
+- [ ] random enemy select from weighted random picker from list in data file
+- [ ] random descriptions for everything
+- [x] advanced weapons, implementtaion of weapon class.
+- [ ] floor depth mechanic.
+- [ ] home base, level up out of dungeon mechanic.
+- [ ] animated ansi/ascii art as opposed to the current static images.
+- [ ] external storage of data maybe.
 

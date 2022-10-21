@@ -27,7 +27,7 @@ export class combatMetrics extends GlobalMetrics{
         this.fUse=0 //flask oil
         this.turn=0 //turn
 
-
+        this.enemy=null
         this.enmyName=""
 
 

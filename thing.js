@@ -5,7 +5,7 @@ import blessedpkg from 'blessed';
 import chalk from 'chalk';
 import gradient from 'gradient-string';
 import {game_event, game_event_enemy, game_event_gain_item} from './game-objects/game_events.js';
-import {Player} from './game-objects/player.js';
+import {Player, playerState} from './game-objects/player.js';
 import './blessed/patches.cjs';
 import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
@@ -450,6 +450,7 @@ async function eventHandler(gameEvent = temp_event1,) {
 	//XTermTestv2.writeSync("DEATH"+ death)
 	// extend somehow to rest later
 	if(death===false){
+		thePlayer.state=playerState.TREASURE_ROOM
 		let length ='╰╾────────────────────────────────────────────╼╯'.length
 		let combatBanner=`\
 ╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
@@ -507,6 +508,7 @@ function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve()}
 
 
 async function combat(combatEvent) {
+	thePlayer.state=playerState.COMBAT
 	buttonsContainer.setContent('')
 	logs.writeSync(escUpByNum(1))
 	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}`);
@@ -514,10 +516,10 @@ async function combat(combatEvent) {
 	logs.writeSync(`\n${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 	let monster = copyMonster(tempMonster)
 	thePlayer.encDat.enmyName=monster.name
+	thePlayer.encDat.enemy=monster
 	ImageScreenTerm.reset()
 	ImageScreenTerm.writeSync(monster.art)
 	combatLogic(monster,thePlayer,true)
-
 }
 // moster picker in random event later
 async function enemyAtack(monster,player=thePlayer,first=false) {

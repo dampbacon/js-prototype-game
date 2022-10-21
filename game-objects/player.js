@@ -9,6 +9,16 @@ chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 // chance.rpg('#d#', {sum: true})
 
 //
+export const playerState=Object.freeze({
+    INIT:"INIT",
+    TOWN:"TOWN",
+    COMBAT:"COMBAT",
+    ALTAR:"ALTAR",
+    SHOP:"SHOP",
+    INN:"INN",
+    DUNGEON_ROOM:"DUNGEON_ROOM",
+    TREASURE_ROOM:"TREASURE_ROOM",
+});
 
 export class Player {
     constructor(name = 'apples') {
@@ -39,6 +49,8 @@ export class Player {
         //change weapon later to be similar to monster class
         this.armourName = armourPicker()
         this.armour = ARMOURmap[this.armourName]
+        this.armourMagic=0;
+
         this.ac = this.armour ? this.armour : 10
         this.depth = 0;
         this.gold = 0;
@@ -50,6 +62,9 @@ export class Player {
         //temp metric will be merged then cleared at end of every event
         //this.globalMetrics = GlobalMetrics()
         //encounterData
+        this.state=playerState.INIT
+        
+        //add support for nonhostile
         this.encDat=new combatMetrics()
     }
     
@@ -66,6 +81,7 @@ export class Player {
     //armour is string key
     changeArmour(armour) {
         this.armourName=armour
+        this.armourMagic=0;
         this.armour=ARMOURmap[armour]
     }
     //not max

@@ -11,6 +11,8 @@ import align_text from 'align-text';
 //import atest from "../atest.cjs";
 //import { alignTextv2 } from "../writeMethods.js";
 //DAMAGE TYPES
+
+//return array consist of str and dmg done
 export const damageTypes = Object.freeze({
     fire_damage : new dmgTypeClass({
         name: 'fire_damage',

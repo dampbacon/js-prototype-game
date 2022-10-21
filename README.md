@@ -10,21 +10,21 @@ example from someone who terminal game compile to wasm https://arthursonzogni.co
 
 ## how to run
 use WSL, windows default terminal mode is incompatible.
-it works on WSL but running on Linux it is incompatible hilariously (dummy terminals that i use for logs and screen do not display escape sequences correctly however other elements do).
-on wsl install node lts 16.\*\*.\*\* via NVM(node version manage)
-apt intall DOES NOT INSTALL CORRECT VERSION OF NODE USE NVM
-do a npm install in project root
+it works on WSL but running on Linux it is incompatible hilariously (dummy terminals that i use for logs and screen do not display escape sequences correctly however other elements do). \
+on wsl install node lts 16.\*\*.\*\* via NVM(node version manage) \
+apt intall DOES NOT INSTALL CORRECT VERSION OF NODE USE NVM \
+do a npm install in project root 
 
-run either ./thing.js if you chmod +x
-or node thing.js
+run either ./thing.js if you chmod +x \
+or node thing.js 
 
-to test basic event combat loop press 'y' instead of just displaying the test buttons
+to test basic event combat loop press 'y' instead of just displaying the test buttons 
 
 # Branch details.
-both branches the code is ....messy
-main branch execution loop is spaghetti code.
-rather than be purely event driven a function pauses execution till a promise is returned
-this is a mess.
+both branches the code is ....messy \
+main branch execution loop is spaghetti code. \
+rather than be purely event driven a function pauses execution till a promise is returned \
+this is a mess. 
 
 I attempted to make the other branch purely event driven and simpler, function calls on button listers when criteria is met i.e killed enemy or death.
 The simplification is somehow unstable and i'm getting api errors with no traceback to the code i declared making it nigh impossible to easily debug.

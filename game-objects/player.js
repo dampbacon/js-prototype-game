@@ -1,8 +1,7 @@
 //var seedrandom = require('seedrandom');
 import {chance1, chance2} from "./random_nums.js";
-import {ARMOUR, ARMOURmap, armourPicker, pickWeapon, weapons} from "./data.js";
+import {ARMOUR, ARMOURmap, armourPicker, pickScroll, pickWeapon, weapons} from "./data.js";
 import { combatMetrics, GlobalMetrics } from "./metrics.js";
-import { fireball, heal, kill, vitalize } from "./items.js";
 //diff object for map generation
 chance1.weighted(['a', 'b', 'c', 'd'], [1, 2, 3, 4])
 
@@ -58,7 +57,7 @@ export class Player {
         this.oil = 5;
         //later include identify potion mechanic
         this.potions = 20;
-        this.scrolls = 2;
+        this.scrolls = 3;
         //metrics to keep track of progression and combat stats
         //temp metric will be merged then cleared at end of every event
         //this.globalMetrics = GlobalMetrics()
@@ -132,10 +131,9 @@ export class Player {
         return new Player(this.name)
     }
     useScroll(params={}){
-        //getScroll()
-        //let scroll=fireball
-        let scroll=vitalize
-        return scroll.use(this,params)
+        let scrollPick=pickScroll()
+        console.log(scrollPick)
+        return scrollPick.use(this, params)
     }
 }
 

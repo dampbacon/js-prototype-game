@@ -1,10 +1,9 @@
 import {chance2, chance3} from "./random_nums.js";
 import chalk from "chalk";
-import {dmgTypeClass, weapon} from "./items.js";
+import {dmgScrollFun, dmgTypeClass, Scroll, weapon} from "./items.js";
 import _ from "lodash";
 import repeat from "repeat-string";
 import longest from "longest";
-import wrap from "word-wrap";
 import gradient from 'gradient-string';
 //var align = require('align-text');
 import align_text from 'align-text';
@@ -37,7 +36,14 @@ export const DMG_TYPE= Object.freeze({
     DARK:'DARK',
     GRAVITY:'GRAVITY',
     NARUTO:'NARUTO',
+    NONE:'NONE',
+    MAGIC:'MAGIC',
 })
+// let FIRE=DMG_TYPE.FIRE,ICE=DMG_TYPE.ICE, 
+// LIGHTNING=DMG_TYPE.LIGHTNING, POISON=DMG_TYPE.POISON,BLUNT=DMG_TYPE.BLUNT, 
+// SLASH=DMG_TYPE.SLASH , PIERCE=DMG_TYPE.PIERCE, HOLY=DMG_TYPE.HOLY, 
+// DARK=DMG_TYPE.DARK, GRAVITY=DMG_TYPE.GRAVITY, NARUTO=DMG_TYPE.NARUTO;
+
 const DMG_COLOUR = {}
 DMG_COLOUR[DMG_TYPE.FIRE] = 'FFA500'
 DMG_COLOUR[DMG_TYPE.ICE] = '00FFFF'
@@ -47,9 +53,12 @@ DMG_COLOUR[DMG_TYPE.BLUNT] = 'FFFFFF'
 DMG_COLOUR[DMG_TYPE.SLASH] = 'FFFFFF'
 DMG_COLOUR[DMG_TYPE.PIERCE] = 'FFFFFF'
 DMG_COLOUR[DMG_TYPE.HOLY] = 'fef65b'
-DMG_COLOUR[DMG_TYPE.DARK] = '3d3d3d'
+DMG_COLOUR[DMG_TYPE.DARK] = '5d5d5d'
 DMG_COLOUR[DMG_TYPE.GRAVITY] = '7919e6'
 DMG_COLOUR[DMG_TYPE.NARUTO] = 'fbe407'
+DMG_COLOUR[DMG_TYPE.NONE] = 'FFFFFF'
+DMG_COLOUR[DMG_TYPE.MAGIC] = '263ce3'
+
 Object.freeze(DMG_COLOUR)
 export {DMG_COLOUR}
 
@@ -332,7 +341,6 @@ export function armourPicker(){
     return pickRandom(armourArray,armourArrayWeights)
 }
 /*
-
    ▄████████ ███▄▄▄▄      ▄████████   ▄▄▄▄███▄▄▄▄   ▄██   ▄           ▄████████    ▄████████     ███     
   ███    ███ ███▀▀▀██▄   ███    ███ ▄██▀▀▀███▀▀▀██▄ ███   ██▄        ███    ███   ███    ███ ▀█████████▄ 
   ███    █▀  ███   ███   ███    █▀  ███   ███   ███ ███▄▄▄███        ███    ███   ███    ███    ▀███▀▀██ 
@@ -342,7 +350,6 @@ export function armourPicker(){
   ███    ███ ███   ███   ███    ███ ███   ███   ███ ███   ███        ███    ███   ███    ███     ███     
   ██████████  ▀█   █▀    ██████████  ▀█   ███   █▀   ▀█████▀         ███    █▀    ███    ███    ▄████▀   
                                                                                   ███    ███             
-
 */
 const GenericEnemiesArt=Object.freeze({
 
@@ -413,10 +420,127 @@ export function PickEnemyArt(){
                           ███    ███            ▀         ▀                      
 */
 
+export const ScrollsAll=Object.freeze({
+    fireball : new Scroll({
+        name: 'fireball',
+        dmgTypeE: DMG_TYPE.FIRE,
+        targetmonster: true,
+        rarity: 1,
+        description: 'A scroll that summons a fireball to attack a monster',
+        scrollFunction: dmgScrollFun(
+            `dodges the worst of the blast and takes`,
+            `catches the full force of the fiery explosion and takes`,
+            `Unfortunately you are not in combat, you cast it out of the room.`,
+            DMG_COLOUR[DMG_TYPE.FIRE],//`FFA500`,
+            `4d6`,
+            `fireball`
+        )
+    }),
+    lightning_bolt : new Scroll({
+        name: 'lightning bolt',
+        dmgTypeE: DMG_TYPE.LIGHTNING,
+        targetmonster: true,
+        rarity: 1,
+        description: 'A scroll that summons a lightning bolt to strike a monster',
+        scrollFunction: dmgScrollFun(
+            `catches a glancing strike and takes`,
+            `catches the full force of the thunder bolt and takes`,
+            `Unfortunately you are not in combat, you cast it out of the room.`,
+            DMG_COLOUR[DMG_TYPE.LIGHTNING],//`FFA500`,
+            `4d6`,
+            `lightning bolt`
+        )
+    }),
+    kill : new Scroll({
+        name: 'kill',
+        dmgTypeE: DMG_TYPE.DARK,
+        targetmonster: true,
+        rarity: 1,
+        description: 'A scroll that kills a monster most of the time',
+        scrollFunction: dmgScrollFun(
+            `takes a glancing blow from the curse and takes`,
+            `absorbs the full force of the curse killing it`,
+            `unfortunately there is nothing to kill besides yourself.\nYou let the scroll fizzle into ashes`,
+            DMG_COLOUR[DMG_TYPE.DARK],
+            `4d6`,
+            `kill`,
+            true
+        )
+    }),
+    heal : new Scroll({
+        name: 'heal',
+        dmgTypeE: DMG_TYPE.HOLY,
+        targetplayer: true,
+        rarity: 0.1,
+        description: 'A scroll that heals the player',
+        scrollFunction: (player, params = {}) => {
+            let heal = chance2.rpg('2d8', {sum: true})
+            if (player.hp === player.hpMax) {
+                return chalk.hex(DMG_COLOUR[DMG_TYPE.HOLY])(`You cast heal on yourself even though you are already at full health.\nWasting a spell that could have been used to save yourself.`)
+            } else {
+                let healAmount = heal
+                if ((player.hp + heal) > player.hpMax) {
+                    healAmount = player.hpMax - player.hp
+                }
+                player.increaseHP(heal)
+                return chalk.hex(DMG_COLOUR[DMG_TYPE.HOLY])(`You cast heal on yourself and heal`) + ` ${chalk.greenBright(healAmount + `hp`)}`
+            }
+        }
+    }),
+    vitalize : new Scroll({
+        name: 'vitalize',
+        dmgTypeE: DMG_TYPE.HOLY,
+        targetplayer: true,
+        rarity: 0.02,
+        description: 'A scroll that strengthens the players life force',
+        scrollFunction: (player, params = {}) => {
+            let hpInc = chance2.rpg('1d6', {sum: true})
+            player.hpMax += hpInc
+            player.hp += hpInc
+            return chalk.hex(DMG_COLOUR[DMG_TYPE.HOLY])(`You cast the spell and feel your vitality strengthened`) + ` ${chalk.greenBright(`Max HP increased by ${hpInc}`)}`
+        }
+    }),
+    //make one for unique dmg types to weapons
+    enchantWeapon : new Scroll({
+        name: 'enchant weapon',
+        dmgTypeE: DMG_TYPE.MAGIC,
+        targetplayer: true,
+        rarity: 0.1,
+        description: 'A scroll that enchants the players weapon',
+        scrollFunction: (player, params = {}) => {
+            if (player.weapon.enchant < 3) {
+                player.weapon.enchant += 1
+                return chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])(`You cast the spell and your ${player.weapon.name} is infused with magic weapon enchant increased by `)+`${chalk.greenBright(`1`)}`
+            } else {
+                //  something special later
+                return chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])(`You attempt to enchant your ${player.weapon.name} but it is already at max enchant`)
+            }
+        }
+    }),
+    curseWeapon : new Scroll({
+        name: 'curse weapon',
+        dmgTypeE: DMG_TYPE.DARK,
+        targetplayer: true,
+        rarity: 0.1,
+        description: 'A scroll that curses the players weapon',
+        scrollFunction: (player, params = {}) => {
+            if (player.weapon.enchant > -3) {
+                player.weapon.enchant -= 1
+                return chalk.hex(DMG_COLOUR[DMG_TYPE.DARK])(`You cast the spell and your ${player.weapon.name} is cursed`) + ` ${chalk.greenBright(`weapon quality drops by 1`)}`
+            } else {
+                //  something special later specifically for max curse
+                return chalk.hex(DMG_COLOUR[DMG_TYPE.DARK])(`You attempt to curse your ${player.weapon.name} but it is already at max curse`)
+            }
+        }
+    })
+})
 
-
-
-
+const scrollsArray=Object.values(ScrollsAll)
+const scrollWeights=scrollsArray.map((item)=>{return item.rarity})
+//alias 
+export function pickScroll(){
+    return pickRandom(scrollsArray,scrollWeights)
+}
 
 
 
@@ -519,7 +643,7 @@ export function padString(string, len, both){
 export function textBoxNotUI(text,padding){
     //let str= padString(text,padding,both)
     let str= text
-    str=align_text(str, centerAlign);
+    //str=align_text(str, centerAlign);
     let lines = str.split('\n');
     let max = longest(lines).length;
 
@@ -570,4 +694,3 @@ potions used ${chalk.green('  |')} ${chalk.cyan('Elixir')}
 scrolls used ${chalk.green('  |')} ${chalk.yellow('ScrollName')}
 oil flask used ${chalk.green('|')} ${chalk.redBright('FireOil')}\
 `
-

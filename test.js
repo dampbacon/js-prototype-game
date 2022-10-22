@@ -7,12 +7,22 @@ let testplayer = new Player()
 // console.log(testplayer.hp)
 // console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,false,testplayer))}
 
-import { armourArray, armourArrayWeights, border, damageTypes, padString, pickWeapon, testContent, testContent2, textBoxNotUI } from "./game-objects/data.js";
+import {
+    armourArray,
+    armourArrayWeights,
+    border,
+    damageTypes,
+    padString,
+    pickScroll,
+    pickWeapon,
+    testContent,
+    testContent2,
+    textBoxNotUI
+} from "./game-objects/data.js";
 import { copyMonster, monster } from "./game-objects/mobs.js";
 import gradient from 'gradient-string';
 import longest from 'longest';
 import chalk from "chalk";
-import { fireball } from "./game-objects/items.js";
 
 //test array values
 // console.log(weaponsArray)
@@ -79,15 +89,16 @@ let tempMonster = new monster({
 // let ansi_escape = testContent2.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
 // console.log(textBoxNotUI(ansi_escape))
 // console.log(textBoxNotUI(testContent2))
-let a=fireball
-console.log(a)
+// let a=fireball
+// console.log(a)
 let copy = copyMonster(tempMonster)
 //console.log(tempMonster)
 console.log(copy)
 console.log(testplayer)
-console.log(testplayer.useScroll())
+//console.log(testplayer.useScroll())
 
+console.log(pickScroll())
 testplayer.state=playerState.COMBAT
-testplayer.hp-=10
+// testplayer.hp-=10
 console.log(testplayer.useScroll({monster:copy}))
-console.log(testplayer.hp)
+// console.log(testplayer.hp)

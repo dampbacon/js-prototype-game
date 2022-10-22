@@ -872,7 +872,35 @@ ${monsterHostile?'':gradient.retro.multiline('\nattacking this enemy\nwill make 
 		})
 		combatButtonsMap[oil.name] = oil
 	}
-	let names=['attack','flee','chatUp','potion','oil']
+	let scrolls
+	if(thePlayer.scrolls>0){
+		scrolls = new blessedpkg.button({
+			parent: buttonsContainer,
+			mouse: true,
+			keys: true,
+			shrink: true,
+			padding: {
+				left: 1,
+				right: 1
+			},
+			left: 1,
+			top: 1,
+			name: 'scrolls',
+			content: `use scroll, ${thePlayer.scrolls} left`,
+			//shadow: true,
+			style: {
+				bg: '#5A5A5A',
+				focus: {
+					bg: '#880808',
+				},
+				hover: {
+					bg: '#880808',
+				},
+			},
+		})
+		combatButtonsMap[scrolls.name] = scrolls
+	}
+	let names=['attack','flee','chatUp','potion','oil','scrolls']
 	for (const name of names) {
 		if (name in combatButtonsMap){
 			buttonsArray.push(combatButtonsMap[name])

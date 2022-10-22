@@ -3,8 +3,9 @@
 //
 
 import chalk from "chalk";
-import { Player, playerState } from "./player.js";
-import { chance2, chance3, monsterRandom } from "./random_nums.js";
+import { DMG_TYPE } from "./data.js";
+import {playerState} from "./player.js";
+import {chance2, monsterRandom} from "./random_nums.js";
 
 //
 
@@ -47,6 +48,7 @@ export class weapon {
 // }
 export class Scroll{
     constructor({
+        dmgTypeE,
         targetmonster, 
         targetplayer, 
         changeMonster, 
@@ -54,8 +56,7 @@ export class Scroll{
         changePlayer, 
         resolveEncounter,
         teleport, 
-        scrollFunction,
-        scrollFunctionParams,  
+        scrollFunction,  
         name, 
         rarity, 
         description,
@@ -73,6 +74,7 @@ export class Scroll{
         this.altar = altar?altar:false
         this.dmgType = dmgType?dmgType:null
 
+        this.dmgTypeE = dmgTypeE?dmgTypeE:DMG_TYPE.NONE
         this.name = name?name:'Scroll';
         this.rarity = rarity?rarity:1;
         this.description = description?description: this.generateDescription();
@@ -85,127 +87,11 @@ export class Scroll{
         return this.scrollFunction(player, params)
     }
 }
- 
-
-export let fireball = new Scroll({
-    name:'fireball',
-    targetmonster:true,
-    rarity:1,
-    description:'A scroll that summons a fireball to attack a monster',
-    scrollFunction: dmgScrollFun(
-        `dodges the worst of the blast and takes`,
-        `catches the full force of the fiery explosion and takes`,
-        `Unfortunately you are not in combat, you cast it out of the room.`,
-        `FFA500`,
-        `4d6`,
-        `fireball`
-    )
-})
-export let kill = new Scroll({
-    name:'kill',
-    targetmonster:true,
-    rarity:1,
-    description:'A scroll that kills a monster most of the time',
-    scrollFunction: dmgScrollFun(
-        `takes a glancing blow from the curse and takes`,
-        `absorbs the full force of the curse killing it`,
-        `unfortunately there is nothing to kill besides yourself.\nYou let the scroll fizzle into ashes`,
-        `5d5d5d`,
-        `4d6`,
-        `kill`,
-        true
-    )
-})
-export let heal = new Scroll({
-    name:'heal',
-    targetplayer:true,
-    rarity:1,
-    description:'A scroll that heals the player',
-    scrollFunction: (player, params={})=>{
-        let heal = chance2.rpg('2d8', {sum: true})
-        if (player.hp===player.hpMax){
-            return chalk.hex(`FFC0CB`)(`You cast heal on yourself even though you are already at full health.\nWasting a spell that could have been used to save yourself.`)
-        }else{
-            let healAmount=heal
-            if((player.hp+heal)>player.hpMax){
-				healAmount = player.hpMax-player.hp
-            }
-            player.increaseHP(heal)
-            return chalk.hex(`FFC0CB`)(`You cast heal on yourself and heal`)+` ${chalk.greenBright(healAmount+`hp`)}`
-        }
-    }
-})
-export let vitalize = new Scroll({
-    name:'vitalize',
-    targetplayer:true,
-    rarity:0.02,
-    description:'A scroll that strengthens the players life force',
-    scrollFunction: (player, params={})=>{
-        let hpInc = chance2.rpg('1d6', {sum: true})
-        player.hpMax+=hpInc
-        player.hp+=hpInc
-        return chalk.hex(`FFC0CB`)(`You cast the spell and feel your vitality strengthened`)+` ${chalk.greenBright(`Max HP increased by ${hpInc}`)}`
-    }
-})
-
-//make one for unique dmg types to weapons
-export let enchantWeapon = new Scroll({
-    name:'enchant weapon',
-    targetplayer:true,
-    rarity:0.1,
-    description:'A scroll that enchants the players weapon',
-    scrollFunction: (player, params={})=>{
-        if(player.weapon.enchant<3){
-            player.weapon.enchant+=1
-            return chalk.blue(`You cast the spell and your weapon is infused with magic`)+` ${chalk.greenBright(`weapon enchant increased by 1`)}`
-        }else{
-            //
-            //
-            //  something special later
-            //
-            //
-            return chalk.blue(`You attempt to enchant your weapon but it is already at max enchant`)
-        }
-    }
-})
-
-export let curseWeapon = new Scroll({
-    name:'enchant weapon',
-    targetplayer:true,
-    rarity:0.1,
-    description:'A scroll that enchants the players weapon',
-    scrollFunction: (player, params={})=>{
-        if(player.weapon.enchant>-3){
-            player.weapon.enchant-=1
-            return chalk.blue(`You cast the spell and your weapon is cursed`)+` ${chalk.greenBright(`weapon quality drops by 1`)}`
-        }else{
-            //
-            //
-            //  something special later specifically for max curse
-            //
-            //
-            return chalk.blue(`You attempt to curse your weapon but it is already at max curse`)
-        }
-    }
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
 let defDodgeStr=` dodges the worst of the blast, and takes `
 let defHitStr=`catches the full force of the fiery explosion and takes`
 let defNoTarget=`Unfortunately you are not in combat, you cast it out of the room`
 
-function dmgScrollFun(
+export function dmgScrollFun(
     dodgestr=defDodgeStr,
     hitstr=defHitStr,
     notarget=defNoTarget,

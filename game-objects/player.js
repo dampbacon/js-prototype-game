@@ -50,7 +50,7 @@ export class Player {
         this.armourName = armourPicker()
         this.armour = ARMOURmap[this.armourName]
         this.armourMagic=0;
-
+        //redundant
         this.ac = this.armour ? this.armour : 10
         this.depth = 0;
         this.gold = 0;

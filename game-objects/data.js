@@ -559,7 +559,7 @@ export const ScrollsAll=Object.freeze({
         scrollFunction: (player, params = {}) => {
             if (player.weapon.enchant < 3) {
                 player.weapon.enchant += 1
-                return chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])(`You cast the spell and your ${player.weapon.name} is infused with magic weapon enchant increased by `)+`${chalk.greenBright(`1`)}`
+                return chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])(`You cast the spell and your ${player.weapon.name} is infused with magic. Weapon enchant increased by `)+`${chalk.greenBright(`1`)}`
             } else {
                 //  something special later
                 return chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])(`You attempt to enchant your ${player.weapon.name} but it is already at max enchant`)

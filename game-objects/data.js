@@ -404,6 +404,17 @@ export function armourPicker(){
 */
 // LATER USE A WRAP TEXT FUNCTION TO GENERALISE STRINGS FITTING THE BOX
 export const ScrollsAll=Object.freeze({
+    // polymorph : new Scroll({
+    //     name: 'polymorph',
+    //     dmgTypeE: DMG_TYPE.NONE,
+    //     targetmonster: true,
+    //     changeMonster: true,
+    //     rarity: 0.1,
+    //     description: 'A scroll that changes the target monster into a random monster',
+    //     scrollFunction:(player, params = {})=>{
+    //         params.monster=monsterPicker()
+    //     }
+    // }),
     fireball : new Scroll({
         name: 'fireball',
         dmgTypeE: DMG_TYPE.FIRE,
@@ -580,6 +591,8 @@ export function pickScroll(){
   ██████████  ▀█   █▀    ██████████  ▀█   ███   █▀   ▀█████▀         ███    █▀    ███    ███    ▄████▀   
                                                                                   ███    ███             
 */
+
+
 const GenericEnemiesArt=Object.freeze({
 
     genericHumaniod:
@@ -631,11 +644,23 @@ const GenericEnemiesArt=Object.freeze({
     [90m[40m/[37m[40m [90m[40m▒[37m[40m       ▌▌      [93m[40m⌂⌂⌂⌂⌂[37m[40m  [90m[40m▒[37m[40m [90m[40m\[m`
     })
     
-    const artArray=Object.values(GenericEnemiesArt)
-    export function PickEnemyArt(){
-        return chance3.pickone(artArray)
-    }
-    
+const artArray=Object.values(GenericEnemiesArt)
+export function PickEnemyArt(){
+    return chance3.pickone(artArray)
+}
+export const enemiesArt=Object.freeze({
+    gobo:
+    `
+[90m[40m----▒###########░▓-▓▓▓\[37m[40m  [m
+[37m[40m    [90m[40m▒[37m[40m         [93m[40m⌂⌂[90m[40m░▄▄▄▄▄\\\[m
+[37m[40m----[90m[40m▒[37m[40m    [33m[40m⌂#[37m[40m    [93m[40m⌂[90m[40m░░░○○░[37m[40m [90m[40m\[37m[40m [m
+[90m[40m----▒[37m[40m   [92m[40m\`[31m[42m••[92m[40m\`[90m[40m│[37m[40m   [90m[40m░[37m[40m░░░░░[90m[40m\\\[m
+[37m[40m----[90m[40m▒[37m[40m    [33m[40m▒Ç[32m[40m/[33m[40m^[37m[40m   [90m[40m░[90m[47m▄▄▄▄▄[90m[40m\\[37m[40m [m
+[37m[40m    [90m[40m▒[37m[40m    [32m[40m''[37m[40m     [90m[40m░○▓○▓▓[37m[40m [90m[40m\\[m`
+    ,
+    ...GenericEnemiesArt
+})
+
 
 
 
@@ -654,7 +679,16 @@ const GenericEnemiesArt=Object.freeze({
   ██████████  ▀█   █▀    ██████████  ▀█   ███   █▀   ▀█████▀       ████████▀    ██████████  ▄████████▀  ████████▀    ███    ███ █▀    ▄████▀         ▄████▀    ▀██████▀    ███    ███  ▄████████▀  
                                                                                                                      ███    ███                                            ███    ███              
 
-*///               make
+*/
+
+const genericEnemyNames = Object.freeze([
+    "lurker",
+    ""
+])
+
+
+
+//               make
 // `you attempt to ${pickMoveWord()} your way through the ${pickPathName()} to get to the next room.    
 //  A ${pickEnemyAdjective()} ${monster.name} is ${pickEnemyVerb()} here obstructing your path.
 // Choose your next move`

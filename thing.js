@@ -15,7 +15,7 @@ import {chance2, resetRandoms} from './game-objects/random_nums.js';
 import {buttonsContainer, createStatsBox, ImageScreenTerm, InventoryBox, logs, program, screen, stats} from "./ui.js";
 import {escLeftByNum, escUpByNum, gradient_scanlines, rollLog} from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
-import { ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, makeRoomText, padString, testContent } from './game-objects/data.js';
+import { ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, enemiesArt, makeRoomText, padString, testContent } from './game-objects/data.js';
 import { combatMetrics } from './game-objects/metrics.js';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
@@ -36,7 +36,8 @@ let tempMonster = new monster({
 	weapon: "ruler",
 	dmgDie: 6,
 	aggro: 6,
-	rarity: 1
+	rarity: 1,
+	art: enemiesArt.gobo
 })
 const rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
 const rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']

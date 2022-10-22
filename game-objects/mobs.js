@@ -41,6 +41,7 @@ export function copyMonster(monsterToCopy) {
         dmgDie:monsterToCopy.dmgDie,
         aggro:monsterToCopy.aggro,
         rarity:monsterToCopy.rarity,
+        art:monsterToCopy.art
         }
     )
 }

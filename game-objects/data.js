@@ -7,6 +7,7 @@ import longest from "longest";
 import gradient from 'gradient-string';
 //var align = require('align-text');
 import align_text from 'align-text';
+import { monster } from "./mobs.js";
 //import atest from "../atest.cjs";
 //import { alignTextv2 } from "../writeMethods.js";
 //DAMAGE TYPES
@@ -559,23 +560,6 @@ export function pickScroll(){
 
 
 
-/*
-
-   ▄████████ ███▄▄▄▄      ▄████████   ▄▄▄▄███▄▄▄▄   ▄██   ▄        
-  ███    ███ ███▀▀▀██▄   ███    ███ ▄██▀▀▀███▀▀▀██▄ ███   ██▄     
-  ███    █▀  ███   ███   ███    █▀  ███   ███   ███ ███▄▄▄███      
- ▄███▄▄▄     ███   ███  ▄███▄▄▄     ███   ███   ███ ▀▀▀▀▀▀███
-▀▀███▀▀▀     ███   ███ ▀▀███▀▀▀     ███   ███   ███ ▄██   ███
-  ███    █▄  ███   ███   ███    █▄  ███   ███   ███ ███   ███
-  ███    ███ ███   ███   ███    ███ ███   ███   ███ ███   ███
-  ██████████  ▀█   █▀    ██████████  ▀█   ███   █▀   ▀█████▀ 
-                                                            
-*/
-
-
-
-
-
 
 
 
@@ -642,7 +626,7 @@ const GenericEnemiesArt=Object.freeze({
     [90m[40m/[37m[40m        ║█[90m[40m░/[33m[40m↓[37m[40m          [90m[40m▒[37m[40m  [90m[40m\[m
     [90m[40m/[37m[40m         [90m[40m▓[37m[40mC        [93m[40m⌂⌂[37m[40m  [90m[40m▒[37m[40m  [90m[40m\[m
     [90m[40m/[37m[40m [90m[40m▒[37m[40m       ▌▌      [93m[40m⌂⌂⌂⌂⌂[37m[40m  [90m[40m▒[37m[40m [90m[40m\[m`
-    })
+})//art for misc. enemies
     
 const artArray=Object.values(GenericEnemiesArt)
 export function PickEnemyArt(){
@@ -658,9 +642,62 @@ export const enemiesArt=Object.freeze({
 [37m[40m----[90m[40m▒[37m[40m    [33m[40m▒Ç[32m[40m/[33m[40m^[37m[40m   [90m[40m░[90m[47m▄▄▄▄▄[90m[40m\\[37m[40m [m
 [37m[40m    [90m[40m▒[37m[40m    [32m[40m''[37m[40m     [90m[40m░○▓○▓▓[37m[40m [90m[40m\\[m`
     ,
-    ...GenericEnemiesArt
+    ...GenericEnemiesArt //superset of all art and custom per creature art
 })
 
+
+
+/*
+
+   ▄████████ ███▄▄▄▄      ▄████████   ▄▄▄▄███▄▄▄▄   ▄██   ▄        
+  ███    ███ ███▀▀▀██▄   ███    ███ ▄██▀▀▀███▀▀▀██▄ ███   ██▄     
+  ███    █▀  ███   ███   ███    █▀  ███   ███   ███ ███▄▄▄███      
+ ▄███▄▄▄     ███   ███  ▄███▄▄▄     ███   ███   ███ ▀▀▀▀▀▀███
+▀▀███▀▀▀     ███   ███ ▀▀███▀▀▀     ███   ███   ███ ▄██   ███
+  ███    █▄  ███   ███   ███    █▄  ███   ███   ███ ███   ███
+  ███    ███ ███   ███   ███    ███ ███   ███   ███ ███   ███
+  ██████████  ▀█   █▀    ██████████  ▀█   ███   █▀   ▀█████▀ 
+                                                            
+*/
+
+
+export const monsters=Object.freeze({
+    gobo : new monster({
+        name: "goblin",
+        hitDie: 1,
+        ac: 8,
+        morale: 6,
+        weapon: "pointy stick",
+        dmgDie: 4,
+        aggro: 7,
+        rarity: 1,
+        art: enemiesArt.gobo
+    }),
+    goboNice : new monster({
+        name: "friendly goblin",
+        hitDie: 1,
+        ac: 8,
+        morale: 6,
+        weapon: "pointy stick",
+        dmgDie: 4,
+        aggro: 0,
+        rarity: 1,
+        art: enemiesArt.gobo
+    }),
+    skelington : new monster({
+        name: "skeleton",
+        hitDie: 1,
+        ac: 10,
+        morale: 12,
+        weapon: "rusty sword",
+        dmgDie: 4,
+        aggro: 12,
+        rarity: 1,
+    }),
+
+
+
+})
 
 
 
@@ -817,6 +854,24 @@ const verbOpts = Object.freeze([
     "drooling",
     "rolling",
     "playing charades",
+    "playing 4d chess",
+    "contemplating the meaning of life and 42",
+    "playing a game of solitaire",
+    "solving poverty",
+    "creating world peace",
+    "solving the climate crisis", 
+    "eating a sandwich",
+    "eating a burrito",
+    "drinking tequila shots",
+    "writing a novel",
+    "drinking a beer",
+    "playing russian roulette",
+    "playing russian roulette with a fully loaded gun",
+    "contemplating the meaning of letuce and how this relates to prime ministers",
+    "eating raw pork",
+    "playing the fiddle",
+    "daydreaming",
+    "wilting",
     "dancing",
     "dining",
     "painting a work of art",
@@ -834,7 +889,7 @@ const verbOpts = Object.freeze([
     "procrastinating",
     "studying",
     "reading",
-    "contemplates",
+    "contemplating",
     "waiting",
     "siting",
     "standing guard",

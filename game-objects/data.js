@@ -1,4 +1,4 @@
-import {chance2, chance3} from "./random_nums.js";
+import {chance2, chance3, monsterRandom} from "./random_nums.js";
 import chalk from "chalk";
 import {dmgScrollFun, dmgTypeClass, Scroll, weapon} from "./items.js";
 import _ from "lodash";
@@ -513,7 +513,7 @@ export const ScrollsAll=Object.freeze({
             DMG_COLOUR[DMG_TYPE.DARK],
             `4d6`,
             `kill`,
-            true
+            true,
         )
     }),
     heal : new Scroll({
@@ -593,10 +593,200 @@ export function pickScroll(){
 
 
 
+/*
+
+   ▄████████ ███▄▄▄▄      ▄████████   ▄▄▄▄███▄▄▄▄   ▄██   ▄        ████████▄     ▄████████    ▄████████  ▄████████    ▄████████  ▄█     ▄███████▄     ███      ▄██████▄     ▄████████    ▄████████ 
+  ███    ███ ███▀▀▀██▄   ███    ███ ▄██▀▀▀███▀▀▀██▄ ███   ██▄      ███   ▀███   ███    ███   ███    ███ ███    ███   ███    ███ ███    ███    ███ ▀█████████▄ ███    ███   ███    ███   ███    ███ 
+  ███    █▀  ███   ███   ███    █▀  ███   ███   ███ ███▄▄▄███      ███    ███   ███    █▀    ███    █▀  ███    █▀    ███    ███ ███▌   ███    ███    ▀███▀▀██ ███    ███   ███    ███   ███    █▀  
+ ▄███▄▄▄     ███   ███  ▄███▄▄▄     ███   ███   ███ ▀▀▀▀▀▀███      ███    ███  ▄███▄▄▄       ███        ███         ▄███▄▄▄▄██▀ ███▌   ███    ███     ███   ▀ ███    ███  ▄███▄▄▄▄██▀   ███        
+▀▀███▀▀▀     ███   ███ ▀▀███▀▀▀     ███   ███   ███ ▄██   ███      ███    ███ ▀▀███▀▀▀     ▀███████████ ███        ▀▀███▀▀▀▀▀   ███▌ ▀█████████▀      ███     ███    ███ ▀▀███▀▀▀▀▀   ▀███████████ 
+  ███    █▄  ███   ███   ███    █▄  ███   ███   ███ ███   ███      ███    ███   ███    █▄           ███ ███    █▄  ▀███████████ ███    ███            ███     ███    ███ ▀███████████          ███ 
+  ███    ███ ███   ███   ███    ███ ███   ███   ███ ███   ███      ███   ▄███   ███    ███    ▄█    ███ ███    ███   ███    ███ ███    ███            ███     ███    ███   ███    ███    ▄█    ███ 
+  ██████████  ▀█   █▀    ██████████  ▀█   ███   █▀   ▀█████▀       ████████▀    ██████████  ▄████████▀  ████████▀    ███    ███ █▀    ▄████▀         ▄████▀    ▀██████▀    ███    ███  ▄████████▀  
+                                                                                                                     ███    ███                                            ███    ███              
+
+*///               make
+// `you attempt to ${pickMoveWord()} your way through the ${pickPathName()} to get to the next room.    
+//  A ${pickEnemyAdjective()} ${monster.name} is ${pickEnemyVerb()} here obstructing your path.
+// Choose your next move`
+const enemyAdjective = Object.freeze([
+    'large',
+    'small',
+    'tall',
+    'short',
+    'fat',
+    'skinny',
+    'ugly',
+    'beautiful',
+    'scary',
+    'cute',
+    'angry',
+    'happy',
+    'sad',
+    'furious',
+    'calm',
+    'sneaky',
+    'slimy',
+    'slippery',
+    'sticky',
+    'damp',
+    'rotten',
+    'stinky',
+    'melancholy',
+    'demonic',
+    'angelic',
+    'contemplative',
+    'distracted',
+    'determined',
+    'disgruntled',
+    'under-payed',
+    'over-worked',
+    'destitute',
+    'hungry',
+    'thirsty',
+    'sleepy',
+    'drooping',
+    'drowsy',
+    'dull',
+    'dazed',
+    'dizzy',
+    'drunk',
+    'drugged',
+    'drained',
+    'diseased',
+    'disgusting',
+    'disheveled',
+    'sloppy',
+    'dirty',
+    'filthy',
+    'greasy',
+    'grubby',
+    'grungy',
+    'lazy',
+    'lethargic',
+    'listless',
+    'uncreative',
+    'uninspired',
+    'unmotivated',
+    'unproductive',
+    'stupid',
+    'dumb',
+    'slow',
+    'slow-witted',
+    'shining',
+    'brilliant',
+    'intellegent',
+    'bright',
+    'well-groomed',
+    'manicured',
+    'impecable',
+    'genius',
+    'hardworking',
+    'happy',
+    'introsprospective'
+])
+
+
+const moveWord = Object.freeze([
+    "crawl",
+    "sneak",
+    "creep",
+    "slither",
+    "scurry",
+    "wriggle",
+    "sneak",
+    "weave",
+    "make",
+    "make",
+    "hurry",
+    "rush",
+    "walk"
+])
+
+const pathName = Object.freeze([
+    "rubble",
+    "tunnels",
+    "corridors",
+    "passages",
+    "paths",
+    "mine-shafts",
+    "ruins",
+    "caves",
+    "scafolding",
+    "overgrowth",
+    "burrows",
+    "shadows",
+    "hallway",
+    "pathway",
+    "gully",
+])
 
 
 
 
+const verbOpts = Object.freeze([
+    "lurking",
+    "haunting",
+    "creeping",
+    "leering",
+    "shouting",
+    "gargling",
+    "drooling",
+    "rolling",
+    "playing charades",
+    "dancing",
+    "dining",
+    "painting a work of art",
+    "singing",
+    "hunting",
+    "titering",
+    "floundering",
+    "wobling",
+    "calculating",
+    "dozing",
+    "sneezing",
+    "scrawling advanced calculus",
+    "reconciling general relativity and quantum mechanics",
+    "programming",
+    "procrastinating",
+    "studying",
+    "reading",
+    "contemplates",
+    "waiting",
+    "siting",
+    "standing guard",
+    "monologing",
+    "brooding",
+    "hiding",
+    "looming",
+    "snoozing",
+])
+
+export function pickEnemyVerb(){
+    return monsterRandom.pickone(verbOpts)
+}
+
+export function pickPathName(){
+    return monsterRandom.pickone(pathName)
+}
+
+export function pickMoveWord(){
+    return monsterRandom.pickone(moveWord)
+}
+
+export function pickEnemyAdjective(){
+    return monsterRandom.pickone(enemyAdjective)
+}
+
+export function makeRoomText(monster){
+    let roomText = 
+`\
+you attempt to ${pickMoveWord()} your way through the ${pickPathName()} to get to the next room.    
+A ${pickEnemyAdjective()} ${monster.name} is ${pickEnemyVerb()} here obstructing your path.
+Choose your next move wisely.\
+`
+    return roomText
+}
 
 
 

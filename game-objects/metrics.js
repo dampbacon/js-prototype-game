@@ -29,6 +29,7 @@ export class combatMetrics extends GlobalMetrics{
 
         this.enemy=null
         this.enmyName=""
+        this.peacefullClr=false
 
 
 

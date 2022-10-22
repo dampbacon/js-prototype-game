@@ -109,14 +109,19 @@ export function dmgScrollFun(
             let saveDC = 10 + player.int + (player.level > 4 ? 4 : player.level);
             if(monsterRandom.d20() + monster.hitDie >= saveDC)
             {
-                monster.hp-=Math.floor(damage/2) //str
+                damage=Math.floor(damage/2)
+                monster.hp-=damage //str
+                player.encDat.AHM(true)
+                player.encDat.ATdmg(damage)
                 return `${chalk.hex(color)(`The`)} ${chalk.blueBright(monster.name)} ${chalk.hex(color)(dodgestr)} \
-${chalk.hex('fe2c54')(Math.floor(damage/2))} ${chalk.hex(color)(`damage.`)}`;
+${chalk.hex('fe2c54')(damage)} ${chalk.hex(color)(`damage.`)}`;
 
             }
             else
             {
                 monster.hp-=damage  //target
+                player.encDat.AHM(true)
+                player.encDat.ATdmg(damage)
                 return `${chalk.hex(color)(`You cast ${chalk.yellow(name)} at`)} \
 ${chalk.blueBright(monster.name+`.`)}\n${chalk.blueBright(monster.name)} ${chalk.hex(color)(hitstr)} \
 ${chalk.red(damage)} ${chalk.hex(color)('damage.')}`

@@ -15,7 +15,7 @@ import {chance2, resetRandoms} from './game-objects/random_nums.js';
 import {buttonsContainer, createStatsBox, ImageScreenTerm, InventoryBox, logs, program, screen, stats} from "./ui.js";
 import {escLeftByNum, escUpByNum, gradient_scanlines, rollLog} from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
-import { padString, testContent } from './game-objects/data.js';
+import { ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, padString, testContent } from './game-objects/data.js';
 import { combatMetrics } from './game-objects/metrics.js';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
@@ -403,6 +403,7 @@ async function createButtons(gameEvent, storyObj = {}) {
 
 		})
 	})
+	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length) + " " + chalk.bold.greenBright("choices")}`)
 	resizeButtons()
 }
 // basically to map event to an object using the event id as a key,
@@ -432,7 +433,6 @@ async function eventHandler(gameEvent = temp_event1,) {
 	if (gbf.writeMode === 'gradientScanlines') {
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 	}
-	buttonsContainer.setContent(` ${chalk.bold.yellow(gameEvent['buttons'].length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 
 	//change to for loop eventually
 	if (gameEvent instanceof (game_event_enemy)) {
@@ -454,9 +454,9 @@ async function eventHandler(gameEvent = temp_event1,) {
 		let length ='╰╾────────────────────────────────────────────╼╯'.length
 		let combatBanner=`\
 ╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
-│   ${gradient.instagram(thePlayer.encDat.enmyName)} ${chalk.blue(`deafeated in`)} ${chalk.greenBright(`${thePlayer.encDat.turn} turns`)}
+│   ${gradient.instagram(thePlayer.encDat.enmyName)} ${chalk.blue(thePlayer.encDat.peacefullClr?`cleared in`:`deafeated in`)} ${chalk.greenBright(`${thePlayer.encDat.turn} turns`)}
 │   <${'-'.repeat(38)}>
-│   XP earned:  ${chalk.greenBright(`545`)}
+│   XP earned:  ${thePlayer.encDat.peacefullClr?chalk.redBright(`0`):chalk.greenBright(`545`)}
 │
 │   average hit rate: ${thePlayer.encDat.calculateHitMissAVG()*100} % hit chance
 │   average damage dealt per turn: ${chalk.redBright(thePlayer.encDat.calculateTurnDmgAVG())} dmg
@@ -591,6 +591,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			playerWonInitiative = true
 		}
 	}
+
 	createCombatButtons(monsterHostile)
 	combatButtonsMap['attack'].on('press', async () => {
 		if((logs.term.rows-2)<=logs.term.buffer.active.cursorY){
@@ -636,10 +637,16 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 		}
 	})
 	combatButtonsMap['flee'].on('press', async () => {
+		//bad name
+
+		
 		let dexSave=player.rollSkillCheck(player.dex)
 		if((dexSave>=(10 + monster.hitDie))||!monsterHostile){
+			player.encDat.peacefullClr=true
 			logs.writeSync(`${!playerWonInitiative&&firstLoop?escUpByNum(1)+'\r':''}${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
-			logs.writeSync(`${chalk.yellow(`You escaped through a random tunnel`)}\n`);
+			monsterHostile?logs.writeSync(`${chalk.yellow(`You escaped through a random tunnel`)}\n`)
+				:logs.writeSync(`${chalk.yellow(`You walk past the monster \nfollowing the path till you reach the room`)}\n`);
+
 			logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 			// random deeper or surface
 			clearButtons();
@@ -723,7 +730,29 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 			} else {
 				await enemyAtack(monster,player)
 				await new Promise(resolve => setTimeout(resolve, 50))
-				combatLogic(monster, player, false, monsterHostile, ++turn)
+				combatLogic(monster, player, false, true, ++turn)
+			}
+		})
+	}
+	if('scrolls' in combatButtonsMap){
+		combatButtonsMap['scrolls'].on('press', async () => {
+			clearButtons();
+			if(playerWonInitiative&&firstLoop){
+				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+			}else if(!firstLoop){
+				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+			}
+			thePlayer.encDat.AsUse()
+			logs.writeSync(thePlayer.useScroll({monster:monster})+'\n')
+			refreshInventory()
+			await new Promise(resolve => setTimeout(resolve, 100))
+			if (monster.hp <= 0) {
+				await new Promise(resolve => setTimeout(resolve, 100))
+				clearCombat(logs)
+			} else {
+				await enemyAtack(monster,player)
+				await new Promise(resolve => setTimeout(resolve, 50))
+				combatLogic(monster, player, false, true, ++turn)
 			}
 		})
 	}
@@ -778,7 +807,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nattacking this enemy\nwill make 
 		left: 1,
 		top: 1,
 		name: 'flee',
-		content: `flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`,
+		content: monsterHostile?`flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`:`${chalk.bold.greenBright(`walk past ${monster.name}\nand enter the room`)}`,
 		//shadow: true,
 		style: {
 			bg: '#5A5A5A',
@@ -906,6 +935,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nattacking this enemy\nwill make 
 			buttonsArray.push(combatButtonsMap[name])
 		}
 	}
+	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length) + " " + chalk.bold.greenBright("choices")}`)
 	screen.render()
 	resizeButtons()
 	stats.focus()
@@ -976,24 +1006,38 @@ async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 
 function refreshStats(player = thePlayer) {
 	stats.setContent(
-		`{bold}${chalk.red("HP ")}{/bold} = ${thePlayer.hp}
-{bold}${chalk.green("AC ")}{/bold} = ${thePlayer.ac}
-${chalk.yellowBright('str')} = ${thePlayer.str}
-${chalk.grey('int')} = ${thePlayer.int}
-${chalk.hex('000080')('dex')} = ${thePlayer.dex}
-${chalk.hex('630330')('cha')} = ${thePlayer.cha} 
-${chalk.magenta("dmg")} = ${thePlayer.basedamage}
-${chalk.magenta("mag")} =`)
+		`{bold}${chalk.red("HP:")}{/bold}
+${thePlayer.hp}
+{bold}${chalk.green("AC:")}{/bold}
+${thePlayer.ac}
+${chalk.yellowBright('str:')}
+${thePlayer.str}
+${chalk.grey('int:')}
+${thePlayer.int}
+${chalk.hex('000080')('dex:')}
+${thePlayer.dex}
+${chalk.hex('630330')('cha:')}
+${thePlayer.cha} 
+${chalk.magenta("dmg:")}
+${thePlayer.basedamage}
+${chalk.magenta("mag:")}`)
 	screen.render()
 }
 function refreshInventory(player = thePlayer) {
 	InventoryBox.setContent(
-`{bold}${chalk.red("Weapon ")}{/bold} = ${thePlayer.weaponName}
-{bold}${chalk.red("Armour ")}{/bold} = ${thePlayer.armourName}
-${chalk.red('oil')} = ${thePlayer.oil}
+`{bold}${chalk.blue("Weapon :")}{/bold}
+${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
+ ${thePlayer.weapon.enchant!==0?`{bold}${chalk.yellow (`+${thePlayer.weapon.enchant}`)}{/bold}`:''}
+
+{bold}${chalk.red("Armour :")}{/bold}
+${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armourName.replace(/_/g, ' '))}\
+ ${thePlayer.weapon.enchant!==0?`{bold}${chalk.yellow (`+${thePlayer.weapon.enchant}`)}{/bold}`:''}
+
+
+${chalk.hex('3B3131')('oil')} = ${thePlayer.oil}
 ${chalk.red('potions')} = ${thePlayer.potions}
-${chalk.red('scrolls')} = ${thePlayer.scrolls}
-${chalk.red('gp')} = ${thePlayer.gold}`)
+${chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])('scrolls')} = ${thePlayer.scrolls}
+${chalk.yellow('gp')} = ${thePlayer.gold}`)
 	screen.render()
 }
 function creatething(){
@@ -1107,7 +1151,45 @@ screen.key('n', async function () {
 	encounterResolver()
 })
 
-
+let bInd = 0
+let scrollUpPrev=false
+//buuuuuuuuuuuuuuuuuugged when removing button
+// screen.key('k', () => {
+// 	if (buttonsArray.length>0){
+// 		try {
+// 			if(scrollUpPrev){
+// 				bInd++
+// 				scrollUpPrev=false
+// 			}
+// 			buttonsContainer.scrollTo(buttonsArray[bInd].top - 2)
+// 			buttonsArray[bInd].focus()
+// 			++bInd
+// 			if (bInd > (buttonsArray.length - 1)) {
+// 				bInd = 0
+// 			}
+// 		}catch (e) {
+// 			bInd = 0
+// 		}
+// 	}
+// })
+// screen.key('l', () => {
+// 	if (buttonsArray.length>0){
+// 		try {
+// 			if(!scrollUpPrev){
+// 				bInd--
+// 				scrollUpPrev=true
+// 			}
+// 			buttonsContainer.scrollTo(buttonsArray[bInd].top - 2)
+// 			buttonsArray[bInd].focus()
+// 			--bInd
+// 			if (bInd < 0) {
+// 				bInd =  (buttonsArray.length - 1)
+// 			}
+// 		}catch (e) {
+// 			bInd = 0
+// 		}
+// 	}
+// })
 
 
 program.cursorColor('000000')

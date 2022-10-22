@@ -327,6 +327,55 @@ ARMOURmap[ARMOUR.CHAINMAIL] = 14
 Object.freeze(ARMOURmap)
 export {ARMOURmap};
 
+const rarityColours=[
+    'ffffff',
+    '1eff00',
+    '0070dd',
+    'a335ee',
+    'ff8000',
+]
+Object.freeze(rarityColours)
+export {rarityColours}
+
+export function ArmourRarityColour(ac){
+    //let colour=''
+    switch(ac){
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+            return rarityColours[0]
+        case 11:
+        case 12: 
+        case 13:
+        case 14:
+            return rarityColours[1]
+        case 15:
+        case 16:
+            return rarityColours[2]
+        case 17:
+        case 18:
+            return rarityColours[3]
+        case 19:
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+        case 25:
+        case 26:
+            return rarityColours[4]
+    }
+}
+
+
+
 export const armourArrayWeights= Object.values(ARMOURmap).map((ac)=>{
     if (ac>20){
         return .2/ac
@@ -419,7 +468,7 @@ export function PickEnemyArt(){
  ▄████████▀  ████████▀    ███    ███  ▀██████▀  █████▄▄██ █████▄▄██  ▄████████▀  
                           ███    ███            ▀         ▀                      
 */
-
+// LATER USE A WRAP TEXT FUNCTION TO GENERALISE STRINGS FITTING THE BOX
 export const ScrollsAll=Object.freeze({
     fireball : new Scroll({
         name: 'fireball',
@@ -444,7 +493,7 @@ export const ScrollsAll=Object.freeze({
         description: 'A scroll that summons a lightning bolt to strike a monster',
         scrollFunction: dmgScrollFun(
             `catches a glancing strike and takes`,
-            `catches the full force of the thunder bolt and takes`,
+            `catches the full force of the thunder bolt\nand takes`,
             `Unfortunately you are not in combat, you cast it out of the room.`,
             DMG_COLOUR[DMG_TYPE.LIGHTNING],//`FFA500`,
             `4d6`,
@@ -458,7 +507,7 @@ export const ScrollsAll=Object.freeze({
         rarity: 1,
         description: 'A scroll that kills a monster most of the time',
         scrollFunction: dmgScrollFun(
-            `takes a glancing blow from the curse and takes`,
+            `takes a glancing blow from the curse\nand takes`,
             `absorbs the full force of the curse killing it`,
             `unfortunately there is nothing to kill besides yourself.\nYou let the scroll fizzle into ashes`,
             DMG_COLOUR[DMG_TYPE.DARK],

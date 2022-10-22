@@ -122,7 +122,7 @@ export const InventoryBox = grid.set(0, 10, 6, 2, blessedpkg.list, {
 export const buttonsContainer = grid.set(0, 6, 6, 3, blessedpkg.form, ({
     parent: screen,
     keys: true,
-    label: `choose ~ ${chalk.green('w s')} to scroll`,
+    label: `focus ${chalk.green('pgDown')} to scroll`,
     //content: 'test?',
     padding: {
         right: 0,

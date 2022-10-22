@@ -57,7 +57,7 @@ export class Player {
         this.oil = 5;
         //later include identify potion mechanic
         this.potions = 20;
-        this.scrolls = 3;
+        this.scrolls = 300;
         //metrics to keep track of progression and combat stats
         //temp metric will be merged then cleared at end of every event
         //this.globalMetrics = GlobalMetrics()
@@ -132,7 +132,7 @@ export class Player {
     }
     useScroll(params={}){
         let scrollPick=pickScroll()
-        console.log(scrollPick)
+        //console.log(scrollPick)
         return scrollPick.use(this, params)
     }
 }

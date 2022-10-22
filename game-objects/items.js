@@ -98,17 +98,24 @@ export function dmgScrollFun(
     color='FFA500',
     dmg='4d6', 
     name='fireball',
-    instakill=false)
+    instakill=false,
+    fixedDmg=false,
+    fixedDmgVal=0,
+    confirmHit=false)
 {
     return (player, params={})=>
     {   
+        let confirmedHit = confirmHit?confirmHit:false
         let descStr = `${chalk.hex(color)(`You use a scroll, it casts`)} ${chalk.greenBright(name)}`
         if(player.state===playerState.COMBAT)
         {
             let monster = params.monster
-            let damage = instakill?monster.hp:chance2.rpg(dmg,{sum: true})
+            let damage = 0 
+            if(fixedDmg){damage=fixedDmgVal}else{
+                damage=instakill?monster.hp:chance2.rpg(dmg,{sum: true})
+            }
             let saveDC = 10 + player.int + (player.level > 4 ? 4 : player.level);
-            if(monsterRandom.d20() + monster.hitDie >= saveDC)
+            if((monsterRandom.d20() + monster.hitDie >= saveDC) && !confirmedHit)
             {
                 damage=Math.floor(damage/2)
                 monster.hp-=damage //str

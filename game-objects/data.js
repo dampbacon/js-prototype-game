@@ -419,6 +419,25 @@ export const ScrollsAll=Object.freeze({
             `fireball`
         )
     }),
+    magicMissile : new Scroll({
+        name: 'magic missile',
+        dmgTypeE: DMG_TYPE.MAGIC,
+        targetmonster: true,
+        rarity: 0.2,
+        description: 'A scroll that summons magic missles to attack a monster',
+        scrollFunction: dmgScrollFun(
+            `####### SHOULD NOT DISPLAY ######`,
+            `is struck by four magical bolts takes`,
+            `Unfortunately you are not in combat, you cast it out of the room.`,
+            DMG_COLOUR[DMG_TYPE.MAGIC],//`FFA500`,
+            `####### NO DICE CRASH IF READ #######`,
+            `Magic Missle`,
+            false,
+            true,
+            12,
+            true,
+        )
+    }),
     lightning_bolt : new Scroll({
         name: 'lightning bolt',
         dmgTypeE: DMG_TYPE.LIGHTNING,

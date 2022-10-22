@@ -13,10 +13,11 @@ import lodashC from 'lodash.compact';
 import {copyMonster, monster} from './game-objects/mobs.js';
 import {chance2, resetRandoms} from './game-objects/random_nums.js';
 import {buttonsContainer, createStatsBox, ImageScreenTerm, InventoryBox, logs, program, screen, stats} from "./ui.js";
-import {escLeftByNum, escUpByNum, gradient_scanlines, rollLog} from "./writeMethods.js";
+import {escLeftByNum, escUpByNum, fitLines, fitLinesStr, gradient_scanlines, rollLog} from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
-import { ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, enemiesArt, makeRoomText, padString, testContent } from './game-objects/data.js';
+import { ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, enemiesArt, makeRoomText, monsters, padString, testContent } from './game-objects/data.js';
 import { combatMetrics } from './game-objects/metrics.js';
+import wrap from 'word-wrap';
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;
@@ -28,17 +29,7 @@ let combatButtonsMap = {}
 let thePlayer = new Player("name")
 let box=createStatsBox()
 // test content
-let tempMonster = new monster({
-	name: "testCreature",
-	hitDie: 3,
-	ac: 6,
-	morale: 6,
-	weapon: "ruler",
-	dmgDie: 6,
-	aggro: 6,
-	rarity: 1,
-	art: enemiesArt.gobo
-})
+let tempMonster=monsters.gobo
 const rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
 const rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
 
@@ -472,7 +463,8 @@ async function eventHandler(gameEvent = temp_event1,) {
 `
 		//combatBanner=padString(combatBanner,ImageScreenTerm.term.cols-length)
 
-		thePlayer.encDat=new combatMetrics()
+		thePlayer.encDat=null //new combatMetrics()
+		//console.log(thePlayer.encDat+'')
 		await new Promise(r => setTimeout(r, 500));
 		//ImageScreenTerm.writeSync('\n'+testContent)
 		ImageScreenTerm.writeSync('\n'+combatBanner)
@@ -509,6 +501,7 @@ function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve()}
 
 
 async function combat(combatEvent) {
+	thePlayer.encDat=new combatMetrics()
 	let monster = copyMonster(tempMonster)
 	logs.writeSync('\n'+escUpByNum(1))
 	await (gradient_scanlines(logs, makeRoomText(monster), 3, gradient.pastel.multiline, rainbowVoil))
@@ -753,7 +746,7 @@ async function combatLogic(monsterCopy /*make into enemy*/, player = thePlayer, 
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
 			thePlayer.encDat.AsUse()
-			logs.writeSync(thePlayer.useScroll({monster:monster})+'\n')
+			logs.writeSync(player.useScroll({monster:monster})+'\n')
 			refreshInventory()
 			await new Promise(resolve => setTimeout(resolve, 100))
 			if (monster.hp <= 0) {

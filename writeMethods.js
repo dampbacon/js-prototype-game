@@ -16,7 +16,7 @@
 //  MOVE TO SEPERATE FILE LATER
 //
 import lodashC from "lodash.compact";
-import {ImageScreenTerm} from "./ui.js";
+import {ImageScreenTerm, logs} from "./ui.js";
 import chalk from "chalk";
 import typeOf from 'kind-of'
 import repeat from 'repeat-string'
@@ -86,7 +86,7 @@ async function slowWrite(str = '', terminal, speed) {
     }
 }
 
-function fitLines(str = '', cols = 0) {
+export function fitLines(str = '', cols = 0) {
     //various checks for characters that screw up the line wrapping
     // regex screws up apostrophes
     let strArr = str.split('\n')
@@ -271,7 +271,18 @@ async function scanlines(terminal = ImageScreenTerm, text = '', speed = 5, color
 
 
 
-
+export function fitLinesStr(text, width=logs.term.cols - 1){
+    let multiline = ``
+    let lorem_lines = fitLines(text, width)
+    for (let line of lorem_lines) {
+        let line_str = line.join('')
+        if (line_str) {
+            line_str = line_str.concat('\n')
+        }
+        multiline = multiline.concat(line_str)
+    }
+    return multiline
+}
 
 
 

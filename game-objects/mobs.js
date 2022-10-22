@@ -45,7 +45,12 @@ export function copyMonster(monsterToCopy) {
         }
     )
 }
-
+//to allow methods to change monster during combat encounters more easily
+export class monsterHolder{
+    constructor(monster){
+        this.monster?monster:null//later make pick random
+    }
+}
 
 //some damage types have alternate effects on a targets weapon cooldowns 
 //these implentations will simulate being target 2 in a trap

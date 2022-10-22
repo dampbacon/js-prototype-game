@@ -106,7 +106,7 @@ export function dmgScrollFun(
     return (player, params={})=>
     {   
         let confirmedHit = confirmHit?confirmHit:false
-        let descStr = `${chalk.hex(color)(`You use a scroll, it casts`)} ${chalk.greenBright(name)}`
+        let descStr = `${chalk.hex(color)(`You use a scroll, it casts`)} ${chalk.greenBright(name)} `
         if(player.state===playerState.COMBAT)
         {
             let monster = params.monster
@@ -121,8 +121,8 @@ export function dmgScrollFun(
                 monster.hp-=damage //str
                 player.encDat.AHM(true)
                 player.encDat.ATdmg(damage)
-                return `${descStr}
-${chalk.hex(color)(`The`)} ${chalk.blueBright(monster.name)} ${chalk.hex(color)(dodgestr)} \
+                return `${descStr}\
+\n${chalk.hex(color)(`The`)} ${chalk.blueBright(monster.name)} ${chalk.hex(color)(dodgestr)} \
 ${chalk.hex('fe2c54')(damage)} ${chalk.hex(color)(`damage.`)}`;
 
             }
@@ -131,8 +131,8 @@ ${chalk.hex('fe2c54')(damage)} ${chalk.hex(color)(`damage.`)}`;
                 monster.hp-=damage  //target
                 player.encDat.AHM(true)
                 player.encDat.ATdmg(damage)
-                return `${descStr} ${chalk.hex(color)('at')} \
-${chalk.blueBright(monster.name+`.`)}\n${chalk.blueBright(monster.name)} ${chalk.hex(color)(hitstr)} \
+                return `${descStr}${chalk.hex(color)('at')} \
+${chalk.blueBright(monster.name+`.`)} ${chalk.blueBright(monster.name)} ${chalk.hex(color)(hitstr)} \
 ${chalk.red(damage)} ${chalk.hex(color)('damage.')}`
             } 
         }

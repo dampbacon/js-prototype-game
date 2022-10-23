@@ -102,5 +102,8 @@ console.log(pickScroll())
 testplayer.state=playerState.COMBAT
 // testplayer.hp-=10
 console.log(testplayer.useScroll({monster:copy}))
-console.log(enemiesArt)
+// console.log(enemiesArt)
 // console.log(testplayer.hp)
+
+chalk.level = 2;
+console.log(chalk.red('Hello world!'));

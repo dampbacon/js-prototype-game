@@ -568,7 +568,7 @@ function clearCombat(logs){
 async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=true, hostile=false, counter=1) {
 	ImageScreenTerm.setLabel(`${gradient.summer(`Turn counter: ${counter}`)}`)
 	let monster = thePlayer.encDat.enemy
-	logs.writeSync('hp '+monster.hp+'\n')
+	//logs.writeSync('hp '+monster.hp+'\n')
 	let playerWonInitiative = false
 	let monsterHostile = hostile
 	let turn = counter
@@ -595,6 +595,11 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=tr
 		}else{
 			playerWonInitiative = true
 		}
+	}else if(firstLoop&&!monsterHostile){
+		//change to random strings later
+		logs.writeSync(chalk.blueBright(monster.name) + gradient.pastel(" is not hostile")+'\n')
+		logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
+
 	}
 
 	createCombatButtons(monsterHostile)
@@ -792,7 +797,7 @@ function createCombatButtons(hostile) {
 		content: `${chalk.bold.white('attack ')}${chalk.bold.green(thePlayer.weapon.dmgDie)}\
 ${thePlayer.basedamage<0?chalk.bold.white(' - '):chalk.bold.white(' + ')}\
 ${chalk.bold.white(Math.abs(thePlayer.basedamage))}\
-${monsterHostile?'':gradient.retro.multiline('\nattacking this enemy\nwill make it hostile')}`, //maybe add damage die
+${monsterHostile?'':gradient.retro.multiline('\n..this will make it hostile')}`, //maybe add damage die
 		//shadow: true,
 		style: {
 			bg: '#5A5A5A',

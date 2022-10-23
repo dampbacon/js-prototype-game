@@ -32,7 +32,7 @@ export class dmgTypeClass extends dmgTypeClassBase{
 
 export class weapon {
     constructor({name, dmgDie, dmgType, rarity, enchant, description}) {
-        this.name = name?name:'Stick';
+        this.name = name?name.toUpperCase():'ERROR';
         this.dmgDie = dmgDie?dmgDie:'1d4';
         this.dmgType = dmgType?dmgType:new dmgTypeClass({name:'blunt',color:'ffffff'});
         this.rarity = rarity?rarity:1;

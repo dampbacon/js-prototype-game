@@ -1,39 +1,87 @@
 #!/usr/bin/env node
-'use strict';
 
+'use strict';
 import blessedpkg from 'blessed';
 import chalk from 'chalk';
 import gradient from 'gradient-string';
-import {game_event, game_event_gain_item} from './game-objects/game_events.js';
-import {Player, playerState} from './game-objects/player.js';
+import {
+	game_event,
+	game_event_gain_item
+} from './game-objects/game_events.js';
+import {
+	Player,
+	playerState
+} from './game-objects/player.js';
 import './blessed/patches.cjs';
 import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
-import {copyMonster, monster} from './game-objects/mobs.js';
-import {chance2, resetRandoms} from './game-objects/random_nums.js';
-import {buttonsContainer, createStatsBox, ImageScreenTerm, InventoryBox, logs, program, screen, stats} from "./ui.js";
-import {escLeftByNum, escUpByNum, fitLines, fitLinesStr, gradient_scanlines, rollLog} from "./writeMethods.js";
+import {
+	copyMonster,
+	monster
+} from './game-objects/mobs.js';
+import {
+	chance2,
+	resetRandoms
+} from './game-objects/random_nums.js';
+import {
+	buttonsContainer,
+	createStatsBox,
+	ImageScreenTerm,
+	InventoryBox,
+	logs,
+	program,
+	screen,
+	stats
+} from "./ui.js";
+import {
+	escLeftByNum,
+	escUpByNum,
+	fitLines,
+	fitLinesStr,
+	gradient_scanlines,
+	rollLog
+} from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
-import { ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, enemiesArt, makeRoomText, monsters, padString, pickEnemy, testContent } from './game-objects/data.js';
-import { combatMetrics } from './game-objects/metrics.js';
+import {
+	ARMOURmap,
+	ArmourRarityColour,
+	DMG_COLOUR,
+	DMG_TYPE,
+	enemiesArt,
+	makeRoomText,
+	monsters,
+	padString,
+	pickEnemy,
+	testContent
+} from './game-objects/data.js';
+import {
+	combatMetrics
+} from './game-objects/metrics.js';
 import wrap from 'word-wrap';
-chalk.level=2;
-const { tinygradient } = smallGrad;
-const { iconv } = pkg;
-const { compact } = lodashC;
-const {blessed} = blessedpkg
+chalk.level = 2;
+const {
+	tinygradient
+} = smallGrad;
+const {
+	iconv
+} = pkg;
+const {
+	compact
+} = lodashC;
+const {
+	blessed
+} = blessedpkg
 let death = false;
 let buttonsArray = [];
 let story = {}
 let combatButtonsMap = {}
 let thePlayer = new Player("name")
-let box=createStatsBox()
+let box = createStatsBox()
 // test content
-let tempMonster=monsters.gobo
-const rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000',]
+let tempMonster = monsters.gobo
+const rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
 const rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
-
 //test string
 const lorem =
 	`Lorem ipsum dolor sit amet,
@@ -50,10 +98,7 @@ Mauris vitae pellentesque tellus.
 Integer velit neque, 
 fermentum vel tempus non, 
 pulvinar id tellus.`
-
 const pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse()
-
-
 const mountain = `[37m[40m                        [97m[40m░░[37m[40m                            [m
 [37m[40m                  [97m[40m▒░[37m[40m   [97m[40m░██▓▓[90m[40m░░[37m[40m                        [m
 [37m[40m                 [97m[40m█▓░░[37m[40m [97m[40m░▓█████▓▒░░[37m[40m [90m[40m░[37m[40m                   [m
@@ -81,7 +126,7 @@ const mountain = `[37m[40m                        [97m[40m░░[37m[40m  
 [37m[40m                     [94m[40m░▓▒░░[37m[40m                            [m
 [37m[40m                                                      [m
 `
-const dice=`[37m[40m          [97m[40m▄▄▄[37m[40m          [m
+const dice = `[37m[40m          [97m[40m▄▄▄[37m[40m          [m
 [37m[40m      [97m[40m▄▄▀▀[37m[40m █ [97m[40m▀▀▄▄[37m[40m      [m
 [37m[40m  [97m[40m▄▄▀▀[90m[40m▄▄▄▄[90m[47m▀[90m[40m▀[90m[47m▀[90m[40m▄▄[37m[40m  [97m[40m▀▀▄▄[37m[40m  [m
 [37m[40m [90m[40m▄[97m[40m█[90m[40m▀▀▀[37m[40m   ▄▀ ▀▄ [90m[40m▀▀▀▄▄[97m[40m█[90m[40m▄[37m[40m [m
@@ -175,8 +220,7 @@ let temp_event2 = new game_event({
 		//[3,"goto 3 lolololololololollolololololololol",true]
 	]
 })
-let testEventArr = [temp_event1, temp_event2,]
-
+let testEventArr = [temp_event1, temp_event2, ]
 //test content
 let body = `[0m\r
 \r
@@ -239,9 +283,6 @@ Yuan Wutong snorted coldly. “Last night, your expenditures at the Sand-Scourin
 Out of respect for Master Su, 
 I’ll let you off just this once, 
 but you’d best hurry back to the Redscale Army, you brat!” `
-
-
-
 //test button declarations
 let button1 = blessedpkg.button({
 	parent: buttonsContainer,
@@ -337,7 +378,9 @@ let button4 = blessedpkg.button({
 });
 //screen.render is essential for the correct screenlines amount to calculate inorder to resize buttons
 function resizeButtons() {
-	buttonsArray.forEach((element) => { element.width = buttonsContainer.width - 5 })
+	buttonsArray.forEach((element) => {
+		element.width = buttonsContainer.width - 5
+	})
 	screen.render()
 	buttonsArray.forEach((element, index, array) => {
 		if (!(index === 0)) {
@@ -356,13 +399,16 @@ function resizeButtons() {
 // the resize button cannot get a valid height and crashes on screen resize
 // if I attempt to remove all mentions of buttonsArray
 function clearButtons() {
-	buttonsArray.forEach((element) => { buttonsContainer.remove(element); element.destroy() })
+	buttonsArray.forEach((element) => {
+		buttonsContainer.remove(element);
+		element.destroy()
+	})
 	buttonsArray = []
 }
 async function createButtons(gameEvent, storyObj = {}) {
 	eventHandler(gameEvent)
 	await waitForClear();
-	if (death){
+	if (death) {
 		await reset()
 		return 0
 	}
@@ -392,7 +438,7 @@ async function createButtons(gameEvent, storyObj = {}) {
 			},
 		})
 		buttonsArray.push(temp)
-		temp.on('press', function () {
+		temp.on('press', function() {
 			clearButtons()
 			buttonsContainer.setContent('')
 			screen.render();
@@ -400,7 +446,6 @@ async function createButtons(gameEvent, storyObj = {}) {
 			resizeButtons();
 			stats.focus();
 			screen.render();
-
 		})
 	})
 	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length) + " " + chalk.bold.greenBright("choices")}`)
@@ -414,26 +459,26 @@ function createEventsMap(eventsArrary = [], storyArr = {}) {
 		storyArr[element.id] = element
 	})
 }
-
 //sloppy but easy way to make it work
-async function eventHandler(gameEvent = temp_event1,) {
-
+async function eventHandler(gameEvent = temp_event1, ) {
 	ImageScreenTerm.term.clear()
 	ImageScreenTerm.term.reset()
 	rollLog(logs)
 	let gb = gameEvent.body
 	let gbf = gb.format
-
 	//change to for loop eventually
 	for (let i of gameEvent.enemies) {
-		combat(gameEvent,i)
-		await (waitForCombat())
+		if (!death) {
+			combat(gameEvent, i)
+			await (waitForCombat())
+		}
 	}
 
-	if(death===false){
-		thePlayer.state=playerState.TREASURE_ROOM
-		let length ='╰╾────────────────────────────────────────────╼╯'.length
-		let combatBanner=`\
+	// MOVE LATER TO CLEAR COMBAT BEFORE TREASURE EVENT
+	if (!death) {
+		thePlayer.state = playerState.TREASURE_ROOM
+		let length = '╰╾────────────────────────────────────────────╼╯'.length
+		let combatBanner = `\
 ╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
 │   ${gradient.instagram(thePlayer.encDat.enmyName)} ${chalk.blue(thePlayer.encDat.peacefullClr?`cleared in`:`deafeated in`)} ${chalk.greenBright(`${thePlayer.encDat.turn} turns`)}
 │   <${'-'.repeat(38)}>
@@ -450,76 +495,89 @@ async function eventHandler(gameEvent = temp_event1,) {
 │   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encDat.fUse}
 ╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
 `
-		thePlayer.encDat=null //new combatMetrics()
+		thePlayer.encDat = null //new combatMetrics()
 		await new Promise(r => setTimeout(r, 500));
-		ImageScreenTerm.writeSync('\n'+combatBanner)
-
-		for(let i=0; i<=12; i++){
-			ImageScreenTerm.writeSync(escUpByNum(1)+escLeftByNum(1)+'│')
+		ImageScreenTerm.writeSync('\n' + combatBanner)
+		for (let i = 0; i <= 12; i++) {
+			ImageScreenTerm.writeSync(escUpByNum(1) + escLeftByNum(1) + '│')
 		}
-
-		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
-		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
 	}
+
+
+	
+	await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
+	logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
+	
 	resolver()
 }
 
-
-function kill(){
+function kill() {
 	clearButtons()
 	death = true;
 	encounterResolver()
 }
-
 // resume execution after combat 
 // enounter clear promise/event package clear promise
 let waitForClearResolve
-function waitForClear() {return new Promise((resolve) => {waitForClearResolve = resolve})}
-function resolver() {if (waitForClearResolve) {waitForClearResolve()}}
+
+function waitForClear() {
+	return new Promise((resolve) => {
+		waitForClearResolve = resolve
+	})
+}
+
+function resolver() {
+	if (waitForClearResolve) {
+		waitForClearResolve()
+	}
+}
 //combat promise
 let waitForCombatResolve
-function waitForCombat() {return new Promise((resolve) => {waitForCombatResolve = resolve});}
-function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve()}
 
+function waitForCombat() {
+	return new Promise((resolve) => {
+		waitForCombatResolve = resolve
+	});
+}
 
-async function combat(combatEvent,enemy) {
-	thePlayer.encDat=new combatMetrics()
-	let monster = enemy//copyMonster(tempMonster)
-	logs.writeSync('\n'+escUpByNum(1))
+function encounterResolver() {
+	if (waitForCombatResolve) waitForCombatResolve()
+}
+async function combat(combatEvent, enemy) {
+	thePlayer.encDat = new combatMetrics()
+	let monster = enemy //copyMonster(tempMonster)
+	logs.writeSync('\n' + escUpByNum(1))
 	await (gradient_scanlines(logs, makeRoomText(monster), 3, gradient.pastel.multiline, rainbowVoil))
-	thePlayer.state=playerState.COMBAT
+	thePlayer.state = playerState.COMBAT
 	buttonsContainer.setContent('')
 	logs.writeSync(escUpByNum(1))
 	logs.writeSync(`\n${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}`);
 	logs.writeSync(`\n${chalk.hex('ECE236')(`Combat Start!`)}`);
 	logs.writeSync(`\n${chalk.hex('E51B2C')(`#`.repeat(logs.term.cols - 1))}\n`);
-	thePlayer.encDat.enmyName=monster.name
-	thePlayer.encDat.enemy=monster
+	thePlayer.encDat.enmyName = monster.name
+	thePlayer.encDat.enemy = monster
 	ImageScreenTerm.reset()
 	ImageScreenTerm.writeSync(monster.art)
-	combatLogic(thePlayer,true)
+	combatLogic(thePlayer, true)
 }
 // moster picker in random event later
-async function enemyAtack(monster,player=thePlayer,first=false) {
-	if(!first){
+async function enemyAtack(monster, player = thePlayer, first = false) {
+	if (!first) {
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
 	await new Promise(resolve => setTimeout(resolve, 300))
 	logs.writeSync((`${chalk.blueBright(monster.name)} ${chalk.hex('ea0000')(`attacks you with`)} \
 ${chalk.blueBright(monster.weapon+'!')}\n`))
-
 	if (monster.rollToHit() >= player.ac) {
 		let monsterDamage = monster.rollDamage()
-		
 		player.encDat.AdmgTkn(monsterDamage)
 		//await new Promise(resolve => setTimeout(resolve, 100))
 		logs.writeSync(`${chalk.blueBright(monster.name)} \
 ${chalk.hex('ea0000')(`hits you for`)} ${chalk.hex('fe2c54')(monsterDamage)} \
 ${chalk.hex('ea0000')(`damage!`)}\n`)
-
 		player.hp -= monsterDamage
 		refreshStats(player)
-		if(player.hp<=0){
+		if (player.hp <= 0) {
 			logs.writeSync((`${escLeftByNum(3)}${chalk.blueBright(monster.name)} ${chalk.hex('ea0000')(`kills you!`)}\n`))
 			await new Promise(resolve => setTimeout(resolve, 2000))
 			kill()
@@ -529,145 +587,118 @@ ${chalk.hex('ea0000')(`damage!`)}\n`)
 		//await new Promise(resolve => setTimeout(resolve, 100))
 		logs.writeSync((`${chalk.blueBright(monster.name)} ${chalk.hex('ea0000')(`misses you!`)}\n`))
 	}
-	if(first){
+	if (first) {
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
 }
 
-function clearCombat(logs){
-	thePlayer.weaponCooldown=0
+function clearCombat(logs) {
+	thePlayer.weaponCooldown = 0
 	ImageScreenTerm.removeLabel()
-
-
-
-
 	clearButtons();
 	logs.writeSync(`${chalk.hex('E51B2C')(`#`.repeat(logs.term.cols - 1))}\n`);
 	logs.writeSync(`${chalk.hex('ECE236')(`You defeated the enemy!`)}\n`);
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
-
-
-
-
 	//insert loot diversion here
-
-
-
-
-
 	encounterResolver()
-
 }
-
-
-
-async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=true, hostile=false, counter=1) {
+async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = true, hostile = false, counter = 1) {
 	ImageScreenTerm.setLabel(`${gradient.summer(`Turn counter: ${counter}`)}`)
 	let monster = thePlayer.encDat.enemy
 	//logs.writeSync('hp '+monster.hp+'\n')
 	let playerWonInitiative = false
 	let monsterHostile = hostile
 	let turn = counter
-	thePlayer.encDat.turn=turn
+	thePlayer.encDat.turn = turn
 	//logs.writeSync(`${chalk.bold.green(turn)}\n`);
-
-	if(firstLoop){
-		if (/*room.forceHostile == -1 &&*/ monster.aggro < 12) {
+	if (firstLoop) {
+		if ( /*room.forceHostile == -1 &&*/ monster.aggro < 12) {
 			// friendly
-		} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/) {
+		} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/ ) {
 			// hostile
 			monsterHostile = true;
 		} else {
 			// neutral, which is functionally the same as friendly
 		}
 	}
-
-	if (firstLoop&&monsterHostile){
+	if (firstLoop && monsterHostile) {
 		let player_initiative = player.rollInitiative()
 		let monster_initiative = monster.rollInitiative()
 		logs.writeSync(`Monster init${chalk.red(monster_initiative)} Player init${chalk.blue(player_initiative)}\n`)
 		if (monster_initiative > player_initiative) {
-			await enemyAtack(monster,player,true)
-		}else{
+			await enemyAtack(monster, player, true)
+		} else {
 			playerWonInitiative = true
 		}
-	}else if(firstLoop&&!monsterHostile){
+	} else if (firstLoop && !monsterHostile) {
 		//change to random strings later
-		logs.writeSync(chalk.blueBright(monster.name) + gradient.pastel(" is not hostile")+'\n')
+		logs.writeSync(chalk.blueBright(monster.name) + gradient.pastel(" is not hostile") + '\n')
 		logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
-
 	}
-
 	createCombatButtons(monsterHostile)
 	combatButtonsMap['attack'].on('press', async () => {
-		if((logs.term.rows-2)<=logs.term.buffer.active.cursorY){
+		if ((logs.term.rows - 2) <= logs.term.buffer.active.cursorY) {
 			logs.writeSync(escUpByNum(1))
 			rollLog(logs)
 		}
 		clearButtons();
-		logs.writeSync(`${chalk.hex('00ea00')(`${escLeftByNum(2)}You attack the enemy with your`)} ${chalk.hex(player.weapon.dmgType.color)(player.weaponName.replace(/_/g, ' ')+'!')}\n`);
+		logs.writeSync(
+			`${chalk.hex('00ea00')(`${escLeftByNum(2)}You attack the enemy with your`)} ${chalk.hex(player.weapon.dmgType.color)(player.weaponName.replace(/_/g, ' ')+'!')}\n`
+			);
 		let TOHIT = player.rollToHit()
 		if (TOHIT[0] === 20) {
-			logs.writeSync(dice+escUpByNum(3)+gradient.rainbow(`\nCrit!\n\n`))
+			logs.writeSync(dice + escUpByNum(3) + gradient.rainbow(`\nCrit!\n\n`))
 			await new Promise(resolve => setTimeout(resolve, 1000))
 		}
-
-		if ((TOHIT[0]+TOHIT[1]) >= monster.ac) {
+		if ((TOHIT[0] + TOHIT[1]) >= monster.ac) {
 			player.encDat.AHM(true)
-
 			let playerDamage = player.rollDamage()
 			let crit = false
 			player.encDat.ATdmg(playerDamage)
 			if (TOHIT[0] === 20) {
 				crit = true
-				playerDamage+=player.rollDamage()
+				playerDamage += player.rollDamage()
 			}
 			monster.hp -= playerDamage
-			logs.writeSync(`${chalk.hex('00ea00')(`You hit for`)} ${chalk.hex('fe2c54')(playerDamage)} ${chalk.hex('00ea00')('damage!')}\n`);// ___DEBUGenemyhp=${monster.hp}\n`);
+			logs.writeSync(
+			`${chalk.hex('00ea00')(`You hit for`)} ${chalk.hex('fe2c54')(playerDamage)} ${chalk.hex('00ea00')('damage!')}\n`); // ___DEBUGenemyhp=${monster.hp}\n`);
 			logs.writeSync(player.wBonus.applyEffectWF(monster, crit, player));
-			
 			//logs.writeSync(chalk.hex('00ea00')(`___DEBUGenemyhp=${monster.hp}\n`));
 		} else {
 			player.encDat.AHM(false)
-
-			logs.writeSync(chalk.hex('00ea00')(`You miss!\n`))//    ____DEBUGenemyhp=${monster.hp}\n`));
+			logs.writeSync(chalk.hex('00ea00')(`You miss!\n`)) //    ____DEBUGenemyhp=${monster.hp}\n`));
 		}
 		if (monster.hp <= 0) {
 			await new Promise(resolve => setTimeout(resolve, 100))
 			clearCombat(logs)
 		} else {
 			await new Promise(resolve => setTimeout(resolve, 50))
-			await enemyAtack(monster,player)
+			await enemyAtack(monster, player)
 			logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 			combatLogic(player, false, true, ++turn)
 		}
 	})
 	combatButtonsMap['flee'].on('press', async () => {
 		//bad name
-
-		
-		let dexSave=player.rollSkillCheck(player.dex)
-		if((dexSave>=(10 + monster.hitDie))||!monsterHostile){
-			player.encDat.peacefullClr=true
+		let dexSave = player.rollSkillCheck(player.dex)
+		if ((dexSave >= (10 + monster.hitDie)) || !monsterHostile) {
+			player.encDat.peacefullClr = true
 			logs.writeSync(`${!playerWonInitiative&&firstLoop?escUpByNum(1)+'\r':''}${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
-			monsterHostile?logs.writeSync(`${chalk.hex('00ea00')(`You escaped through a random tunnel`)}\n`)
-				:logs.writeSync(`${chalk.hex('00ea00')(`You walk past the ${monster.name} \nfollowing the path till you reach the room`)}\n`);
-
+			monsterHostile ? logs.writeSync(`${chalk.hex('00ea00')(`You escaped through a random tunnel`)}\n`) :
+				logs.writeSync(`${chalk.hex('00ea00')(`You walk past the ${monster.name} \nfollowing the path till you reach the room`)}\n`);
 			logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 			// random deeper or surface
 			clearButtons();
 			encounterResolver()
-		}
-		else{
+		} else {
 			clearButtons();
-			if(playerWonInitiative&&firstLoop){
+			if (playerWonInitiative && firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
-			}else if(!firstLoop){
+			} else if (!firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
-
 			logs.writeSync(`${chalk.hex('ea0000')(`${monster.name} prevented your escape!`)}\n`);
-			await enemyAtack(monster,player)
+			await enemyAtack(monster, player)
 			combatLogic(player, false, monsterHostile, ++turn)
 		}
 	})
@@ -679,20 +710,21 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=tr
 	// 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 	// 	}
 	// })
-
-	if('potion' in combatButtonsMap){
+	if ('potion' in combatButtonsMap) {
 		combatButtonsMap['potion'].on('press', async () => {
-			let heal=chance2.rpg('2d4', {sum: true})+4
+			let heal = chance2.rpg('2d4', {
+				sum: true
+			}) + 4
 			clearButtons();
-			if(playerWonInitiative&&firstLoop){
+			if (playerWonInitiative && firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
-			}else if(!firstLoop){
+			} else if (!firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
-			logs.writeSync(thePlayer.hp+" "+thePlayer.hpMax)
-			if((thePlayer.hp+heal)>thePlayer.hpMax){
+			logs.writeSync(thePlayer.hp + " " + thePlayer.hpMax)
+			if ((thePlayer.hp + heal) > thePlayer.hpMax) {
 				logs.writeSync(`${chalk.yellow(`AAAAAAA You drink a potion! you heal for ${thePlayer.hpMax-thePlayer.hp} hp!`)}\n`);
-			}else{
+			} else {
 				logs.writeSync(`${chalk.yellow(`BBBBBBB You drink a potion! you heal for ${heal} hp!`)}\n`);
 			}
 			thePlayer.increaseHP(heal)
@@ -700,32 +732,36 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=tr
 			thePlayer.encDat.APuse()
 			refreshStats()
 			refreshInventory()
-
-			let testHostileDebug=monsterHostile
-			if(monsterHostile){
-				await enemyAtack(monster,player)
-			}else{
-				testHostileDebug=false
+			let testHostileDebug = monsterHostile
+			if (monsterHostile) {
+				await enemyAtack(monster, player)
+			} else {
+				testHostileDebug = false
 			}
-			if(player.potions<1){combatButtonsMap['potion'].destroy()}
+			if (player.potions < 1) {
+				combatButtonsMap['potion'].destroy()
+			}
 			screen.render()
 			combatLogic(player, false, testHostileDebug, ++turn)
 		})
 	}
-	if('oil' in combatButtonsMap){
+	if ('oil' in combatButtonsMap) {
 		combatButtonsMap['oil'].on('press', async () => {
-			
 			player.encDat.AHM(true)
-			let damage = chance2.rpg('2d6', {sum: true})+4
+			let damage = chance2.rpg('2d6', {
+				sum: true
+			}) + 4
 			player.encDat.ATdmg(damage)
 			clearButtons();
-			if(playerWonInitiative&&firstLoop){
+			if (playerWonInitiative && firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
-			}else if(!firstLoop){
+			} else if (!firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
-			logs.writeSync(`${chalk.hex('00ea00')(`You light a flask of oil and throw it to the enemy!\n`)+chalk.hex(DMG_COLOUR[DMG_TYPE.FIRE])(`dealing 2d6+4=${damage} fire damage!`)}\n`);
-			monster.hp-=damage
+			logs.writeSync(
+				`${chalk.hex('00ea00')(`You light a flask of oil and throw it to the enemy!\n`)+chalk.hex(DMG_COLOUR[DMG_TYPE.FIRE])(`dealing 2d6+4=${damage} fire damage!`)}\n`
+				);
+			monster.hp -= damage
 			thePlayer.oil--
 			thePlayer.encDat.AfUse()
 			refreshInventory()
@@ -734,34 +770,36 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=tr
 				await new Promise(resolve => setTimeout(resolve, 100))
 				clearCombat(logs)
 			} else {
-				await enemyAtack(monster,player)
+				await enemyAtack(monster, player)
 				await new Promise(resolve => setTimeout(resolve, 50))
 				combatLogic(player, false, true, ++turn)
 			}
 		})
 	}
-	if('scrolls' in combatButtonsMap){
+	if ('scrolls' in combatButtonsMap) {
 		combatButtonsMap['scrolls'].on('press', async () => {
 			clearButtons();
-			if(playerWonInitiative&&firstLoop){
+			if (playerWonInitiative && firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
-			}else if(!firstLoop){
+			} else if (!firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
 			thePlayer.encDat.AsUse()
-			logs.writeSync(player.useScroll({monster:monster,term:ImageScreenTerm})+'\n')
-			if(monster!==player.encDat.enemy){
-				monster=player.encDat.enemy
+			logs.writeSync(player.useScroll({
+				monster: monster,
+				term: ImageScreenTerm
+			}) + '\n')
+			if (monster !== player.encDat.enemy) {
+				monster = player.encDat.enemy
 			}
 			//console.log(monster)
-			
 			refreshInventory()
 			await new Promise(resolve => setTimeout(resolve, 100))
 			if (monster.hp <= 0) {
 				await new Promise(resolve => setTimeout(resolve, 100))
 				clearCombat(logs)
 			} else {
-				await enemyAtack(monster,player)
+				await enemyAtack(monster, player)
 				await new Promise(resolve => setTimeout(resolve, 50))
 				combatLogic(player, false, true, ++turn)
 			}
@@ -770,11 +808,8 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=tr
 	//generate listener for potion button if potions button exists
 }
 
-
-
-
 function createCombatButtons(hostile) {
-	let monsterHostile=hostile
+	let monsterHostile = hostile
 	clearButtons()
 	combatButtonsMap = {}
 	let attack = new blessedpkg.button({
@@ -817,7 +852,8 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 		left: 1,
 		top: 1,
 		name: 'flee',
-		content: monsterHostile?`flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`:`${chalk.bold.greenBright(`walk past ${thePlayer.encDat.enmyName}\nand continue onwards`)}`,
+		content: monsterHostile ? `flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}` :
+			`${chalk.bold.greenBright(`walk past ${thePlayer.encDat.enmyName}\nand continue onwards`)}`,
 		//shadow: true,
 		style: {
 			bg: '#5A5A5A',
@@ -856,7 +892,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 	})
 	combatButtonsMap[chatUp.name] = chatUp
 	let potion
-	if(thePlayer.potions>0){
+	if (thePlayer.potions > 0) {
 		potion = new blessedpkg.button({
 			parent: buttonsContainer,
 			mouse: true,
@@ -884,7 +920,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 		combatButtonsMap[potion.name] = potion
 	}
 	let oil
-	if(thePlayer.oil>0){
+	if (thePlayer.oil > 0) {
 		oil = new blessedpkg.button({
 			parent: buttonsContainer,
 			mouse: true,
@@ -912,7 +948,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 		combatButtonsMap[oil.name] = oil
 	}
 	let scrolls
-	if(thePlayer.scrolls>0){
+	if (thePlayer.scrolls > 0) {
 		scrolls = new blessedpkg.button({
 			parent: buttonsContainer,
 			mouse: true,
@@ -939,9 +975,9 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 		})
 		combatButtonsMap[scrolls.name] = scrolls
 	}
-	let names=['attack','flee','chatUp','potion','oil','scrolls']
+	let names = ['attack', 'flee', 'chatUp', 'potion', 'oil', 'scrolls']
 	for (const name of names) {
-		if (name in combatButtonsMap){
+		if (name in combatButtonsMap) {
 			buttonsArray.push(combatButtonsMap[name])
 		}
 	}
@@ -951,10 +987,6 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 	stats.focus()
 	screen.render()
 }
-
-
-
-
 //
 //
 // Treasure event
@@ -963,33 +995,27 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 // items: oil, scroll, potion
 // equipment weapons, armour
 // gold
-
 //
 // alter of curse or bless
 // alter of healing
 // alter of change damage type
 let waitForTreasureResolve
 
-function waitForTreasure() {return new Promise((resolve) => {waitForTreasureResolve = resolve})}
-function tresureResolver() {if (waitForTreasureResolve) {waitForTreasureResolve()}}
+function waitForTreasure() {
+	return new Promise((resolve) => {
+		waitForTreasureResolve = resolve
+	})
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+function tresureResolver() {
+	if (waitForTreasureResolve) {
+		waitForTreasureResolve()
+	}
+}
 //ESC[?25l	make cursor invisible
 //ESC[?25h	make cursor visible
 //
 //double check cursor is disabled on all subterminals and main one
-
 function toggleUi() {
 	buttonsContainer.toggle()
 	ImageScreenTerm.toggle()
@@ -1000,7 +1026,6 @@ function toggleUi() {
 // function toggleButtons() {
 // 	buttonsContainer.toggle()
 // }
-
 async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	await new Promise(resolve => setTimeout(resolve, speed))
 	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - ' HP: '.length - 2)} hp: ${player.hp}`)
@@ -1023,7 +1048,6 @@ async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	startBox.focus()
 }
 
-
 function refreshStats(player = thePlayer) {
 	stats.setContent(
 		`{bold}${chalk.red("HP:")}{/bold}
@@ -1043,9 +1067,10 @@ ${thePlayer.basedamage}
 ${chalk.magenta("mag:")}`)
 	screen.render()
 }
+
 function refreshInventory(player = thePlayer) {
 	InventoryBox.setContent(
-`{bold}${chalk.blue("Weapon :")}{/bold}
+		`{bold}${chalk.blue("Weapon :")}{/bold}
 ${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
  ${thePlayer.weapon.enchant!==0?`{bold}${chalk.yellow (`+${thePlayer.weapon.enchant}`)}{/bold}`:''}
 
@@ -1060,25 +1085,26 @@ ${chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])('scrolls')} = ${thePlayer.scrolls}
 ${chalk.yellow('gp')} = ${thePlayer.gold}`)
 	screen.render()
 }
-function creatething(){
-	box.key('enter', function () {
+
+function creatething() {
+	box.key('enter', function() {
 		toggleUi()
 		box.hide()
 		box.destroy()
-		box=null
+		box = null
 		screen.render()
 		resolver()
 	})
-	box.on('click', function () {
+	box.on('click', function() {
 		toggleUi()
 		box.hide()
 		box.destroy()
-		box=null
+		box = null
 		screen.render()
 		resolver()
 	})
 }
-async function reset(){
+async function reset() {
 	resetRandoms()
 	death = false
 	thePlayer = thePlayer.rollNewPlayer()
@@ -1093,7 +1119,7 @@ async function reset(){
 	screen.append(box)
 	screen.render()
 	box.setContent('')
-	await(fillStatsRollBox(40,thePlayer,box))
+	await (fillStatsRollBox(40, thePlayer, box))
 	creatething()
 	await waitForClear();
 	//sample start code
@@ -1111,46 +1137,48 @@ async function reset(){
 //ansiart2utf8 mountain.ans > sometext.txt
 //XTermTestv2.write(mountain)
 //Listeners for test buttons
-button1.on('press', function () {
+button1.on('press', function() {
 	buttonsContainer.setContent('Canceled.');
 	ImageScreenTerm.term.clear();
 	ImageScreenTerm.term.reset();
 	ImageScreenTerm.writeSync(caleb);
 	screen.render();
 });
-button2.on('press', function () {
+button2.on('press', function() {
 	//logs.setContent(chalk.bgMagenta.blueBright("lolololololololollolololololololol"))
 	ImageScreenTerm.term.clear()
 	ImageScreenTerm.term.reset()
 	ImageScreenTerm.writeSync(body)
 	screen.render();
 });
-
 //Listeners
-screen.on('resize', function () {
+screen.on('resize', function() {
 	ImageScreenTerm.height = screen.height;
 	ImageScreenTerm.width = Math.floor(screen.width / 2);
 	//logs.setContent("x:"+form_thing.width.toString()+", y:"+form_thing.height.toString()+", submit length:"+button1.width.toString());
 	resizeButtons()
 });
 // Quit on Escape, q, or Control-C.
-screen.key(['escape', 'q', 'C-c'], function () {
+screen.key(['escape', 'q', 'C-c'], function() {
 	return process.exit(0);
 });
-screen.key('e', function () {
+screen.key('e', function() {
 	ImageScreenTerm.focus();
 	screen.render();
 });
-screen.key('p', function () {
+screen.key('p', function() {
 	screen.focusNext();
 });
-screen.key('r', function () {
+screen.key('r', function() {
 	reset()
 });
 //test content key listener
-screen.key('y', function () {
+screen.key('y', function() {
 	buttonsContainer.resetScroll()
-	buttonsArray.forEach((button) => { buttonsContainer.remove(button); button.destroy() })
+	buttonsArray.forEach((button) => {
+		buttonsContainer.remove(button);
+		button.destroy()
+	})
 	buttonsArray = [];
 	stats.focus();
 	refreshInventory()
@@ -1160,19 +1188,17 @@ screen.key('y', function () {
 	resizeButtons();
 	stats.focus();
 });
-screen.key('z', function () {
+screen.key('z', function() {
 	logs.writeSync(escUpByNum(2))
 	//logs.writeSync('a')
 });
-
-screen.key('n', async function () {
+screen.key('n', async function() {
 	clearButtons()
 	death = true;
 	encounterResolver()
 })
-
 let bInd = 0
-let scrollUpPrev=false
+let scrollUpPrev = false
 //buuuuuuuuuuuuuuuuuugged when removing button
 // screen.key('k', () => {
 // 	if (buttonsArray.length>0){
@@ -1210,14 +1236,11 @@ let scrollUpPrev=false
 // 		}
 // 	}
 // })
-
-
 program.cursorColor('000000')
 screen.title = '~game~';
 screen.program.hideCursor(true);
 screen.append(ImageScreenTerm)
 screen.append(logs)
-
 createEventsMap(testEventArr, story)
 buttonsArray = [button1, button2, button3, button4];
 screen.render()
@@ -1229,21 +1252,20 @@ stats.focus()
 console.log('[?25l')
 ImageScreenTerm.writeSync('[?25l')
 logs.writeSync('[?25l')
-
 await (fillStatsRollBox(40, thePlayer, box))
 refreshStats(thePlayer)
 box.focus()
-box.key('enter', function () {
+box.key('enter', function() {
 	toggleUi()
 	box.hide()
 	box.destroy()
-	box=null
+	box = null
 	screen.render()
 })
-box.on('click', function () {
+box.on('click', function() {
 	toggleUi()
 	box.hide()
 	box.destroy()
-	box=null
+	box = null
 	screen.render()
 })

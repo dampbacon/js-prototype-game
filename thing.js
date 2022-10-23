@@ -764,12 +764,12 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			player.encDat.AHM(true)
 			let playerDamage = player.rollDamage()
 			let crit = false
-			player.encDat.ATdmg(playerDamage)
 			if (TOHIT[0] === 20) {
 				crit = true
 				playerDamage += player.rollDamage()
 			}
 			monster.hp -= playerDamage
+			player.encDat.ATdmg(playerDamage)
 			logs.writeSync(
 			`${chalk.hex('00ea00')(`You hit for`)} ${chalk.hex('fe2c54')(playerDamage)} ${chalk.hex('00ea00')('damage!')}\n`); // ___DEBUGenemyhp=${monster.hp}\n`);
 			logs.writeSync(player.wBonus.applyEffectWF(monster, crit, player));

@@ -817,7 +817,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 		left: 1,
 		top: 1,
 		name: 'flee',
-		content: monsterHostile?`flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`:`${chalk.bold.greenBright(`walk past ${monster.name}\nand continue onwards`)}`,
+		content: monsterHostile?`flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`:`${chalk.bold.greenBright(`walk past ${thePlayer.encDat.enmyName}\nand continue onwards`)}`,
 		//shadow: true,
 		style: {
 			bg: '#5A5A5A',
@@ -964,7 +964,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 // equipment weapons, armour
 // gold
 
-// alters RARE
+//
 // alter of curse or bless
 // alter of healing
 // alter of change damage type

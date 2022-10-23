@@ -6,6 +6,8 @@ import chalk from "chalk";
 import { DMG_TYPE } from "./data.js";
 import {playerState} from "./player.js";
 import {chance2, monsterRandom} from "./random_nums.js";
+chalk.level=2;
+
 
 //
 

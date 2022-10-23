@@ -4,6 +4,8 @@ import * as scroll from "./blessed/scroll.cjs";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
 import BlessedContrib from "blessed-contrib";
 const {blessed} = blessedpkg
+chalk.level=2;
+
 
 export const program = blessedpkg.program()
 export const screen = blessedpkg.screen({

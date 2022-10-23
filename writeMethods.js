@@ -21,6 +21,7 @@ import chalk from "chalk";
 import typeOf from 'kind-of'
 import repeat from 'repeat-string'
 import longest from "longest";
+chalk.level=2;
 
 
 

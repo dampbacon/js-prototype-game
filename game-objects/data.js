@@ -12,6 +12,8 @@ import { Player, playerState } from "./player.js";
 //import atest from "../atest.cjs";
 //import { alignTextv2 } from "../writeMethods.js";
 //DAMAGE TYPES
+chalk.level=2;
+
 
 
 

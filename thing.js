@@ -18,6 +18,7 @@ import XTermNew from "./blessed-xterm/blessed-xterm.js";
 import { ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, enemiesArt, makeRoomText, monsters, padString, testContent } from './game-objects/data.js';
 import { combatMetrics } from './game-objects/metrics.js';
 import wrap from 'word-wrap';
+chalk.level=2;
 const { tinygradient } = smallGrad;
 const { iconv } = pkg;
 const { compact } = lodashC;

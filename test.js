@@ -19,7 +19,8 @@ import {
     pickWeapon,
     testContent,
     testContent2,
-    textBoxNotUI
+    textBoxNotUI,
+    weapons
 } from "./game-objects/data.js";
 import { copyMonster, monster } from "./game-objects/mobs.js";
 import gradient from 'gradient-string';
@@ -159,3 +160,4 @@ let weaponBanner=
 // fdsdsf
 // dsffsdfdssd
 // sffdsdsf`),50))
+let k=weapons.flamberge

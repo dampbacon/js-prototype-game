@@ -599,7 +599,7 @@ async function clearCombat() {
 	ImageScreenTerm.removeLabel()
 	clearButtons();
 	logs.writeSync(`${chalk.hex('E51B2C')(`#`.repeat(logs.term.cols - 1))}\n`);
-	//logs.writeSync(`${chalk.hex('ECE236')(`You ${thePlayer.encDat.peacefullClr?'cleared':'defeated'} the enemy!`)}\n`);
+	logs.writeSync(`${chalk.hex('ECE236')(`You ${thePlayer.encDat.peacefullClr?'cleared':'defeated'} the enemy!`)}\n`);
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
 
 	if (!death) {
@@ -648,15 +648,15 @@ async function clearCombat() {
 		left: 1,
 		top: 1,
 		name: 'gotoTreasure',
-		content: `search for loot`, //make it flash
+		content: chalk.blue(`search for loot`), //make it flash
 		//shadow: true,
 		style: {
-			bg: '#5A5A5A',
+			bg: `#${DMG_COLOUR[DMG_TYPE.HOLY]}`,
 			focus: {
-				bg: '#880808',
+				bg: `#D37FE5`,
 			},
 			hover: {
-				bg: '#880808',
+				bg: `#D37FE5`,
 			},
 		},
 	})

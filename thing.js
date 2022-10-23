@@ -583,7 +583,7 @@ async function clearCombat(logs) {
 │
 │   average hit rate: ${(thePlayer.encDat.calculateHitMissAVG()*100).toFixed(2)} % hit chance
 │   average damage dealt per turn: ${chalk.redBright(thePlayer.encDat.calculateTurnDmgAVG())} dmg
-|
+│
 │   Total dmg dealt; ${chalk.redBright(`${thePlayer.encDat.returnDamageDealt()} dmg`)}
 │   Total dmg taken: ${chalk.greenBright(`${thePlayer.encDat.returnDamageTaken()}`)} dmg
 │

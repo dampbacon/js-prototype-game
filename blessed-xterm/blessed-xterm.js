@@ -408,7 +408,7 @@ function getUnwrappedLineCoordinates(terminal, x, y) {
   const line = buffer.getWrappedRangeForLine(l).first;
   const index = (l - line) * terminal.cols + Math.min(x, buffer.lines.get(l).getTrimmedLength() - 1);
   return [line, index];
-};
+}
 
 function getWrappedLineCoordinates(terminal, index, line) {
   const { first, last } = terminal.buffer.active._buffer.getWrappedRangeForLine(line);
@@ -421,6 +421,6 @@ function getWrappedLineCoordinates(terminal, index, line) {
   }
 
   return [x, y];
-};
+}
 
 export default XTermNew;

@@ -32,7 +32,7 @@ export class Player {
         //tohit
         this.dex= this.rollStat();
         this.cha= this.rollStat();
-        this.int= 4//this.rollStat();
+        this.int= this.rollStat();
         let initial = chance1.rpg('2d6',{sum: true})+this.str+6+     200
         this.hp = initial
         this.hpMax = initial
@@ -40,7 +40,7 @@ export class Player {
         //this.items = Array(5).fill(0)
         this.basedamage = this.str
 
-        this.weapon= weapons.newtons_apple//pickWeapon()
+        this.weapon= /*weapons.newtons_apple*/pickWeapon()
         this.weaponName = this.weapon.name
         this.weaponCooldown = 0
         this.wBonus=this.weapon.dmgType

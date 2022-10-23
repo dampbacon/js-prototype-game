@@ -7,7 +7,8 @@ import longest from "longest";
 import gradient from 'gradient-string';
 //var align = require('align-text');
 import align_text from 'align-text';
-import { monster } from "./mobs.js";
+import { copyMonster, monster } from "./mobs.js";
+import { Player, playerState } from "./player.js";
 //import atest from "../atest.cjs";
 //import { alignTextv2 } from "../writeMethods.js";
 //DAMAGE TYPES
@@ -405,17 +406,32 @@ export function armourPicker(){
 */
 // LATER USE A WRAP TEXT FUNCTION TO GENERALISE STRINGS FITTING THE BOX
 export const ScrollsAll=Object.freeze({
-    // polymorph : new Scroll({
-    //     name: 'polymorph',
-    //     dmgTypeE: DMG_TYPE.NONE,
-    //     targetmonster: true,
-    //     changeMonster: true,
-    //     rarity: 0.1,
-    //     description: 'A scroll that changes the target monster into a random monster',
-    //     scrollFunction:(player, params = {})=>{
-    //         params.monster=monsterPicker()
-    //     }
-    // }),
+    polymorph : new Scroll({
+        name: 'polymorph',
+        dmgTypeE: DMG_TYPE.NONE,
+        targetmonster: true,
+        changeMonster: true,
+        rarity: 0.1,
+        description: 'A scroll that changes the target monster into a random monster',
+        scrollFunction:(player= new Player(), params = {})=>{
+            if (player.state===playerState.COMBAT){
+                let saveDC = 10 + player.int + (player.level > 4 ? 4 : player.level)
+                if(monsterRandom.d20() + player.encDat.enemy >= saveDC){
+                    return `You read the scroll and nothing happens.`
+                }else{
+                    let oldName=player.encDat.enmyName
+                    player.encDat.enemy = copyMonster(monsters.skelington)//new Monster()  //temp till implemented fully
+                    params.term.reset()
+                    player.encDat.enmyName = player.encDat.enemy.name
+                    params.term.writeSync(player.encDat.enemy.art)
+                    return `You read the scroll and the shape of ${oldName} distorts and... \nturns into a ${player.encDat.enmyName}!`
+                }
+            }else{
+                return `You read the scroll and nothing happens.`
+            }
+
+        }
+    }),
     fireball : new Scroll({
         name: 'fireball',
         dmgTypeE: DMG_TYPE.FIRE,
@@ -580,7 +596,8 @@ export function pickScroll(){
 const GenericEnemiesArt=Object.freeze({
 
     genericHumaniod:
-    `[37m[40m   [90m[40m▄▄▄&*[32m[40m¿[90m[40m/▄▄▄▄▄▄▄▄░░░░░[m
+    `
+    [37m[40m   [90m[40m▄▄▄&*[32m[40m¿[90m[40m/▄▄▄▄▄▄▄▄░░░░░[m
     [37m[40m     [90m[40m&*[32m[40m¿[94m[40m¿[90m[40m/▒[37m[40m   [30m[40m░[37m[40m [90m[40m#▒[37m[40m≈÷≈  [m
     [37m[40m   [90m[40m**&[32m[40m¿[94m[40m¿[90m[40m░░▒[37m[40m  [30m[40m▒[31m[40m♦[30m[40m#[90m[40m#▒░░░░░[m
     [37m[40m [90m[40m*//&&[37m[40m [90m[40m/[32m[40m¿¿[90m[40m▒[37m[40m   [90m[40m░▒#▒[37m[40m≈÷≈  [m
@@ -592,7 +609,8 @@ const GenericEnemiesArt=Object.freeze({
     [37m[40m   ########     #######[m`,
     
     amorphousBlob:
-    `[90m[40m░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[37m[40m [m
+    `
+    [90m[40m░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[37m[40m [m
     [37m[40m  ≈÷≈[90m[40m▒[33m[40m║[37m[40m [30m[40m░[37m[40m   [90m[40m▒\[37m[40m  [90m[40m*[37m[40m@   [m
     [90m[40m░░░░░▒[33m[40m║[37m[40m     [90m[40m▒░░[37m[40m  [30m[40m⌂[90m[40m**[37m[40m [m
     [37m[40m  ≈÷≈[90m[40m▒[33m[40m║[37m[40m     [90m[40m▒[37m[40m [30m[40m⌂[93m[40m⌂[37m[40m  [93m[40m⌂[30m[40m⌂[90m[40m\[m
@@ -604,7 +622,8 @@ const GenericEnemiesArt=Object.freeze({
     [37m[40m#######     ######## [m`,
     
     amorphousBlobCave:
-    `[37m[40m             [90m[40m####[37m[40m        [m
+    `
+    [37m[40m             [90m[40m####[37m[40m        [m
     [37m[40m       [90m[40m//[37m[40m [90m[40m###[37m[40m   [90m[40m##\[37m[40m      [m
     [37m[40m       [90m[40m/[37m[40m  [90m[40m#▒[37m[40m      [90m[40m##\\\[37m[40m  [m
     [37m[40m    [90m[40m////[37m[40m [90m[40m#▒[37m[40m          [90m[40m#\\[37m[40m [m
@@ -616,7 +635,8 @@ const GenericEnemiesArt=Object.freeze({
     [90m[40m/[37m[40m [90m[40m▒[37m[40m     [90m[40m▀▒░▀░░░[37m[40m [90m[40m░░▀[37m[40m      [m`,
     
     guard:
-    `[37m[40m           [90m[40m####[37m[40m             [m
+    `
+    [37m[40m           [90m[40m####[37m[40m             [m
     [37m[40m         [90m[40m/##[37m[40m   [90m[40m###[37m[40m [90m[40m\\[37m[40m       [m
     [37m[40m     [90m[40m///##[37m[40m      [90m[40m▒#[37m[40m  [90m[40m\[37m[40m       [m
     [37m[40m    [90m[40m//#[37m[40m          [90m[40m▒#[37m[40m [90m[40m\\\\[37m[40m    [m

@@ -767,11 +767,10 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=tr
 			}
 		})
 	}
-
-
-
 	//generate listener for potion button if potions button exists
 }
+
+
 
 
 function createCombatButtons(hostile) {
@@ -960,9 +959,19 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 //
 // Treasure event
 //
-//
-//
-//
+// types
+// items: oil, scroll, potion
+// equipment weapons, armour
+// gold
+
+// alters RARE
+// alter of curse or bless
+// alter of healing
+// alter of change damage type
+let waitForTreasureResolve
+
+function waitForTreasure() {return new Promise((resolve) => {waitForTreasureResolve = resolve})}
+function tresureResolver() {if (waitForTreasureResolve) {waitForTreasureResolve()}}
 
 
 

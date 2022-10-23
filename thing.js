@@ -474,34 +474,6 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 	}
 
-	// MOVE LATER TO CLEAR COMBAT BEFORE TREASURE EVENT
-	if (!death) {
-		thePlayer.state = playerState.TREASURE_ROOM
-		let length = '╰╾────────────────────────────────────────────╼╯'.length
-		let combatBanner = `\
-╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
-│   ${gradient.instagram(thePlayer.encDat.enmyName)} ${chalk.blue(thePlayer.encDat.peacefullClr?`cleared in`:`deafeated in`)} ${chalk.greenBright(`${thePlayer.encDat.turn} turns`)}
-│   <${'-'.repeat(38)}>
-│   XP earned:  ${thePlayer.encDat.peacefullClr?chalk.redBright(`0`):chalk.greenBright(`545`)}
-│
-│   average hit rate: ${(thePlayer.encDat.calculateHitMissAVG()*100).toFixed(2)} % hit chance
-│   average damage dealt per turn: ${chalk.redBright(thePlayer.encDat.calculateTurnDmgAVG())} dmg
-|
-│   Total dmg dealt; ${chalk.redBright(`${thePlayer.encDat.returnDamageDealt()} dmg`)}
-│   Total dmg taken: ${chalk.greenBright(`${thePlayer.encDat.returnDamageTaken()}`)} dmg
-│
-│   ${chalk.cyan('potions used')} ${chalk.green('   |')} ${thePlayer.encDat.pUse}
-│   ${chalk.yellow('scrolls used')} ${chalk.green('   |')} ${thePlayer.encDat.sUse}
-│   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encDat.fUse}
-╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
-`
-		thePlayer.encDat = null //new combatMetrics()
-		await new Promise(r => setTimeout(r, 500));
-		ImageScreenTerm.writeSync('\n' + combatBanner)
-		for (let i = 0; i <= 12; i++) {
-			ImageScreenTerm.writeSync(escUpByNum(1) + escLeftByNum(1) + '│')
-		}
-	}
 
 
 	
@@ -592,13 +564,52 @@ ${chalk.hex('ea0000')(`damage!`)}\n`)
 	}
 }
 
-function clearCombat(logs) {
+async function clearCombat(logs) {
 	thePlayer.weaponCooldown = 0
 	ImageScreenTerm.removeLabel()
 	clearButtons();
 	logs.writeSync(`${chalk.hex('E51B2C')(`#`.repeat(logs.term.cols - 1))}\n`);
 	logs.writeSync(`${chalk.hex('ECE236')(`You defeated the enemy!`)}\n`);
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
+
+	if (!death) {
+		thePlayer.state = playerState.TREASURE_ROOM
+		let length = '╰╾────────────────────────────────────────────╼╯'.length
+		let combatBanner = `\
+╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
+│   ${gradient.instagram(thePlayer.encDat.enmyName)} ${chalk.blue(thePlayer.encDat.peacefullClr?`cleared in`:`deafeated in`)} ${chalk.greenBright(`${thePlayer.encDat.turn} turns`)}
+│   <${'-'.repeat(38)}>
+│   XP earned:  ${thePlayer.encDat.peacefullClr?chalk.redBright(`0`):chalk.greenBright(`545`)}
+│
+│   average hit rate: ${(thePlayer.encDat.calculateHitMissAVG()*100).toFixed(2)} % hit chance
+│   average damage dealt per turn: ${chalk.redBright(thePlayer.encDat.calculateTurnDmgAVG())} dmg
+|
+│   Total dmg dealt; ${chalk.redBright(`${thePlayer.encDat.returnDamageDealt()} dmg`)}
+│   Total dmg taken: ${chalk.greenBright(`${thePlayer.encDat.returnDamageTaken()}`)} dmg
+│
+│   ${chalk.cyan('potions used')} ${chalk.green('   |')} ${thePlayer.encDat.pUse}
+│   ${chalk.yellow('scrolls used')} ${chalk.green('   |')} ${thePlayer.encDat.sUse}
+│   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encDat.fUse}
+╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
+`
+		thePlayer.encDat = null //new combatMetrics()
+		ImageScreenTerm.writeSync('\n' + combatBanner)
+		for (let i = 0; i <= 12; i++) {
+			ImageScreenTerm.writeSync(escUpByNum(1) + escLeftByNum(1) + '│')
+		}
+	}
+	await new Promise(r => setTimeout(r, 2000));
+
+
+
+
+
+
+
+
+
+
+
 	//insert loot diversion here
 	encounterResolver()
 }

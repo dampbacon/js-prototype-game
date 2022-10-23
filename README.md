@@ -33,12 +33,15 @@ i will back port features i like into the main branch.
 
 ## todo:
 - [ ] persausion and non hostile enemies (partialy done)
-- [ ] different event types
 - [ ] loot, trap, shrines, shop.
 - [ ] random loot gen via weighted random picker from list in data file
-- [ ] random enemy select from weighted random picker from list in data file
-- [ ] random descriptions for everything
+- [x] random enemy select from weighted random picker from list in data file
+- [x] random descriptions for monsters
+- [ ] random player class or descriptors
+- [ ] random room descriptors
+- [ ] random treasure event descriptors (ALTAR, WEAPON, AND LOCATION FOUND)
 - [x] advanced weapons, implementtaion of weapon class.
+- [ ]
 - [ ] floor depth mechanic.
 - [ ] home base, level up out of dungeon mechanic.
 - [ ] animated ansi/ascii art as opposed to the current static images.

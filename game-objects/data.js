@@ -1043,6 +1043,7 @@ export const monsters=Object.freeze({
         dmgDie: 8,
         aggro: 4,
         rarity: 0.5,
+        art: enemiesArt.computerman//temp
     }),
     smartPdgStudent: new monster({
         name: "phd student",
@@ -1053,6 +1054,7 @@ export const monsters=Object.freeze({
         dmgDie: 4,
         aggro: 5,
         rarity: 0.5,
+        art: enemiesArt.computerman//temp
     }),
     skelingtonWarrior: new monster({
         name: "skeleton warrior",

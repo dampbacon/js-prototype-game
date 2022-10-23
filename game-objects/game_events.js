@@ -55,6 +55,7 @@ export class game_event {
         this.toScreen = toScreen
         this.buttons = buttons
         this.cleared = false
+        // later pick between enemy or trap
         this.enemies = enemies?enemies:[pickEnemy()]
         //buttons are in the format of [[event_id,"button label", enabled_always=true]]        
     }

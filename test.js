@@ -2,6 +2,7 @@ import { Player, playerState } from "./game-objects/player.js";
 // import {fire_damage, poison_damage} from "./game-objects/data.js";
 // console.log(poison_damage)
 let testplayer = new Player()
+import assert from 'node:assert/strict';
 // testplayer.hp=100
 // for(let i=0; i<100; i++){
 // console.log(testplayer.hp)
@@ -107,3 +108,85 @@ console.log(testplayer.useScroll({monster:copy}))
 
 chalk.level = 2;
 console.log(chalk.red('Hello world!'));
+
+let weaponBanner=
+`\`
+╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
+│  
+│ 
+│   
+│
+│   
+│  
+│
+│  
+│   
+│
+│  
+│   
+│ 
+╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
+`
+
+
+
+
+
+
+
+
+
+//shorthand for replacing escape sequences
+Object.defineProperty(String.prototype, 'cleanANSI', {
+    value() {
+        return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
+    }
+});
+
+//.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
+function testbox(text, width=20) {
+	let str = text
+	let lines = str.split('\n');
+    let max = lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '').cleanANSI().length;
+    if(width>max){
+        max+=(width-max)
+    }
+    console.log(max)
+    lines = lines.map((line, ind) => {
+		var diff = max - line.cleanANSI().length;
+		if (ind === 0) {
+			console.log(line)
+		}
+		return '│' + line + ' '.repeat(diff) + '│';
+	});
+	let top = '╭╼' + '─'.repeat(lines[0].length - 4) + '╾╮';
+	let bot = '╰╼' + '─'.repeat(lines[0].length - 4) + '╾╯';
+	let res = top + '\n' +
+		lines.join('\n') + '\n' +
+		bot;
+	return (res)
+}
+
+console.log(testbox(`
+sfdsdsf
+sfdfdsfdsdfsds
+fdssdfdsf
+fdsdsf
+dsffsdfdssd
+sffdsdsf`))
+
+console.log(gradient.fruit.multiline(`
+sfdsdsf
+sfdfdsfdsdfsds
+fdssdfdsf
+fdsdsf
+dsffsdfdssd
+sffdsdsf`).cleanANSI())
+
+console.log(testbox(gradient.fruit.multiline(`
+sfdsdsf
+sfdfdsfdsdfsds
+fdssdfdsf
+fdsdsf
+dsffsdfdssd
+sffdsdsf`)))

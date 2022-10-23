@@ -247,7 +247,7 @@ export const damageTypes = Object.freeze({
                                                                                      
 */
 export const weapons = Object.freeze({
-	fists: new weapon({
+	hand_wraps: new weapon({
 		name: 'hand wraps',
 		dmgDie: '1d4',
 		dmgType: damageTypes.weeb_damage,
@@ -255,7 +255,7 @@ export const weapons = Object.freeze({
 		enchant: 0,
 		description: 'channels naruto powers, chance\nfor bonus dmg scales with dex',
 	}),
-	flamberg: new weapon({
+	flamberge: new weapon({
 		name: 'flamberge',
 		dmgDie: '2d6',
 		dmgType: damageTypes.fire_damage,

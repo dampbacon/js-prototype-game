@@ -633,7 +633,7 @@ async function clearCombat() {
 
 
 
-
+//make it flash
 	let gotoTreasure = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
@@ -646,7 +646,7 @@ async function clearCombat() {
 		left: 1,
 		top: 1,
 		name: 'gotoTreasure',
-		content: `search for loot`,
+		content: `search for loot`, //make it flash
 		//shadow: true,
 		style: {
 			bg: '#5A5A5A',
@@ -1358,7 +1358,7 @@ box.on('click', function() {
 
 //draw test
 ImageScreenTerm.writeSync(teststrban)
-ImageScreenTerm.writeSync(escUpByNum(5)+'\r'+escRightByNum(2))
+ImageScreenTerm.writeSync(escUpByNum(5)+'\r'+escRightByNum(2))//fix for multiline of 3
 let linesappicon=apicon.split('\n')
 for (let i of linesappicon){
 	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))

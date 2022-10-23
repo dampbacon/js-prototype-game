@@ -564,12 +564,12 @@ ${chalk.hex('ea0000')(`damage!`)}\n`)
 	}
 }
 
-async function clearCombat(logs) {
+async function clearCombat() {
 	thePlayer.weaponCooldown = 0
 	ImageScreenTerm.removeLabel()
 	clearButtons();
 	logs.writeSync(`${chalk.hex('E51B2C')(`#`.repeat(logs.term.cols - 1))}\n`);
-	logs.writeSync(`${chalk.hex('ECE236')(`You defeated the enemy!`)}\n`);
+	//logs.writeSync(`${chalk.hex('ECE236')(`You ${thePlayer.encDat.peacefullClr?'cleared':'defeated'} the enemy!`)}\n`);
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
 
 	if (!death) {
@@ -691,7 +691,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 		}
 		if (monster.hp <= 0) {
 			await new Promise(resolve => setTimeout(resolve, 100))
-			clearCombat(logs)
+			clearCombat()
 		} else {
 			await new Promise(resolve => setTimeout(resolve, 50))
 			await enemyAtack(monster, player)
@@ -710,7 +710,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 			// random deeper or surface
 			clearButtons();
-			encounterResolver()
+			clearCombat()
 		} else {
 			clearButtons();
 			if (playerWonInitiative && firstLoop) {
@@ -789,7 +789,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			await new Promise(resolve => setTimeout(resolve, 100))
 			if (monster.hp <= 0) {
 				await new Promise(resolve => setTimeout(resolve, 100))
-				clearCombat(logs)
+				clearCombat()
 			} else {
 				await enemyAtack(monster, player)
 				await new Promise(resolve => setTimeout(resolve, 50))
@@ -818,7 +818,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			await new Promise(resolve => setTimeout(resolve, 100))
 			if (monster.hp <= 0) {
 				await new Promise(resolve => setTimeout(resolve, 100))
-				clearCombat(logs)
+				clearCombat()
 			} else {
 				await enemyAtack(monster, player)
 				await new Promise(resolve => setTimeout(resolve, 50))

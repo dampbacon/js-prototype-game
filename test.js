@@ -136,64 +136,26 @@ let weaponBanner=
 
 
 
-//shorthand for replacing escape sequences
-Object.defineProperty(String.prototype, 'cleanANSI', {
-    value() {
-        return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
-    }
-});
-function centerText(text, width) {
-    let pad = Math.floor((width - text.cleanANSI().length) / 2);
-    return (' '.repeat(pad) + text);
-}
-function testbox(text='', width=20,gradientFunction=gradient.pastel, vertLn='36454f') {
-	let str = text
-	let lines = str.split('\n').map(line => centerText(line, width));
-    let max = lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '').cleanANSI().length;
-    assert(max<width,"STRING TO WIDE FOR THE GIVEN WIDTH OF THE BOX")
-    max+=(width-max)
-    console.log(max)
-    lines = lines.map((line, ind) => {
-		var diff = max - line.cleanANSI().length;
-		if (ind === 0) {
-			console.log(line)
-		}
-		return chalk.hex(vertLn)('│') + line + ' '.repeat(diff) + chalk.hex(vertLn)('│');
-	})
-    let top,bot;
-    if(!gradientFunction){
-        top = chalk.hex(vertLn)('╭')+'╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼'+chalk.hex(vertLn)('╮');
-        bot = chalk.hex(vertLn)('╰')+'╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼'+chalk.hex(vertLn)('╯');
-    }else{
-        top = chalk.hex(vertLn)('╭')+ gradientFunction('╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼') + chalk.hex(vertLn)('╮');
-        bot = chalk.hex(vertLn)('╰')+ gradientFunction('╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼') + chalk.hex(vertLn)('╯');
-    }
-	let res = top + '\n' +
-		lines.join('\n') + '\n' +
-		bot;
-	return (res)
-}
+// console.log(testbox(`
+// sfdsdsf
+// sfdfdsfdsdfsds
+// fdssdfdsf
+// fdsdsf
+// dsffsdfdssd
+// sffdsdsf`))
 
-console.log(testbox(`
-sfdsdsf
-sfdfdsfdsdfsds
-fdssdfdsf
-fdsdsf
-dsffsdfdssd
-sffdsdsf`))
+// console.log(gradient.fruit.multiline(`
+// sfdsdsf
+// sfdfdsfdsdfsds
+// fdssdfdsf
+// fdsdsf
+// dsffsdfdssd
+// sffdsdsf`).cleanANSI())
 
-console.log(gradient.fruit.multiline(`
-sfdsdsf
-sfdfdsfdsdfsds
-fdssdfdsf
-fdsdsf
-dsffsdfdssd
-sffdsdsf`).cleanANSI())
-
-console.log(testbox(gradient.fruit.multiline(`
-sfdsdsf
-sfdfdsfdsdfsds
-fdssdfdsf
-fdsdsf
-dsffsdfdssd
-sffdsdsf`),50))
+// console.log(testbox(gradient.fruit.multiline(`
+// sfdsdsf
+// sfdfdsfdsdfsds
+// fdssdfdsf
+// fdsdsf
+// dsffsdfdssd
+// sffdsdsf`),50))

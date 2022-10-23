@@ -11,11 +11,9 @@ import {
 	weapon
 } from "./items.js";
 import _ from "lodash";
-import repeat from "repeat-string";
-import longest from "longest";
+import assert from 'node:assert/strict';
+
 import gradient from 'gradient-string';
-//var align = require('align-text');
-import align_text from 'align-text';
 import {
 	copyMonster,
 	monster
@@ -24,8 +22,7 @@ import {
 	Player,
 	playerState
 } from "./player.js";
-//import atest from "../atest.cjs";
-//import { alignTextv2 } from "../writeMethods.js";
+
 //DAMAGE TYPES
 chalk.level = 2;
 /*
@@ -1347,78 +1344,42 @@ export const border =
 │                          │
 ╰╼────────────────────────╾╯
 `
-//adapted from jonschlinkert align-text examples (MIT)
-function centerAlign(len, longest, line, lines) {
-	return Math.floor((longest - len) / 2);
+
+//shorthand for replacing escape sequences
+Object.defineProperty(String.prototype, 'cleanANSI', {
+    value() {
+        return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
+    }
+});
+
+function centerText(text, width) {
+    let pad = Math.floor((width - text.cleanANSI().length) / 2);
+    return (' '.repeat(pad) + text);
 }
-export function padString(string, len, both) {
-	if (both) {
-		return string.split('\n')
-			.map((val = '', _a, _b) => {
-				return '*'.repeat(Math.floor(len) / 2) + val + '*'.repeat(Math.floor(len) / 2)
-			})
-			.join('\n')
-	}
-	return string.split('\n')
-		.map((val = '', _a, _b) => {
-			return '*'.repeat(Math.floor(len) / 2) + val
-		})
-		.join('\n')
-}
-//+'@'.repeat(Math.floor(len)/2)+'@'.repeat(Math.floor(len)%2)})
-//later mak compat with escape stringz
-//.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
-export function textBoxNotUI(text, padding) {
-	//let str= padString(text,padding,both)
+export function dynamicBox(text='', width=20,gradientFunction=gradient.pastel, vertLn='36454f') {
 	let str = text
-	//str=align_text(str, centerAlign);
-	let lines = str.split('\n');
-	let max = longest(lines).length;
-	lines = lines.map((line, ind) => {
-		var diff = max - line.length;
+	let lines = str.split('\n').map(line => centerText(line, width));
+    let max = lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '').cleanANSI().length;
+    assert(max<width,"STRING TO WIDE FOR THE GIVEN WIDTH OF THE BOX")
+    max+=(width-max)
+    console.log(max)
+    lines = lines.map((line, ind) => {
+		var diff = max - line.cleanANSI().length;
 		if (ind === 0) {
 			console.log(line)
 		}
-		return '│' + line + repeat(' ', diff) + '│';
-	});
-	let top = '╭╼' + repeat('─', lines[0].length - 4) + '╾╮';
-	let bot = '╰╼' + repeat('─', lines[0].length - 4) + '╾╯';
+		return chalk.hex(vertLn)('│') + line + ' '.repeat(diff) + chalk.hex(vertLn)('│');
+	})
+    let top,bot;
+    if(!gradientFunction){
+        top = chalk.hex(vertLn)('╭')+'╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼'+chalk.hex(vertLn)('╮');
+        bot = chalk.hex(vertLn)('╰')+'╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼'+chalk.hex(vertLn)('╯');
+    }else{
+        top = chalk.hex(vertLn)('╭')+ gradientFunction('╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼') + chalk.hex(vertLn)('╮');
+        bot = chalk.hex(vertLn)('╰')+ gradientFunction('╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼') + chalk.hex(vertLn)('╯');
+    }
 	let res = top + '\n' +
 		lines.join('\n') + '\n' +
 		bot;
 	return (res)
 }
-// turns taken, damage deal, damage taken
-//
-//
-export let testContent =
-	`\
-╭╼────────────────────────────────────────────╾╮
-│   ${gradient.instagram("MonsterName")} ${chalk.blue(`deafeated in`)} ${chalk.greenBright(`${4} turns`)}
-│   <${'-'.repeat(38)}>
-│   XP earned:  ${chalk.greenBright(`545`)}
-│
-│   average hit rate: 99.999 % hit chance
-│   average damage dealt per turn: ${chalk.redBright(`999`)} smg
-|
-│   Total dmg dealt; ${chalk.redBright('9999 dmg')}
-│   Total dmg taken: ${chalk.greenBright(`-33`)} dmg
-│
-│   potions used ${chalk.green('  |')} ${chalk.cyan('Elixir')}
-│   scrolls used ${chalk.green('  |')} ${chalk.yellow('ScrollName')}
-│   oil flask used ${chalk.green('|')} ${chalk.redBright('FireOil')}
-╰╼────────────────────────────────────────────╾╯\
-`
-export let testContent2 =
-	`\
-${gradient.instagram("MonsterName")} ${chalk.blue(`deafeated in`)} ${chalk.greenBright(`${4} turns`)}
-<${'-'.repeat(38)}>
-XP earned:  ${chalk.greenBright(`545`)}
-average hit rate: 99.999 % hit chance
-average damage dealt per turn: ${chalk.redBright(`999`)} smg
-Total dmg dealt; ${chalk.redBright('9999 dmg')}
-Total dmg taken: ${chalk.greenBright(`-33`)} dmg
-potions used ${chalk.green('  |')} ${chalk.cyan('Elixir')}
-scrolls used ${chalk.green('  |')} ${chalk.yellow('ScrollName')}
-oil flask used ${chalk.green('|')} ${chalk.redBright('FireOil')}\
-`

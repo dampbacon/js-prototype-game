@@ -53,7 +53,8 @@ export class weapon {
 		dmgType,
 		rarity,
 		enchant,
-		description
+		description,
+        art,
 	}) {
 		this.name = name ? name.toUpperCase() : 'ERROR';
 		this.dmgDie = dmgDie ? dmgDie : '1d4';
@@ -64,6 +65,7 @@ export class weapon {
 		this.rarity = rarity ? rarity : 1;
 		this.enchant = enchant ? enchant : 0;
 		this.description = description ? description : this.generateDescription();
+        this.art=art?art:null;
 	}
 }
 // export class MakeScroll{

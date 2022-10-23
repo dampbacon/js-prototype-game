@@ -564,6 +564,37 @@ ${chalk.hex('ea0000')(`damage!`)}\n`)
 	}
 }
 
+
+
+
+//
+//
+// Treasure event
+//
+// types
+// items: oil, scroll, potion
+// equipment weapons, armour
+// gold
+//
+// alter of curse or bless
+// alter of healing
+// alter of change damage type
+let waitForTreasureResolve
+
+function waitForTreasure() {
+	return new Promise((resolve) => {
+		waitForTreasureResolve = resolve
+	})
+}
+
+function tresureResolver() {
+	if (waitForTreasureResolve) {
+		waitForTreasureResolve()
+	}
+}
+
+
+
 async function clearCombat() {
 	thePlayer.weaponCooldown = 0
 	ImageScreenTerm.removeLabel()
@@ -606,6 +637,51 @@ async function clearCombat() {
 
 
 
+	let gotoTreasure = new blessedpkg.button({
+		parent: buttonsContainer,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'gotoTreasure',
+		content: `search for loot`,
+		//shadow: true,
+		style: {
+			bg: '#5A5A5A',
+			focus: {
+				bg: '#880808',
+			},
+			hover: {
+				bg: '#880808',
+			},
+		},
+	})
+	buttonsArray.push(gotoTreasure)
+	screen.render()
+	resizeButtons()
+	screen.render()
+
+	gotoTreasure.on('press', async function () {
+		clearButtons()
+		screen.render()
+		//move somewhere else
+		tresureResolver()
+	});
+
+
+
+
+	//await new Promise(r => setTimeout(r, 1000));
+
+
+	await waitForTreasure();
+
+
 	//treasure room
 	//click button search for loot
 	//combat banner and screen items clear
@@ -615,14 +691,28 @@ async function clearCombat() {
 	//for items you just take it
 	//for altars do int or some check to see what it does else random
 	//consumes scrolls
-
-
-
-
-
 	//insert loot diversion here
 	encounterResolver()
 }
+
+
+function pickTreasure(){
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = true, hostile = false, counter = 1) {
 	ImageScreenTerm.setLabel(`${gradient.summer(`Turn counter: ${counter}`)}`)
 	let monster = thePlayer.encDat.enemy
@@ -723,6 +813,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			combatLogic(player, false, monsterHostile, ++turn)
 		}
 	})
+	// something something morale
 	// combatButtonsMap['chatUp'].on('press', async () => {
 	// 	clearButtons();
 	// 	if(playerWonInitiative&&firstLoop){
@@ -1008,31 +1099,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 	stats.focus()
 	screen.render()
 }
-//
-//
-// Treasure event
-//
-// types
-// items: oil, scroll, potion
-// equipment weapons, armour
-// gold
-//
-// alter of curse or bless
-// alter of healing
-// alter of change damage type
-let waitForTreasureResolve
 
-function waitForTreasure() {
-	return new Promise((resolve) => {
-		waitForTreasureResolve = resolve
-	})
-}
-
-function tresureResolver() {
-	if (waitForTreasureResolve) {
-		waitForTreasureResolve()
-	}
-}
 //ESC[?25l	make cursor invisible
 //ESC[?25h	make cursor visible
 //

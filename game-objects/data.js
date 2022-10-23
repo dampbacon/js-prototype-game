@@ -113,6 +113,9 @@ export const damageTypes = Object.freeze({
 			if ((target2.weaponCooldown > 0) && !crit) {
 				--target2.weaponCooldown
 				let bonusDamage = 1
+                if(target2.dex>0){
+                    bonusDamage+=target2.dex
+                }
 				target.hp -= bonusDamage
 				if (target2 instanceof Player) {
 					target2.encDat.TdmgAr[-1] += bonusDamage
@@ -253,15 +256,15 @@ export const weapons = Object.freeze({
 		dmgType: damageTypes.weeb_damage,
 		rarity: .1,
 		enchant: 0,
-		description: 'naruto powers'
+		description: 'channels naruto powers, chance\nfor bonus dmg scales with dex',
 	}),
 	flamberg: new weapon({
-		name: 'flamberg',
+		name: 'flamberge',
 		dmgDie: '2d6',
 		dmgType: damageTypes.fire_damage,
 		rarity: .3,
 		enchant: 0,
-		description: 'a flaming flamberg'
+		description: 'a flaming flamberge, powerful'
 	}),
 	flaming_sword: new weapon({
 		name: 'flaming_sword',
@@ -277,7 +280,7 @@ export const weapons = Object.freeze({
 		dmgType: damageTypes.poison_damage,
 		rarity: .6,
 		enchant: 0,
-		description: 'a venomous sword'
+		description: 'a venomous sword, bonus poison\ndmg scales with dex'
 	}),
 	sword: new weapon({
 		name: 'sword',
@@ -293,7 +296,7 @@ export const weapons = Object.freeze({
 		dmgType: damageTypes.blunt_damage, //later use player int for unique damage type?
 		rarity: 1,
 		enchant: 0,
-		description: 'a textbook'
+		description: 'a physics textbook'
 	}),
 	pencil: new weapon({
 		name: 'pencil',
@@ -301,7 +304,7 @@ export const weapons = Object.freeze({
 		dmgType: damageTypes.piercing_damage,
 		rarity: 1,
 		enchant: 0,
-		description: 'a pencil'
+		description: 'a freshly sharpened pencil'
 	}),
 	dagger: new weapon({
 		name: 'dagger',
@@ -314,10 +317,10 @@ export const weapons = Object.freeze({
 	newtons_apple: new weapon({
 		name: 'newtons_apple',
 		dmgDie: '1d8',
-		dmgType: damageTypes.gravity_damage, //later use player int for unique damage type?
+		dmgType: damageTypes.gravity_damage, 
 		rarity: .2,
 		enchant: 0,
-		description: 'newton\'s apple'
+		description: 'newton\'s apple, only a genius can \nwield it\'s true powers (int>=4)'
 	})
 })
 const weaponsArray = Object.values(weapons)
@@ -1061,7 +1064,7 @@ export const monsters = Object.freeze({
 		dmgDie: 6,
 		aggro: 12,
 		rarity: 1,
-		art: enemiesArt.skelingtonWar //temp
+		art: enemiesArt.skelingtonWar 
 	}),
 })
 const enemyArray = Object.values(monsters)

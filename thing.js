@@ -46,6 +46,7 @@ import {
 	ArmourRarityColour,
 	DMG_COLOUR,
 	DMG_TYPE,
+	dynamicBox,
 	enemiesArt, escLeftByNum, escRightByNum, escUpByNum,
 	makeRoomText,
 	monsters,
@@ -624,6 +625,7 @@ async function clearCombat() {
 `
 		thePlayer.encDat = null //new combatMetrics()
 		ImageScreenTerm.writeSync('\n' + combatBanner)
+		//draw line to close box
 		for (let i = 0; i <= 12; i++) {
 			ImageScreenTerm.writeSync(escUpByNum(1) + escLeftByNum(1) + '│')
 		}
@@ -634,8 +636,8 @@ async function clearCombat() {
 
 
 
-
-//make it flash
+// multiple combats delay treasure till later
+// make it flash
 	let gotoTreasure = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
@@ -677,7 +679,7 @@ async function clearCombat() {
 
 	//await new Promise(r => setTimeout(r, 1000));
 
-
+// multiple combats delay treasure till later
 	await waitForTreasure();
 
 
@@ -1365,9 +1367,37 @@ let extraesc=0
 if(desclines>2){
 	extraesc=desclines-2
 }
-ImageScreenTerm.writeSync(mkWeaponBan(mmmm))// if(weapndesc_lines.length>2){+1}
-ImageScreenTerm.writeSync(escUpByNum(5+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
+
+//ImageScreenTerm.writeSync(mkWeaponBan(mmmm))// if(weapndesc_lines.length>2){+1}
+//ImageScreenTerm.writeSync(escUpByNum(5+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
+async function slowLineWrite(multiLineText){
+	let lines=multiLineText.split('\n')
+	for (let i of lines){
+		await new Promise(r => setTimeout(r, 100));
+		ImageScreenTerm.writeSync(i+'\n')
+	}
+}
+
 let linesappicon=apicon.split('\n')
+
+await(slowLineWrite(dynamicBox('\n\n\n\n',51,false,gradient.retro,'ffffff')))
+ImageScreenTerm.writeSync('\r'+escUpByNum(7))
+
+await(slowLineWrite(mkWeaponBan(mmmm)))
+ImageScreenTerm.writeSync(escUpByNum(5+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
 for (let i of linesappicon){
+	await new Promise(r => setTimeout(r, 100));
+	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
+}
+
+ImageScreenTerm.writeSync('\n')//clear previous banner
+
+await(slowLineWrite(dynamicBox('\n\n\n\n',51,false,gradient.retro,'ffffff')))
+ImageScreenTerm.writeSync('\r'+escUpByNum(7))
+
+await(slowLineWrite(mkWeaponBan(mmmm)))
+ImageScreenTerm.writeSync(escUpByNum(5+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
+for (let i of linesappicon){
+	await new Promise(r => setTimeout(r, 100));
 	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
 }

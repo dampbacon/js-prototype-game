@@ -51,7 +51,12 @@ export function copyMonster(monsterToCopy) {
         dmgDie:monsterToCopy.dmgDie,
         aggro:monsterToCopy.aggro,
         rarity:monsterToCopy.rarity,
-        art:monsterToCopy.art
+        art:monsterToCopy.art,
+        dmgWeakness:monsterToCopy.dmgWeakness,
+        dmgType:monsterToCopy.dmgType,
+        dmgColor:monsterToCopy.dmgColor
+
+
         }
     )
 }

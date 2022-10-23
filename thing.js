@@ -15,7 +15,7 @@ import {chance2, resetRandoms} from './game-objects/random_nums.js';
 import {buttonsContainer, createStatsBox, ImageScreenTerm, InventoryBox, logs, program, screen, stats} from "./ui.js";
 import {escLeftByNum, escUpByNum, fitLines, fitLinesStr, gradient_scanlines, rollLog} from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
-import { ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, enemiesArt, makeRoomText, monsters, padString, testContent } from './game-objects/data.js';
+import { ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, enemiesArt, makeRoomText, monsters, padString, pickEnemy, testContent } from './game-objects/data.js';
 import { combatMetrics } from './game-objects/metrics.js';
 import wrap from 'word-wrap';
 chalk.level=2;
@@ -504,7 +504,7 @@ function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve()}
 
 async function combat(combatEvent) {
 	thePlayer.encDat=new combatMetrics()
-	let monster = copyMonster(tempMonster)
+	let monster = pickEnemy()//copyMonster(tempMonster)
 	logs.writeSync('\n'+escUpByNum(1))
 	await (gradient_scanlines(logs, makeRoomText(monster), 3, gradient.pastel.multiline, rainbowVoil))
 	thePlayer.state=playerState.COMBAT
@@ -576,7 +576,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=tr
 	thePlayer.encDat.turn=turn
 	//logs.writeSync(`${chalk.bold.green(turn)}\n`);
 
-	if(!firstLoop){
+	if(firstLoop){
 		if (/*room.forceHostile == -1 &&*/ monster.aggro < 12) {
 			// friendly
 		} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/) {
@@ -656,7 +656,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop=tr
 			player.encDat.peacefullClr=true
 			logs.writeSync(`${!playerWonInitiative&&firstLoop?escUpByNum(1)+'\r':''}${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 			monsterHostile?logs.writeSync(`${chalk.hex('00ea00')(`You escaped through a random tunnel`)}\n`)
-				:logs.writeSync(`${chalk.hex('00ea00')(`You walk past the monster \nfollowing the path till you reach the room`)}\n`);
+				:logs.writeSync(`${chalk.hex('00ea00')(`You walk past the ${monster.name} \nfollowing the path till you reach the room`)}\n`);
 
 			logs.writeSync(`${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 			// random deeper or surface
@@ -798,7 +798,7 @@ function createCombatButtons(hostile) {
 		content: `${chalk.bold.white('attack ')}${chalk.bold.green(thePlayer.weapon.dmgDie)}\
 ${thePlayer.basedamage<0?chalk.bold.white(' - '):chalk.bold.white(' + ')}\
 ${chalk.bold.white(Math.abs(thePlayer.basedamage))}\
-${monsterHostile?'':gradient.retro.multiline('\n..this will make it hostile')}`, //maybe add damage die
+${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe add damage die
 		//shadow: true,
 		style: {
 			bg: '#5A5A5A',

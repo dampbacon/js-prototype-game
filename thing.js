@@ -598,13 +598,23 @@ async function clearCombat(logs) {
 			ImageScreenTerm.writeSync(escUpByNum(1) + escLeftByNum(1) + '│')
 		}
 	}
+
+	//temp
 	await new Promise(r => setTimeout(r, 2000));
 
 
 
 
 
-
+	//treasure room
+	//click button search for loot
+	//combat banner and screen items clear
+	//banners for items load in
+	//for weapons and armour
+	//allow player choice current to keep or not
+	//for items you just take it
+	//for altars do int or some check to see what it does else random
+	//consumes scrolls
 
 
 

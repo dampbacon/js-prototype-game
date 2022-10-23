@@ -1369,7 +1369,7 @@ export function dynamicBox(text='', width=20, center=false,gradientFunction=grad
         lines=lines.map(line => centerText(line, width))
     }
     let max = lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '').cleanANSI().length;
-    console.log(lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '')+`${max}`)
+    //console.log(lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '')+`${max}`)
     assert(max<=width,"STRING TO WIDE FOR THE GIVEN WIDTH OF THE BOX")
     max+=(width-max)
     //console.log(max)

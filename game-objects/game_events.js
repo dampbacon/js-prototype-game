@@ -1,4 +1,5 @@
 import gradient from 'gradient-string';
+import { pickEnemy } from './data.js';
 
 
 
@@ -48,12 +49,13 @@ export class eventPackage{
     }
 }
 export class game_event {
-    constructor({ id, body, toScreen, buttons, cleared } = { ...defaults }) {
+    constructor({ id, body, toScreen, buttons, cleared, enemies } = { ...defaults }) {
         this.id = id
         this.body = body
         this.toScreen = toScreen
         this.buttons = buttons
         this.cleared = false
+        this.enemies = enemies?enemies:[pickEnemy()]
         //buttons are in the format of [[event_id,"button label", enabled_always=true]]        
     }
     setCleared(){
@@ -73,14 +75,14 @@ export class game_event_gain_item extends game_event {
     }
 }
 
-export class game_event_enemy extends game_event {
-    constructor({ id, body, toScreen, buttons, enemy, cleared } = { ...defaults, enemy: null, cleared: false }) {
-        //make if enemy is hostile pass buttons to be created for combat
-        super(id, body, toScreen, buttons, cleared)
-        this.enemy = enemy;
-    }
-}
-let a = new game_event_enemy()
+// export class game_event_enemy extends game_event {
+//     constructor({ id, body, toScreen, buttons, enemy, cleared } = { ...defaults, enemy: null, cleared: false }) {
+//         //make if enemy is hostile pass buttons to be created for combat
+//         super(id, body, toScreen, buttons, cleared)
+//         this.enemy = enemy;
+//     }
+// }
+// let a = new game_event_enemy()
 
 //stub
 export class game_event_skillcheck extends game_event {

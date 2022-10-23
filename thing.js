@@ -4,7 +4,7 @@
 import blessedpkg from 'blessed';
 import chalk from 'chalk';
 import gradient from 'gradient-string';
-import {game_event, game_event_enemy, game_event_gain_item} from './game-objects/game_events.js';
+import {game_event, game_event_gain_item} from './game-objects/game_events.js';
 import {Player, playerState} from './game-objects/player.js';
 import './blessed/patches.cjs';
 import pkg from 'iconv-lite';
@@ -140,7 +140,13 @@ let temp_event1 = new game_event({
 		[1, "goto 1(recur)", true],
 		[2, "goto 2", true],
 		//[3,"goto 3 lolololololololollolololololololol",true]
-	]
+	],
+	enemies: [
+		pickEnemy(),
+		pickEnemy(),
+		pickEnemy(),
+		pickEnemy(),
+	],
 })
 let temp_event2 = new game_event({
 	id: 2,
@@ -429,16 +435,18 @@ async function eventHandler(gameEvent = temp_event1,) {
 	}
 
 	//change to for loop eventually
-	if (gameEvent instanceof (game_event_enemy)) {
-		combat(gameEvent)
-		//await something
-	} else if (gameEvent instanceof (game_event_gain_item)) {
-
-	} else {
-		// test code
-		combat(gameEvent)
+	for (let i of gameEvent.enemies) {
+		combat(gameEvent,i)
+		await (waitForCombat())
 	}
-	await (waitForCombat())
+		//await something
+	// } else if (gameEvent instanceof (game_event_gain_item)) {
+
+	// } else {
+	// 	// test code
+	// 	combat(gameEvent)
+	// }
+	
 	//write event package content after event complete
 	//rollLog(XTermTestv2)
 	//XTermTestv2.writeSync("DEATH"+ death)
@@ -502,9 +510,9 @@ function waitForCombat() {return new Promise((resolve) => {waitForCombatResolve 
 function encounterResolver() {if (waitForCombatResolve) waitForCombatResolve()}
 
 
-async function combat(combatEvent) {
+async function combat(combatEvent,enemy) {
 	thePlayer.encDat=new combatMetrics()
-	let monster = pickEnemy()//copyMonster(tempMonster)
+	let monster = enemy//copyMonster(tempMonster)
 	logs.writeSync('\n'+escUpByNum(1))
 	await (gradient_scanlines(logs, makeRoomText(monster), 3, gradient.pastel.multiline, rainbowVoil))
 	thePlayer.state=playerState.COMBAT

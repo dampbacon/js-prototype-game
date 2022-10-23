@@ -441,7 +441,7 @@ export const ScrollsAll=Object.freeze({
                     return `You read the scroll and nothing happens.`
                 }else{
                     let oldName=player.encDat.enmyName
-                    player.encDat.enemy = copyMonster(monsters.skelington)//new Monster()  //temp till implemented fully
+                    player.encDat.enemy = pickEnemy()//new Monster()  //temp till implemented fully
                     params.term.reset()
                     player.encDat.enmyName = player.encDat.enemy.name
                     params.term.writeSync(player.encDat.enemy.art)
@@ -1075,7 +1075,7 @@ const enemyArray=Object.values(monsters)
 const enemyRarity=enemyArray.map((enemy)=>{return enemy.rarity})
 //alias 
 export function pickEnemy(){
-    return pickRandom(enemyArray,enemyRarity)
+    return _.cloneDeep(pickRandom(enemyArray,enemyRarity))
 }
 
 

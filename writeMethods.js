@@ -16,27 +16,11 @@
 //  MOVE TO SEPERATE FILE LATER
 //
 import lodashC from "lodash.compact";
-import {
-	ImageScreenTerm,
-	logs
-} from "./ui.js";
+import {ImageScreenTerm, logs} from "./ui.js";
 import chalk from "chalk";
-import typeOf from 'kind-of'
-import repeat from 'repeat-string'
-import longest from "longest";
+import {escDownByNum, escLeftByNum, escRightByNum, escUpByNum} from "./game-objects/data.js";
+
 chalk.level = 2;
-export function escLeftByNum(num) {
-	return `[${num}D`
-}
-export function escRightByNum(num) {
-	return `[${num}C`
-}
-export function escUpByNum(num) {
-	return `[${num}A`
-}
-export function escDownByNum(num) {
-	return `[${num}B`
-}
 
 function findCursor(terminal = ImageScreenTerm) {
 	return [terminal.term.buffer.active.cursorX, terminal.term.buffer.active.cursorY]

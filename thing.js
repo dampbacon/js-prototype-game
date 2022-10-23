@@ -35,8 +35,6 @@ import {
 	stats
 } from "./ui.js";
 import {
-	escLeftByNum,
-	escUpByNum,
 	fitLines,
 	fitLinesStr,
 	gradient_scanlines,
@@ -48,17 +46,16 @@ import {
 	ArmourRarityColour,
 	DMG_COLOUR,
 	DMG_TYPE,
-	enemiesArt,
+	enemiesArt, escLeftByNum, escRightByNum, escUpByNum,
 	makeRoomText,
 	monsters,
-	padString,
 	pickEnemy,
-	testContent
 } from './game-objects/data.js';
 import {
 	combatMetrics
 } from './game-objects/metrics.js';
 import wrap from 'word-wrap';
+import { apicon, teststrban } from './test.js';
 chalk.level = 2;
 const {
 	tinygradient
@@ -697,7 +694,7 @@ async function clearCombat() {
 
 
 function pickTreasure(){
-	
+
 }
 
 
@@ -1329,6 +1326,7 @@ screen.title = '~game~';
 screen.program.hideCursor(true);
 screen.append(ImageScreenTerm)
 screen.append(logs)
+screen.render()
 createEventsMap(testEventArr, story)
 buttonsArray = [button1, button2, button3, button4];
 screen.render()
@@ -1357,3 +1355,11 @@ box.on('click', function() {
 	box = null
 	screen.render()
 })
+
+//draw test
+ImageScreenTerm.writeSync(teststrban)
+ImageScreenTerm.writeSync(escUpByNum(5)+'\r'+escRightByNum(2))
+let linesappicon=apicon.split('\n')
+for (let i of linesappicon){
+	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
+}

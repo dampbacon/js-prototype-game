@@ -9,17 +9,9 @@ import assert from 'node:assert/strict';
 // console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,false,testplayer))}
 
 import {
-    armourArray,
-    armourArrayWeights,
-    border,
-    damageTypes,
-    enemiesArt,
-    padString,
-    pickScroll,
-    pickWeapon,
-    testContent,
-    testContent2,
-    textBoxNotUI,
+    DMG_COLOUR,
+    dynamicBox,
+    rarityByWeight,
     weapons
 } from "./game-objects/data.js";
 import { copyMonster, monster } from "./game-objects/mobs.js";
@@ -110,24 +102,7 @@ let tempMonster = new monster({
 // chalk.level = 2;
 // console.log(chalk.red('Hello world!'));
 
-let weaponBanner=
-`\`
-╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
-│  
-│ 
-│   
-│
-│   
-│  
-│
-│  
-│   
-│
-│  
-│   
-│ 
-╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
-`
+
 
 
 
@@ -160,4 +135,35 @@ let weaponBanner=
 // fdsdsf
 // dsffsdfdssd
 // sffdsdsf`),50))
-let k=weapons.flamberge
+
+function padwithspc (str='', amount=4,first=true,char=' ') {
+    let lines=str.split('\n')
+    lines=lines.map((line,i)=>{
+        if(i===0 && first){
+            return line
+        }
+        return `${` `.repeat(amount)}${line}`
+    })
+    return lines.join('\n')
+}
+export let apicon=
+`\
+[95m[40m≈[37m[40m   [92m[40m▌[37m[40m [95m[40m≈≈[37m[40m  [m
+[37m[40m  [31m[40m███[97m[41m▀[97m[40m█[37m[40m [95m[40m≈[37m[40m [m
+[37m[40m [95m[40m≈[31m[40m████[97m[41m▀[37m[40m  [95m[40m≈[m
+[37m[40m [95m[40m≈[37m[40m [31m[40m▀▀▀[30m[40m[37m[40m [m\
+`
+
+
+let weapon=weapons.newtons_apple
+let wpnlines=weapon.description.split('\n')
+let testweaponBanner=
+`\
+             ${chalk.hex(rarityByWeight(weapon.rarity))('Name   :'+(weapon.name.replace(/_/g, ' ')))}
+             ${chalk.greenBright(`dmgDie :${weapon.dmgDie}`)}
+             ${chalk.hex(weapon.dmgType.color)('dmgTyp :'+weapon.dmgType.name)}
+             ${chalk.blueBright(`desc.  :${wpnlines[0]}`)}
+                     ${chalk.blueBright(`${wpnlines[1]}${wpnlines[2]?`\n${' '.repeat(21)+wpnlines[2]}`:''}`)}`
+//console.log()
+//console.log(wpnlines[2])
+export let teststrban = dynamicBox(testweaponBanner,51)

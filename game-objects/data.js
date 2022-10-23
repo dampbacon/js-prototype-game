@@ -1,27 +1,12 @@
-import {
-	chance2,
-	chance3,
-	monsterRandom
-} from "./random_nums.js";
+import {chance2, chance3, monsterRandom} from "./random_nums.js";
 import chalk from "chalk";
-import {
-	dmgScrollFun,
-	dmgTypeClass,
-	Scroll,
-	weapon
-} from "./items.js";
+import {dmgScrollFun, dmgTypeClass, Scroll, weapon} from "./items.js";
 import _ from "lodash";
 import assert from 'node:assert/strict';
 
 import gradient from 'gradient-string';
-import {
-	copyMonster,
-	monster
-} from "./mobs.js";
-import {
-	Player,
-	playerState
-} from "./player.js";
+import {monster} from "./mobs.js";
+import {Player, playerState} from "./player.js";
 
 //DAMAGE TYPES
 chalk.level = 2;
@@ -317,9 +302,30 @@ export const weapons = Object.freeze({
 		dmgType: damageTypes.gravity_damage, 
 		rarity: .2,
 		enchant: 0,
-		description: 'newton\'s apple, only a genius can \nwield it\'s true powers (int>=4)'
+		description: `newton\'s apple, only a genius \ncan wield its true powers`
 	})
 })
+export function rarityByWeight(num=1)
+{
+    if(num<=.2)
+    {
+        return rarityColours[4]
+    }else if(num<=.4)
+    {
+        return rarityColours[3]
+    }else if(num<=.6)
+    {
+        return rarityColours[2]
+    }
+    else if(num<=.8)
+    {
+        return rarityColours[1]
+    }
+    else if(num<=1)
+    {
+        return rarityColours[0]
+    }
+}
 const weaponsArray = Object.values(weapons)
 const weaponWeights = weaponsArray.map((item) => {
 	return item.rarity
@@ -1356,17 +1362,21 @@ function centerText(text, width) {
     let pad = Math.floor((width - text.cleanANSI().length) / 2);
     return (' '.repeat(pad) + text);
 }
-export function dynamicBox(text='', width=20,gradientFunction=gradient.pastel, vertLn='36454f') {
+export function dynamicBox(text='', width=20, center=false,gradientFunction=gradient.pastel, vertLn='36454f') {
 	let str = text
-	let lines = str.split('\n').map(line => centerText(line, width));
+	let lines = str.split('\n');
+    if(center) {
+        lines=lines.map(line => centerText(line, width))
+    }
     let max = lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '').cleanANSI().length;
-    assert(max<width,"STRING TO WIDE FOR THE GIVEN WIDTH OF THE BOX")
+    console.log(lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '')+`${max}`)
+    assert(max<=width,"STRING TO WIDE FOR THE GIVEN WIDTH OF THE BOX")
     max+=(width-max)
-    console.log(max)
+    //console.log(max)
     lines = lines.map((line, ind) => {
 		var diff = max - line.cleanANSI().length;
 		if (ind === 0) {
-			console.log(line)
+			//console.log(line)
 		}
 		return chalk.hex(vertLn)('│') + line + ' '.repeat(diff) + chalk.hex(vertLn)('│');
 	})
@@ -1382,4 +1392,20 @@ export function dynamicBox(text='', width=20,gradientFunction=gradient.pastel, v
 		lines.join('\n') + '\n' +
 		bot;
 	return (res)
+}
+
+export function escLeftByNum(num) {
+	return `[${num}D`
+}
+
+export function escRightByNum(num) {
+	return `[${num}C`
+}
+
+export function escUpByNum(num) {
+	return `[${num}A`
+}
+
+export function escDownByNum(num) {
+	return `[${num}B`
 }

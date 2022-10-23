@@ -238,7 +238,7 @@ export const weapons = Object.freeze({
 		dmgType: damageTypes.weeb_damage,
 		rarity: .1,
 		enchant: 0,
-		description: 'channels naruto powers, chance\nfor bonus dmg scales with dex',
+		description: 'channels naruto powers, chance\nfor bonus dmg, scales with dex',
 	}),
 	flamberge: new weapon({
 		name: 'flamberge',

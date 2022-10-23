@@ -154,16 +154,18 @@ export let apicon=
 [37m[40m [95m[40m≈[37m[40m [31m[40m▀▀▀[30m[40m[37m[40m [m\
 `
 
-
-let weapon=weapons.newtons_apple
-let wpnlines=weapon.description.split('\n')
-let testweaponBanner=
+export function mkWeaponBan(weapon=weapons.newtons_apple){
+    let wpn=weapon
+    let wpnlines=wpn.description.split('\n')
+    let testweaponBanner=
 `\
-             ${chalk.hex(rarityByWeight(weapon.rarity))('Name   :'+(weapon.name.replace(/_/g, ' ')))}
-             ${chalk.greenBright(`dmgDie :${weapon.dmgDie}`)}
-             ${chalk.hex(weapon.dmgType.color)('dmgTyp :'+weapon.dmgType.name)}
+             ${chalk.hex(rarityByWeight(wpn.rarity))('Name   :'+(wpn.name.replace(/_/g, ' ')))}
+             ${chalk.greenBright(`dmgDie :${wpn.dmgDie}`)}
+             ${chalk.hex(wpn.dmgType.color)('dmgTyp :'+wpn.dmgType.name)}
              ${chalk.blueBright(`desc.  :${wpnlines[0]}`)}
-                     ${chalk.blueBright(`${wpnlines[1]}${wpnlines[2]?`\n${' '.repeat(21)+wpnlines[2]}`:''}`)}`
-//console.log()
-//console.log(wpnlines[2])
-export let teststrban = dynamicBox(testweaponBanner,51)
+                     ${chalk.blueBright(`${wpnlines[1]}${wpnlines[2]?`\n${' '.repeat(21)+wpnlines[2]}`:''}`)}\
+`
+    return dynamicBox(testweaponBanner,51)
+}
+
+

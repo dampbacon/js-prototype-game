@@ -50,12 +50,14 @@ import {
 	makeRoomText,
 	monsters,
 	pickEnemy,
+	weapons,
 } from './game-objects/data.js';
 import {
 	combatMetrics
 } from './game-objects/metrics.js';
 import wrap from 'word-wrap';
-import { apicon, teststrban } from './test.js';
+import { apicon, mkWeaponBan } from './test.js';
+import { weapon } from './game-objects/items.js';
 chalk.level = 2;
 const {
 	tinygradient
@@ -1357,8 +1359,14 @@ box.on('click', function() {
 })
 
 //draw test
-ImageScreenTerm.writeSync(teststrban)
-ImageScreenTerm.writeSync(escUpByNum(5)+'\r'+escRightByNum(2))//fix for multiline of 3
+let mmmm=weapons.newtons_apple
+let desclines= mmmm.description.split('\n').length
+let extraesc=0
+if(desclines>2){
+	extraesc=desclines-2
+}
+ImageScreenTerm.writeSync(mkWeaponBan(mmmm))// if(weapndesc_lines.length>2){+1}
+ImageScreenTerm.writeSync(escUpByNum(5+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
 let linesappicon=apicon.split('\n')
 for (let i of linesappicon){
 	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))

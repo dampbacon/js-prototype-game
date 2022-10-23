@@ -856,6 +856,7 @@ export const monsters=Object.freeze({
         dmgDie: 4,
         aggro: 7,
         rarity: 1,
+        art: enemiesArt.computerman//temp
     }),
     bandit : new monster({
         name: "disguised bandit",
@@ -866,6 +867,7 @@ export const monsters=Object.freeze({
         dmgDie: 4,
         aggro: 7,
         rarity: 1,
+        art: enemiesArt.genericHumaniod
     }),
     rat : new monster({
         name: "skeever",

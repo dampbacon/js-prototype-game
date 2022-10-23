@@ -414,43 +414,22 @@ function createEventsMap(eventsArrary = [], storyArr = {}) {
 		storyArr[element.id] = element
 	})
 }
-//return maybe idek
-// reads event package and sees which buttons to create only called after a combat
 
 //sloppy but easy way to make it work
 async function eventHandler(gameEvent = temp_event1,) {
-	//
-	// WRITE EVENT PACKAGE HANDLING CODE
-	// probably easier to do recursively?
-	//
+
 	ImageScreenTerm.term.clear()
 	ImageScreenTerm.term.reset()
 	rollLog(logs)
 	let gb = gameEvent.body
 	let gbf = gb.format
-	//make enum thing later
-	//ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
-	if (gbf.writeMode === 'gradientScanlines') {
-		//await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
-	}
 
 	//change to for loop eventually
 	for (let i of gameEvent.enemies) {
 		combat(gameEvent,i)
 		await (waitForCombat())
 	}
-		//await something
-	// } else if (gameEvent instanceof (game_event_gain_item)) {
 
-	// } else {
-	// 	// test code
-	// 	combat(gameEvent)
-	// }
-	
-	//write event package content after event complete
-	//rollLog(XTermTestv2)
-	//XTermTestv2.writeSync("DEATH"+ death)
-	// extend somehow to rest later
 	if(death===false){
 		thePlayer.state=playerState.TREASURE_ROOM
 		let length ='╰╾────────────────────────────────────────────╼╯'.length
@@ -471,21 +450,14 @@ async function eventHandler(gameEvent = temp_event1,) {
 │   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encDat.fUse}
 ╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
 `
-		//combatBanner=padString(combatBanner,ImageScreenTerm.term.cols-length)
-
 		thePlayer.encDat=null //new combatMetrics()
-		//console.log(thePlayer.encDat+'')
 		await new Promise(r => setTimeout(r, 500));
-		//ImageScreenTerm.writeSync('\n'+testContent)
 		ImageScreenTerm.writeSync('\n'+combatBanner)
 
-		//ImageScreenTerm.writeSync(escLeftByNum(1))
-		//ImageScreenTerm.writeSync("#")
 		for(let i=0; i<=12; i++){
 			ImageScreenTerm.writeSync(escUpByNum(1)+escLeftByNum(1)+'│')
 		}
-		//ImageScreenTerm.reset()
-		//ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
+
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
 	}
@@ -565,11 +537,26 @@ ${chalk.hex('ea0000')(`damage!`)}\n`)
 function clearCombat(logs){
 	thePlayer.weaponCooldown=0
 	ImageScreenTerm.removeLabel()
+
+
+
+
 	clearButtons();
-	encounterResolver()
 	logs.writeSync(`${chalk.hex('E51B2C')(`#`.repeat(logs.term.cols - 1))}\n`);
 	logs.writeSync(`${chalk.hex('ECE236')(`You defeated the enemy!`)}\n`);
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
+
+
+
+
+	//insert loot diversion here
+
+
+
+
+
+	encounterResolver()
+
 }
 
 
@@ -831,7 +818,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 		left: 1,
 		top: 1,
 		name: 'flee',
-		content: monsterHostile?`flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`:`${chalk.bold.greenBright(`walk past ${monster.name}\nand enter the room`)}`,
+		content: monsterHostile?`flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}`:`${chalk.bold.greenBright(`walk past ${monster.name}\nand continue onwards`)}`,
 		//shadow: true,
 		style: {
 			bg: '#5A5A5A',

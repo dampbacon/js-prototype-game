@@ -3,7 +3,7 @@
 //
 import chalk from "chalk";
 import {
-	DMG_TYPE
+	DMG_TYPE, weaponART
 } from "./data.js";
 import {
 	playerState
@@ -65,7 +65,7 @@ export class weapon {
 		this.rarity = rarity ? rarity : 1;
 		this.enchant = enchant ? enchant : 0;
 		this.description = description ? description : this.generateDescription();
-        this.art=art?art:null;
+        this.art=art?art:weaponART.swordHandle;//default art
 	}
 }
 // export class MakeScroll{

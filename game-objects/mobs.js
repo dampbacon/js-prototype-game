@@ -37,7 +37,7 @@ export class monster {
 		rarity,
 		art,
 		dmgWeakness,
-		dmgType
+		dmgType,
 	} = {
 		...defaults
 	}) {
@@ -56,6 +56,7 @@ export class monster {
 		this.hp = monsterRandom.rpg(`${this.hitDie}d6`, {
 			sum: true
 		});
+		this.polymorph = false
 	}
 	rollDamage() {
 		// later change to bring consistancy simaler to player class

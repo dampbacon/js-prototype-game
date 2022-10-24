@@ -35,6 +35,7 @@ import {
 	stats
 } from "./ui.js";
 import {
+	drawBanner,
 	fitLines,
 	fitLinesStr,
 	gradient_scanlines,
@@ -675,6 +676,9 @@ async function clearCombat() {
 	screen.render()
 	resizeButtons()
 	screen.render()
+	buttonsContainer.scrollTo(0)
+	screen.render()
+
 
 	gotoTreasure.on('press', async function () {
 		clearButtons()
@@ -735,11 +739,13 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 	if (firstLoop) {
 		if ( /*room.forceHostile == -1 &&*/ monster.aggro < 12) {
 			// friendly
+			monsterHostile = false;
 		} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/ ) {
 			// hostile
 			monsterHostile = true;
 		} else {
 			// neutral, which is functionally the same as friendly
+			monsterHostile = false;
 		}
 	}
 	if (firstLoop && monsterHostile) {
@@ -921,9 +927,27 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 				await new Promise(resolve => setTimeout(resolve, 100))
 				clearCombat()
 			} else {
-				await enemyAtack(monster, player)
+				if (monster.polymorph) {
+					if ( /*room.forceHostile == -1 &&*/ monster.aggro < 12) {
+						// friendly
+						monster.polymorph = false;
+						monsterHostile = false;
+					} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/ ) {
+						// hostile
+						monster.polymorph = false;
+						monsterHostile = true;
+						await enemyAtack(monster, player)
+					} else {
+						// neutral
+						monster.polymorph = false;
+						monsterHostile = false;
+					}
+				}else{
+					monsterHostile = true;
+					await enemyAtack(monster, player)
+				}
 				await new Promise(resolve => setTimeout(resolve, 50))
-				combatLogic(player, false, true, ++turn)
+				combatLogic(player, false, monsterHostile, ++turn)
 			}
 		})
 	}
@@ -1368,39 +1392,16 @@ box.on('click', function() {
 	box = null
 	screen.render()
 })
-
+logs.writeSync("TESTING SANDBOX, PRESS Y AFTER ITEMS WRITTEN \nTO GO TO COMBAT TEST")
 //draw test
 await new Promise((r) => setTimeout(r, 1000));
 
-async function slowLineWrite(multiLineText){
-	let lines=multiLineText.split('\n')
-	for (let i of lines){
-		await new Promise(r => setTimeout(r, 100));
-		ImageScreenTerm.writeSync(i+'\n')
-	}
-}
-async function drawBanner(weap=weapons.newtons_apple){
-	let weapon4box=weap
-	let desclines= weapon4box.description.split('\n').length
-	let extraesc=0
-	if(desclines>2){
-		extraesc=desclines-2
-	}
 
-	let linesIcon=apicon.split('\n')
-
-	await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff')))
-	ImageScreenTerm.writeSync('\r'+escUpByNum(7+extraesc))
-
-	await(slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity))))
-	ImageScreenTerm.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
-	for (let i of linesIcon){
-		await new Promise(r => setTimeout(r, 100));
-		ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
-	}
-	ImageScreenTerm.writeSync(`\n${`\n`.repeat(extraesc)}`)//clear previous banner
-}
 await drawBanner()
+await drawBanner()
+await drawBanner()
+await drawBanner()
+
 
 // await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff')))
 // ImageScreenTerm.writeSync('\r'+escUpByNum(7+extraesc))

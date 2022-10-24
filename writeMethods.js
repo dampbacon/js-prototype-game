@@ -17,8 +17,10 @@
 //
 import lodashC from "lodash.compact";
 import {ImageScreenTerm, logs} from "./ui.js";
+import gradient from 'gradient-string';
 import chalk from "chalk";
-import {escDownByNum, escLeftByNum, escRightByNum, escUpByNum} from "./game-objects/data.js";
+import {dynamicBox, escDownByNum, escLeftByNum, escRightByNum, escUpByNum, rarityByWeight, weapons} from "./game-objects/data.js";
+import { mkWeaponBan } from "./test.js";
 
 chalk.level = 2;
 
@@ -239,6 +241,7 @@ async function scanlines(terminal = ImageScreenTerm, text = '', speed = 5, color
 		cursorPos = 1
 	}
 }
+
 export function fitLinesStr(text, width = logs.term.cols - 1) {
 	let multiline = ``
 	let lorem_lines = fitLines(text, width)
@@ -250,4 +253,32 @@ export function fitLinesStr(text, width = logs.term.cols - 1) {
 		multiline = multiline.concat(line_str)
 	}
 	return multiline
+}
+export async function slowLineWrite(multiLineText){
+	let lines=multiLineText.split('\n')
+	for (let i of lines){
+		await new Promise(r => setTimeout(r, 100));
+		ImageScreenTerm.writeSync(i+'\n')
+	}
+}
+export async function drawBanner(weap=weapons.newtons_apple){
+	let weapon4box=weap
+	let desclines= weapon4box.description.split('\n').length
+	let extraesc=0
+	if(desclines>2){
+		extraesc=desclines-2
+	}
+
+	let linesIcon=weapon4box.art.split('\n')
+
+	await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff')))
+	ImageScreenTerm.writeSync('\r'+escUpByNum(7+extraesc))
+
+	await(slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity))))
+	ImageScreenTerm.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
+	for (let i of linesIcon){
+		await new Promise(r => setTimeout(r, 100));
+		ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
+	}
+	ImageScreenTerm.writeSync(`\n${`\n`.repeat(extraesc)}`)//clear previous banner
 }

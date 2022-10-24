@@ -18,7 +18,7 @@ import lodashC from "lodash.compact";
 import {ImageScreenTerm, logs} from "./ui.js";
 import gradient from 'gradient-string';
 import chalk from "chalk";
-import {DMG_COLOUR, DMG_TYPE, dynamicBox, escDownByNum, escLeftByNum, escRightByNum, escUpByNum, miscColours, rarityByWeight, weapons} from "./game-objects/data.js";
+import {ARMOUR, ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, dynamicBox, escDownByNum, escLeftByNum, escRightByNum, escUpByNum, miscColours, rarityByWeight, weapons} from "./game-objects/data.js";
 
 chalk.level = 2;
 
@@ -283,10 +283,10 @@ export async function drawBanner(weap=weapons.newtons_apple, term=ImageScreenTer
 
 	let linesIcon=weapon4box.art.split('\n')
 
-	await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff')))
+	await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff'),term))
 	term.writeSync('\r'+escUpByNum(7+extraesc))
 
-	await(slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity))))
+	await(slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity)),term))
 	term.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
 	for (let i of linesIcon){
 		await new Promise(r => setTimeout(r, 50));
@@ -307,9 +307,9 @@ ${chalk.hex('8b4513')('{▄}')}
       potions!`)}
         ${chalk.greenBright(`X ${amount}`)} \
 `
-	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'))
+	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'),term)
 	term.writeSync('\r'+escUpByNum(5))
-	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,'ff2d57'))
+	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,'ff2d57'),term)
 	term.writeSync('\r'+escUpByNum(4)+escRightByNum(2))
 	let iconLines=icon.split('\n')
 	//ImageScreenTerm.writeSync(ddfs)
@@ -326,7 +326,7 @@ let goldStr=
 ${chalk.bold.hex('FFD700')(`You found some gold!`)}
     ${chalk.greenBright(`qnt : ${amount}gp`)}\
 `
-	await slowLineWrite(dynamicBox(goldStr,20,false,gradient.summer,'FFD700'))
+	await slowLineWrite(dynamicBox(goldStr,20,false,gradient.summer,'FFD700'),term)
 	//term.writeSync('\n')
 }
 
@@ -343,9 +343,9 @@ export async function writeOil(amount=1,term=ImageScreenTerm){
       oil flasks!`)}
         ${chalk.greenBright(`X ${amount}`)} \
 `
-	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'))
+	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'),term)
 	term.writeSync('\r'+escUpByNum(5))
-	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,miscColours.oil))
+	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,miscColours.oil),term)
 	term.writeSync('\r'+escUpByNum(4)+escRightByNum(2))
 	let iconLines=icon.split('\n')
 	//ImageScreenTerm.writeSync(ddfs)
@@ -368,10 +368,42 @@ export async function writeScroll(amount=1,term=ImageScreenTerm){
       magic scrolls!`)}
         ${chalk.greenBright(`X ${amount}`)} \
 `
-	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'))
+	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'),term)
 	term.writeSync('\r'+escUpByNum(5))
-	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,DMG_COLOUR[DMG_TYPE.MAGIC]))
+	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,DMG_COLOUR[DMG_TYPE.MAGIC]),term)
 	term.writeSync('\r'+escUpByNum(4)+escRightByNum(1))
+	let iconLines=icon.split('\n')
+	//ImageScreenTerm.writeSync(ddfs)
+	for (let i of iconLines){
+		await new Promise(r => setTimeout(r, 50));
+		term.writeSync(i+'\n\r'+escRightByNum(1))
+	}
+	term.writeSync('\n')
+}
+
+export async function writeArmour(armourName,term=ImageScreenTerm){
+	//later make rarity change
+	let icon=`\
+[90m[40m▐[90m[47m~~▒░▒░▒~~[90m[40m▌[37m[40m  [m
+[90m[47m║░Ω░▒░▒░Ω░║[37m[40m  [m
+[90m[40m‼Σ▐[90m[47m▒░▒░▒[90m[40m▌Σ‼[37m[40m  [m
+[37m[40m  [90m[40m▐[90m[47m░▒░▒░[90m[40m▌[37m[40m    [m
+[37m[40m  [90m[40m▐[90m[47m§§§§§[90m[40m▌[37m[40m    [m\
+`
+	let ac=ARMOURmap[armourName]
+	let colour=ArmourRarityColour(ac)
+	let k=
+`\
+             ${chalk.hex(colour)('Name   : '+(armourName.replace(/_/g, ' ')))}
+             ${chalk.greenBright(`AC     : ${ac}`)}
+             
+             ${chalk.blueBright(`desc.  : ${'provides protection from'}`)}
+                      ${chalk.blueBright('pointy sticks and magic')}\
+`
+	await slowLineWrite(dynamicBox(`\n\n\n\n`,51,false,gradient.mind,'d3d3d3'),term)
+	term.writeSync('\r'+escUpByNum(7))
+	await slowLineWrite(dynamicBox(k,51,false,gradient.passion,colour),term)
+	term.writeSync('\r'+escUpByNum(6)+escRightByNum(1))
 	let iconLines=icon.split('\n')
 	//ImageScreenTerm.writeSync(ddfs)
 	for (let i of iconLines){

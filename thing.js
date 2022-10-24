@@ -41,6 +41,7 @@ import {
 	gradient_scanlines,
 	rollLog,
 	slowLineWrite,
+	writeArmour,
 	writeGold,
 	writeOil,
 	writePotion,
@@ -1400,7 +1401,7 @@ box.on('click', function() {
 	box = null
 	screen.render()
 })
-logs.writeSync("TESTING SANDBOX, PRESS Y AFTER ITEMS WRITTEN \nTO GO TO COMBAT TEST")
+logs.writeSync("TESTING SANDBOX, PRESS Y AFTER ITEMS WRITTEN \nTO GO TO COMBAT TEST\n")
 //draw test
 await new Promise((r) => setTimeout(r, 1000));
 
@@ -1415,35 +1416,7 @@ await drawBanner()
 await writeOil(4)
 await writeScroll(4)
 
-export async function writeArmour(armourName,term=ImageScreenTerm){
-	//later make rarity change
-	let icon=`\
-[90m[40m▐[90m[47m~~▒░▒░▒~~[90m[40m▌[37m[40m  [m
-[90m[47m║░Ω░▒░▒░Ω░║[37m[40m  [m
-[90m[40m‼Σ▐[90m[47m▒░▒░▒[90m[40m▌Σ‼[37m[40m  [m
-[37m[40m  [90m[40m▐[90m[47m░▒░▒░[90m[40m▌[37m[40m    [m
-[37m[40m  [90m[40m▐[90m[47m§§§§§[90m[40m▌[37m[40m    [m\
-`
-	let ac=ARMOURmap[armourName]
-	let colour=ArmourRarityColour(ac)
-	let k=
-`\
-             ${chalk.hex(colour)('Name   : '+(armourName.replace(/_/g, ' ')))}
-             ${chalk.greenBright(`AC     : ${ac}`)}
-             
-             ${chalk.blueBright(`desc.  : ${'provides protection from'}`)}
-                      ${chalk.blueBright('pointy sticks and magic')}\
-`
-	await slowLineWrite(dynamicBox(`\n\n\n\n`,51,false,gradient.mind,'d3d3d3'))
-	term.writeSync('\r'+escUpByNum(7))
-	await slowLineWrite(dynamicBox(k,51,false,gradient.passion,colour))
-	term.writeSync('\r'+escUpByNum(6)+escRightByNum(1))
-	let iconLines=icon.split('\n')
-	//ImageScreenTerm.writeSync(ddfs)
-	for (let i of iconLines){
-		await new Promise(r => setTimeout(r, 50));
-		term.writeSync(i+'\n\r'+escRightByNum(1))
-	}
-	term.writeSync('\n')
-}
+
 await writeArmour(ARMOUR.DENSE_PERSONALITY)
+await drawBanner(weapons.flamberge,logs)
+await writeArmour(ARMOUR.DENSE_PERSONALITY,logs)

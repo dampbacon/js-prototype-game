@@ -488,7 +488,7 @@ export const ScrollsAll = Object.freeze({
 		dmgTypeE: DMG_TYPE.NONE,
 		targetmonster: true,
 		changeMonster: true,
-		rarity: 900.1,
+		rarity: 0.1,
 		description: 'A scroll that changes the target monster into a random monster',
 		scrollFunction: (player = new Player(), params = {}) => {
 			if (player.state === playerState.COMBAT) {

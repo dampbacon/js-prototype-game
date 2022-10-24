@@ -94,9 +94,9 @@ export const damageTypes = Object.freeze({
 					sum: true
 				})
 				target.hp -= bonusDamage
-				if (target2 instanceof Player) {
+				try{
 					target2.encDat.TdmgAr[-1] += bonusDamage
-				}
+				}catch(e){}
 				return `${chalk.hex(self.color)('bonus fire damage: ')}${bonusDamage}\n`
 			} else {
 				return ''
@@ -117,9 +117,9 @@ export const damageTypes = Object.freeze({
                     bonusDamage+=target2.dex
                 }
 				target.hp -= bonusDamage
-				if (target2 instanceof Player) {
+				try{
 					target2.encDat.TdmgAr[-1] += bonusDamage
-				}
+				}catch(e){}
 				return `${chalk.hex(self.color)('$$$$$$$$$ 1 poison damage: ')}${bonusDamage}\n`
 			} else if (chance2.bool({
 					likelihood: (100 * self.chanceToApply)
@@ -131,9 +131,9 @@ export const damageTypes = Object.freeze({
 				})
 				target2.weaponCooldown = crit ? 0 : selfdmgtype.effectDurationMax
 				target.hp -= bonusDamage
-				if (target2 instanceof Player) {
+				try{
 					target2.encDat.TdmgAr[-1] += bonusDamage
-				}
+				}catch(e){}
 				return `${chalk.hex(self.color)('DEFAULT poison damage: ')}$dam${bonusDamage}__________________\ncool${target2.weaponCooldown}_______________\n`
 			} else {
 				return 'MISS@##@#'
@@ -158,9 +158,9 @@ export const damageTypes = Object.freeze({
 						sum: true
 					})
 					target.hp -= bonusDamage
-					if (target2 instanceof Player) {
+					try{
 						target2.encDat.TdmgAr[-1] += bonusDamage
-					}
+					}catch(e){}
 					return `${chalk.hex(self.color)('bonus gravitational wave damage: ')}${bonusDamage}\n`
 				}
 			}
@@ -195,9 +195,9 @@ export const damageTypes = Object.freeze({
 				}
 				--target2.weaponCooldown
 				target.hp -= damage
-				if (target2 instanceof Player) {
+				try{
 					target2.encDat.TdmgAr[-1] += damage
-				}
+				}catch(e){}
 				return `${chalk.hex(self.color)(`${appendStr}`)}`
 			} else if (chance2.bool({
 					likelihood: (100 * (self.chanceToApply + bonusChance))
@@ -209,9 +209,9 @@ export const damageTypes = Object.freeze({
 				})
 				target2.weaponCooldown = crit ? 7 : selfdmgtype.effectDurationMax
 				target.hp -= bonusDamage
-				if (target2 instanceof Player) {
+				try{
 					target2.encDat.TdmgAr[-1] += bonusDamage
-				}
+				}catch(e){}
 				return `${chalk.hex(self.color)('naruto damage dealt: ')}${bonusDamage}\n`
 			} else {
 				return 'MISS@##@#'
@@ -1375,8 +1375,8 @@ const roomWords = Object.freeze([
 const blockingWords = Object.freeze([
 	"obstructing your path",
 	"blocking your way",
-	"clogging the way forwards",
-	"blocking the door",
+	"blocking the way forwards",
+	"blocking the door ahead",
 ])
 //horrible code
 function pickEnemyVerb() {

@@ -1431,7 +1431,7 @@ export async function writeArmour(armourName,term=ImageScreenTerm){
              ${chalk.hex(colour)('Name   : '+(armourName.replace(/_/g, ' ')))}
              ${chalk.greenBright(`AC     : ${ac}`)}
              
-             ${chalk.blueBright(`desc.  : ${'provides protection for'}`)}
+             ${chalk.blueBright(`desc.  : ${'provides protection from'}`)}
                       ${chalk.blueBright('pointy sticks and magic')}\
 `
 	await slowLineWrite(dynamicBox(`\n\n\n\n`,51,false,gradient.mind,'d3d3d3'))

@@ -39,7 +39,10 @@ import {
 	fitLines,
 	fitLinesStr,
 	gradient_scanlines,
-	rollLog
+	rollLog,
+	slowLineWrite,
+	writeGold,
+	writePotion
 } from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
 import {
@@ -1295,6 +1298,8 @@ screen.key('r', function() {
 });
 //test content key listener
 screen.key('y', function() {
+	ImageScreenTerm.term.clear()
+	ImageScreenTerm.term.reset()
 	buttonsContainer.resetScroll()
 	buttonsArray.forEach((button) => {
 		buttonsContainer.remove(button);
@@ -1303,7 +1308,7 @@ screen.key('y', function() {
 	buttonsArray = [];
 	stats.focus();
 	refreshInventory()
-	ImageScreenTerm.term.reset()
+	//ImageScreenTerm.term.reset()
 	createButtons(temp_event1, story);
 	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 	resizeButtons();
@@ -1399,7 +1404,7 @@ await new Promise((r) => setTimeout(r, 1000));
 await drawBanner(weapons.flamberge)
 await drawBanner(weapons.sword)
 await drawBanner()
-await drawBanner()
+
 
 
 // await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff')))
@@ -1411,3 +1416,11 @@ await drawBanner()
 // 	await new Promise(r => setTimeout(r, 100));
 // 	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
 // }
+
+await writePotion(5)
+await drawBanner(weapons.flamberge)
+await writePotion()
+await writeGold(4)
+await writeGold(4000)
+ImageScreenTerm.writeSync("JJKJHK")
+//await writeGold(4)

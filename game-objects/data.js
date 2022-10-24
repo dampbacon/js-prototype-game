@@ -116,7 +116,7 @@ export const damageTypes = Object.freeze({
 				if (target2 instanceof Player) {
 					target2.encDat.TdmgAr[-1] += bonusDamage
 				}
-				return `${chalk.hex(self.color)('DEFAULT poison damage: ')}${bonusDamage}__________________\n${target2.weaponCooldown}_______________\n`
+				return `${chalk.hex(self.color)('DEFAULT poison damage: ')}$dam{bonusDamage}__________________\ncool${target2.weaponCooldown}_______________\n`
 			} else {
 				return 'MISS@##@#'
 			}
@@ -1325,10 +1325,28 @@ Choose your next move wisely.\
 
 
 
+/*
+   ▄▄▄▄███▄▄▄▄    ▄█     ▄████████  ▄████████         ▄████████    ▄████████     ███     
+ ▄██▀▀▀███▀▀▀██▄ ███    ███    ███ ███    ███        ███    ███   ███    ███ ▀█████████▄ 
+ ███   ███   ███ ███▌   ███    █▀  ███    █▀         ███    ███   ███    ███    ▀███▀▀██ 
+ ███   ███   ███ ███▌   ███        ███               ███    ███  ▄███▄▄▄▄██▀     ███   ▀ 
+ ███   ███   ███ ███▌ ▀███████████ ███             ▀███████████ ▀▀███▀▀▀▀▀       ███     
+ ███   ███   ███ ███           ███ ███    █▄         ███    ███ ▀███████████     ███     
+ ███   ███   ███ ███     ▄█    ███ ███    ███        ███    ███   ███    ███     ███     
+  ▀█   ███   █▀  █▀    ▄████████▀  ████████▀         ███    █▀    ███    ███    ▄████▀   
+                                                                  ███    ███             
+*/
 
 
-
-
+export const miscArt=Object.freeze({
+	potion: 
+`\
+ [33m[40m{▄}[m
+ [97m[40m█${chalk.hex('ff2d57')('█')}[97m[40m█[m
+ [37m[40m [97m[40m▀[37m[40m [m\
+`
+,
+})
 
 
 
@@ -1391,7 +1409,7 @@ export const border =
 //shorthand for replacing escape sequences
 Object.defineProperty(String.prototype, 'cleanANSI', {
     value() {
-        return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
+        return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
     }
 });
 
@@ -1412,8 +1430,9 @@ export function dynamicBox(text='', width=20, center=false,gradientFunction=grad
     //console.log(max)
     lines = lines.map((line, ind) => {
 		var diff = max - line.cleanANSI().length;
-		if (ind === 0) {
-			//console.log(line)
+		if (ind === 1) {
+			// console.log(line)
+			// console.log(chalk.hex(vertLn)('│') + line + ' '.repeat(diff) + chalk.hex(vertLn)('│'))
 		}
 		return chalk.hex(vertLn)('│') + line + ' '.repeat(diff) + chalk.hex(vertLn)('│');
 	})

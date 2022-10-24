@@ -270,7 +270,7 @@ export function fitLinesStr(text, width = logs.term.cols - 1) {
 export async function slowLineWrite(multiLineText,term=ImageScreenTerm){
 	let lines=multiLineText.split('\n')
 	for (let i of lines){
-		await new Promise(r => setTimeout(r, 100));
+		await new Promise(r => setTimeout(r, 50));
 		term.writeSync(i+'\n')
 	}
 }
@@ -290,10 +290,45 @@ export async function drawBanner(weap=weapons.newtons_apple, term=ImageScreenTer
 	await(slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity))))
 	term.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
 	for (let i of linesIcon){
-		await new Promise(r => setTimeout(r, 100));
+		await new Promise(r => setTimeout(r, 50));
 		term.writeSync(i+'\n\r'+escRightByNum(2))
 	}
 	term.writeSync(`\n${`\n`.repeat(extraesc)}`)//clear previous banner
+}
+
+export async function writePotion(amount=1,term=ImageScreenTerm){
+	let icon=`\
+${chalk.hex('8b4513')('{▄}')}
+\u001b[97m\u001b[40m█\u001b${chalk.hex('ff2d57')('█')}\u001b[97m\u001b[40m█\u001b[m
+\u001b[37m\u001b[40m \u001b[97m\u001b[40m▀\u001b[37m\u001b[40m \u001b[m\
+`
+	let k=
+`\
+    ${chalk.hex('ff2d57')(`  You found...
+      potions!`)}
+        ${chalk.greenBright(`X ${amount}`)} \
+`
+	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'))
+	term.writeSync('\r'+escUpByNum(5))
+	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,'ff2d57'))
+	term.writeSync('\r'+escUpByNum(4)+escRightByNum(2))
+	let iconLines=icon.split('\n')
+	//ImageScreenTerm.writeSync(ddfs)
+	for (let i of iconLines){
+		await new Promise(r => setTimeout(r, 50));
+		term.writeSync(i+'\n\r'+escRightByNum(2))
+	}
+	term.writeSync('\n')
+}
+
+export async function writeGold(amount,term=ImageScreenTerm){
+let goldStr=
+`\
+${chalk.bold.hex('FFD700')(`You found some gold!`)}
+    ${chalk.greenBright(`qnt : ${amount}gp`)}\
+`
+	await slowLineWrite(dynamicBox(goldStr,20,false,gradient.summer,'FFD700'))
+	//term.writeSync('\n')
 }
 
 

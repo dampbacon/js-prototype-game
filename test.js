@@ -11,6 +11,7 @@ import assert from 'node:assert/strict';
 import {
     DMG_COLOUR,
     dynamicBox,
+    miscArt,
     rarityByWeight,
     weapons
 } from "./game-objects/data.js";
@@ -155,3 +156,25 @@ export let apicon=
 [37m[40m [95m[40m≈[37m[40m [31m[40m▀▀▀[30m[40m[37m[40m [m\
 `
 
+
+
+let hmmmsaf=
+`\
+ ${chalk.hex('8b4513')('{▄}')}
+ \u001b[97m\u001b[40m█\u001b${chalk.hex('ff2d57')('█')}\u001b[97m\u001b[40m█\u001b[m
+ \u001b[37m\u001b[40m \u001b[97m\u001b[40m▀\u001b[37m\u001b[40m \u001b[m\
+`
+console.log(apicon)
+console.log(apicon.cleanANSI())
+//'\033[0m'
+//"oil";
+//"scroll"
+//"potion"
+
+
+//oil
+hmmmsaf=`\
+[37m[40m [33m[40m▄▄[37m[40m [m
+[97m[40m▄[93m[47m▄▄[97m[40m▄[m
+[97m[40m▀[93m[47m▀▀[97m[40m▀[m\
+`

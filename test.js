@@ -148,13 +148,14 @@ function padwithspc (str='', amount=4,first=true,char=' ') {
 }
 export let apicon=
 `\
+
 [95m[40m≈[37m[40m   [92m[40m▌[37m[40m [95m[40m≈≈[37m[40m  [m
 [37m[40m  [31m[40m███[97m[41m▀[97m[40m█[37m[40m [95m[40m≈[37m[40m [m
 [37m[40m [95m[40m≈[31m[40m████[97m[41m▀[37m[40m  [95m[40m≈[m
 [37m[40m [95m[40m≈[37m[40m [31m[40m▀▀▀[30m[40m[37m[40m [m\
 `
 
-export function mkWeaponBan(weapon=weapons.newtons_apple){
+export function mkWeaponBan(weapon=weapons.newtons_apple, vertBarColour='36454f'){
     let wpn=weapon
     let wpnlines=wpn.description.split('\n')
     let testweaponBanner=
@@ -165,7 +166,7 @@ export function mkWeaponBan(weapon=weapons.newtons_apple){
              ${chalk.blueBright(`desc.  :${wpnlines[0]}`)}
                      ${chalk.blueBright(`${wpnlines[1]}${wpnlines[2]?`\n${' '.repeat(21)+wpnlines[2]}`:''}`)}\
 `
-    return dynamicBox(testweaponBanner,51)
-}
+    return dynamicBox(testweaponBanner,51,false, gradient.passion,vertBarColour)
+}//passion
 
 

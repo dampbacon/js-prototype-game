@@ -51,6 +51,7 @@ import {
 	makeRoomText,
 	monsters,
 	pickEnemy,
+	rarityByWeight,
 	weapons,
 } from './game-objects/data.js';
 import {
@@ -188,9 +189,6 @@ let temp_event1 = new game_event({
 	],
 	enemies: [
 		pickEnemy(),
-		pickEnemy(),
-		pickEnemy(),
-		pickEnemy(),
 	],
 })
 let temp_event2 = new game_event({
@@ -218,7 +216,10 @@ let temp_event2 = new game_event({
 		[1, "goto 1", true],
 		//[2,"goto 2",true],
 		//[3,"goto 3 lolololololololollolololololololol",true]
-	]
+	],
+	enemies: [
+		pickEnemy(),
+	],
 })
 let testEventArr = [temp_event1, temp_event2, ]
 //test content
@@ -479,6 +480,14 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	
 	await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 	logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
+
+
+	//
+	// for testing
+	//
+	temp_event1.enemies=[pickEnemy()]
+	temp_event2.enemies=[pickEnemy()]
+
 	
 	resolver()
 }
@@ -1361,15 +1370,8 @@ box.on('click', function() {
 })
 
 //draw test
-let mmmm=weapons.newtons_apple
-let desclines= mmmm.description.split('\n').length
-let extraesc=0
-if(desclines>2){
-	extraesc=desclines-2
-}
+await new Promise((r) => setTimeout(r, 1000));
 
-//ImageScreenTerm.writeSync(mkWeaponBan(mmmm))// if(weapndesc_lines.length>2){+1}
-//ImageScreenTerm.writeSync(escUpByNum(5+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
 async function slowLineWrite(multiLineText){
 	let lines=multiLineText.split('\n')
 	for (let i of lines){
@@ -1377,27 +1379,35 @@ async function slowLineWrite(multiLineText){
 		ImageScreenTerm.writeSync(i+'\n')
 	}
 }
+async function drawBanner(weap=weapons.newtons_apple){
+	let weapon4box=weap
+	let desclines= weapon4box.description.split('\n').length
+	let extraesc=0
+	if(desclines>2){
+		extraesc=desclines-2
+	}
 
-let linesappicon=apicon.split('\n')
+	let linesIcon=apicon.split('\n')
 
-await(slowLineWrite(dynamicBox('\n\n\n\n',51,false,gradient.retro,'ffffff')))
-ImageScreenTerm.writeSync('\r'+escUpByNum(7))
+	await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff')))
+	ImageScreenTerm.writeSync('\r'+escUpByNum(7+extraesc))
 
-await(slowLineWrite(mkWeaponBan(mmmm)))
-ImageScreenTerm.writeSync(escUpByNum(5+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
-for (let i of linesappicon){
-	await new Promise(r => setTimeout(r, 100));
-	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
+	await(slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity))))
+	ImageScreenTerm.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
+	for (let i of linesIcon){
+		await new Promise(r => setTimeout(r, 100));
+		ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
+	}
+	ImageScreenTerm.writeSync(`\n${`\n`.repeat(extraesc)}`)//clear previous banner
 }
+await drawBanner()
 
-ImageScreenTerm.writeSync('\n')//clear previous banner
+// await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff')))
+// ImageScreenTerm.writeSync('\r'+escUpByNum(7+extraesc))
 
-await(slowLineWrite(dynamicBox('\n\n\n\n',51,false,gradient.retro,'ffffff')))
-ImageScreenTerm.writeSync('\r'+escUpByNum(7))
-
-await(slowLineWrite(mkWeaponBan(mmmm)))
-ImageScreenTerm.writeSync(escUpByNum(5+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
-for (let i of linesappicon){
-	await new Promise(r => setTimeout(r, 100));
-	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
-}
+// await(slowLineWrite(mkWeaponBan(mmmm)))
+// ImageScreenTerm.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
+// for (let i of linesappicon){
+// 	await new Promise(r => setTimeout(r, 100));
+// 	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
+// }

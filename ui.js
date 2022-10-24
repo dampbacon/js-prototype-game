@@ -3,6 +3,12 @@ import chalk from "chalk";
 import * as scroll from "./blessed/scroll.cjs";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
 import BlessedContrib from "blessed-contrib";
+import "./blessed/screen.cjs";
+import "./blessed/element.cjs";
+import "./blessed/box.cjs";
+import "./blessed/patches.cjs";
+import "./blessed/node.cjs";
+
 const {
 	blessed
 } = blessedpkg

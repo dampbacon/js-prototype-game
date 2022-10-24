@@ -42,6 +42,7 @@ import {
 	rollLog,
 	slowLineWrite,
 	writeGold,
+	writeOil,
 	writePotion
 } from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
@@ -53,6 +54,7 @@ import {
 	dynamicBox,
 	enemiesArt, escLeftByNum, escRightByNum, escUpByNum,
 	makeRoomText,
+	miscColours,
 	monsters,
 	pickEnemy,
 	rarityByWeight,
@@ -1417,10 +1419,10 @@ await drawBanner()
 // 	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
 // }
 
-await writePotion(5)
-await drawBanner(weapons.flamberge)
-await writePotion()
+// await writePotion(5)
+// await drawBanner(weapons.flamberge)
+// await writePotion()
+// await writeGold(4)
+// await writeGold(4000)
+// ImageScreenTerm.writeSync("JJKJHK")
 await writeGold(4)
-await writeGold(4000)
-ImageScreenTerm.writeSync("JJKJHK")
-//await writeGold(4)

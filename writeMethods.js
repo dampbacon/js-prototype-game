@@ -19,7 +19,7 @@ import lodashC from "lodash.compact";
 import {ImageScreenTerm, logs} from "./ui.js";
 import gradient from 'gradient-string';
 import chalk from "chalk";
-import {dynamicBox, escDownByNum, escLeftByNum, escRightByNum, escUpByNum, rarityByWeight, weapons} from "./game-objects/data.js";
+import {dynamicBox, escDownByNum, escLeftByNum, escRightByNum, escUpByNum, miscColours, rarityByWeight, weapons} from "./game-objects/data.js";
 
 chalk.level = 2;
 
@@ -331,4 +331,28 @@ ${chalk.bold.hex('FFD700')(`You found some gold!`)}
 	//term.writeSync('\n')
 }
 
-
+//effectively a copy of above function but i was to lazy to generalise and alias it
+export async function writeOil(amount=1,term=ImageScreenTerm){
+	let icon=`\
+[37m[40m ${chalk.hex('55342B')('▄▄')}[37m[40m [m
+[97m[40m▄${chalk.bgHex(miscColours.oil)(chalk.hex('ffffff')('▀▀'))}[97m[40m▄[m
+[97m[40m▀${chalk.bgHex('ffffff')(chalk.hex(miscColours.oil)('▀▀'))}[97m[40m▀[m\
+`
+	let k=
+`\
+    ${chalk.hex(miscColours.oil)(`  You found...
+      oil flasks!`)}
+        ${chalk.greenBright(`X ${amount}`)} \
+`
+	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'))
+	term.writeSync('\r'+escUpByNum(5))
+	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,miscColours.oil))
+	term.writeSync('\r'+escUpByNum(4)+escRightByNum(2))
+	let iconLines=icon.split('\n')
+	//ImageScreenTerm.writeSync(ddfs)
+	for (let i of iconLines){
+		await new Promise(r => setTimeout(r, 50));
+		term.writeSync(i+'\n\r'+escRightByNum(2))
+	}
+	term.writeSync('\n')
+}

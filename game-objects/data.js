@@ -58,6 +58,23 @@ Object.freeze(DMG_COLOUR)
 export {
 	DMG_COLOUR
 }
+
+
+export const miscColours=Object.freeze({
+	oil:'3B3131',
+	...DMG_COLOUR,
+	common:'ffffff',
+	uncommon:'1eff00',
+	rare:'0070dd',
+	epic:'a335ee',
+	legendary:'ff8000',
+})
+
+
+
+
+
+
 export const damageTypes = Object.freeze({
 	fire_damage: new dmgTypeClass({
 		name: DMG_TYPE.FIRE,
@@ -420,11 +437,11 @@ export {
 	ARMOURmap
 };
 const rarityColours = [
-	'ffffff',
-	'1eff00',
-	'0070dd',
-	'a335ee',
-	'ff8000',
+	miscColours.common,
+	miscColours.uncommon,
+	miscColours.rare,
+	miscColours.epic,
+	miscColours.legendary,
 ]
 Object.freeze(rarityColours)
 export {
@@ -1347,9 +1364,6 @@ export const miscArt=Object.freeze({
 `
 ,
 })
-
-
-
 
 
 

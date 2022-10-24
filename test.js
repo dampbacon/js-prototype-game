@@ -19,6 +19,7 @@ import { copyMonster, monster } from "./game-objects/mobs.js";
 import gradient from 'gradient-string';
 import longest from 'longest';
 import chalk, { Chalk } from "chalk";
+import { slowLineWrite } from "./writeMethods.js";
 
 //test array values
 // console.log(weaponsArray)
@@ -158,12 +159,12 @@ export let apicon=
 
 
 
-let hmmmsaf=
-`\
- ${chalk.hex('8b4513')('{▄}')}
- \u001b[97m\u001b[40m█\u001b${chalk.hex('ff2d57')('█')}\u001b[97m\u001b[40m█\u001b[m
- \u001b[37m\u001b[40m \u001b[97m\u001b[40m▀\u001b[37m\u001b[40m \u001b[m\
-`
+// let hmmmsaf=
+// `\
+//  ${chalk.hex('8b4513')('{▄}')}
+//  \u001b[97m\u001b[40m█\u001b${chalk.hex('ff2d57')('█')}\u001b[97m\u001b[40m█\u001b[m
+//  \u001b[37m\u001b[40m \u001b[97m\u001b[40m▀\u001b[37m\u001b[40m \u001b[m\
+// `
 console.log(apicon)
 console.log(apicon.cleanANSI())
 //'\033[0m'
@@ -173,7 +174,7 @@ console.log(apicon.cleanANSI())
 
 
 //oil
-hmmmsaf=`\
+let hmmmsaf=`\
 [37m[40m [33m[40m▄▄[37m[40m [m
 [97m[40m▄[93m[47m▄▄[97m[40m▄[m
 [97m[40m▀[93m[47m▀▀[97m[40m▀[m\

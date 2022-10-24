@@ -1398,7 +1398,7 @@ await new Promise((r) => setTimeout(r, 1000));
 
 
 await drawBanner(weapons.flamberge)
-await drawBanner()
+await drawBanner(weapons.sword)
 await drawBanner()
 await drawBanner()
 

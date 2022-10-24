@@ -280,7 +280,7 @@ export const weapons = Object.freeze({
 		dmgType: damageTypes.fire_damage,
 		rarity: .3,
 		enchant: 0,
-		description: 'a flaming flamberge, powerful',
+		description: 'a flaming flamberge, powerful\nsword + fire dmg',
 		art: weaponART.swordHandle,
 	}),
 	flaming_sword: new weapon({

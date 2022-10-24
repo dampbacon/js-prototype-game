@@ -164,7 +164,7 @@ export function mkWeaponBan(weapon=weapons.newtons_apple, vertBarColour='36454f'
              ${chalk.greenBright(`dmgDie :${wpn.dmgDie}`)}
              ${chalk.hex(wpn.dmgType.color)('dmgTyp :'+wpn.dmgType.name)}
              ${chalk.blueBright(`desc.  :${wpnlines[0]}`)}
-                     ${chalk.blueBright(`${wpnlines[1]}${wpnlines[2]?`\n${' '.repeat(21)+wpnlines[2]}`:''}`)}\
+                     ${chalk.blueBright(`${wpnlines[1]?wpnlines[1]:''}${wpnlines[2]?`\n${' '.repeat(21)+wpnlines[2]}`:''}`)}\
 `
     return dynamicBox(testweaponBanner,51,false, gradient.passion,vertBarColour)
 }//passion

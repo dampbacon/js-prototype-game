@@ -254,14 +254,14 @@ export function fitLinesStr(text, width = logs.term.cols - 1) {
 	}
 	return multiline
 }
-export async function slowLineWrite(multiLineText){
+export async function slowLineWrite(multiLineText,term=ImageScreenTerm){
 	let lines=multiLineText.split('\n')
 	for (let i of lines){
 		await new Promise(r => setTimeout(r, 100));
-		ImageScreenTerm.writeSync(i+'\n')
+		term.writeSync(i+'\n')
 	}
 }
-export async function drawBanner(weap=weapons.newtons_apple){
+export async function drawBanner(weap=weapons.newtons_apple, term=ImageScreenTerm){
 	let weapon4box=weap
 	let desclines= weapon4box.description.split('\n').length
 	let extraesc=0
@@ -272,13 +272,13 @@ export async function drawBanner(weap=weapons.newtons_apple){
 	let linesIcon=weapon4box.art.split('\n')
 
 	await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff')))
-	ImageScreenTerm.writeSync('\r'+escUpByNum(7+extraesc))
+	term.writeSync('\r'+escUpByNum(7+extraesc))
 
 	await(slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity))))
-	ImageScreenTerm.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
+	term.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
 	for (let i of linesIcon){
 		await new Promise(r => setTimeout(r, 100));
-		ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
+		term.writeSync(i+'\n\r'+escRightByNum(2))
 	}
-	ImageScreenTerm.writeSync(`\n${`\n`.repeat(extraesc)}`)//clear previous banner
+	term.writeSync(`\n${`\n`.repeat(extraesc)}`)//clear previous banner
 }

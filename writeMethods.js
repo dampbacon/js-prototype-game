@@ -287,10 +287,10 @@ export async function drawBanner(weap=weapons.newtons_apple, term=ImageScreenTer
 	term.writeSync('\r'+escUpByNum(7+extraesc))
 
 	await(slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity)),term))
-	term.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
+	term.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(1))//fix for multiline of 3
 	for (let i of linesIcon){
 		await new Promise(r => setTimeout(r, 50));
-		term.writeSync(i+'\n\r'+escRightByNum(2))
+		term.writeSync(i+'\n\r'+escRightByNum(1))
 	}
 	term.writeSync(`\n${`\n`.repeat(extraesc)}`)//clear previous banner
 }

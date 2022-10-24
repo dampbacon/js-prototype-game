@@ -9,6 +9,8 @@ import assert from 'node:assert/strict';
 // console.log(testplayer.weapon.dmgType.applyEffectWF(testplayer,false,testplayer))}
 
 import {
+    ARMOURmap,
+    ArmourSubsetMaker,
     DMG_COLOUR,
     DMG_TYPE,
     dynamicBox,
@@ -186,3 +188,5 @@ let blah=`\
 `
 console.log(hmmmsaf)
 console.log(blah)
+console.log(ARMOURmap)
+console.log(ArmourSubsetMaker(16,22))

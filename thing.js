@@ -484,8 +484,8 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	}
 
 
-
-	
+    //later if in cave?? or toggleable
+	thePlayer.depth++
 	await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 	logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
 
@@ -718,7 +718,8 @@ async function clearCombat() {
 
 
 function pickTreasure(){
-
+	let options = ["gold", "items", "weapon", "armour", "altar"]
+	let weights_array =[5,1,1,1,1]
 }
 
 
@@ -935,11 +936,11 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 				clearCombat()
 			} else {
 				if (monster.polymorph) {
-					if ( /*room.forceHostile == -1 &&*/ monster.aggro < 12) {
+					if (monster.aggro < 12) {
 						// friendly
 						monster.polymorph = false;
 						monsterHostile = false;
-					} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/ ) {
+					} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12) {
 						// hostile
 						monster.polymorph = false;
 						monsterHostile = true;

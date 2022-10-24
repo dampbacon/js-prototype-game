@@ -414,6 +414,7 @@ export const ARMOUR = Object.freeze({
 	PADDED_ARMOUR: 'PADDED_ARMOUR',
 	CAMBRIDGE_BLUE_ROBE: 'CAMBRIDGE_BLUE_ROBE',
 	LABCOAT: 'LABCOAT',
+	HALF_PLATE: 'HALF_PLATE',
 	SPLINT: 'SPLINT',
 	PLATE: 'PLATE',
 	GANDALFS_WHITE_ROBES: 'GANDALFS_WHITE_ROBES',
@@ -425,9 +426,10 @@ const ARMOURmap = {}
 ARMOURmap[ARMOUR.LOIN_CLOTH] = 10
 ARMOURmap[ARMOUR.TRAVELLERS_CLOTHES] = 10
 ARMOURmap[ARMOUR.OXFORD_BLUE_ROBE] = 12
-ARMOURmap[ARMOUR.PADDED_ARMOUR] = 12
+ARMOURmap[ARMOUR.PADDED_ARMOUR] = 14
 ARMOURmap[ARMOUR.CAMBRIDGE_BLUE_ROBE] = 11
 ARMOURmap[ARMOUR.LABCOAT] = 10
+ARMOURmap[ARMOUR.HALF_PLATE] = 17
 ARMOURmap[ARMOUR.SPLINT] = 16
 ARMOURmap[ARMOUR.PLATE] = 18
 ARMOURmap[ARMOUR.GANDALFS_WHITE_ROBES] = 20
@@ -447,6 +449,14 @@ const rarityColours = [
 Object.freeze(rarityColours)
 export {
 	rarityColours
+}
+
+export function ArmourSubsetMaker(min,max){
+	let k={d:'f',e:'s'}
+	let subset = Object.keys(ARMOURmap).filter((key) => {
+		return ARMOURmap[key] >= min && ARMOURmap[key] <= max
+	})
+	return subset
 }
 export function ArmourRarityColour(ac) {
 	//let colour=''

@@ -180,4 +180,9 @@ let hmmmsaf=`\
 [37m[40m ${chalk.bgHex('ffffff')(chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])('φ♫§≈'))}[37m[40m [m
 [37m[40m [97m[40m▀[37m[40m▀▀▀▀[m\
 `
+let blah=`\
+[37m[40m█▒▒▒▒█[m
+[37m[40m ▒▒▒▒ [m\
+`
 console.log(hmmmsaf)
+console.log(blah)

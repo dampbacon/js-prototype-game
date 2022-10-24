@@ -48,6 +48,7 @@ import {
 } from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
 import {
+	ARMOUR,
 	ARMOURmap,
 	ArmourRarityColour,
 	DMG_COLOUR,
@@ -1405,11 +1406,42 @@ await new Promise((r) => setTimeout(r, 1000));
 
 
 await drawBanner(weapons.flamberge)
-await drawBanner(weapons.sword)
+//await drawBanner(weapons.sword)
 await drawBanner()
 
 
-await writeGold(4)
-await writePotion(4)
+//await writeGold(4)
+//await writePotion(4)
 await writeOil(4)
 await writeScroll(4)
+
+export async function writeArmour(armourName,term=ImageScreenTerm){
+	
+	let icon=`\
+[90m[40m▐[90m[47m~~▒░▒░▒~~[90m[40m▌[37m[40m  [m
+[90m[47m║░Ω░▒░▒░Ω░║[37m[40m  [m
+[90m[40m‼Σ▐[90m[47m▒░▒░▒[90m[40m▌Σ‼[37m[40m  [m
+[37m[40m  [90m[40m▐[90m[47m░▒░▒░[90m[40m▌[37m[40m    [m
+[37m[40m  [90m[40m▐[90m[47m§§§§§[90m[40m▌[37m[40m    [m\
+`
+	let k=
+`\
+             ${chalk.hex(ArmourRarityColour(ARMOURmap[armourName]))('Name   : '+(armourName.replace(/_/g, ' ')))}
+             ${chalk.greenBright(`AC     : ${ARMOURmap[armourName]}`)}
+             ${chalk.hex('ff0000')('itemTyp: '+'suit of armour')}
+             ${chalk.blueBright(`desc.  : ${'wpnlines[0]'}`)}
+             \
+`
+	await slowLineWrite(dynamicBox(`\n\n\n\n`,45,false,gradient.cristal,'d3d3d3'))
+	term.writeSync('\r'+escUpByNum(7))
+	await slowLineWrite(dynamicBox(k,45,false,gradient.summer,'ff2d57'))
+	term.writeSync('\r'+escUpByNum(6)+escRightByNum(1))
+	let iconLines=icon.split('\n')
+	//ImageScreenTerm.writeSync(ddfs)
+	for (let i of iconLines){
+		await new Promise(r => setTimeout(r, 50));
+		term.writeSync(i+'\n\r'+escRightByNum(1))
+	}
+	term.writeSync('\n')
+}
+await writeArmour(ARMOUR.DENSE_PERSONALITY)

@@ -13,7 +13,6 @@
 // XTermTestv2.term.onScroll((apple) => { scrollPosition = apple.valueOf() })
 //
 //  TERMINAL WRITE FUNCTIONS
-//  MOVE TO SEPERATE FILE LATER
 //
 import lodashC from "lodash.compact";
 import {ImageScreenTerm, logs} from "./ui.js";
@@ -357,7 +356,6 @@ export async function writeOil(amount=1,term=ImageScreenTerm){
 	term.writeSync('\n')
 }
 //another lazy copy
-
 export async function writeScroll(amount=1,term=ImageScreenTerm){
 	let icon=`\
 [37m[40m▀${chalk.bgHex('ffffff')(chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])('☼§≈♫'))}[37m[40m [m

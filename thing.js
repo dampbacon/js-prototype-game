@@ -59,7 +59,6 @@ import {
 	combatMetrics
 } from './game-objects/metrics.js';
 import wrap from 'word-wrap';
-import { apicon, mkWeaponBan } from './test.js';
 import { weapon } from './game-objects/items.js';
 chalk.level = 2;
 const {

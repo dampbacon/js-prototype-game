@@ -20,7 +20,6 @@ import {ImageScreenTerm, logs} from "./ui.js";
 import gradient from 'gradient-string';
 import chalk from "chalk";
 import {dynamicBox, escDownByNum, escLeftByNum, escRightByNum, escUpByNum, rarityByWeight, weapons} from "./game-objects/data.js";
-import { mkWeaponBan } from "./test.js";
 
 chalk.level = 2;
 
@@ -242,6 +241,20 @@ async function scanlines(terminal = ImageScreenTerm, text = '', speed = 5, color
 	}
 }
 
+export function mkWeaponBan(weapon=weapons.newtons_apple, vertBarColour='36454f'){
+    let wpn=weapon
+    let wpnlines=wpn.description.split('\n')
+    let testweaponBanner=
+`\
+             ${chalk.hex(rarityByWeight(wpn.rarity))('Name   :'+(wpn.name.replace(/_/g, ' ')))}
+             ${chalk.greenBright(`dmgDie :${wpn.dmgDie}`)}
+             ${chalk.hex(wpn.dmgType.color)('dmgTyp :'+wpn.dmgType.name)}
+             ${chalk.blueBright(`desc.  :${wpnlines[0]}`)}
+                     ${chalk.blueBright(`${wpnlines[1]?wpnlines[1]:''}${wpnlines[2]?`\n${' '.repeat(21)+wpnlines[2]}`:''}`)}\
+`
+    return dynamicBox(testweaponBanner,51,false, gradient.passion,vertBarColour)
+}//passion
+
 export function fitLinesStr(text, width = logs.term.cols - 1) {
 	let multiline = ``
 	let lorem_lines = fitLines(text, width)
@@ -282,3 +295,5 @@ export async function drawBanner(weap=weapons.newtons_apple, term=ImageScreenTer
 	}
 	term.writeSync(`\n${`\n`.repeat(extraesc)}`)//clear previous banner
 }
+
+

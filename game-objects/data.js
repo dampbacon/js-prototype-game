@@ -62,6 +62,7 @@ export {
 
 export const miscColours=Object.freeze({
 	oil:'3B3131',
+	potionPink:'ff2d57',
 	...DMG_COLOUR,
 	common:'ffffff',
 	uncommon:'1eff00',

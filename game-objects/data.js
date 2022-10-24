@@ -240,7 +240,14 @@ export const weaponART = Object.freeze({
 [37m[40m [95m[40m≈[31m[40m████[97m[41m▀[37m[40m  [95m[40m≈[m
 [37m[40m [95m[40m≈[37m[40m [31m[40m▀▀▀[30m[40m[37m[40m [m\
 `,
-
+	swordHandle:
+`\
+[37m[40m     [90m[40m╔[37m[40m╛    [m
+[37m[40m     [90m[40m╟==≈≈≈[m
+[90m[43m▄[30m[43m▒[90m[43m▄[30m[43m▒[90m[43m▄[90m[40m╠[37m[40m════[90m[40m═[m
+[37m[40m     [90m[40m╟==≈≈≈[m
+[37m[40m     [90m[40m╚[37m[40m╕    [m\
+`
 
 
 })
@@ -273,7 +280,8 @@ export const weapons = Object.freeze({
 		dmgType: damageTypes.fire_damage,
 		rarity: .3,
 		enchant: 0,
-		description: 'a flaming flamberge, powerful'
+		description: 'a flaming flamberge, powerful',
+		art: weaponART.swordHandle,
 	}),
 	flaming_sword: new weapon({
 		name: 'flaming_sword',

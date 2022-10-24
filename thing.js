@@ -1397,7 +1397,7 @@ logs.writeSync("TESTING SANDBOX, PRESS Y AFTER ITEMS WRITTEN \nTO GO TO COMBAT T
 await new Promise((r) => setTimeout(r, 1000));
 
 
-await drawBanner()
+await drawBanner(weapons.flamberge)
 await drawBanner()
 await drawBanner()
 await drawBanner()

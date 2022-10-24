@@ -43,7 +43,8 @@ import {
 	slowLineWrite,
 	writeGold,
 	writeOil,
-	writePotion
+	writePotion,
+	writeScroll
 } from "./writeMethods.js";
 import XTermNew from "./blessed-xterm/blessed-xterm.js";
 import {
@@ -1408,21 +1409,7 @@ await drawBanner(weapons.sword)
 await drawBanner()
 
 
-
-// await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff')))
-// ImageScreenTerm.writeSync('\r'+escUpByNum(7+extraesc))
-
-// await(slowLineWrite(mkWeaponBan(mmmm)))
-// ImageScreenTerm.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(2))//fix for multiline of 3
-// for (let i of linesappicon){
-// 	await new Promise(r => setTimeout(r, 100));
-// 	ImageScreenTerm.writeSync(i+'\n\r'+escRightByNum(2))
-// }
-
-// await writePotion(5)
-// await drawBanner(weapons.flamberge)
-// await writePotion()
-// await writeGold(4)
-// await writeGold(4000)
-// ImageScreenTerm.writeSync("JJKJHK")
 await writeGold(4)
+await writePotion(4)
+await writeOil(4)
+await writeScroll(4)

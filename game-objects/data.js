@@ -134,7 +134,7 @@ export const damageTypes = Object.freeze({
 				if (target2 instanceof Player) {
 					target2.encDat.TdmgAr[-1] += bonusDamage
 				}
-				return `${chalk.hex(self.color)('DEFAULT poison damage: ')}$dam{bonusDamage}__________________\ncool${target2.weaponCooldown}_______________\n`
+				return `${chalk.hex(self.color)('DEFAULT poison damage: ')}$dam${bonusDamage}__________________\ncool${target2.weaponCooldown}_______________\n`
 			} else {
 				return 'MISS@##@#'
 			}

@@ -665,15 +665,15 @@ async function clearCombat() {
 		left: 1,
 		top: 1,
 		name: 'gotoTreasure',
-		content: chalk.blue(`search for loot`), //make it flash
+		content: chalk.hex('ffffff')(`search for loot`), //make it flash
 		//shadow: true,
 		style: {
-			bg: `#${DMG_COLOUR[DMG_TYPE.HOLY]}`,
+			bg: `#${miscColours.epic}`,
 			focus: {
-				bg: `#D37FE5`,
+				bg: `#${miscColours.legendary}`,
 			},
 			hover: {
-				bg: `#D37FE5`,
+				bg: `#${miscColours.legendary}`,
 			},
 		},
 	})
@@ -981,7 +981,7 @@ ${chalk.bold.white(Math.abs(thePlayer.basedamage))}\
 ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe add damage die
 		//shadow: true,
 		style: {
-			bg: '#5A5A5A',
+			bg: '#000072',
 			focus: {
 				bg: '#880808',
 			},
@@ -1007,7 +1007,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 			`${chalk.bold.greenBright(`walk past ${thePlayer.encDat.enmyName}\nand continue onwards`)}`,
 		//shadow: true,
 		style: {
-			bg: '#5A5A5A',
+			bg: '#000072',
 			focus: {
 				bg: '#880808',
 			},
@@ -1032,7 +1032,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 		content: `chat up ${thePlayer.dex > -1 ? chalk.bold.greenBright('cha check') : chalk.bold.redBright('cha check')}`,
 		//shadow: true,
 		style: {
-			bg: '#5A5A5A',
+			bg: '#000072',
 			focus: {
 				bg: '#880808',
 			},
@@ -1059,7 +1059,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 			content: `use potion, ${thePlayer.potions} left`,
 			//shadow: true,
 			style: {
-				bg: '#5A5A5A',
+				bg: '#000072',
 				focus: {
 					bg: '#880808',
 				},
@@ -1087,7 +1087,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 			content: `throw oil, ${thePlayer.oil} left`,
 			//shadow: true,
 			style: {
-				bg: '#5A5A5A',
+				bg: '#000072',
 				focus: {
 					bg: '#880808',
 				},
@@ -1115,7 +1115,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 			content: `use scroll, ${thePlayer.scrolls} left`,
 			//shadow: true,
 			style: {
-				bg: '#5A5A5A',
+				bg: '#000072',
 				focus: {
 					bg: '#880808',
 				},

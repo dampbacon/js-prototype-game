@@ -394,6 +394,14 @@ function pickRandom(items, weights) {
 	//copy.dmgType=damageTypes[copy.dmgType.name]
 	return copy
 }
+
+export function weaponSubset(min,max) {
+	let copy = _.cloneDeep(weaponsArray)
+	copy = copy.filter((item) => {
+		return item.rarity >= min && item.rarity <= max
+	})
+	return copy
+}
 /*
 
    ▄████████    ▄████████   ▄▄▄▄███▄▄▄▄    ▄██████▄  ███    █▄     ▄████████ 

@@ -17,7 +17,8 @@ import {
     miscArt,
     miscColours,
     rarityByWeight,
-    weapons
+    weapons,
+    weaponSubset
 } from "./game-objects/data.js";
 import { copyMonster, monster } from "./game-objects/mobs.js";
 import gradient from 'gradient-string';
@@ -190,3 +191,4 @@ console.log(hmmmsaf)
 console.log(blah)
 console.log(ARMOURmap)
 console.log(ArmourSubsetMaker(16,22))
+console.log(weaponSubset(0,0.4))

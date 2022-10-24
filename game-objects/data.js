@@ -578,7 +578,7 @@ export const ScrollsAll = Object.freeze({
 		name: 'heal',
 		dmgTypeE: DMG_TYPE.HOLY,
 		targetplayer: true,
-		rarity: 0.1,
+		rarity: 0.2,
 		description: 'A scroll that heals the player',
 		scrollFunction: (player, params = {}) => {
 			let heal = chance2.rpg('2d8', {
@@ -603,7 +603,7 @@ export const ScrollsAll = Object.freeze({
 		name: 'vitalize',
 		dmgTypeE: DMG_TYPE.HOLY,
 		targetplayer: true,
-		rarity: 0.02,
+		rarity: 0.08,
 		description: 'A scroll that strengthens the players life force',
 		scrollFunction: (player, params = {}) => {
 			let hpInc = chance2.rpg('1d6', {

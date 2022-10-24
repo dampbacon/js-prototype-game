@@ -1361,6 +1361,18 @@ const verbOpts = Object.freeze([
 	"looming",
 	"snoozing",
 ])
+const throughAlt = Object.freeze([
+	"through",
+	"along",
+	"past",
+	"between"
+])
+const roomWords = Object.freeze([
+	"room",
+	"area",
+	"chamber",
+])
+//horrible code
 export function pickEnemyVerb() {
 	return monsterRandom.pickone(verbOpts)
 }
@@ -1373,12 +1385,18 @@ export function pickMoveWord() {
 export function pickEnemyAdjective() {
 	return monsterRandom.pickone(enemyAdjective)
 }
+export function pickThroughAlt() {
+	return monsterRandom.pickone(throughAlt)
+}
+export function pickRoomWord() {
+	return monsterRandom.pickone(roomWords)
+}
 export function makeRoomText(monster) {
 	let roomText =
 		`\
-you attempt to ${pickMoveWord()} your way through the ${pickPathName()} to get to the next room.    
+you attempt to ${pickMoveWord()} your way ${pickThroughAlt()} the ${pickPathName()} to get to the next ${pickRoomWord()}.    
 A ${pickEnemyAdjective()} ${monster.name} is ${pickEnemyVerb()} here... obstructing your path.
-Choose your next move wisely.\
+Choose your next move.\
 `
 	return roomText
 }

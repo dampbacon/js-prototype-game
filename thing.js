@@ -1416,7 +1416,7 @@ await writeOil(4)
 await writeScroll(4)
 
 export async function writeArmour(armourName,term=ImageScreenTerm){
-	
+	//later make rarity change
 	let icon=`\
 [90m[40m▐[90m[47m~~▒░▒░▒~~[90m[40m▌[37m[40m  [m
 [90m[47m║░Ω░▒░▒░Ω░║[37m[40m  [m
@@ -1424,17 +1424,19 @@ export async function writeArmour(armourName,term=ImageScreenTerm){
 [37m[40m  [90m[40m▐[90m[47m░▒░▒░[90m[40m▌[37m[40m    [m
 [37m[40m  [90m[40m▐[90m[47m§§§§§[90m[40m▌[37m[40m    [m\
 `
+	let ac=ARMOURmap[armourName]
+	let colour=ArmourRarityColour(ac)
 	let k=
 `\
-             ${chalk.hex(ArmourRarityColour(ARMOURmap[armourName]))('Name   : '+(armourName.replace(/_/g, ' ')))}
-             ${chalk.greenBright(`AC     : ${ARMOURmap[armourName]}`)}
-             ${chalk.hex('ff0000')('itemTyp: '+'suit of armour')}
-             ${chalk.blueBright(`desc.  : ${'wpnlines[0]'}`)}
-             \
+             ${chalk.hex(colour)('Name   : '+(armourName.replace(/_/g, ' ')))}
+             ${chalk.greenBright(`AC     : ${ac}`)}
+             
+             ${chalk.blueBright(`desc.  : ${'provides protection for'}`)}
+                      ${chalk.blueBright('pointy sticks and magic')}\
 `
-	await slowLineWrite(dynamicBox(`\n\n\n\n`,45,false,gradient.cristal,'d3d3d3'))
+	await slowLineWrite(dynamicBox(`\n\n\n\n`,51,false,gradient.mind,'d3d3d3'))
 	term.writeSync('\r'+escUpByNum(7))
-	await slowLineWrite(dynamicBox(k,45,false,gradient.summer,'ff2d57'))
+	await slowLineWrite(dynamicBox(k,51,false,gradient.passion,colour))
 	term.writeSync('\r'+escUpByNum(6)+escRightByNum(1))
 	let iconLines=icon.split('\n')
 	//ImageScreenTerm.writeSync(ddfs)

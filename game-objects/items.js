@@ -68,8 +68,16 @@ export class weapon {
         this.art=art?art:weaponART.swordHandle;//default art
 	}
 }
-// export class MakeScroll{
-// }
+
+
+//
+//
+//
+//
+//
+// MAKE ENUM FOR SCROLL TAGS
+// ADD TAGS TO SCROLLS ON CREATION INSTEAD OF BOOLS
+//
 export class Scroll {
 	constructor({
 		dmgTypeE,

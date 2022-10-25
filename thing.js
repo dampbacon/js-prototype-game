@@ -715,9 +715,11 @@ async function clearCombat() {
 	// make it flash
 	if (!death && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
 		treasure()
+		if (thePlayer.potions > 0)potionButtonGeneric();
 		await waitForTreasure();
 	} else if (!death && thePlayer.encDat.peacefullClr) {
 		MakeContinueButton()
+		if (thePlayer.potions > 0)potionButtonGeneric();
 		await waitForTreasure();
 	}
 	thePlayer.encDat = null
@@ -1436,6 +1438,77 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 	stats.focus()
 	screen.render()
 }
+
+
+
+function potionButtonGeneric() {
+	let potion= new blessedpkg.button({
+		parent: buttonsContainer,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'potion',
+		content: `use potion, ${thePlayer.potions} left`,
+		//shadow: true,
+		style: {
+			bg: '#000072',
+			focus: {
+				bg: '#880808',
+			},
+			hover: {
+				bg: '#880808',
+			},
+		},
+	})
+	buttonsArray.push(potion)
+	screen.render()
+	resizeButtons()
+	potion.on('press', () => {
+		let heal = chance2.rpg('2d4', {
+			sum: true
+		}) + 4
+		logs.writeSync(thePlayer.hp + " " + thePlayer.hpMax)
+		if ((thePlayer.hp + heal) > thePlayer.hpMax) {
+			logs.writeSync(`${chalk.yellow(`You drink a potion! you heal for ${thePlayer.hpMax-thePlayer.hp} hp!`)}\n`);
+		} else {
+			logs.writeSync(`${chalk.yellow(`You drink a potion! you heal for ${heal} hp!`)}\n`);
+		}
+		thePlayer.increaseHP(heal)
+		thePlayer.potions--
+		refreshStats()
+		refreshInventory()
+		if (thePlayer.potions < 1) {
+			potion.destroy()
+		}else{
+			potion.setContent(`use potion, ${thePlayer.potions} left`)
+		}
+		stats.focus()
+		screen.render()
+	})
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //ESC[?25l	make cursor invisible
 //ESC[?25h	make cursor visible
 //

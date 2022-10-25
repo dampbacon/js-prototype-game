@@ -69,9 +69,9 @@ export class Player {
 		//redundant
 		this.ac = this.armour ? this.armour : 10
 		//distance travelled
-		this.depth = 0;
+		this.depth = 1;
 		//depth used for events
-		this.actualDepth = 0;
+		this.actualDepth = 1;
 		this.gold = 0;
 		this.oil = 5;
 		//later include identify potion mechanic

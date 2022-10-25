@@ -72,6 +72,7 @@ export const logs = new XTermNew({
 	keys: true,
 	mouse: true,
 	border: 'line',
+	label: chalk.hex('323232')("scroll, mouseWheel or click pgDn/pgUp"),
 	style: {
 		label: {
 			bold: true

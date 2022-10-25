@@ -568,7 +568,7 @@ async function combat(combatEvent, enemy) {
 	logs.writeSync(escUpByNum(1))
 	logs.writeSync(`\n${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}`);
 	logs.writeSync(`\n${chalk.hex('ECE236')(`Combat Start!`)}`);
-	logs.writeSync(`\n${chalk.hex('E51B2C')(`#`.repeat(logs.term.cols - 1))}\n`);
+	logs.writeSync(`\n${chalk.hex(miscColours.darkWood)(`@`.repeat(logs.term.cols - 1))}\n`);
 	thePlayer.encDat.enmyName = monster.name
 	thePlayer.encDat.enemy = monster
 	ImageScreenTerm.reset()
@@ -642,7 +642,7 @@ async function clearCombat() {
 	thePlayer.weaponCooldown = 0
 	ImageScreenTerm.removeLabel()
 	clearButtons();
-	logs.writeSync(`${chalk.hex('E51B2C')(`#`.repeat(logs.term.cols - 1))}\n`);
+	logs.writeSync(`${chalk.hex(miscColours.darkWood)(`@`.repeat(logs.term.cols - 1))}\n`);
 	logs.writeSync(`${chalk.hex('ECE236')(`You ${thePlayer.encDat.peacefullClr?'cleared':'defeated'} the enemy!`)}\n`);
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
 
@@ -675,7 +675,7 @@ async function clearCombat() {
 	}
 
 	//temp
-	await new Promise(r => setTimeout(r, 2000));
+	//await new Promise(r => setTimeout(r, 2000));
 
 
 
@@ -719,6 +719,9 @@ async function clearCombat() {
 			clearButtons()
 			ImageScreenTerm.term.reset()
 			screen.render()
+			logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
+			logs.writeSync('searching for loot...\n')
+			logs.writeSync(`${chalk.hex('1B1B1B')(`.`.repeat(logs.term.cols - 1))}\n`);
 			//move somewhere else
 			let treasure = pickTreasure()
 			switch (treasure){
@@ -727,9 +730,11 @@ async function clearCombat() {
 					goldDice += ((thePlayer.dex>0)?thePlayer.dex:0);
 					let gold =chance4.rpg(`${goldDice}d6`, {sum: true})
 					await writeGold(gold)
+					logs.writeSync(`found ${gold}gp\n`)
 					thePlayer.gold += gold
 					refreshInventory()
 					ImageScreenTerm.writeSync("TESTgold\n")
+					logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
 					MakeContinueButton()
 					break
 				}
@@ -754,13 +759,16 @@ async function clearCombat() {
 								let amount = chance4.d4()
 								thePlayer.potions += amount
 								refreshInventory()
+								logs.writeSync(`found ${amount} potions\n`)
 								await writePotion(amount)
 								break
 							}
 							case 'scroll':{
+								//later make weighted random
 								let amount = chance4.d4()
 								thePlayer.scrolls += amount
 								refreshInventory()
+								logs.writeSync(`found ${amount} scrolls\n`)
 								await writeScroll(amount)
 								break
 							}
@@ -768,11 +776,13 @@ async function clearCombat() {
 								let amount = chance4.d6()
 								thePlayer.oil += amount
 								refreshInventory()
+								logs.writeSync(`found ${amount} oil flasks\n`)
 								await writeOil(amount)
 								break
 							}	
 						}	
 					}
+					logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
 					MakeContinueButton()
 				}
 				// make these call a function, its more complex than above functions
@@ -815,7 +825,7 @@ async function clearCombat() {
 
 function pickTreasure(){
 	let options = ["gold", "items"]// "weapon", "armour", "altar"]
-	let weights_array =[1,10]//1,1,1]
+	let weights_array =[4,1]//1,1,1]
 	return chance4.weighted(options, weights_array)
 }
 
@@ -901,9 +911,9 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 	} else if (firstLoop && !monsterHostile) {
 		//change to random strings later
 		logs.writeSync(chalk.blueBright(monster.name) + gradient.pastel(" is not hostile") + '\n')
-		logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
+		logs.writeSync(`${chalk.hex('1B1B1B')(`.`.repeat(logs.term.cols - 1))}\n`);
 	}
-	createCombatButtons(monsterHostile)
+	if (!death)createCombatButtons(monsterHostile)
 	combatButtonsMap['attack'].on('press', async () => {
 		if ((logs.term.rows - 2) <= logs.term.buffer.active.cursorY) {
 			logs.writeSync(escUpByNum(1))
@@ -1062,6 +1072,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 				monster = player.encDat.enemy
 			}
 			//console.log(monster)
+			refreshStats()
 			refreshInventory()
 			await new Promise(resolve => setTimeout(resolve, 100))
 			if (monster.hp <= 0) {
@@ -1338,9 +1349,7 @@ ${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
 {bold}${chalk.red("Armour :")}{/bold}
 ${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armourName.replace(/_/g, ' '))}\
  ${thePlayer.armourMagic!==0?`{bold}${chalk.yellow (`+${thePlayer.armourMagic}`)}{/bold}`:''}
-
-debug 	   depth: ${player.depth}
-debugACTUALdepth: ${player.actualDepth}
+debug depth: ${player.depth} act: ${player.actualDepth}
 ${chalk.magenta("XP : ")}${"200/400"}
 ${chalk.magenta("Lvl: ")}${thePlayer.level}
 

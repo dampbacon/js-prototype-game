@@ -929,7 +929,7 @@ async function ComplexTreasure(strOrObject = weapons.flamberge, weapon = true) {
 	screen.render()
 	resizeButtons()
 	logs.writeSync(`${chalk.hex(weapon?rarityByWeight(strOrObject.rarity):ArmourRarityColour(ARMOURmap[strOrObject]))(itemName)} found\n`)
-	const equipFont = cfonts.render('equiped:', {
+	const equipFont = cfonts.render('equiped', {
 		gradient: 'red,blue',
 		font: 'block',
 		colors: ['system'],
@@ -1699,7 +1699,7 @@ box.on('click', function() {
 logs.writeSync("TESTING SANDBOX, PRESS Y AFTER ITEMS WRITTEN \nTO GO TO COMBAT TEST\n")
 //draw test
 await new Promise((r) => setTimeout(r, 1000));
-const prettyFont = cfonts.render('equiped:', {
+const prettyFont = cfonts.render('equiped', {
 	gradient: 'red,blue',
 	font: 'block',
 	colors: ['system'],

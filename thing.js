@@ -507,6 +507,11 @@ async function eventHandler(gameEvent = temp_event1, ) {
 			if (thePlayer.potions > 0)potionButtonGeneric();
 			await waitForTreasure();
 		}
+		if(countDEADenemies===0){
+			MakeContinueButton()
+			if (thePlayer.potions > 0)potionButtonGeneric();
+			await waitForTreasure();
+		}
 	}
 	//later if in cave?? or toggleable
 	// later make like total moves and like another depth var for current depth

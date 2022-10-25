@@ -708,15 +708,15 @@ async function clearCombat() {
 │   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encDat.fUse}
 ╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
 `
-		//new combatMetrics()
+//draw banner
 		ImageScreenTerm.writeSync('\n' + combatBanner)
 		//draw line to close box
 		for (let i = 0; i <= 12; i++) {
 			ImageScreenTerm.writeSync(escUpByNum(1) + escLeftByNum(1) + '│')
 		}
 	}
-	//temp
-	//await new Promise(r => setTimeout(r, 2000));
+	// temp
+	// await new Promise(r => setTimeout(r, 2000));
 	// multiple combats delay treasure till later
 	// make it flash
 	if (!death && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {

@@ -494,8 +494,15 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 	}
 	// idea is for when a room has multiple encounters you loot after defeating all enemies
-	if (thePlayer.multipleEncounters) {
-		for (let i = 0; i < gameEvent.enemies.length; i++) {
+	// first check how many are killed, then loot event*kill amount
+	if (thePlayer.multipleEncounters&&!death) {
+		let countDEADenemies = 0
+		for (let i of gameEvent.enemies) {
+			if(i.hp<=0){
+				countDEADenemies++
+			}
+		}
+		for (let i = 0; i < countDEADenemies; i++) {
 			treasure()
 			await waitForTreasure();
 		}
@@ -525,7 +532,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		// for testing
 		//
 	}
-	temp_event1.enemies = [pickEnemy()]
+	temp_event1.enemies = [pickEnemy(),pickEnemy(),pickEnemy()]
 	temp_event2.enemies = [pickEnemy()]
 	resolver()
 }

@@ -29,9 +29,9 @@ class XTermNew extends blessed.ScrollableBox{
       }
     };
     let testP=process.env
-    //testP.term='xterm-256color'
+    testP.term='xterm-256color'
     //delete testP['COLORTERM']
-    testP.COLORTERM='xterm-256color',
+    testP.COLORTERM=null
     setOption(this.options, 'args', []);
     setOption(this.options, 'env', testP);
     setOption(this.options, 'cwd', process.cwd());

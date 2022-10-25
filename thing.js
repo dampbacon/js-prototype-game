@@ -504,6 +504,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 		for (let i = 0; i < countDEADenemies; i++) {
 			treasure()
+			if (thePlayer.potions > 0)potionButtonGeneric();
 			await waitForTreasure();
 		}
 	}

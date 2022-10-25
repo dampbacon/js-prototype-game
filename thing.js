@@ -572,9 +572,28 @@ async function combat(combatEvent, enemy) {
 	await (gradient_scanlines(logs, makeRoomText(monster), 3, gradient.pastel.multiline, rainbowVoil))
 	thePlayer.state = playerState.COMBAT
 	buttonsContainer.setContent('')
+
+	const foundFont = cfonts.render(`combat begin!`, 
+	{gradient: `#${miscColours.legendary},#4B4B4B`, 
+	font: 'chrome', 
+	colors: ['system'], 
+	background: 'transparent', 
+	letterSpacing: 0, 
+	lineHeight: 1, 
+	space: false, 
+	maxLength: '50'});
+	
+	let foundBLKTXT = foundFont.string 
+
+
+
+
+
 	logs.writeSync(escUpByNum(1))
 	logs.writeSync(`\n${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}`);
-	logs.writeSync(`\n${chalk.hex('ECE236')(`Combat Start!`)}`);
+	//logs.writeSync(`\n${chalk.hex('ECE236')(`Combat Start!`)}`);
+	logs.writeSync('\n'+foundBLKTXT)
+
 	logs.writeSync(`\n${chalk.hex(miscColours.darkWood)(`@`.repeat(logs.term.cols - 1))}\n`);
 	thePlayer.encDat.enmyName = monster.name
 	thePlayer.encDat.enemy = monster
@@ -649,8 +668,26 @@ async function clearCombat() {
 	thePlayer.weaponCooldown = 0
 	ImageScreenTerm.removeLabel()
 	clearButtons();
+
+	//`red,#4B4B4B`
+	const foundFont = cfonts.render(`You ${thePlayer.encDat.peacefullClr?'cleared':'defeated'}|the enemy!`, 
+	{gradient: `#${miscColours.legendary},#4B4B4B`, 
+	font: 'chrome', 
+	colors: ['system'], 
+	background: 'transparent', 
+	letterSpacing: 0, 
+	lineHeight: 1, 
+	space: false, 
+	maxLength: '50'});
+
+	let foundBLKTXT = foundFont.string 
+
+	
+
+
+
 	logs.writeSync(`${chalk.hex(miscColours.darkWood)(`@`.repeat(logs.term.cols - 1))}\n`);
-	logs.writeSync(`${chalk.hex('ECE236')(`You ${thePlayer.encDat.peacefullClr?'cleared':'defeated'} the enemy!`)}\n`);
+	logs.writeSync(foundBLKTXT+'\n')
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
 
 	if (!death) {
@@ -1496,7 +1533,6 @@ function refreshInventory(player = thePlayer) {
 		`{bold}${chalk.blue("Weapon :")}{/bold}
 ${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
  ${thePlayer.weapon.enchant!==0?`{bold}${chalk.yellow (`+${thePlayer.weapon.enchant}`)}{/bold}`:''}
-
 {bold}${chalk.red("Armour :")}{/bold}
 ${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armourName.replace(/_/g, ' '))}\
  ${thePlayer.armourMagic!==0?`{bold}${chalk.yellow (`+${thePlayer.armourMagic}`)}{/bold}`:''}

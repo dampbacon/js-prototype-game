@@ -736,6 +736,12 @@ async function clearCombat() {
 					let goldDice = 4 + (Math.ceil(thePlayer.actualDepth / 2.5));
 					goldDice += ((thePlayer.dex>0)?thePlayer.dex:0);
 					let gold =chance4.rpg(`${goldDice}d6`, {sum: true})
+					const foundFont = cfonts.render('gold', {gradient: `#${miscColours.legendary},red`, font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
+					let foundBLKTXT = foundFont.string 
+					await slowLineWrite(foundBLKTXT, ImageScreenTerm,20)
+					let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
+					ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols))+'\n')
+
 					await writeGold(gold)
 					logs.writeSync(`found ${gold}gp\n`)
 					thePlayer.gold += gold

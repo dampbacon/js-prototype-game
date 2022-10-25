@@ -526,7 +526,7 @@ export const ScrollsAll = Object.freeze({
 		dmgTypeE: DMG_TYPE.NONE,
 		targetmonster: true,
 		changeMonster: true,
-		rarity: 0.1,
+		rarity: 0.6,
 		description: 'A scroll that changes the target monster into a random monster',
 		scrollFunction: (player = new Player(), params = {}) => {
 			if (player.state === playerState.COMBAT) {
@@ -616,7 +616,7 @@ export const ScrollsAll = Object.freeze({
 		name: 'heal',
 		dmgTypeE: DMG_TYPE.HOLY,
 		targetplayer: true,
-		rarity: 0.2,
+		rarity: 1,
 		description: 'A scroll that heals the player',
 		scrollFunction: (player, params = {}) => {
 			let heal = chance2.rpg('4d8', {
@@ -641,7 +641,7 @@ export const ScrollsAll = Object.freeze({
 		name: 'vitalize',
 		dmgTypeE: DMG_TYPE.HOLY,
 		targetplayer: true,
-		rarity: 0.08,
+		rarity: 0.4,
 		description: 'A scroll that strengthens the players life force',
 		scrollFunction: (player, params = {}) => {
 			let hpInc = chance2.rpg('1d6', {
@@ -658,7 +658,7 @@ export const ScrollsAll = Object.freeze({
 		name: 'enchant weapon',
 		dmgTypeE: DMG_TYPE.MAGIC,
 		targetplayer: true,
-		rarity: 0.1,
+		rarity: 0.2,
 		description: 'A scroll that enchants the players weapon',
 		scrollFunction: (player, params = {}) => {
 			if (player.weapon.enchant < 3) {
@@ -677,7 +677,7 @@ export const ScrollsAll = Object.freeze({
 		name: 'curse weapon',
 		dmgTypeE: DMG_TYPE.DARK,
 		targetplayer: true,
-		rarity: 0.1,
+		rarity: 0.2,
 		description: 'A scroll that curses the players weapon',
 		scrollFunction: (player, params = {}) => {
 			if (player.weapon.enchant > -3) {

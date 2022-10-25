@@ -65,7 +65,7 @@ export class Player {
 		//change weapon later to be similar to monster class
 		this.armourName = armourPicker()
 		this.armour = ARMOURmap[this.armourName]
-		this.armourMagic = 5;
+		this.armourMagic = 0;
 		//redundant
 		this.ac = this.armour ? this.armour + this.armourMagic: 10
 		//distance travelled

@@ -746,7 +746,7 @@ async function clearCombat() {
 					logs.writeSync(`found ${gold}gp\n`)
 					thePlayer.gold += gold
 					refreshInventory()
-					ImageScreenTerm.writeSync("TESTgold\n")
+					//ImageScreenTerm.writeSync("TESTgold\n")
 					logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
 					MakeContinueButton()
 					break

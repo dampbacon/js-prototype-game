@@ -266,10 +266,10 @@ export function fitLinesStr(text, width = logs.term.cols - 1) {
 	}
 	return multiline
 }
-export async function slowLineWrite(multiLineText,term=ImageScreenTerm){
+export async function slowLineWrite(multiLineText,term=ImageScreenTerm,speed=50){
 	let lines=multiLineText.split('\n')
 	for (let i of lines){
-		await new Promise(r => setTimeout(r, 50));
+		await new Promise(r => setTimeout(r, speed));
 		term.writeSync(i+'\n')
 	}
 }

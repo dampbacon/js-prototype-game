@@ -493,6 +493,10 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 		refreshInventory()
 		screen.render()
+		// await slowLineWrite(gameEvent.toScreen.toScreen.cleanANSI())
+		// ImageScreenTerm.writeSync('[H')
+		// await slowLineWrite(gameEvent.toScreen.toScreen)
+		writeImage(gameEvent)
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
 
@@ -506,6 +510,12 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
 	
 	resolver()
+}
+
+async function writeImage(gameEvent){
+	await slowLineWrite(chalk.hex('323232')(gameEvent.toScreen.toScreen.cleanANSI()),ImageScreenTerm,24)
+	ImageScreenTerm.writeSync('[H')
+	await slowLineWrite(gameEvent.toScreen.toScreen,ImageScreenTerm,24)
 }
 
 function kill() {
@@ -699,6 +709,7 @@ async function clearCombat() {
 
 		gotoTreasure.on('press', async function () {
 			clearButtons()
+			ImageScreenTerm.term.reset()
 			screen.render()
 			//move somewhere else
 			let treasure = pickTreasure()
@@ -715,8 +726,8 @@ async function clearCombat() {
 				// case 'altar':
 				// 	break
 			}
-
-			tresureResolver()
+			MakeContinueButton()
+			//tresureResolver()
 		});
 
 		//await new Promise(r => setTimeout(r, 1000));
@@ -745,7 +756,43 @@ function pickTreasure(){
 }
 
 
-
+function MakeContinueButton(text){
+	let continueButton = new blessedpkg.button({
+		parent: buttonsContainer,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'continue',
+		content: text?text:chalk.hex('ffffff')(`continue`),
+		//shadow: true,
+		style: {
+			bg: `#${miscColours.epic}`,
+			focus: {
+				bg: `#${miscColours.legendary}`,
+			},
+			hover: {
+				bg: `#${miscColours.legendary}`,
+			},
+		},
+	});
+	buttonsArray.push(continueButton)
+	screen.render()
+	resizeButtons()
+	screen.render()
+	buttonsContainer.scrollTo(0)
+	screen.render()
+	continueButton.on('press', async function () {
+		clearButtons()
+		screen.render()
+		tresureResolver()
+	});
+}
 
 
 

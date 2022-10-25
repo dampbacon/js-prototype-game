@@ -7,16 +7,20 @@ export var chance1 = new Chance();
 export var chance2 = new Chance();
 //random picker dice
 export var chance3 = new Chance();
+//random loot dice
+export var chance4 = new Chance(); 
 export function resetRandoms(seed) {
 	if (seed) {
 		monsterRandom = new Chance(seed);
 		chance1 = new Chance(seed);
 		chance2 = new Chance(seed);
 		chance3 = new Chance(seed)
+		chance4 = new Chance(seed)
 	} else {
 		monsterRandom = new Chance();
 		chance1 = new Chance();
 		chance2 = new Chance();
 		chance3 = new Chance();
+		chance4 = new Chance();
 	}
 }

@@ -22,6 +22,7 @@ import {
 } from './game-objects/mobs.js';
 import {
 	chance2,
+	chance4,
 	resetRandoms
 } from './game-objects/random_nums.js';
 import {
@@ -488,6 +489,12 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	// later make like total moves and like another depth var for current depth
 	if(!death){
 		thePlayer.depth++
+		thePlayer.actualDepth++
+
+		//depth is distance travelled, ACTUAL DEPTH IS CURRENT LOCATION
+		//They look the same for now but eventually youll be able to skip floors due to events and oil consumption
+		//or other things (Like loot rarity) will need to track actuall distance travelled
+		//plan is for both to be reset once you leave the dungeon. with the data stored somewhere for stats for a gameover screen.
 		if ((thePlayer.depth % 4 === 0)&&(thePlayer.oil>0)) {
 			thePlayer.oil--
 		}
@@ -513,6 +520,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 }
 
 async function writeImage(gameEvent){
+	ImageScreenTerm.term.reset()
 	await slowLineWrite(chalk.hex('323232')(gameEvent.toScreen.toScreen.cleanANSI()),ImageScreenTerm,24)
 	ImageScreenTerm.writeSync('[H')
 	await slowLineWrite(gameEvent.toScreen.toScreen,ImageScreenTerm,24)
@@ -658,7 +666,7 @@ async function clearCombat() {
 │   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encDat.fUse}
 ╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
 `
-		thePlayer.encDat = null //new combatMetrics()
+		//new combatMetrics()
 		ImageScreenTerm.writeSync('\n' + combatBanner)
 		//draw line to close box
 		for (let i = 0; i <= 12; i++) {
@@ -674,7 +682,7 @@ async function clearCombat() {
 // multiple combats delay treasure till later
 // make it flash
 	let gotoTreasure
-	if(!death) {
+	if(!death && !thePlayer.encDat.peacefullClr) {
 		gotoTreasure = new blessedpkg.button({
 			parent: buttonsContainer,
 			mouse: true,
@@ -715,8 +723,10 @@ async function clearCombat() {
 			let treasure = pickTreasure()
 			switch (treasure){
 				case 'gold':
+					ImageScreenTerm.writeSync("TESTgold")
 					break
 				case 'items':
+					ImageScreenTerm.writeSync("TESTitems")
 					break
 				// make these call a function
 				// case 'weapon':
@@ -727,12 +737,17 @@ async function clearCombat() {
 				// 	break
 			}
 			MakeContinueButton()
+
+			
 			//tresureResolver()
 		});
 
 		//await new Promise(r => setTimeout(r, 1000));
 
 	// multiple combats delay treasure till later
+		await waitForTreasure();
+	}else if(!death && thePlayer.encDat.peacefullClr){
+		MakeContinueButton()
 		await waitForTreasure();
 	}
 
@@ -746,6 +761,7 @@ async function clearCombat() {
 	//for altars do int or some check to see what it does else random
 	//consumes scrolls
 	//insert loot diversion here
+	thePlayer.encDat = null
 	encounterResolver()
 }
 
@@ -753,6 +769,7 @@ async function clearCombat() {
 function pickTreasure(){
 	let options = ["gold", "items"]// "weapon", "armour", "altar"]
 	let weights_array =[5,1]//1,1,1]
+	return chance4.weighted(options, weights_array)
 }
 
 
@@ -1275,7 +1292,8 @@ ${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
 ${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armourName.replace(/_/g, ' '))}\
  ${thePlayer.armourMagic!==0?`{bold}${chalk.yellow (`+${thePlayer.armourMagic}`)}{/bold}`:''}
 
-debug depth: ${player.depth}
+debug 	   depth: ${player.depth}
+debugACTUALdepth: ${player.actualDepth}
 ${chalk.magenta("XP : ")}${"200/400"}
 ${chalk.magenta("Lvl: ")}${thePlayer.level}
 

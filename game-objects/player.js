@@ -65,9 +65,9 @@ export class Player {
 		//change weapon later to be similar to monster class
 		this.armourName = armourPicker()
 		this.armour = ARMOURmap[this.armourName]
-		this.armourMagic = 0;
+		this.armourMagic = 5;
 		//redundant
-		this.ac = this.armour ? this.armour : 10
+		this.ac = this.armour ? this.armour + this.armourMagic: 10
 		//distance travelled
 		this.depth = 1;
 		//depth used for events
@@ -90,6 +90,14 @@ export class Player {
 			sum: true
 		}))
 	}
+	enchantArmour() {
+		this.armourMagic += 1
+		this.ac += 1
+	}
+	curseArmour() {
+		this.armourMagic -= 1
+		this.ac -= 1
+	}
 	//Weapon object
 	changeWeapon(weapon) {
 		this.weapon = weapon
@@ -102,6 +110,7 @@ export class Player {
 		this.armourName = armour
 		this.armourMagic = 0;
 		this.armour = ARMOURmap[armour]
+		this.ac = this.armour
 	}
 	//not max
 	increaseHP(amount) {

@@ -10,6 +10,7 @@
     "align-text": "^1.0.2",
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.11.0",
+    "cfonts": "^3.1.1",
     "chalk": "^5.0.1",
     "chalk-animation": "^2.0.3",
     "chance": "^1.1.8",

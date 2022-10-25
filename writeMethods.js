@@ -19,6 +19,7 @@ import {ImageScreenTerm, logs} from "./ui.js";
 import gradient from 'gradient-string';
 import chalk from "chalk";
 import {ARMOUR, ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, dynamicBox, escDownByNum, escLeftByNum, escRightByNum, escUpByNum, miscColours, rarityByWeight, weapons} from "./game-objects/data.js";
+import { Player } from "./game-objects/player.js";
 
 chalk.level = 2;
 
@@ -381,7 +382,7 @@ export async function writeScroll(amount=1,term=ImageScreenTerm){
 	term.writeSync('\n')
 }
 
-export async function writeArmour(armourName,term=ImageScreenTerm){
+export async function writeArmour(armourName,enchant=0,term=ImageScreenTerm){
 	//later make rarity change
 	let icon=`\
 [90m[40m▐[90m[47m~~▒░▒▒░▒~~[90m[40m▌[37m[40m [m
@@ -395,7 +396,7 @@ export async function writeArmour(armourName,term=ImageScreenTerm){
 	let k=
 `\
              ${chalk.hex(colour)('Name   : '+(armourName.replace(/_/g, ' ')))}
-             ${chalk.greenBright(`AC     : ${ac}`)}
+             ${chalk.greenBright(`AC     : ${ac}`)} ${(enchant!==0?(enchant>-1?chalk.hex(DMG_COLOUR[DMG_TYPE.HOLY])(`+ ${enchant}`):`- ${Math.abs(enchant)}`):'')}
              
              ${chalk.blueBright(`desc.  : ${'provides protection from'}`)}
                       ${chalk.blueBright('pointy sticks and magic')}\

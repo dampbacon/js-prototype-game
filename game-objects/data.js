@@ -379,7 +379,10 @@ export function rarityByWeight(num=1)
     else if(num<=1)
     {
         return rarityColours[0]
-    }
+    }else{
+		// for debug
+		return 'c2c2c2'
+	}
 }
 const weaponsArray = Object.values(weapons)
 const weaponWeights = weaponsArray.map((item) => {

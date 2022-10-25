@@ -28,9 +28,12 @@ class XTermNew extends blessed.ScrollableBox{
         cfg[name] = def;
       }
     };
-
+    let testP=process.env
+    //testP.term='xterm-256color'
+    //delete testP['COLORTERM']
+    testP.COLORTERM='xterm-256color',
     setOption(this.options, 'args', []);
-    setOption(this.options, 'env', process.env);
+    setOption(this.options, 'env', testP);
     setOption(this.options, 'cwd', process.cwd());
     setOption(this.options, 'cursorType', 'block');
     setOption(this.options, 'scrollback', 10000);

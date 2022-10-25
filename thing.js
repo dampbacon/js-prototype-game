@@ -494,7 +494,9 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
     //later if in cave?? or toggleable
 	// later make like total moves and like another depth var for current depth
+	thePlayer.multipleEncounters=false
 	if(!death){
+		
 		thePlayer.depth++
 		thePlayer.actualDepth++
 
@@ -565,8 +567,11 @@ function waitForCombat() {
 function encounterResolver() {
 	if (waitForCombatResolve) waitForCombatResolve()
 }
-async function combat(combatEvent, enemy) {
+async function combat(event, enemy) {
 	thePlayer.encDat = new combatMetrics()
+	if(event.enemies.length>1){
+		thePlayer.multipleEncounters=true
+	}
 	let monster = enemy //copyMonster(tempMonster)
 	logs.writeSync('\n' + escUpByNum(1))
 	await (gradient_scanlines(logs, makeRoomText(monster), 3, gradient.pastel.multiline, rainbowVoil))
@@ -725,182 +730,159 @@ async function clearCombat() {
 
 // multiple combats delay treasure till later
 // make it flash
-	let gotoTreasure
-	if(!death && !thePlayer.encDat.peacefullClr) {
-		gotoTreasure = new blessedpkg.button({
-			parent: buttonsContainer,
-			mouse: true,
-			keys: true,
-			shrink: true,
-			padding: {
-				left: 1,
-				right: 1
-			},
-			left: 1,
-			top: 1,
-			name: 'gotoTreasure',
-			content: chalk.hex('ffffff')(`search for loot`), //make it flash
-			//shadow: true,
-			style: {
-				bg: `#${miscColours.epic}`,
-				focus: {
-					bg: `#${miscColours.legendary}`,
-				},
-				hover: {
-					bg: `#${miscColours.legendary}`,
-				},
-			},
-		})
-		buttonsArray.push(gotoTreasure)
-		screen.render()
-		resizeButtons()
-		screen.render()
-		buttonsContainer.scrollTo(0)
-		screen.render()
-
-
-		gotoTreasure.on('press', async function () {
-			clearButtons()
-			ImageScreenTerm.term.reset()
-			screen.render()
-			logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
-			logs.writeSync('searching for loot...\n')
-			logs.writeSync(`${chalk.hex('1B1B1B')(`.`.repeat(logs.term.cols - 1))}\n`);
-			//move somewhere else
-			let treasure = pickTreasure()
-			switch (treasure){
-				case 'gold':{
-					let goldDice = 4 + (Math.ceil(thePlayer.actualDepth / 2.5));
-					goldDice += ((thePlayer.dex>0)?thePlayer.dex:0);
-					let gold =chance4.rpg(`${goldDice}d6`, {sum: true})
-					const foundFont = cfonts.render('gold', {gradient: `#${miscColours.legendary},red`, font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
-					let foundBLKTXT = foundFont.string 
-					await slowLineWrite(foundBLKTXT, ImageScreenTerm,20)
-					let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
-					ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols))+'\n')
-
-					await writeGold(gold)
-					logs.writeSync(`found ${gold}gp\n`)
-					thePlayer.gold += gold
-					refreshInventory()
-					//ImageScreenTerm.writeSync("TESTgold\n")
-					logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
-					MakeContinueButton()
-					break
-				}
-				case 'items':{
-					//ImageScreenTerm.writeSync("TESTitems\n")
-					let amountOfDifferentItems = chance4.integer({min: 1, max: 3})
-					let items = ["potion", "scroll", "oil"]
-					let weights = [1, .8, 2]
-					let itemsWon=[]
-					const foundFont = cfonts.render('loot...', {gradient: 'red,blue', font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
-					let foundBLKTXT = foundFont.string 
-
-					await slowLineWrite(foundBLKTXT, ImageScreenTerm,20)
-					let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
-					ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols))+'\n')
-
-					for(let i = 0; i < amountOfDifferentItems; i++){
-						let selected = chance4.weighted(items, weights)
-						itemsWon.push(selected)
-						let index = items.findIndex((item)=>item===selected)
-						items.splice(index, 1)
-						weights.splice(index, 1)
-					}
-					for (let i = 0; i < itemsWon.length; i++) {
-						let item = itemsWon[i]
-						switch (item) {
-							case 'potion':{
-								let amount = chance4.d4()
-								thePlayer.potions += amount
-								refreshInventory()
-								logs.writeSync(`found ${amount} potions\n`)
-								await writePotion(amount)
-								break
-							}
-							case 'scroll':{
-								//later make weighted random
-								let amount = chance4.d4()
-								thePlayer.scrolls += amount
-								refreshInventory()
-								logs.writeSync(`found ${amount} scrolls\n`)
-								await writeScroll(amount)
-								break
-							}
-							case 'oil':{
-								let amount = chance4.d6()
-								thePlayer.oil += amount
-								refreshInventory()
-								logs.writeSync(`found ${amount} oil flasks\n`)
-								await writeOil(amount)
-								break
-							}	
-						}
-					}
-					ImageScreenTerm.writeSync(spacer('▀'.repeat(ImageScreenTerm.term.cols))+'\n')
-
-					logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
-					MakeContinueButton()
-					break
-				}// "weapon", "armour", "altar"]
-
-
-				// make these call a function, its more complex than above functions
-				case 'weapon':{
-					ComplexTreasure(pickWeapon(),true)
-					break
-				}
-				case 'armour':
-					ComplexTreasure(armourPicker(),false)
-					break
-				// case 'altar':
-				// 	break
-			}
-
-			
-			//tresureResolver()
-		});
-
-		//await new Promise(r => setTimeout(r, 1000));
-
-	// multiple combats delay treasure till later
+	if(!death && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
+		treasure()
 		await waitForTreasure();
 	}else if(!death && thePlayer.encDat.peacefullClr){
 		MakeContinueButton()
 		await waitForTreasure();
 	}
-
-	//treasure room
-	//click button search for loot
-	//combat banner and screen items clear
-	//banners for items load in
-	//for weapons and armour
-	//allow player choice current to keep or not
-	//for items you just take it
-	//for altars do int or some check to see what it does else random
-	//consumes scrolls
-	//insert loot diversion here
-
 	thePlayer.encDat = null
 	encounterResolver()
 }
 //keep or change weapon or armour
+
+
+async function treasure() {
+	let gotoTreasure = new blessedpkg.button({
+		parent: buttonsContainer,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'gotoTreasure',
+		content: chalk.hex('ffffff')(`search for loot`), //make it flash
+		//shadow: true,
+		style: {
+			bg: `#${miscColours.epic}`,
+			focus: {
+				bg: `#${miscColours.legendary}`,
+			},
+			hover: {
+				bg: `#${miscColours.legendary}`,
+			},
+		},
+	})
+	buttonsArray.push(gotoTreasure)
+	screen.render()
+	resizeButtons()
+	screen.render()
+	buttonsContainer.scrollTo(0)
+	screen.render()
+
+
+	gotoTreasure.on('press', async function () {
+		clearButtons()
+		ImageScreenTerm.term.reset()
+		screen.render()
+		logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
+		logs.writeSync('searching for loot...\n')
+		logs.writeSync(`${chalk.hex('1B1B1B')(`.`.repeat(logs.term.cols - 1))}\n`);
+		//move somewhere else
+		let treasure = pickTreasure()
+		switch (treasure){
+			case 'gold':{
+				let goldDice = 4 + (Math.ceil(thePlayer.actualDepth / 2.5));
+				goldDice += ((thePlayer.dex>0)?thePlayer.dex:0);
+				let gold =chance4.rpg(`${goldDice}d6`, {sum: true})
+				const foundFont = cfonts.render('gold', {gradient: `#${miscColours.legendary},red`, font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
+				let foundBLKTXT = foundFont.string 
+				await slowLineWrite(foundBLKTXT, ImageScreenTerm,20)
+				let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
+				ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols))+'\n')
+
+				await writeGold(gold)
+				logs.writeSync(`found ${gold}gp\n`)
+				thePlayer.gold += gold
+				refreshInventory()
+				//ImageScreenTerm.writeSync("TESTgold\n")
+				logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
+				MakeContinueButton()
+				break
+			}
+			case 'items':{
+				//ImageScreenTerm.writeSync("TESTitems\n")
+				let amountOfDifferentItems = chance4.integer({min: 1, max: 3})
+				let items = ["potion", "scroll", "oil"]
+				let weights = [1, .8, 2]
+				let itemsWon=[]
+				const foundFont = cfonts.render('loot...', {gradient: 'red,blue', font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
+				let foundBLKTXT = foundFont.string 
+
+				await slowLineWrite(foundBLKTXT, ImageScreenTerm,20)
+				let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
+				ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols))+'\n')
+
+				for(let i = 0; i < amountOfDifferentItems; i++){
+					let selected = chance4.weighted(items, weights)
+					itemsWon.push(selected)
+					let index = items.findIndex((item)=>item===selected)
+					items.splice(index, 1)
+					weights.splice(index, 1)
+				}
+				for (let i = 0; i < itemsWon.length; i++) {
+					let item = itemsWon[i]
+					switch (item) {
+						case 'potion':{
+							let amount = chance4.d4()
+							thePlayer.potions += amount
+							refreshInventory()
+							logs.writeSync(`found ${amount} potions\n`)
+							await writePotion(amount)
+							break
+						}
+						case 'scroll':{
+							//later make weighted random
+							let amount = chance4.d4()
+							thePlayer.scrolls += amount
+							refreshInventory()
+							logs.writeSync(`found ${amount} scrolls\n`)
+							await writeScroll(amount)
+							break
+						}
+						case 'oil':{
+							let amount = chance4.d6()
+							thePlayer.oil += amount
+							refreshInventory()
+							logs.writeSync(`found ${amount} oil flasks\n`)
+							await writeOil(amount)
+							break
+						}	
+					}
+				}
+				ImageScreenTerm.writeSync(spacer('▀'.repeat(ImageScreenTerm.term.cols))+'\n')
+
+				logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
+				MakeContinueButton()
+				break
+			}// "weapon", "armour", "altar"]
+			// make these call a function, its more complex than above functions
+			case 'weapon':{
+				ComplexTreasure(pickWeapon(),true)
+				break
+			}
+			case 'armour':
+				ComplexTreasure(armourPicker(),false)
+				break
+			// case 'altar':
+			// 	break
+		}
+	});
+}
+
+
+
 async function ComplexTreasure(strOrObject=weapons.flamberge,weapon=true){
 	let itemStr = weapon?"weapon":"armour"
 	
 	let itemName = weapon?strOrObject.name:strOrObject
 
 	let oldItem = weapon?thePlayer.weapon.name:thePlayer.armourName
-
-
-		
-	
-
-
-
-
-
 
 	let keep = new blessedpkg.button({
 		parent: buttonsContainer,
@@ -1536,7 +1518,7 @@ ${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
 {bold}${chalk.red("Armour :")}{/bold}
 ${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armourName.replace(/_/g, ' '))}\
  ${thePlayer.armourMagic!==0?`{bold}${chalk.yellow (`+${thePlayer.armourMagic}`)}{/bold}`:''}
-debug depth: ${player.depth} act: ${player.actualDepth}
+debug depth: ${player.depth};${player.actualDepth}
 ${chalk.magenta("XP : ")}${"200/400"}
 ${chalk.magenta("Lvl: ")}${thePlayer.level}
 
@@ -1738,21 +1720,6 @@ logs.writeSync("TESTING SANDBOX, PRESS Y AFTER ITEMS WRITTEN \nTO GO TO COMBAT T
 //draw test
 await new Promise((r) => setTimeout(r, 1000));
 
-
-
-//await drawBanner(weapons.sword)
-
-
-
-//await writeGold(4)
-//await writePotion(4)
-// await writeOil(4)
-// await writeScroll(4)
-
-
-// await writeArmour(ARMOUR.DENSE_PERSONALITY,)
-// await drawBanner(weapons.flamberge,logs)
-// await writeArmour(ARMOUR.DENSE_PERSONALITY,0,logs)
 
 
 const prettyFont = cfonts.render('equiped:', {gradient: 'red,blue', font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});

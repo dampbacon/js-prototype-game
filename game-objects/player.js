@@ -84,6 +84,8 @@ export class Player {
 		this.state = playerState.INIT
 		//add support for nonhostile
 		this.encDat = new combatMetrics()
+		//multiple combats dont have seperate holder
+		this.multipleEncounters = false
 	}
 	rollStat() {
 		return skillBonus(chance1.rpg('3d6', {

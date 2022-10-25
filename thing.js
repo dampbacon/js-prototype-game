@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 'use strict';
-
 import blessedpkg from 'blessed';
 import chalk from 'chalk';
 import gradient from 'gradient-string';
@@ -58,7 +57,11 @@ import {
 	DMG_COLOUR,
 	DMG_TYPE,
 	dynamicBox,
-	enemiesArt, escDownByNum, escLeftByNum, escRightByNum, escUpByNum,
+	enemiesArt,
+	escDownByNum,
+	escLeftByNum,
+	escRightByNum,
+	escUpByNum,
 	makeRoomText,
 	miscColours,
 	monsters,
@@ -71,11 +74,11 @@ import {
 	combatMetrics
 } from './game-objects/metrics.js';
 import wrap from 'word-wrap';
-import { weapon } from './game-objects/items.js';
+import {
+	weapon
+} from './game-objects/items.js';
 //const cfonts = require('cfonts');
-
 import cfonts from 'cfonts';
-
 chalk.level = 2;
 const {
 	tinygradient
@@ -491,26 +494,23 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 	}
 	// idea is for when a room has multiple encounters you loot after defeating all enemies
-	if(thePlayer.multipleEncounters){
-		for(let i = 0; i < gameEvent.enemies.length; i++){
+	if (thePlayer.multipleEncounters) {
+		for (let i = 0; i < gameEvent.enemies.length; i++) {
 			treasure()
 			await waitForTreasure();
 		}
 	}
-
-    //later if in cave?? or toggleable
+	//later if in cave?? or toggleable
 	// later make like total moves and like another depth var for current depth
-	thePlayer.multipleEncounters=false
-	if(!death){
-		
+	thePlayer.multipleEncounters = false
+	if (!death) {
 		thePlayer.depth++
 		thePlayer.actualDepth++
-
 		//depth is distance travelled, ACTUAL DEPTH IS CURRENT LOCATION
 		//They look the same for now but eventually youll be able to skip floors due to events and oil consumption
 		//or other things (Like loot rarity) will need to track actuall distance travelled
 		//plan is for both to be reset once you leave the dungeon. with the data stored somewhere for stats for a gameover screen.
-		if ((thePlayer.depth % 4 === 0)&&(thePlayer.oil>0)) {
+		if ((thePlayer.depth % 4 === 0) && (thePlayer.oil > 0)) {
 			thePlayer.oil--
 		}
 		refreshInventory()
@@ -521,24 +521,19 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		writeImage(gameEvent)
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
-
-
-	//
-	// for testing
-	//
+		//
+		// for testing
+		//
 	}
-	temp_event1.enemies=[pickEnemy()]
-	temp_event2.enemies=[pickEnemy()]
-
-	
+	temp_event1.enemies = [pickEnemy()]
+	temp_event2.enemies = [pickEnemy()]
 	resolver()
 }
-
-async function writeImage(gameEvent){
+async function writeImage(gameEvent) {
 	ImageScreenTerm.term.reset()
-	await slowLineWrite(chalk.hex('323232')(gameEvent.toScreen.toScreen.cleanANSI()),ImageScreenTerm,24)
+	await slowLineWrite(chalk.hex('323232')(gameEvent.toScreen.toScreen.cleanANSI()), ImageScreenTerm, 24)
 	ImageScreenTerm.writeSync('[H')
-	await slowLineWrite(gameEvent.toScreen.toScreen,ImageScreenTerm,24)
+	await slowLineWrite(gameEvent.toScreen.toScreen, ImageScreenTerm, 24)
 }
 
 function kill() {
@@ -575,36 +570,29 @@ function encounterResolver() {
 }
 async function combat(event, enemy) {
 	thePlayer.encDat = new combatMetrics()
-	if(event.enemies.length>1){
-		thePlayer.multipleEncounters=true
+	if (event.enemies.length > 1) {
+		thePlayer.multipleEncounters = true
 	}
 	let monster = enemy //copyMonster(tempMonster)
 	logs.writeSync('\n' + escUpByNum(1))
 	await (gradient_scanlines(logs, makeRoomText(monster), 3, gradient.pastel.multiline, rainbowVoil))
 	thePlayer.state = playerState.COMBAT
 	buttonsContainer.setContent('')
-
-	const foundFont = cfonts.render(`combat begin!`, 
-	{gradient: `#${miscColours.legendary},#4B4B4B`, 
-	font: 'chrome', 
-	colors: ['system'], 
-	background: 'transparent', 
-	letterSpacing: 0, 
-	lineHeight: 1, 
-	space: false, 
-	maxLength: '50'});
-	
-	let foundBLKTXT = foundFont.string 
-
-
-
-
-
+	const foundFont = cfonts.render(`combat begin!`, {
+		gradient: `#${miscColours.legendary},#4B4B4B`,
+		font: 'chrome',
+		colors: ['system'],
+		background: 'transparent',
+		letterSpacing: 0,
+		lineHeight: 1,
+		space: false,
+		maxLength: '50'
+	});
+	let foundBLKTXT = foundFont.string
 	logs.writeSync(escUpByNum(1))
 	logs.writeSync(`\n${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}`);
 	//logs.writeSync(`\n${chalk.hex('ECE236')(`Combat Start!`)}`);
-	logs.writeSync('\n'+foundBLKTXT)
-
+	logs.writeSync('\n' + foundBLKTXT)
 	logs.writeSync(`\n${chalk.hex(miscColours.darkWood)(`@`.repeat(logs.term.cols - 1))}\n`);
 	thePlayer.encDat.enmyName = monster.name
 	thePlayer.encDat.enemy = monster
@@ -643,10 +631,6 @@ ${chalk.hex('ea0000')(`damage!`)}\n`)
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
 }
-
-
-
-
 //
 //
 // Treasure event
@@ -672,35 +656,25 @@ function tresureResolver() {
 		waitForTreasureResolve()
 	}
 }
-
-
-
 async function clearCombat() {
 	thePlayer.weaponCooldown = 0
 	ImageScreenTerm.removeLabel()
 	clearButtons();
-
 	//`red,#4B4B4B`
-	const foundFont = cfonts.render(`You ${thePlayer.encDat.peacefullClr?'cleared':'defeated'}|the enemy!`, 
-	{gradient: `#${miscColours.legendary},#4B4B4B`, 
-	font: 'chrome', 
-	colors: ['system'], 
-	background: 'transparent', 
-	letterSpacing: 0, 
-	lineHeight: 1, 
-	space: false, 
-	maxLength: '50'});
-
-	let foundBLKTXT = foundFont.string 
-
-	
-
-
-
+	const foundFont = cfonts.render(`You ${thePlayer.encDat.peacefullClr?'cleared':'defeated'}|the enemy!`, {
+		gradient: `#${miscColours.legendary},#4B4B4B`,
+		font: 'chrome',
+		colors: ['system'],
+		background: 'transparent',
+		letterSpacing: 0,
+		lineHeight: 1,
+		space: false,
+		maxLength: '50'
+	});
+	let foundBLKTXT = foundFont.string
 	logs.writeSync(`${chalk.hex(miscColours.darkWood)(`@`.repeat(logs.term.cols - 1))}\n`);
-	logs.writeSync(foundBLKTXT+'\n')
+	logs.writeSync(foundBLKTXT + '\n')
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
-
 	if (!death) {
 		thePlayer.state = playerState.TREASURE_ROOM
 		let length = '╰╾────────────────────────────────────────────╼╯'.length
@@ -728,18 +702,14 @@ async function clearCombat() {
 			ImageScreenTerm.writeSync(escUpByNum(1) + escLeftByNum(1) + '│')
 		}
 	}
-
 	//temp
 	//await new Promise(r => setTimeout(r, 2000));
-
-
-
-// multiple combats delay treasure till later
-// make it flash
-	if(!death && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
+	// multiple combats delay treasure till later
+	// make it flash
+	if (!death && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
 		treasure()
 		await waitForTreasure();
-	}else if(!death && thePlayer.encDat.peacefullClr){
+	} else if (!death && thePlayer.encDat.peacefullClr) {
 		MakeContinueButton()
 		await waitForTreasure();
 	}
@@ -747,8 +717,6 @@ async function clearCombat() {
 	encounterResolver()
 }
 //keep or change weapon or armour
-
-
 async function treasure() {
 	let gotoTreasure = new blessedpkg.button({
 		parent: buttonsContainer,
@@ -780,9 +748,7 @@ async function treasure() {
 	screen.render()
 	buttonsContainer.scrollTo(0)
 	screen.render()
-
-
-	gotoTreasure.on('press', async function () {
+	gotoTreasure.on('press', async function() {
 		clearButtons()
 		ImageScreenTerm.term.reset()
 		screen.render()
@@ -791,17 +757,27 @@ async function treasure() {
 		logs.writeSync(`${chalk.hex('1B1B1B')(`.`.repeat(logs.term.cols - 1))}\n`);
 		//move somewhere else
 		let treasure = pickTreasure()
-		switch (treasure){
-			case 'gold':{
+		switch (treasure) {
+			case 'gold': {
 				let goldDice = 4 + (Math.ceil(thePlayer.actualDepth / 2.5));
-				goldDice += ((thePlayer.dex>0)?thePlayer.dex:0);
-				let gold =chance4.rpg(`${goldDice}d6`, {sum: true})
-				const foundFont = cfonts.render('gold', {gradient: `#${miscColours.legendary},red`, font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
-				let foundBLKTXT = foundFont.string 
-				await slowLineWrite(foundBLKTXT, ImageScreenTerm,20)
+				goldDice += ((thePlayer.dex > 0) ? thePlayer.dex : 0);
+				let gold = chance4.rpg(`${goldDice}d6`, {
+					sum: true
+				})
+				const foundFont = cfonts.render('gold', {
+					gradient: `#${miscColours.legendary},red`,
+					font: 'block',
+					colors: ['system'],
+					background: 'transparent',
+					letterSpacing: 0,
+					lineHeight: 1,
+					space: false,
+					maxLength: '50'
+				});
+				let foundBLKTXT = foundFont.string
+				await slowLineWrite(foundBLKTXT, ImageScreenTerm, 20)
 				let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
-				ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols))+'\n')
-
+				ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols)) + '\n')
 				await writeGold(gold)
 				logs.writeSync(`found ${gold}gp\n`)
 				thePlayer.gold += gold
@@ -811,30 +787,40 @@ async function treasure() {
 				MakeContinueButton()
 				break
 			}
-			case 'items':{
+			case 'items': {
 				//ImageScreenTerm.writeSync("TESTitems\n")
-				let amountOfDifferentItems = chance4.integer({min: 1, max: 3})
+				let amountOfDifferentItems = chance4.integer({
+					min: 1,
+					max: 3
+				})
 				let items = ["potion", "scroll", "oil"]
 				let weights = [1, .8, 2]
-				let itemsWon=[]
-				const foundFont = cfonts.render('loot...', {gradient: 'red,blue', font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
-				let foundBLKTXT = foundFont.string 
-
-				await slowLineWrite(foundBLKTXT, ImageScreenTerm,20)
+				let itemsWon = []
+				const foundFont = cfonts.render('loot...', {
+					gradient: 'red,blue',
+					font: 'block',
+					colors: ['system'],
+					background: 'transparent',
+					letterSpacing: 0,
+					lineHeight: 1,
+					space: false,
+					maxLength: '50'
+				});
+				let foundBLKTXT = foundFont.string
+				await slowLineWrite(foundBLKTXT, ImageScreenTerm, 20)
 				let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
-				ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols))+'\n')
-
-				for(let i = 0; i < amountOfDifferentItems; i++){
+				ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols)) + '\n')
+				for (let i = 0; i < amountOfDifferentItems; i++) {
 					let selected = chance4.weighted(items, weights)
 					itemsWon.push(selected)
-					let index = items.findIndex((item)=>item===selected)
+					let index = items.findIndex((item) => item === selected)
 					items.splice(index, 1)
 					weights.splice(index, 1)
 				}
 				for (let i = 0; i < itemsWon.length; i++) {
 					let item = itemsWon[i]
 					switch (item) {
-						case 'potion':{
+						case 'potion': {
 							let amount = chance4.d4()
 							thePlayer.potions += amount
 							refreshInventory()
@@ -842,7 +828,7 @@ async function treasure() {
 							await writePotion(amount)
 							break
 						}
-						case 'scroll':{
+						case 'scroll': {
 							//later make weighted random
 							let amount = chance4.d4()
 							thePlayer.scrolls += amount
@@ -851,43 +837,38 @@ async function treasure() {
 							await writeScroll(amount)
 							break
 						}
-						case 'oil':{
+						case 'oil': {
 							let amount = chance4.d6()
 							thePlayer.oil += amount
 							refreshInventory()
 							logs.writeSync(`found ${amount} oil flasks\n`)
 							await writeOil(amount)
 							break
-						}	
+						}
 					}
 				}
-				ImageScreenTerm.writeSync(spacer('▀'.repeat(ImageScreenTerm.term.cols))+'\n')
-
+				ImageScreenTerm.writeSync(spacer('▀'.repeat(ImageScreenTerm.term.cols)) + '\n')
 				logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
 				MakeContinueButton()
 				break
-			}// "weapon", "armour", "altar"]
+			} // "weapon", "armour", "altar"]
 			// make these call a function, its more complex than above functions
-			case 'weapon':{
-				ComplexTreasure(pickWeapon(),true)
+			case 'weapon': {
+				ComplexTreasure(pickWeapon(), true)
 				break
 			}
 			case 'armour':
-				ComplexTreasure(armourPicker(),false)
+				ComplexTreasure(armourPicker(), false)
 				break
-			// case 'altar':
-			// 	break
+				// case 'altar':
+				// 	break
 		}
 	});
 }
-
-async function ComplexTreasure(strOrObject=weapons.flamberge,weapon=true){
-	let itemStr = weapon?"weapon":"armour"
-	
-	let itemName = weapon?strOrObject.name:strOrObject
-
-	let oldItem = weapon?thePlayer.weapon.name:thePlayer.armourName
-
+async function ComplexTreasure(strOrObject = weapons.flamberge, weapon = true) {
+	let itemStr = weapon ? "weapon" : "armour"
+	let itemName = weapon ? strOrObject.name : strOrObject
+	let oldItem = weapon ? thePlayer.weapon.name : thePlayer.armourName
 	let keep = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
@@ -912,9 +893,6 @@ async function ComplexTreasure(strOrObject=weapons.flamberge,weapon=true){
 			},
 		},
 	})
-
-
-
 	let take = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
@@ -939,72 +917,74 @@ async function ComplexTreasure(strOrObject=weapons.flamberge,weapon=true){
 			},
 		},
 	})
-
-	
 	buttonsArray.push(keep)
 	buttonsArray.push(take)
 	screen.render()
 	resizeButtons()
-
 	logs.writeSync(`${chalk.hex(weapon?rarityByWeight(strOrObject.rarity):ArmourRarityColour(ARMOURmap[strOrObject]))(itemName)} found\n`)
-	
-	const equipFont = cfonts.render('equiped:', {gradient: 'red,blue', font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
-	let equipBLKTXT = equipFont.string  // the ansi string for sexy console font
-
+	const equipFont = cfonts.render('equiped:', {
+		gradient: 'red,blue',
+		font: 'block',
+		colors: ['system'],
+		background: 'transparent',
+		letterSpacing: 0,
+		lineHeight: 1,
+		space: false,
+		maxLength: '50'
+	});
+	let equipBLKTXT = equipFont.string // the ansi string for sexy console font
 	// write to terminal
-	const foundFont = cfonts.render('Found...', {gradient: 'red,blue', font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
-	let foundBLKTXT = foundFont.string 
-
+	const foundFont = cfonts.render('Found...', {
+		gradient: 'red,blue',
+		font: 'block',
+		colors: ['system'],
+		background: 'transparent',
+		letterSpacing: 0,
+		lineHeight: 1,
+		space: false,
+		maxLength: '50'
+	});
+	let foundBLKTXT = foundFont.string
 	ImageScreenTerm.writeSync('[H')
 	//ImageScreenTerm.writeSync(equipBLKTXT+'\n')
-	await slowLineWrite(equipBLKTXT,ImageScreenTerm,20)
-	weapon?await drawBanner(thePlayer.weapon):await writeArmour(thePlayer.armourName,thePlayer.armourMagic)
-
+	await slowLineWrite(equipBLKTXT, ImageScreenTerm, 20)
+	weapon ? await drawBanner(thePlayer.weapon) : await writeArmour(thePlayer.armourName, thePlayer.armourMagic)
 	let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
 	ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols)))
-
 	ImageScreenTerm.writeSync('\n\n')
 	//ImageScreenTerm.writeSync(foundBLKTXT+'\n') 
-	await slowLineWrite(foundBLKTXT,ImageScreenTerm,20)
-	weapon?await drawBanner(strOrObject,ImageScreenTerm,true): await writeArmour(strOrObject,0,ImageScreenTerm,true)
-
-
+	await slowLineWrite(foundBLKTXT, ImageScreenTerm, 20)
+	weapon ? await drawBanner(strOrObject, ImageScreenTerm, true) : await writeArmour(strOrObject, 0, ImageScreenTerm, true)
 	keep.on('press', async function() {
 		clearButtons()
-		logs.writeSync(`${chalk.hex(weapon?rarityByWeight(strOrObject.rarity):ArmourRarityColour(ARMOURmap[strOrObject]))(itemName)} not taken\n`)
+		logs.writeSync(
+			`${chalk.hex(weapon?rarityByWeight(strOrObject.rarity):ArmourRarityColour(ARMOURmap[strOrObject]))(itemName)} not taken\n`)
 		logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
 		tresureResolver()
 	})
-
 	take.on('press', async function() {
 		clearButtons()
 		logs.writeSync(`${chalk.hex(weapon?rarityByWeight(strOrObject.rarity):ArmourRarityColour(ARMOURmap[strOrObject]))(itemName)} \
 taken, ${chalk.hex(weapon?rarityByWeight(thePlayer.weapon.rarity):ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(oldItem)} discarded\n`)
-
 		logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
-		if(weapon){
+		if (weapon) {
 			thePlayer.changeWeapon(strOrObject)
-		}else{
+		} else {
 			thePlayer.changeArmour(strOrObject)
 		}
 		refreshInventory()
 		refreshStats()
 		tresureResolver()
 	})
-
-	
-
 }
 
-
-function pickTreasure(){
-	let options = ["gold", "items", "weapon", "armour"]//, "altar"]
-	let weights_array =[5,1,1,1]//,1]
+function pickTreasure() {
+	let options = ["gold", "items", "weapon", "armour"] //, "altar"]
+	let weights_array = [5, 1, 1, 1] //,1]
 	return chance4.weighted(options, weights_array)
 }
 
-
-function MakeContinueButton(text){
+function MakeContinueButton(text) {
 	let continueButton = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
@@ -1017,7 +997,7 @@ function MakeContinueButton(text){
 		left: 1,
 		top: 1,
 		name: 'continue',
-		content: text?text:chalk.hex('ffffff')(`continue`),
+		content: text ? text : chalk.hex('ffffff')(`continue`),
 		//shadow: true,
 		style: {
 			bg: `#${miscColours.epic}`,
@@ -1035,23 +1015,12 @@ function MakeContinueButton(text){
 	screen.render()
 	buttonsContainer.scrollTo(0)
 	screen.render()
-	continueButton.on('press', async function () {
+	continueButton.on('press', async function() {
 		clearButtons()
 		screen.render()
 		tresureResolver()
 	});
 }
-
-
-
-
-
-
-
-
-
-
-
 async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = true, hostile = false, counter = 1) {
 	ImageScreenTerm.setLabel(`${gradient.summer(`Turn counter: ${counter}`)}`)
 	let monster = thePlayer.encDat.enemy
@@ -1087,7 +1056,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 		logs.writeSync(chalk.blueBright(monster.name) + gradient.pastel(" is not hostile") + '\n')
 		logs.writeSync(`${chalk.hex('1B1B1B')(`.`.repeat(logs.term.cols - 1))}\n`);
 	}
-	if (!death)createCombatButtons(monsterHostile)
+	if (!death) createCombatButtons(monsterHostile)
 	combatButtonsMap['attack'].on('press', async () => {
 		if ((logs.term.rows - 2) <= logs.term.buffer.active.cursorY) {
 			logs.writeSync(escUpByNum(1))
@@ -1096,7 +1065,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 		clearButtons();
 		logs.writeSync(
 			`${chalk.hex('00ea00')(`${escLeftByNum(2)}You attack the enemy with your`)} ${chalk.hex(player.weapon.dmgType.color)(player.weaponName.replace(/_/g, ' ')+'!')}\n`
-			);
+		);
 		let TOHIT = player.rollToHit()
 		if (TOHIT[0] === 20) {
 			logs.writeSync(dice + escUpByNum(3) + gradient.rainbow(`\nCrit!\n\n`))
@@ -1113,7 +1082,8 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			monster.hp -= playerDamage
 			player.encDat.ATdmg(playerDamage)
 			logs.writeSync(
-			`${chalk.hex('00ea00')(`You hit for`)} ${chalk.hex('fe2c54')(playerDamage)} ${chalk.hex('00ea00')('damage!')}\n`); // ___DEBUGenemyhp=${monster.hp}\n`);
+				`${chalk.hex('00ea00')(`You hit for`)} ${chalk.hex('fe2c54')(playerDamage)} ${chalk.hex('00ea00')('damage!')}\n`
+				); // ___DEBUGenemyhp=${monster.hp}\n`);
 			logs.writeSync(player.wBonus.applyEffectWF(monster, crit, player));
 			//logs.writeSync(chalk.hex('00ea00')(`___DEBUGenemyhp=${monster.hp}\n`));
 		} else {
@@ -1213,7 +1183,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			}
 			logs.writeSync(
 				`${chalk.hex('00ea00')(`You light a flask of oil and throw it to the enemy!\n`)+chalk.hex(DMG_COLOUR[DMG_TYPE.FIRE])(`dealing 2d6+4=${damage} fire damage!`)}\n`
-				);
+			);
 			monster.hp -= damage
 			thePlayer.oil--
 			thePlayer.encDat.AfUse()
@@ -1268,7 +1238,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 						monster.polymorph = false;
 						monsterHostile = false;
 					}
-				}else{
+				} else {
 					monsterHostile = true;
 					await enemyAtack(monster, player)
 				}
@@ -1459,7 +1429,6 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 	stats.focus()
 	screen.render()
 }
-
 //ESC[?25l	make cursor invisible
 //ESC[?25h	make cursor visible
 //
@@ -1723,25 +1692,34 @@ box.on('click', function() {
 logs.writeSync("TESTING SANDBOX, PRESS Y AFTER ITEMS WRITTEN \nTO GO TO COMBAT TEST\n")
 //draw test
 await new Promise((r) => setTimeout(r, 1000));
-
-
-
-const prettyFont = cfonts.render('equiped:', {gradient: 'red,blue', font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
-let a = prettyFont.string  // the ansi string for sexy console font
-
- // write to terminal
-const font2 = cfonts.render('Found...', {gradient: 'red,blue', font: 'block', colors: ['system'], background: 'transparent', letterSpacing: 0, lineHeight: 1, space: false, maxLength: '50'});
-let v = font2.string 
-
+const prettyFont = cfonts.render('equiped:', {
+	gradient: 'red,blue',
+	font: 'block',
+	colors: ['system'],
+	background: 'transparent',
+	letterSpacing: 0,
+	lineHeight: 1,
+	space: false,
+	maxLength: '50'
+});
+let a = prettyFont.string // the ansi string for sexy console font
+// write to terminal
+const font2 = cfonts.render('Found...', {
+	gradient: 'red,blue',
+	font: 'block',
+	colors: ['system'],
+	background: 'transparent',
+	letterSpacing: 0,
+	lineHeight: 1,
+	space: false,
+	maxLength: '50'
+});
+let v = font2.string
 ImageScreenTerm.writeSync('[H')
-ImageScreenTerm.writeSync(a+'\n')
+ImageScreenTerm.writeSync(a + '\n')
 await drawBanner(weapons.flamberge)
-
 let rar = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
 ImageScreenTerm.writeSync(rar('▄'.repeat(ImageScreenTerm.term.cols)))
-
 ImageScreenTerm.writeSync('\n\n')
-ImageScreenTerm.writeSync(v+'\n') 
+ImageScreenTerm.writeSync(v + '\n')
 await drawBanner()
-
-

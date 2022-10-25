@@ -15,12 +15,30 @@
 //  TERMINAL WRITE FUNCTIONS
 //
 import lodashC from "lodash.compact";
-import {ImageScreenTerm, logs} from "./ui.js";
+import {
+	ImageScreenTerm,
+	logs
+} from "./ui.js";
 import gradient from 'gradient-string';
 import chalk from "chalk";
-import {ARMOUR, ARMOURmap, ArmourRarityColour, DMG_COLOUR, DMG_TYPE, dynamicBox, escDownByNum, escLeftByNum, escRightByNum, escUpByNum, miscColours, rarityByWeight, weapons} from "./game-objects/data.js";
-import { Player } from "./game-objects/player.js";
-
+import {
+	ARMOUR,
+	ARMOURmap,
+	ArmourRarityColour,
+	DMG_COLOUR,
+	DMG_TYPE,
+	dynamicBox,
+	escDownByNum,
+	escLeftByNum,
+	escRightByNum,
+	escUpByNum,
+	miscColours,
+	rarityByWeight,
+	weapons
+} from "./game-objects/data.js";
+import {
+	Player
+} from "./game-objects/player.js";
 chalk.level = 2;
 
 function findCursor(terminal = ImageScreenTerm) {
@@ -240,21 +258,19 @@ async function scanlines(terminal = ImageScreenTerm, text = '', speed = 5, color
 		cursorPos = 1
 	}
 }
-
-export function mkWeaponBan(weapon=weapons.newtons_apple, vertBarColour='36454f'){
-    let wpn=weapon
-    let wpnlines=wpn.description.split('\n')
-    let testweaponBanner=
-`\
+export function mkWeaponBan(weapon = weapons.newtons_apple, vertBarColour = '36454f') {
+	let wpn = weapon
+	let wpnlines = wpn.description.split('\n')
+	let testweaponBanner =
+		`\
              ${chalk.hex(rarityByWeight(wpn.rarity))('Name   :'+(wpn.name.replace(/_/g, ' ')))}
              ${chalk.greenBright(`dmgDie :${wpn.dmgDie}`)}
              ${chalk.hex(wpn.dmgType.color)('dmgTyp :'+wpn.dmgType.name)}
              ${chalk.blueBright(`desc.  :${wpnlines[0]}`)}
                      ${chalk.blueBright(`${wpnlines[1]?wpnlines[1]:''}${wpnlines[2]?`\n${' '.repeat(21)+wpnlines[2]}`:''}`)}\
 `
-    return dynamicBox(testweaponBanner,51,false, gradient.passion,vertBarColour)
-}//passion
-
+	return dynamicBox(testweaponBanner, 51, false, gradient.passion, vertBarColour)
+} //passion
 export function fitLinesStr(text, width = logs.term.cols - 1) {
 	let multiline = ``
 	let lorem_lines = fitLines(text, width)
@@ -267,149 +283,142 @@ export function fitLinesStr(text, width = logs.term.cols - 1) {
 	}
 	return multiline
 }
-export async function slowLineWrite(multiLineText,term=ImageScreenTerm,speed=50){
-	let lines=multiLineText.split('\n')
-	for (let i of lines){
+export async function slowLineWrite(multiLineText, term = ImageScreenTerm, speed = 50) {
+	let lines = multiLineText.split('\n')
+	for (let i of lines) {
 		await new Promise(r => setTimeout(r, speed));
-		term.writeSync(i+'\n')
+		term.writeSync(i + '\n')
 	}
 }
-export async function drawBanner(weap=weapons.newtons_apple, term=ImageScreenTerm){
-	let weapon4box=weap
-	let desclines= weapon4box.description.split('\n').length
-	let extraesc=0
-	if(desclines>2){
-		extraesc=desclines-2
+export async function drawBanner(weap = weapons.newtons_apple, term = ImageScreenTerm) {
+	let weapon4box = weap
+	let desclines = weapon4box.description.split('\n').length
+	let extraesc = 0
+	if (desclines > 2) {
+		extraesc = desclines - 2
 	}
-
-	let linesIcon=weapon4box.art.split('\n')
-
-	await(slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`,51,false,gradient.retro,'ffffff'),term))
-	term.writeSync('\r'+escUpByNum(7+extraesc))
-
-	await(slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity)),term))
-	term.writeSync(escUpByNum(6+extraesc)+'\r'+escRightByNum(1))//fix for multiline of 3
-	for (let i of linesIcon){
+	let linesIcon = weapon4box.art.split('\n')
+	await (slowLineWrite(dynamicBox(`\n\n\n\n${`\n`.repeat(extraesc)}`, 51, false, gradient.retro, 'ffffff'), term))
+	term.writeSync('\r' + escUpByNum(7 + extraesc))
+	await (slowLineWrite(mkWeaponBan(weapon4box, rarityByWeight(weapon4box.rarity)), term))
+	term.writeSync(escUpByNum(6 + extraesc) + '\r' + escRightByNum(1)) //fix for multiline of 3
+	for (let i of linesIcon) {
 		await new Promise(r => setTimeout(r, 50));
-		term.writeSync(i+'\n\r'+escRightByNum(1))
+		term.writeSync(i + '\n\r' + escRightByNum(1))
 	}
-	term.writeSync(`\n${`\n`.repeat(extraesc)}`)//clear previous banner
+	term.writeSync(`\n${`\n`.repeat(extraesc)}`) //clear previous banner
 }
-
-export async function writePotion(amount=1,term=ImageScreenTerm){
-	let icon=`\
+export async function writePotion(amount = 1, term = ImageScreenTerm) {
+	let icon = `\
 ${chalk.hex('8b4513')('{▄}')}
 \u001b[97m\u001b[40m█\u001b${chalk.hex('ff2d57')('█')}\u001b[97m\u001b[40m█\u001b[m
 \u001b[37m\u001b[40m \u001b[97m\u001b[40m▀\u001b[37m\u001b[40m \u001b[m\
 `
-	let k=
-`\
+	let k =
+		`\
     ${chalk.hex('ff2d57')(`  You found...
       potions!`)}
         ${chalk.greenBright(`X ${amount}`)} \
 `
-	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'),term)
-	term.writeSync('\r'+escUpByNum(5))
-	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,'ff2d57'),term)
-	term.writeSync('\r'+escUpByNum(4)+escRightByNum(2))
-	let iconLines=icon.split('\n')
+	await slowLineWrite(dynamicBox(`\n\n`, 20, false, gradient.cristal, 'd3d3d3'), term)
+	term.writeSync('\r' + escUpByNum(5))
+	await slowLineWrite(dynamicBox(k, 20, false, gradient.summer, 'ff2d57'), term)
+	term.writeSync('\r' + escUpByNum(4) + escRightByNum(2))
+	let iconLines = icon.split('\n')
 	//ImageScreenTerm.writeSync(ddfs)
-	for (let i of iconLines){
+	for (let i of iconLines) {
 		await new Promise(r => setTimeout(r, 50));
-		term.writeSync(i+'\n\r'+escRightByNum(2))
+		term.writeSync(i + '\n\r' + escRightByNum(2))
 	}
 	term.writeSync('\n')
 }
-
-export async function writeGold(amount,term=ImageScreenTerm){
-let goldStr=
-`\
+export async function writeGold(amount, term = ImageScreenTerm) {
+	let goldStr =
+		`\
 ${chalk.bold.hex('FFD700')(`You found some gold!`)}
     ${chalk.greenBright(`qnt : ${amount}gp`)}\
 `
-	await slowLineWrite(dynamicBox(goldStr,20,false,gradient.summer,'FFD700'),term)
+	await slowLineWrite(dynamicBox(goldStr, 20, false, gradient.summer, 'FFD700'), term)
 	//term.writeSync('\n')
 }
-
 //effectively a copy of above function but i was too lazy to generalise and alias it
-export async function writeOil(amount=1,term=ImageScreenTerm){
-	let icon=`\
+export async function writeOil(amount = 1, term = ImageScreenTerm) {
+	let icon = `\
 [37m[40m ${chalk.hex('55342B')('▄▄')}[37m[40m [m
 [97m[40m▄${chalk.bgHex(miscColours.oil)(chalk.hex('ffffff')('▀▀'))}[97m[40m▄[m
 [97m[40m▀${chalk.bgHex('ffffff')(chalk.hex(miscColours.oil)('▀▀'))}[97m[40m▀[m\
 `
-	let k=
-`\
+	let k =
+		`\
     ${chalk.hex(miscColours.oil)(`  You found...
       oil flasks!`)}
         ${chalk.greenBright(`X ${amount}`)} \
 `
-	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'),term)
-	term.writeSync('\r'+escUpByNum(5))
-	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,miscColours.oil),term)
-	term.writeSync('\r'+escUpByNum(4)+escRightByNum(2))
-	let iconLines=icon.split('\n')
+	await slowLineWrite(dynamicBox(`\n\n`, 20, false, gradient.cristal, 'd3d3d3'), term)
+	term.writeSync('\r' + escUpByNum(5))
+	await slowLineWrite(dynamicBox(k, 20, false, gradient.summer, miscColours.oil), term)
+	term.writeSync('\r' + escUpByNum(4) + escRightByNum(2))
+	let iconLines = icon.split('\n')
 	//ImageScreenTerm.writeSync(ddfs)
-	for (let i of iconLines){
+	for (let i of iconLines) {
 		await new Promise(r => setTimeout(r, 50));
-		term.writeSync(i+'\n\r'+escRightByNum(2))
+		term.writeSync(i + '\n\r' + escRightByNum(2))
 	}
 	term.writeSync('\n')
 }
 //another lazy copy
-export async function writeScroll(amount=1,term=ImageScreenTerm){
-	let icon=`\
+export async function writeScroll(amount = 1, term = ImageScreenTerm) {
+	let icon = `\
 [37m[40m▀${chalk.bgHex('ffffff')(chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])('☼§≈♫'))}[37m[40m [m
 [37m[40m ${chalk.bgHex('ffffff')(chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])('φ♫§≈'))}[37m[40m [m
 [37m[40m [97m[40m▀[37m[40m▀▀▀▀[m\
 `
-	let k=
-`\
+	let k =
+		`\
     ${chalk.hex(DMG_COLOUR[DMG_TYPE.MAGIC])(`  You found...
       magic scrolls!`)}
         ${chalk.greenBright(`X ${amount}`)} \
 `
-	await slowLineWrite(dynamicBox(`\n\n`,20,false,gradient.cristal,'d3d3d3'),term)
-	term.writeSync('\r'+escUpByNum(5))
-	await slowLineWrite(dynamicBox(k,20,false,gradient.summer,DMG_COLOUR[DMG_TYPE.MAGIC]),term)
-	term.writeSync('\r'+escUpByNum(4)+escRightByNum(1))
-	let iconLines=icon.split('\n')
+	await slowLineWrite(dynamicBox(`\n\n`, 20, false, gradient.cristal, 'd3d3d3'), term)
+	term.writeSync('\r' + escUpByNum(5))
+	await slowLineWrite(dynamicBox(k, 20, false, gradient.summer, DMG_COLOUR[DMG_TYPE.MAGIC]), term)
+	term.writeSync('\r' + escUpByNum(4) + escRightByNum(1))
+	let iconLines = icon.split('\n')
 	//ImageScreenTerm.writeSync(ddfs)
-	for (let i of iconLines){
+	for (let i of iconLines) {
 		await new Promise(r => setTimeout(r, 50));
-		term.writeSync(i+'\n\r'+escRightByNum(1))
+		term.writeSync(i + '\n\r' + escRightByNum(1))
 	}
 	term.writeSync('\n')
 }
-
-export async function writeArmour(armourName,enchant=0,term=ImageScreenTerm){
+export async function writeArmour(armourName, enchant = 0, term = ImageScreenTerm) {
 	//later make rarity change
-	let icon=`\
+	let icon = `\
 [90m[40m▐[90m[47m~~▒░▒▒░▒~~[90m[40m▌[37m[40m [m
 [90m[47m║░Ω░▒░░▒░Ω░║[37m[40m [m
 [90m[40m‼Σ▐[90m[47m▒░▒▒░▒[90m[40m▌Σ‼[37m[40m [m
 [37m[40m  [90m[40m▐[90m[47m░▒░░▒░[90m[40m▌[37m[40m   [m
 [37m[40m  [90m[40m▐[90m[47m§§§§§§[90m[40m▌[37m[40m   [m\
 `
-	let ac=ARMOURmap[armourName]
-	let colour=ArmourRarityColour(ac)
-	let k=
-`\
+	let ac = ARMOURmap[armourName]
+	let colour = ArmourRarityColour(ac)
+	let k =
+		`\
              ${chalk.hex(colour)('Name   : '+(armourName.replace(/_/g, ' ')))}
              ${chalk.greenBright(`AC     : ${ac}`)} ${(enchant!==0?(enchant>-1?chalk.hex(DMG_COLOUR[DMG_TYPE.HOLY])(`+ ${enchant}`):`- ${Math.abs(enchant)}`):'')}
              
              ${chalk.blueBright(`desc.  : ${'provides protection from'}`)}
                       ${chalk.blueBright('pointy sticks and magic')}\
 `
-	await slowLineWrite(dynamicBox(`\n\n\n\n`,51,false,gradient.mind,'d3d3d3'),term)
-	term.writeSync('\r'+escUpByNum(7))
-	await slowLineWrite(dynamicBox(k,51,false,gradient.passion,colour),term)
-	term.writeSync('\r'+escUpByNum(6)+escRightByNum(1))
-	let iconLines=icon.split('\n')
+	await slowLineWrite(dynamicBox(`\n\n\n\n`, 51, false, gradient.mind, 'd3d3d3'), term)
+	term.writeSync('\r' + escUpByNum(7))
+	await slowLineWrite(dynamicBox(k, 51, false, gradient.passion, colour), term)
+	term.writeSync('\r' + escUpByNum(6) + escRightByNum(1))
+	let iconLines = icon.split('\n')
 	//ImageScreenTerm.writeSync(ddfs)
-	for (let i of iconLines){
+	for (let i of iconLines) {
 		await new Promise(r => setTimeout(r, 50));
-		term.writeSync(i+'\n\r'+escRightByNum(1))
+		term.writeSync(i + '\n\r' + escRightByNum(1))
 	}
 	term.writeSync('\n')
 }

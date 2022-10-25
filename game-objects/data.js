@@ -1,13 +1,25 @@
-import {chance2, chance3, monsterRandom} from "./random_nums.js";
+import {
+	chance2,
+	chance3,
+	monsterRandom
+} from "./random_nums.js";
 import chalk from "chalk";
-import {dmgScrollFun, dmgTypeClass, Scroll, weapon} from "./items.js";
+import {
+	dmgScrollFun,
+	dmgTypeClass,
+	Scroll,
+	weapon
+} from "./items.js";
 import _ from "lodash";
 import assert from 'node:assert/strict';
-
 import gradient from 'gradient-string';
-import {monster} from "./mobs.js";
-import {Player, playerState} from "./player.js";
-
+import {
+	monster
+} from "./mobs.js";
+import {
+	Player,
+	playerState
+} from "./player.js";
 //DAMAGE TYPES
 chalk.level = 2;
 /*
@@ -58,25 +70,17 @@ Object.freeze(DMG_COLOUR)
 export {
 	DMG_COLOUR
 }
-
-
-export const miscColours=Object.freeze({
-	oil:'3B3131',
-	darkWood:'55342B',
-	potionPink:'ff2d57',
+export const miscColours = Object.freeze({
+	oil: '3B3131',
+	darkWood: '55342B',
+	potionPink: 'ff2d57',
 	...DMG_COLOUR,
-	common:'ffffff',
-	uncommon:'1eff00',
-	rare:'0070dd',
-	epic:'a335ee',
-	legendary:'ff8000',
+	common: 'ffffff',
+	uncommon: '1eff00',
+	rare: '0070dd',
+	epic: 'a335ee',
+	legendary: 'ff8000',
 })
-
-
-
-
-
-
 export const damageTypes = Object.freeze({
 	fire_damage: new dmgTypeClass({
 		name: DMG_TYPE.FIRE,
@@ -95,9 +99,9 @@ export const damageTypes = Object.freeze({
 					sum: true
 				})
 				target.hp -= bonusDamage
-				try{
+				try {
 					target2.encDat.TdmgAr[-1] += bonusDamage
-				}catch(e){}
+				} catch (e) {}
 				return `${chalk.hex(self.color)('bonus fire damage: ')}${bonusDamage}\n`
 			} else {
 				return ''
@@ -114,13 +118,13 @@ export const damageTypes = Object.freeze({
 			if ((target2.weaponCooldown > 0) && !crit) {
 				--target2.weaponCooldown
 				let bonusDamage = 1
-                if(target2.dex>0){
-                    bonusDamage+=target2.dex
-                }
+				if (target2.dex > 0) {
+					bonusDamage += target2.dex
+				}
 				target.hp -= bonusDamage
-				try{
+				try {
 					target2.encDat.TdmgAr[-1] += bonusDamage
-				}catch(e){}
+				} catch (e) {}
 				return `${chalk.hex(self.color)('$$$$$$$$$ 1 poison damage: ')}${bonusDamage}\n`
 			} else if (chance2.bool({
 					likelihood: (100 * self.chanceToApply)
@@ -132,9 +136,9 @@ export const damageTypes = Object.freeze({
 				})
 				target2.weaponCooldown = crit ? 0 : selfdmgtype.effectDurationMax
 				target.hp -= bonusDamage
-				try{
+				try {
 					target2.encDat.TdmgAr[-1] += bonusDamage
-				}catch(e){}
+				} catch (e) {}
 				return `${chalk.hex(self.color)('DEFAULT poison damage: ')}$dam${bonusDamage}__________________\ncool${target2.weaponCooldown}_______________\n`
 			} else {
 				return 'MISS@##@#'
@@ -159,9 +163,9 @@ export const damageTypes = Object.freeze({
 						sum: true
 					})
 					target.hp -= bonusDamage
-					try{
+					try {
 						target2.encDat.TdmgAr[-1] += bonusDamage
-					}catch(e){}
+					} catch (e) {}
 					return `${chalk.hex(self.color)('bonus gravitational wave damage: ')}${bonusDamage}\n`
 				}
 			}
@@ -196,9 +200,9 @@ export const damageTypes = Object.freeze({
 				}
 				--target2.weaponCooldown
 				target.hp -= damage
-				try{
+				try {
 					target2.encDat.TdmgAr[-1] += damage
-				}catch(e){}
+				} catch (e) {}
 				return `${chalk.hex(self.color)(`${appendStr}`)}`
 			} else if (chance2.bool({
 					likelihood: (100 * (self.chanceToApply + bonusChance))
@@ -210,9 +214,9 @@ export const damageTypes = Object.freeze({
 				})
 				target2.weaponCooldown = crit ? 7 : selfdmgtype.effectDurationMax
 				target.hp -= bonusDamage
-				try{
+				try {
 					target2.encDat.TdmgAr[-1] += bonusDamage
-				}catch(e){}
+				} catch (e) {}
 				return `${chalk.hex(self.color)('naruto damage dealt: ')}${bonusDamage}\n`
 			} else {
 				return 'MISS@##@#'
@@ -251,28 +255,21 @@ export const damageTypes = Object.freeze({
                                                                                             ███    ███             
 */
 export const weaponART = Object.freeze({
-	apple:
-`\
+	apple: `\
 
  [95m[40m≈[37m[40m   [92m[40m▌[37m[40m [95m[40m≈≈[37m[40m  [m
  [37m[40m  [31m[40m███[97m[41m▀[97m[40m█[37m[40m [95m[40m≈[37m[40m [m
  [37m[40m [95m[40m≈[31m[40m████[97m[41m▀[37m[40m  [95m[40m≈[m
  [37m[40m [95m[40m≈[37m[40m [31m[40m▀▀▀[30m[40m[37m[40m [m\
 `,
-	swordHandle:
-`\
+	swordHandle: `\
 [37m[40m     [90m[40m╔[37m[40m╛    [m
 [37m[40m     [90m[40m╟==≈≈≈≈[m
 ${chalk.bgHex('55342B')(chalk.hex('323232')('▄'))}${chalk.bgHex('55342B')(chalk.hex('323232')('▒'))}${chalk.bgHex('55342B')(chalk.hex('323232')('▄'))}${chalk.bgHex('55342B')(chalk.hex('323232')('▒'))}[90m[43m${chalk.bgHex('55342B')(chalk.hex('323232')('▄'))}[90m[40m╠[37m[40m════[90m[40m══[m
 [37m[40m     [90m[40m╟==≈≈≈≈[m
 [37m[40m     [90m[40m╚[37m[40m╕    [m\
 `
-
-
 })
-
-
-
 /*
  ▄█     █▄     ▄████████    ▄████████    ▄███████▄  ▄██████▄  ███▄▄▄▄      ▄████████ 
 ███     ███   ███    ███   ███    ███   ███    ███ ███    ███ ███▀▀▀██▄   ███    ███ 
@@ -353,33 +350,25 @@ export const weapons = Object.freeze({
 	newtons_apple: new weapon({
 		name: 'newtons_apple',
 		dmgDie: '1d8',
-		dmgType: damageTypes.gravity_damage, 
+		dmgType: damageTypes.gravity_damage,
 		rarity: .2,
 		enchant: 0,
 		description: `newton\'s apple, only a genius \ncan wield its true powers`,
 		art: weaponART.apple
 	})
 })
-export function rarityByWeight(num=1)
-{
-    if(num<=.2)
-    {
-        return rarityColours[4]
-    }else if(num<=.4)
-    {
-        return rarityColours[3]
-    }else if(num<=.6)
-    {
-        return rarityColours[2]
-    }
-    else if(num<=.8)
-    {
-        return rarityColours[1]
-    }
-    else if(num<=1)
-    {
-        return rarityColours[0]
-    }else{
+export function rarityByWeight(num = 1) {
+	if (num <= .2) {
+		return rarityColours[4]
+	} else if (num <= .4) {
+		return rarityColours[3]
+	} else if (num <= .6) {
+		return rarityColours[2]
+	} else if (num <= .8) {
+		return rarityColours[1]
+	} else if (num <= 1) {
+		return rarityColours[0]
+	} else {
 		// for debug
 		return 'c2c2c2'
 	}
@@ -398,8 +387,7 @@ function pickRandom(items, weights) {
 	//copy.dmgType=damageTypes[copy.dmgType.name]
 	return copy
 }
-
-export function weaponSubset(min,max) {
+export function weaponSubset(min, max) {
 	let copy = _.cloneDeep(weaponsArray)
 	copy = copy.filter((item) => {
 		return item.rarity >= min && item.rarity <= max
@@ -462,9 +450,11 @@ Object.freeze(rarityColours)
 export {
 	rarityColours
 }
-
-export function ArmourSubsetMaker(min,max){
-	let k={d:'f',e:'s'}
+export function ArmourSubsetMaker(min, max) {
+	let k = {
+		d: 'f',
+		e: 's'
+	}
 	let subset = Object.keys(ARMOURmap).filter((key) => {
 		return ARMOURmap[key] >= min && ARMOURmap[key] <= max
 	})
@@ -546,7 +536,7 @@ export const ScrollsAll = Object.freeze({
 				} else {
 					let oldName = player.encDat.enmyName
 					player.encDat.enemy = pickEnemy() //new Monster()  //temp till implemented fully
-					player.encDat.enemy.polymorph=true
+					player.encDat.enemy.polymorph = true
 					params.term.reset()
 					player.encDat.enmyName = player.encDat.enemy.name
 					params.term.writeSync(player.encDat.enemy.art)
@@ -635,7 +625,7 @@ export const ScrollsAll = Object.freeze({
 			if (player.hp === player.hpMax) {
 				return chalk.hex(DMG_COLOUR[DMG_TYPE.HOLY])(
 					`You cast heal on yourself even though you are already at full health.\nWasting a spell that could have been used to save yourself.`
-					)
+				)
 			} else {
 				let healAmount = heal
 				if ((player.hp + heal) > player.hpMax) {
@@ -710,8 +700,6 @@ const scrollWeights = scrollsArray.map((item) => {
 export function pickScroll() {
 	return pickRandom(scrollsArray, scrollWeights)
 }
-
-
 /*
    ▄████████ ███▄▄▄▄      ▄████████   ▄▄▄▄███▄▄▄▄   ▄██   ▄           ▄████████    ▄████████     ███     
   ███    ███ ███▀▀▀██▄   ███    ███ ▄██▀▀▀███▀▀▀██▄ ███   ██▄        ███    ███   ███    ███ ▀█████████▄ 
@@ -1146,7 +1134,7 @@ export const monsters = Object.freeze({
 		dmgDie: 6,
 		aggro: 12,
 		rarity: 1,
-		art: enemiesArt.skelingtonWar 
+		art: enemiesArt.skelingtonWar
 	}),
 })
 const enemyArray = Object.values(monsters)
@@ -1406,21 +1394,27 @@ const blockingWords = Object.freeze([
 function pickEnemyVerb() {
 	return monsterRandom.pickone(verbOpts)
 }
+
 function pickPathName() {
 	return monsterRandom.pickone(pathName)
 }
+
 function pickMoveWord() {
 	return monsterRandom.pickone(moveWord)
 }
+
 function pickEnemyAdjective() {
 	return monsterRandom.pickone(enemyAdjective)
 }
+
 function pickThroughAlt() {
 	return monsterRandom.pickone(throughAlt)
 }
+
 function pickRoomWord() {
 	return monsterRandom.pickone(roomWords)
 }
+
 function pickBlockingWords() {
 	return monsterRandom.pickone(blockingWords)
 }
@@ -1433,11 +1427,6 @@ Choose your next move.\
 `
 	return roomText
 }
-
-
-
-
-
 /*
    ▄▄▄▄███▄▄▄▄    ▄█     ▄████████  ▄████████         ▄████████    ▄████████     ███     
  ▄██▀▀▀███▀▀▀██▄ ███    ███    ███ ███    ███        ███    ███   ███    ███ ▀█████████▄ 
@@ -1449,51 +1438,13 @@ Choose your next move.\
   ▀█   ███   █▀  █▀    ▄████████▀  ████████▀         ███    █▀    ███    ███    ▄████▀   
                                                                   ███    ███             
 */
-
-
-export const miscArt=Object.freeze({
-	potion: 
-`\
+export const miscArt = Object.freeze({
+	potion: `\
  [33m[40m{▄}[m
  [97m[40m█${chalk.hex('ff2d57')('█')}[97m[40m█[m
  [37m[40m [97m[40m▀[37m[40m [m\
-`
-,
+`,
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //
 //
@@ -1501,10 +1452,6 @@ export const miscArt=Object.freeze({
 // Not urgent but eventually make functions to generate boxes that work with escape sequences
 // currently a pain coz strin.length includes esc sequences and you need to make a copy with out escapes
 // using a regex
-
-
-
-
 export const border =
 	`\
 ╭╼────────────────────────╾╮
@@ -1515,30 +1462,29 @@ export const border =
 │                          │
 ╰╼────────────────────────╾╯
 `
-
 //shorthand for replacing escape sequences
 Object.defineProperty(String.prototype, 'cleanANSI', {
-    value() {
-        return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,'')
-    }
+	value() {
+		return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
+	}
 });
 
 function centerText(text, width) {
-    let pad = Math.floor((width - text.cleanANSI().length) / 2);
-    return (' '.repeat(pad) + text);
+	let pad = Math.floor((width - text.cleanANSI().length) / 2);
+	return (' '.repeat(pad) + text);
 }
-export function dynamicBox(text='', width=20, center=false,gradientFunction=gradient.pastel, vertLn='36454f') {
+export function dynamicBox(text = '', width = 20, center = false, gradientFunction = gradient.pastel, vertLn = '36454f') {
 	let str = text
 	let lines = str.split('\n');
-    if(center) {
-        lines=lines.map(line => centerText(line, width))
-    }
-    let max = lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '').cleanANSI().length;
-    //console.log(lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '')+`${max}`)
-    assert(max<=width,"STRING TO WIDE FOR THE GIVEN WIDTH OF THE BOX")
-    max+=(width-max)
-    //console.log(max)
-    lines = lines.map((line, ind) => {
+	if (center) {
+		lines = lines.map(line => centerText(line, width))
+	}
+	let max = lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '').cleanANSI().length;
+	//console.log(lines.reduce((a, b) => a.cleanANSI().length > b.cleanANSI().length ? a : b, '')+`${max}`)
+	assert(max <= width, "STRING TO WIDE FOR THE GIVEN WIDTH OF THE BOX")
+	max += (width - max)
+	//console.log(max)
+	lines = lines.map((line, ind) => {
 		var diff = max - line.cleanANSI().length;
 		if (ind === 1) {
 			// console.log(line)
@@ -1546,32 +1492,28 @@ export function dynamicBox(text='', width=20, center=false,gradientFunction=grad
 		}
 		return chalk.hex(vertLn)('│') + line + ' '.repeat(diff) + chalk.hex(vertLn)('│');
 	})
-    let top,bot;
-    if(!gradientFunction){
-        top = chalk.hex(vertLn)('╭')+'╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼'+chalk.hex(vertLn)('╮');
-        bot = chalk.hex(vertLn)('╰')+'╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼'+chalk.hex(vertLn)('╯');
-    }else{
-        top = chalk.hex(vertLn)('╭')+ gradientFunction('╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼') + chalk.hex(vertLn)('╮');
-        bot = chalk.hex(vertLn)('╰')+ gradientFunction('╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼') + chalk.hex(vertLn)('╯');
-    }
+	let top, bot;
+	if (!gradientFunction) {
+		top = chalk.hex(vertLn)('╭') + '╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼' + chalk.hex(vertLn)('╮');
+		bot = chalk.hex(vertLn)('╰') + '╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼' + chalk.hex(vertLn)('╯');
+	} else {
+		top = chalk.hex(vertLn)('╭') + gradientFunction('╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼') + chalk.hex(vertLn)('╮');
+		bot = chalk.hex(vertLn)('╰') + gradientFunction('╾' + '─'.repeat(lines[0].cleanANSI().length - 4) + '╼') + chalk.hex(vertLn)('╯');
+	}
 	let res = top + '\n' +
 		lines.join('\n') + '\n' +
 		bot;
 	return (res)
 }
-
 export function escLeftByNum(num) {
 	return `[${num}D`
 }
-
 export function escRightByNum(num) {
 	return `[${num}C`
 }
-
 export function escUpByNum(num) {
 	return `[${num}A`
 }
-
 export function escDownByNum(num) {
 	return `[${num}B`
 }

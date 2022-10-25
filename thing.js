@@ -490,7 +490,13 @@ async function eventHandler(gameEvent = temp_event1, ) {
 			await (waitForCombat())
 		}
 	}
-
+	// idea is for when a room has multiple encounters you loot after defeating all enemies
+	if(thePlayer.multipleEncounters){
+		for(let i = 0; i < gameEvent.enemies.length; i++){
+			treasure()
+			await waitForTreasure();
+		}
+	}
 
     //later if in cave?? or toggleable
 	// later make like total moves and like another depth var for current depth
@@ -874,8 +880,6 @@ async function treasure() {
 		}
 	});
 }
-
-
 
 async function ComplexTreasure(strOrObject=weapons.flamberge,weapon=true){
 	let itemStr = weapon?"weapon":"armour"

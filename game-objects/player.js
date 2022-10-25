@@ -45,7 +45,7 @@ export class Player {
 		this.int = this.rollStat();
 		let initial = chance1.rpg('2d6', {
 			sum: true
-		}) + this.str + 6 + 200
+		}) + this.str + 6 //+ 200
 		this.hp = initial
 		this.hpMax = initial
 		this.slots = {
@@ -68,7 +68,10 @@ export class Player {
 		this.armourMagic = 0;
 		//redundant
 		this.ac = this.armour ? this.armour : 10
+		//distance travelled
 		this.depth = 0;
+		//depth used for events
+		this.actualDepth = 0;
 		this.gold = 0;
 		this.oil = 5;
 		//later include identify potion mechanic

@@ -486,19 +486,21 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
     //later if in cave?? or toggleable
 	// later make like total moves and like another depth var for current depth
-	thePlayer.depth++
-	if ((thePlayer.depth % 4 === 0)&&(thePlayer.oil>0)) {
-		thePlayer.oil--
-	}
-	refreshInventory()
-	screen.render()
-	await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
-	logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
+	if(!death){
+		thePlayer.depth++
+		if ((thePlayer.depth % 4 === 0)&&(thePlayer.oil>0)) {
+			thePlayer.oil--
+		}
+		refreshInventory()
+		screen.render()
+		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
+		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
 
 
 	//
 	// for testing
 	//
+	}
 	temp_event1.enemies=[pickEnemy()]
 	temp_event2.enemies=[pickEnemy()]
 
@@ -661,53 +663,67 @@ async function clearCombat() {
 
 // multiple combats delay treasure till later
 // make it flash
-	let gotoTreasure = new blessedpkg.button({
-		parent: buttonsContainer,
-		mouse: true,
-		keys: true,
-		shrink: true,
-		padding: {
+	let gotoTreasure
+	if(!death) {
+		gotoTreasure = new blessedpkg.button({
+			parent: buttonsContainer,
+			mouse: true,
+			keys: true,
+			shrink: true,
+			padding: {
+				left: 1,
+				right: 1
+			},
 			left: 1,
-			right: 1
-		},
-		left: 1,
-		top: 1,
-		name: 'gotoTreasure',
-		content: chalk.hex('ffffff')(`search for loot`), //make it flash
-		//shadow: true,
-		style: {
-			bg: `#${miscColours.epic}`,
-			focus: {
-				bg: `#${miscColours.legendary}`,
+			top: 1,
+			name: 'gotoTreasure',
+			content: chalk.hex('ffffff')(`search for loot`), //make it flash
+			//shadow: true,
+			style: {
+				bg: `#${miscColours.epic}`,
+				focus: {
+					bg: `#${miscColours.legendary}`,
+				},
+				hover: {
+					bg: `#${miscColours.legendary}`,
+				},
 			},
-			hover: {
-				bg: `#${miscColours.legendary}`,
-			},
-		},
-	})
-	buttonsArray.push(gotoTreasure)
-	screen.render()
-	resizeButtons()
-	screen.render()
-	buttonsContainer.scrollTo(0)
-	screen.render()
-
-
-	gotoTreasure.on('press', async function () {
-		clearButtons()
+		})
+		buttonsArray.push(gotoTreasure)
 		screen.render()
-		//move somewhere else
-		tresureResolver()
-	});
+		resizeButtons()
+		screen.render()
+		buttonsContainer.scrollTo(0)
+		screen.render()
 
 
+		gotoTreasure.on('press', async function () {
+			clearButtons()
+			screen.render()
+			//move somewhere else
+			let treasure = pickTreasure()
+			switch (treasure){
+				case 'gold':
+					break
+				case 'items':
+					break
+				// make these call a function
+				// case 'weapon':
+				// 	break
+				// case 'armour':
+				// 	break
+				// case 'altar':
+				// 	break
+			}
 
+			tresureResolver()
+		});
 
-	//await new Promise(r => setTimeout(r, 1000));
+		//await new Promise(r => setTimeout(r, 1000));
 
-// multiple combats delay treasure till later
-	await waitForTreasure();
-
+	// multiple combats delay treasure till later
+		await waitForTreasure();
+	}
 
 	//treasure room
 	//click button search for loot
@@ -724,8 +740,8 @@ async function clearCombat() {
 
 
 function pickTreasure(){
-	let options = ["gold", "items", "weapon", "armour", "altar"]
-	let weights_array =[5,1,1,1,1]
+	let options = ["gold", "items"]// "weapon", "armour", "altar"]
+	let weights_array =[5,1]//1,1,1]
 }
 
 
@@ -1187,7 +1203,7 @@ async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 function refreshStats(player = thePlayer) {
 	stats.setContent(
 		`{bold}${chalk.red("HP:")}{/bold}
-${thePlayer.hp}
+${thePlayer.hp}/${thePlayer.hpMax}
 {bold}${chalk.green("AC:")}{/bold}
 ${thePlayer.ac}
 ${chalk.yellowBright('str:')}
@@ -1197,10 +1213,8 @@ ${thePlayer.int}
 ${chalk.hex('000080')('dex:')}
 ${thePlayer.dex}
 ${chalk.hex('630330')('cha:')}
-${thePlayer.cha} 
-${chalk.magenta("dmg:")}
-${thePlayer.basedamage}
-${chalk.magenta("mag:")}`)
+${thePlayer.cha}\
+`)
 	screen.render()
 }
 
@@ -1214,7 +1228,9 @@ ${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
 ${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armourName.replace(/_/g, ' '))}\
  ${thePlayer.armourMagic!==0?`{bold}${chalk.yellow (`+${thePlayer.armourMagic}`)}{/bold}`:''}
 
-${player.depth}
+debug depth: ${player.depth}
+${chalk.magenta("XP : ")}${"200/400"}
+${chalk.magenta("Lvl: ")}${thePlayer.level}
 
 ${chalk.hex('3B3131')('oil')} = ${thePlayer.oil}
 ${chalk.red('potions')} = ${thePlayer.potions}
@@ -1225,6 +1241,7 @@ ${chalk.yellow('gp')} = ${thePlayer.gold}`)
 
 function creatething() {
 	box.key('enter', function() {
+		death = false
 		toggleUi()
 		box.hide()
 		box.destroy()
@@ -1233,6 +1250,7 @@ function creatething() {
 		resolver()
 	})
 	box.on('click', function() {
+		death = false
 		toggleUi()
 		box.hide()
 		box.destroy()
@@ -1243,7 +1261,6 @@ function creatething() {
 }
 async function reset() {
 	resetRandoms()
-	death = false
 	thePlayer = thePlayer.rollNewPlayer()
 	refreshStats(thePlayer)
 	refreshInventory()

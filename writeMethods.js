@@ -384,11 +384,11 @@ export async function writeScroll(amount=1,term=ImageScreenTerm){
 export async function writeArmour(armourName,term=ImageScreenTerm){
 	//later make rarity change
 	let icon=`\
-[90m[40m▐[90m[47m~~▒░▒░▒~~[90m[40m▌[37m[40m  [m
-[90m[47m║░Ω░▒░▒░Ω░║[37m[40m  [m
-[90m[40m‼Σ▐[90m[47m▒░▒░▒[90m[40m▌Σ‼[37m[40m  [m
-[37m[40m  [90m[40m▐[90m[47m░▒░▒░[90m[40m▌[37m[40m    [m
-[37m[40m  [90m[40m▐[90m[47m§§§§§[90m[40m▌[37m[40m    [m\
+[90m[40m▐[90m[47m~~▒░▒▒░▒~~[90m[40m▌[37m[40m [m
+[90m[47m║░Ω░▒░░▒░Ω░║[37m[40m [m
+[90m[40m‼Σ▐[90m[47m▒░▒▒░▒[90m[40m▌Σ‼[37m[40m [m
+[37m[40m  [90m[40m▐[90m[47m░▒░░▒░[90m[40m▌[37m[40m   [m
+[37m[40m  [90m[40m▐[90m[47m§§§§§§[90m[40m▌[37m[40m   [m\
 `
 	let ac=ARMOURmap[armourName]
 	let colour=ArmourRarityColour(ac)

@@ -485,7 +485,13 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
 
     //later if in cave?? or toggleable
+	// later make like total moves and like another depth var for current depth
 	thePlayer.depth++
+	if ((thePlayer.depth % 4 === 0)&&(thePlayer.oil>0)) {
+		thePlayer.oil--
+	}
+	refreshInventory()
+	screen.render()
 	await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 	logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
 
@@ -1208,6 +1214,7 @@ ${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
 ${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armourName.replace(/_/g, ' '))}\
  ${thePlayer.armourMagic!==0?`{bold}${chalk.yellow (`+${thePlayer.armourMagic}`)}{/bold}`:''}
 
+${player.depth}
 
 ${chalk.hex('3B3131')('oil')} = ${thePlayer.oil}
 ${chalk.red('potions')} = ${thePlayer.potions}

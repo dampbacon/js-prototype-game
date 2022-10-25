@@ -626,7 +626,7 @@ export const ScrollsAll = Object.freeze({
 		rarity: 0.2,
 		description: 'A scroll that heals the player',
 		scrollFunction: (player, params = {}) => {
-			let heal = chance2.rpg('2d8', {
+			let heal = chance2.rpg('4d8', {
 				sum: true
 			})
 			if (player.hp === player.hpMax) {

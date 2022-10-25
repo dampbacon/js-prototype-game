@@ -722,13 +722,60 @@ async function clearCombat() {
 			//move somewhere else
 			let treasure = pickTreasure()
 			switch (treasure){
-				case 'gold':
-					ImageScreenTerm.writeSync("TESTgold")
+				case 'gold':{
+					let goldDice = 4 + (Math.ceil(thePlayer.actualDepth / 2.5));
+					goldDice += ((thePlayer.dex>0)?thePlayer.dex:0);
+					let gold =chance4.rpg(`${goldDice}d6`, {sum: true})
+					await writeGold(gold)
+					thePlayer.gold += gold
+					refreshInventory()
+					ImageScreenTerm.writeSync("TESTgold\n")
+					MakeContinueButton()
 					break
-				case 'items':
-					ImageScreenTerm.writeSync("TESTitems")
-					break
-				// make these call a function
+				}
+				case 'items':{
+					ImageScreenTerm.writeSync("TESTitems\n")
+					let amountOfDifferentItems = chance4.integer({min: 1, max: 3})
+					let items = ["potion", "scroll", "oil"]
+					let weights = [1, .8, 2]
+					let itemsWon=[]
+
+					for(let i = 0; i < amountOfDifferentItems; i++){
+						let selected = chance4.weighted(items, weights)
+						itemsWon.push(selected)
+						let index = items.findIndex((item)=>item===selected)
+						items.splice(index, 1)
+						weights.splice(index, 1)
+					}
+					for (let i = 0; i < itemsWon.length; i++) {
+						let item = itemsWon[i]
+						switch (item) {
+							case 'potion':{
+								let amount = chance4.d4()
+								thePlayer.potions += amount
+								refreshInventory()
+								await writePotion(amount)
+								break
+							}
+							case 'scroll':{
+								let amount = chance4.d4()
+								thePlayer.scrolls += amount
+								refreshInventory()
+								await writeScroll(amount)
+								break
+							}
+							case 'oil':{
+								let amount = chance4.d6()
+								thePlayer.oil += amount
+								refreshInventory()
+								await writeOil(amount)
+								break
+							}	
+						}	
+					}
+					MakeContinueButton()
+				}
+				// make these call a function, its more complex than above functions
 				// case 'weapon':
 				// 	break
 				// case 'armour':
@@ -736,7 +783,6 @@ async function clearCombat() {
 				// case 'altar':
 				// 	break
 			}
-			MakeContinueButton()
 
 			
 			//tresureResolver()
@@ -761,6 +807,7 @@ async function clearCombat() {
 	//for altars do int or some check to see what it does else random
 	//consumes scrolls
 	//insert loot diversion here
+
 	thePlayer.encDat = null
 	encounterResolver()
 }
@@ -768,7 +815,7 @@ async function clearCombat() {
 
 function pickTreasure(){
 	let options = ["gold", "items"]// "weapon", "armour", "altar"]
-	let weights_array =[5,1]//1,1,1]
+	let weights_array =[1,10]//1,1,1]
 	return chance4.weighted(options, weights_array)
 }
 

@@ -245,7 +245,7 @@ let temp_event2 = new game_event({
 	//test loot overrides
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
 	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
-	loot: [{type:LOOT_OPTIONS.WEAPON,item:weapons.flamberge}],
+	loot: [{type:LOOT_OPTIONS.WEAPON,item:weapons.flamberge},{type:LOOT_OPTIONS.GOLD,item:9000},{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
 	noDrops:true,
 	
 })

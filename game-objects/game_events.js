@@ -74,7 +74,9 @@ export class game_event {
 		this.buttons = buttons
 		this.cleared = false
 		// later pick between enemy or trap
-		this.enemies = enemies ? enemies : [pickEnemy()]
+		// enemies will ussually be just a pick enemy function refreshed
+		// how ever for custom events and more flexibility ability for a room to have no enemies will be added
+		this.enemies = enemies ? enemies : []
 		this.loot = loot ? loot : []  // {type: 'gold', item: 10} or {type: 'weapon', item: weapons.sword} or {type: 'armor', item: null}
 		this.noDrops = noDrops ? noDrops : false
 		//buttons are in the format of [[event_id,"button label", enabled_always=true]]        

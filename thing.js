@@ -189,9 +189,10 @@ let temp_event1 = new game_event({
 		body: 'some words for an test event, plz work~~~~~~~~~~`we wq ew qkiuoh hj khgfdf gk hj gf dhjksgfd'.repeat(3),
 		format: {
 			writeMode: 'gradientScanlines',
-			gradientFunction: gradient.retro.multiline,
-			gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse(),
-			speed: 2,
+			gradientFunction: gradient.instagram.multiline,
+			gradientArr: [`#${miscColours.legendary}`, `#${miscColours.epic}`, `#${miscColours.oil}`],
+			//gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse(),
+			speed: 5,
 		},
 		TextFile: {
 			exists: false,
@@ -237,8 +238,8 @@ let temp_event2 = new game_event({
 	},
 	buttons: [
 		[1, "goto 1", true],
-		//[2,"goto 2",true],
-		//[3,"goto 3 lolololololololollolololololololol",true]
+		[2,"goto 2 recur",true],
+		[3,"goto 3 lolololololololollolololololololol",true]
 	],
 	enemies: [
 		pickEnemy(),
@@ -250,7 +251,42 @@ let temp_event2 = new game_event({
 	noDrops:true,
 	
 })
-let testEventArr = [temp_event1, temp_event2, ]
+let temp_event3 = new game_event({
+	id: 3,
+	body: {
+		body: 'GAME EVENT 3, plz lalalala lalal lalall alalal allal',
+		format: {
+			writeMode: 'gradientScanlines',
+			gradientFunction: gradient.retro.multiline,
+			gradientArr: [`#${miscColours.legendary}`, `#${miscColours.epic}`, `#${miscColours.oil}`],
+		},
+		TextFile: {
+			exists: false,
+			url: ''
+		},
+	},
+	toScreen: {
+		toScreen: "EVENT #3",
+		AnsiFile: {
+			exists: false,
+			url: '',
+		},
+	},
+	buttons: [
+		[1, "goto 1", true],
+		[2,"goto 2",true],
+		[3,"goto 3 recur",true]
+	],
+	enemies: [
+		pickEnemy(),
+	],
+	//test loot overrides
+	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
+	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
+	
+	
+})
+let testEventArr = [temp_event1, temp_event2, temp_event3 ]
 //test content
 let body = `[0m\r
 \r
@@ -505,7 +541,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	}
 	// idea is for when a room has multiple encounters you loot after defeating all enemies
 	// first check how many are killed, then loot event*kill amount
-	if ( (thePlayer.multipleEncounters&&!death) && !thePlayer.noLoot) {
+	if ( (thePlayer.multipleEncounters&&!death) && !thePlayer.noLoot && gameEvent.enemies) {
 		let countDEADenemies = 0
 		for (let i of gameEvent.enemies) {
 			if(i.hp<=0){
@@ -518,11 +554,6 @@ async function eventHandler(gameEvent = temp_event1, ) {
 			if (thePlayer.scrolls > 0)scrollsButtonGeneric();
 			await waitForTreasure();
 		}
-		// if(countDEADenemies===0){
-		// 	MakeContinueButton()
-		// 	if (thePlayer.potions > 0)potionButtonGeneric();
-		// 	await waitForTreasure();
-		// }
 	}
 
 	thePlayer.multipleEncounters = false
@@ -563,6 +594,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	}
 	temp_event1.enemies = [pickEnemy(),pickEnemy(),pickEnemy()]
 	temp_event2.enemies = [pickEnemy()]
+	temp_event3.enemies = []
 	resolver()
 }
 async function writeImage(gameEvent) {

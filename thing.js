@@ -242,8 +242,10 @@ let temp_event2 = new game_event({
 	enemies: [
 		pickEnemy(),
 	],
+	//test loot overrides
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
-	loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
+	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
+	loot: [{type:LOOT_OPTIONS.WEAPON,item:weapons.flamberge}],
 	noDrops:true,
 	
 })
@@ -520,17 +522,16 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		// 	await waitForTreasure();
 		// }
 	}
-	//later if in cave?? or toggleable
-	// later make like total moves and like another depth var for current depth
+
 	thePlayer.multipleEncounters = false
 	thePlayer.noLoot = false
 	if (!death) {
 
-		// modify so custom loot can be given
+		// custom loot handling
 		if(gameEvent.loot){
 			for (let i = 0; i < gameEvent.loot.length; i++) {
 				treasure(gameEvent.loot[i])
-				logs.writeSync(`DEBUGGUGUGUGYou found ${gameEvent.loot[i].type}!`)
+				//logs.writeSync(`DEBUGGUGUGUGYou found ${gameEvent.loot[i].type}!`)
 				if (thePlayer.potions > 0)potionButtonGeneric();
 				await waitForTreasure();
 			}
@@ -816,12 +817,12 @@ async function treasure(customTreasure={type: 'items', item: null})
 		if (customTreasure.type && (customTreasure.type in LOOT_OPTIONS)) {
 
 			//DEBUGGggg
-			logs.writeSync(chalk.red(`custom treasure type ${customTreasure.type}`))
+			//logs.writeSync(chalk.red(`custom treasure type ${customTreasure.type}`))
 			customLoot= true
 			treasure = customTreasure.type
 		}else{
 			//DEBUGGgggggggggggg
-			logs.writeSync(`random treasure type`)
+			//logs.writeSync(`random treasure type`)
 
 			treasure = pickTreasure()
 		}
@@ -985,11 +986,26 @@ async function treasure(customTreasure={type: 'items', item: null})
 			} // "weapon", "armour", "altar"]
 			// make these call a function, its more complex than above functions
 			case LOOT_OPTIONS.WEAPON: {
-				ComplexTreasure(pickWeapon(), true)
+				let wpn=null
+				if (customTreasure.item){
+					assert(customTreasure.item instanceof weapon, 'ITEM MUST BE A WEAPON')
+					wpn=customTreasure.item
+				}else{
+					wpn = new pickWeapon()
+				}
+				ComplexTreasure(wpn, true)
 				break
 			}
 			case LOOT_OPTIONS.ARMOUR: {
-				ComplexTreasure(armourPicker(), false)
+				let arm=null
+				if (customTreasure.item){
+					assert(typeof customTreasure.item ==='string', 'ITEM MUST BE A STRING')
+					assert(customTreasure.item in ARMOUR, 'ITEM MUST BE A VALID ARMOUR')
+					arm=customTreasure.item
+				}else{
+					arm = armourPicker()
+				}
+				ComplexTreasure(arm, false)
 				break
 			}
 				// case 'altar':

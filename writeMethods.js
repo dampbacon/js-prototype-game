@@ -264,7 +264,7 @@ export function mkWeaponBan(weapon = weapons.newtons_apple, vertBarColour = '364
 	let testweaponBanner =
 		`\
              ${chalk.hex(rarityByWeight(wpn.rarity))('Name   :'+(wpn.name.replace(/_/g, ' ')))}
-             ${chalk.greenBright(`dmgDie :${wpn.dmgDie}`)}
+             ${chalk.greenBright(`dmgDie :${wpn.dmgDie} ${wpn.enchant?`+ ${wpn.enchant}`:''}`)}
              ${chalk.hex(wpn.dmgType.color)('dmgTyp :'+wpn.dmgType.name)}
              ${chalk.blueBright(`desc.  :${wpnlines[0]}`)}
                      ${chalk.blueBright(`${wpnlines[1]?wpnlines[1]:''}${wpnlines[2]?`\n${' '.repeat(21)+wpnlines[2]}`:''}`)}\

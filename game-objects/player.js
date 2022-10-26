@@ -86,6 +86,7 @@ export class Player {
 		this.encDat = new combatMetrics()
 		//multiple combats dont have seperate holder
 		this.multipleEncounters = false
+		this.noLoot = false
 	}
 	rollStat() {
 		return skillBonus(chance1.rpg('3d6', {

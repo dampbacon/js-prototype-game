@@ -1448,20 +1448,33 @@ export const miscArt = Object.freeze({
 //
 //
 //
+// MISC DATA
+// MISC DATA
+// MISC DATA
+
+export const LOOT_OPTIONS = Object.freeze({
+	GOLD:"GOLD",
+	ITEMS:"ITEMS",
+	WEAPON:"WEAPON",
+	ARMOUR:"ARMOUR",
+})
+export const ITEM_TYPES = Object.freeze({
+	POTION:"POTION",
+	SCROLL:"SCROLL",
+	OIL:"OIL",
+})
+
+
+
 //
-// Not urgent but eventually make functions to generate boxes that work with escape sequences
-// currently a pain coz strin.length includes esc sequences and you need to make a copy with out escapes
-// using a regex
-export const border =
-	`\
-╭╼────────────────────────╾╮
-│                          │
-│                          │
-│                          │
-│                          │
-│                          │
-╰╼────────────────────────╾╯
-`
+//
+//
+//
+//
+//
+//
+//
+//
 //shorthand for replacing escape sequences
 Object.defineProperty(String.prototype, 'cleanANSI', {
 	value() {

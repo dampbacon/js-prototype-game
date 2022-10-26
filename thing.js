@@ -13,6 +13,7 @@ import {
 	playerState
 } from './game-objects/player.js';
 import './blessed/patches.cjs';
+import assert from 'node:assert/strict';
 import pkg from 'iconv-lite';
 import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
@@ -62,6 +63,8 @@ import {
 	escLeftByNum,
 	escRightByNum,
 	escUpByNum,
+	ITEM_TYPES,
+	LOOT_OPTIONS,
 	makeRoomText,
 	miscColours,
 	monsters,
@@ -239,6 +242,10 @@ let temp_event2 = new game_event({
 	enemies: [
 		pickEnemy(),
 	],
+	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
+	loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
+	noDrops:true,
+	
 })
 let testEventArr = [temp_event1, temp_event2, ]
 //test content
@@ -495,7 +502,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	}
 	// idea is for when a room has multiple encounters you loot after defeating all enemies
 	// first check how many are killed, then loot event*kill amount
-	if (thePlayer.multipleEncounters&&!death) {
+	if ( (thePlayer.multipleEncounters&&!death) && !thePlayer.noLoot) {
 		let countDEADenemies = 0
 		for (let i of gameEvent.enemies) {
 			if(i.hp<=0){
@@ -516,7 +523,19 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	//later if in cave?? or toggleable
 	// later make like total moves and like another depth var for current depth
 	thePlayer.multipleEncounters = false
+	thePlayer.noLoot = false
 	if (!death) {
+
+		// modify so custom loot can be given
+		if(gameEvent.loot){
+			for (let i = 0; i < gameEvent.loot.length; i++) {
+				treasure(gameEvent.loot[i])
+				logs.writeSync(`DEBUGGUGUGUGYou found ${gameEvent.loot[i].type}!`)
+				if (thePlayer.potions > 0)potionButtonGeneric();
+				await waitForTreasure();
+			}
+		}
+
 		thePlayer.depth++
 		thePlayer.actualDepth++
 		//depth is distance travelled, ACTUAL DEPTH IS CURRENT LOCATION
@@ -585,6 +604,9 @@ async function combat(event, enemy) {
 	thePlayer.encDat = new combatMetrics()
 	if (event.enemies.length > 1) {
 		thePlayer.multipleEncounters = true
+	}
+	if(event.noDrops){
+		thePlayer.noLoot = true
 	}
 	let monster = enemy //copyMonster(tempMonster)
 	logs.writeSync('\n' + escUpByNum(1))
@@ -719,8 +741,12 @@ async function clearCombat() {
 	// await new Promise(r => setTimeout(r, 2000));
 	// multiple combats delay treasure till later
 	// make it flash
-	if (!death && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
+	if ((!thePlayer.noLoot && !death) && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
 		treasure()
+
+		//debug
+		logs.writeSync(`AAAAAAA ${thePlayer.noLoot}`)
+
 		if (thePlayer.potions > 0)potionButtonGeneric();
 		await waitForTreasure();
 	} else if (!death && thePlayer.encDat.peacefullClr) {
@@ -732,7 +758,12 @@ async function clearCombat() {
 	encounterResolver()
 }
 //keep or change weapon or armour
-async function treasure() {
+
+// if just type of item then do random type of that item {type: 'items', item: [2,3,5]}
+// if type and customtreasure defined then give that qauntity of that item
+// if 
+async function treasure(customTreasure={type: 'items', item: null}) 
+{
 	let gotoTreasure = new blessedpkg.button({
 		parent: buttonsContainer,
 		mouse: true,
@@ -771,14 +802,47 @@ async function treasure() {
 		logs.writeSync('searching for loot...\n')
 		logs.writeSync(`${chalk.hex('1B1B1B')(`.`.repeat(logs.term.cols - 1))}\n`);
 		//move somewhere else
-		let treasure = pickTreasure()
+
+		let options =[LOOT_OPTIONS.GOLD, LOOT_OPTIONS.ITEMS, LOOT_OPTIONS.WEAPON, LOOT_OPTIONS.ARMOUR]
+		let treasure
+		let customLoot= false
+		//DEBUGG
+		// logs.writeSync(customTreasure.toString())
+		// logs.writeSync(customTreasure.type)
+		// logs.writeSync((customTreasure.type in LOOT_OPTIONS).toString())
+		// logs.writeSync(options.includes(customTreasure.type).toString())
+
+
+		if (customTreasure.type && (customTreasure.type in LOOT_OPTIONS)) {
+
+			//DEBUGGggg
+			logs.writeSync(chalk.red(`custom treasure type ${customTreasure.type}`))
+			customLoot= true
+			treasure = customTreasure.type
+		}else{
+			//DEBUGGgggggggggggg
+			logs.writeSync(`random treasure type`)
+
+			treasure = pickTreasure()
+		}
+
+
 		switch (treasure) {
-			case 'gold': {
-				let goldDice = 4 + (Math.ceil(thePlayer.actualDepth / 2.5));
-				goldDice += ((thePlayer.dex > 0) ? thePlayer.dex : 0);
-				let gold = chance4.rpg(`${goldDice}d6`, {
-					sum: true
-				})
+			case LOOT_OPTIONS.GOLD: {
+
+				let gold = 0
+
+				if(customLoot&&customTreasure.item){
+					assert(typeof customTreasure.item === 'number', 'GOLD CUSTOM ITEM must be a number')
+					gold = customTreasure.item
+				}else{
+					let goldDice = 4 + (Math.ceil(thePlayer.actualDepth / 2.5));
+					goldDice += ((thePlayer.dex > 0) ? thePlayer.dex : 0);
+					gold = chance4.rpg(`${goldDice}d6`, {
+						sum: true
+					})
+				}
+
 				const foundFont = cfonts.render('gold', {
 					gradient: `#${miscColours.legendary},red`,
 					font: 'block',
@@ -802,15 +866,11 @@ async function treasure() {
 				MakeContinueButton()
 				break
 			}
-			case 'items': {
+			case LOOT_OPTIONS.ITEMS: {
 				//ImageScreenTerm.writeSync("TESTitems\n")
-				let amountOfDifferentItems = chance4.integer({
-					min: 1,
-					max: 3
-				})
-				let items = ["potion", "scroll", "oil"]
-				let weights = [1, .8, 2]
-				let itemsWon = []
+				let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
+				let items = [ITEM_TYPES.POTION, ITEM_TYPES.SCROLL, ITEM_TYPES.OIL]
+				let itemsWon=[]
 				const foundFont = cfonts.render('loot...', {
 					gradient: 'red,blue',
 					font: 'block',
@@ -823,37 +883,93 @@ async function treasure() {
 				});
 				let foundBLKTXT = foundFont.string
 				await slowLineWrite(foundBLKTXT, ImageScreenTerm, 20)
-				let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
+				
 				ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols)) + '\n')
-				for (let i = 0; i < amountOfDifferentItems; i++) {
-					let selected = chance4.weighted(items, weights)
-					itemsWon.push(selected)
-					let index = items.findIndex((item) => item === selected)
-					items.splice(index, 1)
-					weights.splice(index, 1)
+
+
+
+
+
+				if(customLoot&&customTreasure.item){
+					assert(Array.isArray(customTreasure.item), 'ITEMS must be a ARRAY')
+					assert(customTreasure.item.length===3, 'ARRAY SIZE MUST BE 3')
+					for(let i=0;i<3;i++){
+						assert(typeof customTreasure.item[i] === 'number', 'EACH ITEM MUST BE A NUMBER')
+						if(customTreasure.item[i]>0){
+							itemsWon.push(items[i])
+						}
+
+					}
+					//let items = customTreasure.item
+				}else{
+					
+					let amountOfDifferentItems = chance4.integer({
+						min: 1,
+						max: 3
+					})
+					
+					let weights = [1, .8, 2]
+					itemsWon = []
+					// const foundFont = cfonts.render('loot...', {
+					// 	gradient: 'red,blue',
+					// 	font: 'block',
+					// 	colors: ['system'],
+					// 	background: 'transparent',
+					// 	letterSpacing: 0,
+					// 	lineHeight: 1,
+					// 	space: false,
+					// 	maxLength: '50'
+					// });
+					// let foundBLKTXT = foundFont.string
+					// await slowLineWrite(foundBLKTXT, ImageScreenTerm, 20)
+					
+					// ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols)) + '\n')
+					for (let i = 0; i < amountOfDifferentItems; i++) {
+						let selected = chance4.weighted(items, weights)
+						itemsWon.push(selected)
+						let index = items.findIndex((item) => item === selected)
+						items.splice(index, 1)
+						weights.splice(index, 1)
+					}
 				}
+
 				for (let i = 0; i < itemsWon.length; i++) {
 					let item = itemsWon[i]
 					switch (item) {
-						case 'potion': {
-							let amount = chance4.d4()
+						case ITEM_TYPES.POTION: {
+							let amount=0
+							if(customTreasure.item){
+								amount=customTreasure.item[0]
+							}else{
+								amount = chance4.d4()
+							}
 							thePlayer.potions += amount
 							refreshInventory()
 							logs.writeSync(`found ${amount} potions\n`)
 							await writePotion(amount)
 							break
 						}
-						case 'scroll': {
+						case ITEM_TYPES.SCROLL: {
 							//later make weighted random
-							let amount = chance4.d4()
+							let amount=0
+							if(customTreasure.item){
+								amount=customTreasure.item[1]
+							}else{
+								amount = chance4.d4()
+							}
 							thePlayer.scrolls += amount
 							refreshInventory()
 							logs.writeSync(`found ${amount} scrolls\n`)
 							await writeScroll(amount)
 							break
 						}
-						case 'oil': {
-							let amount = chance4.d6()
+						case ITEM_TYPES.OIL: {
+							let amount=0
+							if(customTreasure.item){
+								amount=customTreasure.item[2]
+							}else{
+								amount = chance4.d6()
+							}
 							thePlayer.oil += amount
 							refreshInventory()
 							logs.writeSync(`found ${amount} oil flasks\n`)
@@ -868,13 +984,14 @@ async function treasure() {
 				break
 			} // "weapon", "armour", "altar"]
 			// make these call a function, its more complex than above functions
-			case 'weapon': {
+			case LOOT_OPTIONS.WEAPON: {
 				ComplexTreasure(pickWeapon(), true)
 				break
 			}
-			case 'armour':
+			case LOOT_OPTIONS.ARMOUR: {
 				ComplexTreasure(armourPicker(), false)
 				break
+			}
 				// case 'altar':
 				// 	break
 		}
@@ -994,8 +1111,8 @@ taken, ${chalk.hex(weapon?rarityByWeight(thePlayer.weapon.rarity):ArmourRarityCo
 }
 
 function pickTreasure() {
-	let options = ["gold", "items", "weapon", "armour"] //, "altar"]
-	let weights_array = [5, 1, 1, 1] //,1]
+	let options = [LOOT_OPTIONS.GOLD, LOOT_OPTIONS.ITEMS, LOOT_OPTIONS.WEAPON, LOOT_OPTIONS.ARMOUR] //, "altar"]
+	let weights_array = [5, 2, 1, 1] //,1]
 	return chance4.weighted(options, weights_array)
 }
 

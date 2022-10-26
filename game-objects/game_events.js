@@ -61,7 +61,10 @@ export class game_event {
 		toScreen,
 		buttons,
 		cleared,
-		enemies
+		enemies,
+		noDrops,
+		loot,
+		
 	} = {
 		...defaults
 	}) {
@@ -72,6 +75,8 @@ export class game_event {
 		this.cleared = false
 		// later pick between enemy or trap
 		this.enemies = enemies ? enemies : [pickEnemy()]
+		this.loot = loot ? loot : []  // {type: 'gold', item: 10} or {type: 'weapon', item: weapons.sword} or {type: 'armor', item: null}
+		this.noDrops = noDrops ? noDrops : false
 		//buttons are in the format of [[event_id,"button label", enabled_always=true]]        
 	}
 	setCleared() {

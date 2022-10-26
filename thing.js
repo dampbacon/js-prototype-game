@@ -64,6 +64,7 @@ import {
 	escRightByNum,
 	escUpByNum,
 	ITEM_TYPES,
+	lootLocationsPicker,
 	LOOT_OPTIONS,
 	makeRoomText,
 	miscColours,
@@ -768,7 +769,12 @@ async function clearCombat() {
 
 // if just type of item then do random type of that item {type: 'items', item: [2,3,5]}
 // if type and customtreasure defined then give that qauntity of that item
-// if 
+// 
+//  ADD SHIED PERHAPS?
+//	ADD ENCHANTING ITEMS AS LOOT LATER
+// 	
+//
+//
 async function treasure(customTreasure={type: 'items', item: null}) 
 {
 	let gotoTreasure = new blessedpkg.button({
@@ -807,6 +813,11 @@ async function treasure(customTreasure={type: 'items', item: null})
 		screen.render()
 		logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
 		logs.writeSync('searching for loot...\n')
+
+		logs.writeSync(`You find ${lootLocationsPicker()}\n`);
+
+
+
 		logs.writeSync(`${chalk.hex('1B1B1B')(`.`.repeat(logs.term.cols - 1))}\n`);
 		//move somewhere else
 
@@ -865,7 +876,7 @@ async function treasure(customTreasure={type: 'items', item: null})
 				let spacer = gradient([`#${miscColours.legendary}`, `#${miscColours.epic}`]);
 				ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols)) + '\n')
 				await writeGold(gold)
-				logs.writeSync(`found ${gold}gp\n`)
+				logs.writeSync(`${gold}gp\n`)
 				thePlayer.gold += gold
 				refreshInventory()
 				//ImageScreenTerm.writeSync("TESTgold\n")
@@ -938,7 +949,7 @@ async function treasure(customTreasure={type: 'items', item: null})
 							}
 							thePlayer.potions += amount
 							refreshInventory()
-							logs.writeSync(`found ${amount} potions\n`)
+							logs.writeSync(`${amount} x healing potions\n`)
 							await writePotion(amount)
 							break
 						}
@@ -952,7 +963,7 @@ async function treasure(customTreasure={type: 'items', item: null})
 							}
 							thePlayer.scrolls += amount
 							refreshInventory()
-							logs.writeSync(`found ${amount} scrolls\n`)
+							logs.writeSync(`${amount} x magical scrolls\n`)
 							await writeScroll(amount)
 							break
 						}
@@ -965,7 +976,7 @@ async function treasure(customTreasure={type: 'items', item: null})
 							}
 							thePlayer.oil += amount
 							refreshInventory()
-							logs.writeSync(`found ${amount} oil flasks\n`)
+							logs.writeSync(`${amount} x flasks of oil\n`)
 							await writeOil(amount)
 							break
 						}
@@ -1066,7 +1077,7 @@ async function ComplexTreasure(strOrObject = weapons.flamberge, weapon = true) {
 	buttonsArray.push(take)
 	screen.render()
 	resizeButtons()
-	logs.writeSync(`${chalk.hex(weapon?rarityByWeight(strOrObject.rarity):ArmourRarityColour(ARMOURmap[strOrObject]))(itemName)} found\n`)
+	logs.writeSync(`${weapon?'a':'a set of'} ${chalk.hex(weapon?rarityByWeight(strOrObject.rarity):ArmourRarityColour(ARMOURmap[strOrObject]))(`${itemName} ${weapon?'':"armour"}`)}\n`)
 	const equipFont = cfonts.render('equiped', {
 		gradient: 'red,blue',
 		font: 'block',

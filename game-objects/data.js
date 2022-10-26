@@ -1,6 +1,7 @@
 import {
 	chance2,
 	chance3,
+	chance4,
 	monsterRandom
 } from "./random_nums.js";
 import chalk from "chalk";
@@ -72,6 +73,7 @@ export {
 }
 export const miscColours = Object.freeze({
 	oil: '3B3131',
+	gold: 'FFD700',
 	darkWood: '55342B',
 	potionPink: 'ff2d57',
 	...DMG_COLOUR,
@@ -1427,6 +1429,48 @@ Choose your next move.\
 `
 	return roomText
 }
+
+
+
+
+
+
+const lootLocations= Object.freeze([
+	"in an ornate treasure chest",
+	"on a table",
+	"on a shelf",
+	"in a pile of rubble",
+	"in the remnants of a small hoard",
+	"next to a pile of bones",
+	"on a fallen adventurer",
+	"on a pedestal",
+	"under a pile of leaflets",
+	"in a barrel",
+	"in a plain chest",
+	"in a cardboard box",
+	"in a corner",
+	"under a nondescript false floor tile",
+	"behind a pillar",
+	"resting on an inert alter",
+	"in a pit in the ground",
+	"in a hole in the wall",
+	"hovering over a glowing pedestal",
+	"in a basket",
+	"in an urn",
+	"in front of a tombstone",
+	"lying in the open"
+])
+
+export function lootLocationsPicker() {
+	return chance4.pickone(lootLocations)
+}
+
+
+
+
+
+const lootRoomText = ``
+
 /*
    ▄▄▄▄███▄▄▄▄    ▄█     ▄████████  ▄████████         ▄████████    ▄████████     ███     
  ▄██▀▀▀███▀▀▀██▄ ███    ███    ███ ███    ███        ███    ███   ███    ███ ▀█████████▄ 

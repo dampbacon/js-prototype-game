@@ -746,7 +746,7 @@ async function clearCombat() {
 		treasure()
 
 		//debug
-		logs.writeSync(`AAAAAAA ${thePlayer.noLoot}`)
+		//logs.writeSync(`AAAAAAA ${thePlayer.noLoot}`)
 
 		if (thePlayer.potions > 0)potionButtonGeneric();
 		await waitForTreasure();

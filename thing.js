@@ -1239,18 +1239,16 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 				clearCombat()
 			} else {
 				if (monster.polymorph) {
+					monster.polymorph = false
 					if (monster.aggro < 12) {
 						// friendly
-						monster.polymorph = false;
 						monsterHostile = false;
 					} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12) {
 						// hostile
-						monster.polymorph = false;
 						monsterHostile = true;
 						await enemyAtack(monster, player)
 					} else {
 						// neutral
-						monster.polymorph = false;
 						monsterHostile = false;
 					}
 				} else {
@@ -1809,3 +1807,5 @@ ImageScreenTerm.writeSync(rar('▄'.repeat(ImageScreenTerm.term.cols)))
 ImageScreenTerm.writeSync('\n\n')
 ImageScreenTerm.writeSync(v + '\n')
 await drawBanner()
+
+

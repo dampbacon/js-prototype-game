@@ -514,6 +514,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		for (let i = 0; i < countDEADenemies; i++) {
 			treasure()
 			if (thePlayer.potions > 0)potionButtonGeneric();
+			if (thePlayer.scrolls > 0)scrollsButtonGeneric();
 			await waitForTreasure();
 		}
 		// if(countDEADenemies===0){
@@ -533,6 +534,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 				treasure(gameEvent.loot[i])
 				//logs.writeSync(`DEBUGGUGUGUGYou found ${gameEvent.loot[i].type}!`)
 				if (thePlayer.potions > 0)potionButtonGeneric();
+				if (thePlayer.scrolls > 0)scrollsButtonGeneric();
 				await waitForTreasure();
 			}
 		}
@@ -749,10 +751,14 @@ async function clearCombat() {
 		//logs.writeSync(`AAAAAAA ${thePlayer.noLoot}`)
 
 		if (thePlayer.potions > 0)potionButtonGeneric();
+		if (thePlayer.scrolls > 0)scrollsButtonGeneric();
+
 		await waitForTreasure();
 	} else if (!death && thePlayer.encDat.peacefullClr) {
 		MakeContinueButton()
 		if (thePlayer.potions > 0)potionButtonGeneric();
+		if (thePlayer.scrolls > 0)scrollsButtonGeneric();
+
 		await waitForTreasure();
 	}
 	thePlayer.encDat = null
@@ -864,7 +870,12 @@ async function treasure(customTreasure={type: 'items', item: null})
 				refreshInventory()
 				//ImageScreenTerm.writeSync("TESTgold\n")
 				logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
+				
 				MakeContinueButton()
+				if (thePlayer.potions > 0)potionButtonGeneric();
+				if (thePlayer.scrolls > 0)scrollsButtonGeneric();	
+
+
 				break
 			}
 			case LOOT_OPTIONS.ITEMS: {
@@ -886,11 +897,6 @@ async function treasure(customTreasure={type: 'items', item: null})
 				await slowLineWrite(foundBLKTXT, ImageScreenTerm, 20)
 				
 				ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols)) + '\n')
-
-
-
-
-
 				if(customLoot&&customTreasure.item){
 					assert(Array.isArray(customTreasure.item), 'ITEMS must be a ARRAY')
 					assert(customTreasure.item.length===3, 'ARRAY SIZE MUST BE 3')
@@ -911,20 +917,6 @@ async function treasure(customTreasure={type: 'items', item: null})
 					
 					let weights = [1, .8, 2]
 					itemsWon = []
-					// const foundFont = cfonts.render('loot...', {
-					// 	gradient: 'red,blue',
-					// 	font: 'block',
-					// 	colors: ['system'],
-					// 	background: 'transparent',
-					// 	letterSpacing: 0,
-					// 	lineHeight: 1,
-					// 	space: false,
-					// 	maxLength: '50'
-					// });
-					// let foundBLKTXT = foundFont.string
-					// await slowLineWrite(foundBLKTXT, ImageScreenTerm, 20)
-					
-					// ImageScreenTerm.writeSync(spacer('▄'.repeat(ImageScreenTerm.term.cols)) + '\n')
 					for (let i = 0; i < amountOfDifferentItems; i++) {
 						let selected = chance4.weighted(items, weights)
 						itemsWon.push(selected)
@@ -981,7 +973,12 @@ async function treasure(customTreasure={type: 'items', item: null})
 				}
 				ImageScreenTerm.writeSync(spacer('▀'.repeat(ImageScreenTerm.term.cols)) + '\n')
 				logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
+				
+				
 				MakeContinueButton()
+				if (thePlayer.potions > 0)potionButtonGeneric();
+				if (thePlayer.scrolls > 0)scrollsButtonGeneric();
+	
 				break
 			} // "weapon", "armour", "altar"]
 			// make these call a function, its more complex than above functions
@@ -1625,12 +1622,56 @@ function potionButtonGeneric() {
 		}else{
 			potion.setContent(`use potion, ${thePlayer.potions} left`)
 		}
+		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 		stats.focus()
 		screen.render()
 	})
 }
 
-
+function scrollsButtonGeneric() {
+	let scrolls = new blessedpkg.button({
+		parent: buttonsContainer,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'scrolls',
+		content: `use scroll, ${thePlayer.scrolls} left`,
+		//shadow: true,
+		style: {
+			bg: '#000072',
+			focus: {
+				bg: '#880808',
+			},
+			hover: {
+				bg: '#880808',
+			},
+		},
+	})
+	buttonsArray.push(scrolls)
+	screen.render()
+	resizeButtons()
+	scrolls.on('press', async () => {
+		logs.writeSync(thePlayer.useScroll({
+			term: ImageScreenTerm
+		}) + '\n')
+		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
+		refreshStats()
+		refreshInventory()
+		if (thePlayer.scrolls < 1) {
+			scrolls.destroy()
+		}else{
+			scrolls.setContent(`use scroll, ${thePlayer.scrolls} left`)
+		}
+		stats.focus()
+		screen.render()
+	})
+}
 
 
 

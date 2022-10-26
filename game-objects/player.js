@@ -88,6 +88,11 @@ export class Player {
 		this.multipleEncounters = false
 		this.noLoot = false
 	}
+	makeAttack(){
+		//stub
+		//later will be used instead of current system to cleanly handle damage types once i redo them
+		//return [String, Integer]
+	}
 	rollStat() {
 		return skillBonus(chance1.rpg('3d6', {
 			sum: true

@@ -3,7 +3,7 @@
 //
 import chalk from "chalk";
 import {
-	DMG_TYPE, weaponART
+	DMG_TYPE, STATS, weaponART
 } from "./data.js";
 import {
 	playerState
@@ -23,6 +23,93 @@ export class dmgTypeClassBase {
 		this.color = color;
 	}
 }
+
+// export class NEW_dmgTypeClass extends dmgTypeClassBase {
+// 	constructor({
+// 		name,
+// 		color,
+// 		applyEffectCallback,
+// 	}) {
+// 		super({
+// 			name,
+// 			color
+// 		});
+
+// 		this.applyEffectCallback = applyEffectCallback?applyEffectCallback:
+// 		(player, self, params)=>{
+// 			return "ERROR: no applyEffectCallback defined for " + self.name
+// 		};
+// 	}
+// 	NEW_applyEffect(player, params = {}) {
+// 		return this.applyEffectCallback(player, this, params);
+// 	}
+// }
+
+// export function GENERICdmgTypeFunction({
+// 	name,
+// 	color,
+
+// 	hitStr,
+// 	missStr,
+// 	coolDownHitSTR,
+
+// 	noCoolDown=false,
+
+// 	chanceTohit={
+// 		hit:.7,
+// 		miss:0,
+// 		coolDownHit:1
+// 	},
+// 	statForBonusHitChance = {
+// 		hit:[STATS.NONE, (statNum)=>{return statNum/10}],
+// 		miss:[STATS.NONE, (statNum)=>{return statNum/10}],
+// 		coolDownHit:[STATS.NONE, (statNum)=>{return statNum/10}]
+// 	},
+// 	dmgDie={
+// 		defualtHitDMGDIE:"1d6",
+// 		missDMGDIE:null,
+// 		coolDownHitDMGDIE:null,
+// 	},
+// 	critical={
+// 		hit:null,
+// 		miss:null,
+// 		coolDownHit:null
+// 	},
+// 	flatDMG={
+// 		hit:0,
+// 		miss:0,
+// 		coolDownHit:2},
+// 	uniqueCallbackOverride={
+// 		hit:null,
+// 		miss:null,
+// 		coolDownHit:null
+// 	},
+// 	useUniqueOverrideOnCrit = {
+// 		hit:false,
+// 		miss:false,
+// 		coolDownHit:false
+// 	},
+// 	useUniqueOverrideCallback = {
+// 		hit:false,
+// 		miss:false,
+// 		coolDownHit:false
+// 	},
+// 	useOnlyOverrides = false,
+// }) {
+
+// 	return (player, self, params = {}) => {
+
+// 	}
+	
+// }
+
+
+
+
+
+
+
+
 export class dmgTypeClass extends dmgTypeClassBase {
 	constructor({
 		name,
@@ -79,6 +166,8 @@ export class weapon {
 // ADD TAGS TO SCROLLS ON CREATION INSTEAD OF BOOLS
 //
 export class Scroll {
+
+	// later make constructor that instead of booleans for tags, takes an array of tags that are enums
 	constructor({
 		dmgTypeE,
 		targetmonster,

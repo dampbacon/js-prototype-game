@@ -75,6 +75,8 @@ import {
 	rarityByWeight,
 	ROOM_ART,
 	weapons,
+	miscArt,
+	SPECIAL_ROOM_ART,
 } from './game-objects/data.js';
 import {
 	combatMetrics
@@ -106,59 +108,13 @@ let combatButtonsMap = {}
 let thePlayer = new Player("name")
 let box = createStatsBox()
 // test content
-let tempMonster = monsters.gobo
+
 const rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]
 const rainbowWithBlue = ['93CAED', 'ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000']
-//test string
-const lorem =
-	`Lorem ipsum dolor sit amet,
-consectetur adipiscing elit. 
-Morbi varius ut augue ac sagittis. 
-Vivamus lectus lacus, commodo eu ligula pulvinar, 
-tincidunt congue sapien. 
-Morbi fringilla sollicitudin ante eget accumsan. 
-Aliquam diam felis, 
-posuere sit amet felis id, 
-condimentum rutrum dolor. 
-Donec semper sagittis condimentum. 
-Mauris vitae pellentesque tellus. 
-Integer velit neque, 
-fermentum vel tempus non, 
-pulvinar id tellus.`
 const pgrad = ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'].reverse()
-const dice = `[37m[40m          [97m[40m▄▄▄[37m[40m          [m
-[37m[40m      [97m[40m▄▄▀▀[37m[40m █ [97m[40m▀▀▄▄[37m[40m      [m
-[37m[40m  [97m[40m▄▄▀▀[90m[40m▄▄▄▄[90m[47m▀[90m[40m▀[90m[47m▀[90m[40m▄▄[37m[40m  [97m[40m▀▀▄▄[37m[40m  [m
-[37m[40m [90m[40m▄[97m[40m█[90m[40m▀▀▀[37m[40m   ▄▀ ▀▄ [90m[40m▀▀▀▄▄[97m[40m█[90m[40m▄[37m[40m [m
-[37m[40m [90m[40m█[97m[40m▀▄[37m[40m   ▄[91m[47m▄[91m[40m▄▄[37m[40m [91m[40m▄▄[91m[47m▄[37m[40m▄   [97m[40m▄▀[90m[40m█[37m[40m [m
-[37m[40m [90m[40m█[37m[40m [97m[40m█[37m[40m  ▄▀[91m[40m▄▄█[37m[40m [91m[40m█[37m[40m [91m[40m█[37m[40m▀▄  [97m[40m█[37m[40m [90m[40m█[37m[40m [m
-[37m[40m [90m[40m█[37m[40m  [97m[40m█[37m[40m█  [91m[40m█▄▄[37m[40m [91m[40m█▄█[37m[40m  █[97m[40m█[37m[40m  [90m[40m█[37m[40m [m
-[37m[40m [90m[40m█[37m[40m ▄[97m[40m▀[90m[47m▄[97m[40m▀▀▀▀[91m[47m▄▄▄[97m[40m▀▀▀▀[90m[47m▄[97m[40m▀[37m[40m▄ [90m[40m█[37m[40m [m
-[37m[40m [90m[40m▀[90m[47m▄[37m[40m   [90m[40m▀▄[37m[40m  [91m[40m█▄█[37m[40m  [90m[40m▄▀[37m[40m   [90m[47m▄[90m[40m▀[37m[40m [m
-[37m[40m   [90m[40m▀▀▄▄[37m[40m [90m[40m█[37m[40m [91m[40m█▄█[37m[40m [90m[40m█[37m[40m [90m[40m▄▄▀▀[37m[40m   [m
-[37m[40m       [90m[40m▀▀█▄[37m[40m [90m[40m▄█▀▀[37m[40m       [m
-[37m[40m           [90m[40m▀[37m[40m           [m
-`
-const bb = `    ${chalk.bold(`THE VILLAGE`)}
-[37m[40m                                           [m
-[37m[40m                   [33m[40m▒▒▒░░[37m[40m                   [m
-[37m[40m                 [33m[40m▒▒▒▒░░░░░[37m[40m                 [m
-[37m[40m                [33m[40m██▓▓▓▓▓▓▓██[37m[40m                [m
-[37m[40m       [33m[40m▒▒▒░░[37m[40m    [33m[40m▐▓▒░█▒  ░▓▌[37m[40m                [m
-[37m[40m     [33m[40m▒▒▒▒░░░░░[37m[40m  [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m    [33m[40m▒▒▒░░[37m[40m       [m
-[37m[40m    [33m[40m██▓▓▓▓▓▓▓██[37m[40m         [93m[40m▄[37m[40m     [33m[40m▒▒▒░░░░░[37m[40m     [m
-[37m[40m    [33m[40m▐▓▒░█▒  ░▓▌[37m[40m         [91m[40m█[37m[40m   [33m[40m██▓▓▓▓▓▓▓██[37m[40m    [m
-[37m[40m    [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m             [33m[40m▐▓▒░█▒  ░▓▌[37m[40m    [m
-[37m[40m        [93m[40m▄[37m[40m     [33m[40m▒▒▒░░[37m[40m        [93m[40m▄[33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m    [m
-[37m[40m        [96m[40m█[37m[40m   [33m[40m▒▒▒▒░░░░░[37m[40m   [93m[40m▄[37m[40m  [95m[40m█[37m[40m               [m
-[37m[40m     [32m[40m░░[37m[40m    [33m[40m██▓▓▓▓▓▓▓██[37m[40m  [94m[40m█[37m[40m                  [m
-[37m[40m       [32m[40m░░[37m[40m  [33m[40m▐▓▒░█▒  ░▓▌[37m[40m    [32m[40m░░░[37m[40m    [33m[40m▒▒▒░░[37m[40m     [m
-[37m[40m           [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m   [32m[40m░[37m[40m     [33m[40m▒▒▒▒░░░░░[37m[40m   [m
-[37m[40m                              [33m[40m██▓▓▓▓▓▓▓██[37m[40m  [m
-[37m[40m         [32m[40m░[37m[40m [32m[40m░[37m[40m [32m[40m░[37m[40m                [33m[40m▐▓▒░█▒  ░▓▌[37m[40m  [m
-[37m[40m                     [32m[40m░░░░░[37m[40m    [33m[40m▐▓▒░█▒[37m[40m  [33m[40m░▓▌[37m[40m  [m
-[37m[40m                                           [m
-`
+
+
+const dice = miscArt.dice
 let temp_event1 = new game_event({
 	id: 1,
 	body: {
@@ -176,7 +132,7 @@ let temp_event1 = new game_event({
 		},
 	},
 	toScreen: {
-		toScreen: ROOM_ART.mountain,
+		toScreen: SPECIAL_ROOM_ART.mountain,
 		AnsiFile: {
 			exists: false,
 			url: '',
@@ -191,6 +147,7 @@ let temp_event1 = new game_event({
 		pickEnemy(),
 	],
 })
+
 let temp_event2 = new game_event({
 	id: 2,
 	body: {
@@ -207,7 +164,7 @@ let temp_event2 = new game_event({
 		},
 	},
 	toScreen: {
-		toScreen: bb,
+		toScreen: ROOM_ART.amoury,
 		AnsiFile: {
 			exists: false,
 			url: '',
@@ -286,7 +243,7 @@ let HOMEBASE = new game_event({
 		},
 	},
 	toScreen: {
-		toScreen: ROOM_ART.cellar,
+		toScreen: SPECIAL_ROOM_ART.village,
 		AnsiFile: {
 			exists: false,
 			url: '',

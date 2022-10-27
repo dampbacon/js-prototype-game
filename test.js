@@ -237,4 +237,4 @@ let loremTest=wrapAnsi(gradient.retro(lorem),20,{hard:true})
 //console.log(pickRoomText())
 //console.log(chance4.pickone(Object.values(ROOM_ART)))
 
-console.log(pickRoomText())
+console.log(pickRoomText()[1])

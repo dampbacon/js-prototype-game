@@ -1553,7 +1553,7 @@ export const ROOM_ART = Object.freeze({
 const roomTextOptions = Object.freeze([
 	["an abandoned mess hall","pots and pans are strewn about the room, with benches and tables that have seen better days"],
 	["a foundry","The room glows a warm red which eminates from the furnaces in the center of the room, you spy various pieces of weapons and armour in varying states of completion littered around the room"],
-	["an abandoned treasury", "empty shelves, racks and chests fill the room, the room appears to have been cleaned out many years ago"],
+	//["an abandoned treasury", "empty shelves, racks and chests fill the room, the room appears to have been cleaned out many years ago"],
 	//["just an empty room", "a few furnishings lie around but the room appears to be mostly empty, it's unclear if anyone was here recently"],
 	["a small chapel", "an inert altar sits in the center of the room, a few decayed pews are scattered around the room"],
 	//["a small cavern", "the walls are covered in a thick layer of moss and lichen, it appears to be well travelled"], 

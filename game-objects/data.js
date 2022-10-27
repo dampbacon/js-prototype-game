@@ -1447,7 +1447,7 @@ const realRoomTextOptions = Object.freeze([
 	["an old guard barracks", "the room is filled with beds and lockers in varying states of disrepair, you see a few broken weapons and armour on the floor"],
 	["a narrow corridor", "a few items are strewn about, there's only one clear exit"],
 	["a mining depot", "the room is strewn throughout with mining equipment, you see a few pickaxes and shovels, and a some mine carts"],
-	["an abadoned cellar", "the room is filled with barrels and crates, noting the grubs wriggling through the wood you doubt it's safe to consume anything in here"],
+	["an abandoned cellar", "the room is filled with barrels and crates, noting the grubs wriggling through the wood you doubt it's safe to consume anything in here"],
 ])
 
 export function pickRealRoomText(){

@@ -465,9 +465,11 @@ function clearButtons() {
 	})
 	buttonsArray = []
 }
-async function createButtons(gameEvent, storyObj = {}) {
-	eventHandler(gameEvent)
-	await waitForClear();
+async function createButtons(gameEvent, storyObj = {}, skipEventHandling = false) {
+	if(!skipEventHandling){
+		eventHandler(gameEvent)
+		await waitForClear();
+	}
 	if (death) {
 		await reset()
 	}else{
@@ -538,7 +540,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 				if(i === gameEvent.enemies[gameEvent.enemies.length - 1]){
 					MakeContinueButton(chalk.hex("ffffff")("enter the room"))
 				}else{
-					MakeContinueButton(chalk.hex("ffffff")("face the next enemy"))
+					MakeContinueButton(chalk.hex("ffffff")("continue your journey \nto the next room"))
 				}
 				await waitForTreasure()
 			}
@@ -631,7 +633,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	temp_event1.body.body = pickRealRoomText()
 	temp_event2.enemies = [pickEnemy()]
 	temp_event2.body.body = pickRealRoomText()
-	temp_event3.enemies = [pickEnemy()]
+	temp_event3.enemies = []
 	temp_event3.body.body = pickRealRoomText()
 
 	resolver()

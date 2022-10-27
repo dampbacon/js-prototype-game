@@ -70,6 +70,7 @@ import {
 	miscColours,
 	monsters,
 	pickEnemy,
+	pickRealRoomText,
 	pickWeapon,
 	rarityByWeight,
 	weapons,
@@ -627,8 +628,12 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		//
 	}
 	temp_event1.enemies = [pickEnemy(),pickEnemy(),pickEnemy()]
+	temp_event1.body.body = pickRealRoomText()
 	temp_event2.enemies = [pickEnemy()]
+	temp_event2.body.body = pickRealRoomText()
 	temp_event3.enemies = [pickEnemy()]
+	temp_event3.body.body = pickRealRoomText()
+
 	resolver()
 }
 async function writeImage(gameEvent) {

@@ -1615,25 +1615,32 @@ export const ROOM_ART = Object.freeze({
 const roomTextOptions = Object.freeze([
 	["an abandoned mess hall","pots and pans are strewn about the room, with benches and tables that have seen better days"],
 	["a foundry","The room glows a warm red which eminates from the furnaces in the center of the room, you spy various pieces of weapons and armour in varying states of completion littered around the room"],
-	//["an abandoned treasury", "empty shelves, racks and chests fill the room, the room appears to have been cleaned out many years ago"],
-	//["just an empty room", "a few furnishings lie around but the room appears to be mostly empty, it's unclear if anyone was here recently"],
+	["an abandoned treasury", "empty shelves, racks and chests fill the room, the room appears to have been cleaned out many years ago", ROOM_ART.emptyRoom],
+	["just an empty room", "a few furnishings lie around but the room appears to be mostly empty, it's unclear if anyone was here recently", ROOM_ART.emptyRoom],
 	["a small chapel", "an inert altar sits in the center of the room, a few decayed pews are scattered around the room"],
-	//["a small cavern", "the walls are covered in a thick layer of moss and lichen, it appears to be well travelled"], 
-	//["a hallway", "crumbling stone walls line the hallway, the floor is covered in a thick layer of dust. Most of the exits are blocked by rubble"],
+	["a small cavern", "the walls are covered in a thick layer of moss and lichen, it appears to be well travelled", ROOM_ART.cavern],
+	["a hallway", "crumbling stone walls line the hallway, the floor is covered in a thick layer of dust. Most of the exits are blocked by rubble", ROOM_ART.hallway],
 	["a rat infested room", "the floor is covered in a layer of detritus of dubios orgine, you see bones and scraps of food lying around"],
 	["a dungeon cell", "few furnishings litter the room, you spy manacles and chains on the wall, and steel implements of dubious purpose"],
 	["a small library", "it's filled with bookshelves, most of the books are old and tattered, a few are in better condition"],
-	["an abandoned armory", "the room is filled with weapons and armour, most of it seems rusted and unusable, it's unclear if you'll be able to find something salvageble"],
+	["an abandoned armory", "the room is filled with weapons and armour, most of it seems rusted and unusable, it's unclear if you'll be able to find something salvageble", ROOM_ART.amoury],
 	["a courtyard", "the courtyard is filled with rubble, you see a few broken statues and fountains"],
 	["an old guard barracks", "the room is filled with beds and lockers in varying states of disrepair, you see a few broken weapons and armour on the floor"],
-	//["a narrow corridor", "a few items are strewn about, there's only one clear exit"],
+	["a narrow corridor", "a few items are strewn about, there's only one clear exit", ROOM_ART.hallway],
 	["a mining depot", "the room is strewn throughout with mining equipment, you see a few pickaxes and shovels, and a some mine carts"],
-	//["an abandoned cellar", "the room is filled with barrels and crates, noting the grubs wriggling through the wood you doubt it's safe to consume anything in here"],
+	["an abandoned cellar", "the room is filled with barrels and crates, noting the grubs wriggling through the wood you doubt it's safe to consume anything in here", ROOM_ART.cellar],
 ])
 
 export function pickRoomText(){
 	let randomRoomText=chance4.pickone(roomTextOptions)
-	return `it appears to be ${randomRoomText[0]}, ${randomRoomText[1]} `
+	if(randomRoomText.length!==3){
+		let image = chance4.pickone(Object.values(ROOM_ART))
+		//image=Object.values(image)[0]
+		return [`it appears to be ${randomRoomText[0]}, ${randomRoomText[1]} `, image]
+	}else{
+		assert(typeof randomRoomText[2]==="string", `room art must be a string\n${randomRoomText}`)
+		return [`it appears to be ${randomRoomText[0]}, ${randomRoomText[1]} `, randomRoomText[2]]
+	}
 	// later array with picture
 }
 

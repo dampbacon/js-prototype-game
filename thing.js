@@ -621,11 +621,21 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		//
 	}
 	temp_event1.enemies = [pickEnemy(),pickEnemy(),pickEnemy()]
-	temp_event1.body.body = pickRoomText()
+	let t1=pickRoomText()
+	temp_event1.toScreen.toScreen = t1[1]
+	temp_event1.body.body = t1[0]
+
+
 	temp_event2.enemies = [pickEnemy()]
-	temp_event2.body.body = pickRoomText()
+	let t2=pickRoomText()
+	temp_event2.toScreen.toScreen = t2[1]
+	temp_event2.body.body = t2[0]
+
+
 	temp_event3.enemies = []
-	temp_event3.body.body = pickRoomText()
+	let t3=pickRoomText()
+	temp_event3.toScreen.toScreen = t3[1]
+	temp_event3.body.body = t3[0]
 
 	resolver()
 }

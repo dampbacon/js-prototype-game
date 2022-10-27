@@ -16,7 +16,9 @@ import {
     dynamicBox,
     miscArt,
     miscColours,
+    pickRoomText,
     rarityByWeight,
+    ROOM_ART,
     weapons,
     weaponSubset
 } from "./game-objects/data.js";
@@ -25,6 +27,7 @@ import gradient from 'gradient-string';
 import longest from 'longest';
 import chalk, { Chalk } from "chalk";
 import wrapAnsi from "wrap-ansi";
+import { chance4 } from "./game-objects/random_nums.js";
 
 //test array values
 // console.log(weaponsArray)
@@ -216,7 +219,7 @@ Nostrud quis pariatur veniam cupidatat nulla ut dolor et aute duis ea culpa. Ani
 Deserunt sint ea consequat ipsum aliquip quis id exercitation proident sit consectetur ad sunt aute. Magna nisi qui consequat officia pariatur id ipsum. Laboris culpa esse enim adipisicing elit dolore. Consectetur occaecat deserunt sunt sint pariatur.`
 let loremTest=wrapAnsi(gradient.retro(lorem),20,{hard:true}) 
 
-console.log(loremTest)
+//console.log(loremTest)
 
 // export function teststr(text, width = 80) {
 // 	let multiline = ``
@@ -230,3 +233,8 @@ console.log(loremTest)
 // 	}
 // 	return multiline
 // }
+
+//console.log(pickRoomText())
+//console.log(chance4.pickone(Object.values(ROOM_ART)))
+
+console.log(pickRoomText())

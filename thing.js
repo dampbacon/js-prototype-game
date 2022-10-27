@@ -294,9 +294,39 @@ let temp_event3 = new game_event({
 	//test loot overrides
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
 	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
-	
-	
 })
+let HOMEBASE = new game_event({
+	id: 0,
+	body: {
+		body: 'Home, level up, party, etc.',
+		format: {
+			writeMode: 'gradientScanlines',
+			gradientFunction: gradient.passion.multiline,
+			gradientArr: [`#${miscColours.legendary}`, `#${miscColours.epic}`, `#${miscColours.oil}`],
+		},
+		TextFile: {
+			exists: false,
+			url: ''
+		},
+	},
+	toScreen: {
+		toScreen: ROOM_ART.cellar,
+		AnsiFile: {
+			exists: false,
+			url: '',
+		},
+	},
+	buttons: [
+		[1, "Enter the dungeon once more", true],
+		//some shop redirect
+	],
+})
+
+
+
+
+
+
 let testEventArr = [temp_event1, temp_event2, temp_event3 ]
 //test content
 let body = `[0m\r
@@ -555,22 +585,6 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
 
-
-	// idea is for when a room has multiple encounters you loot after defeating all enemies
-	// first check how many are killed, then loot event*kill amount
-	// if ((!thePlayer.noLoot && !death) && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
-	// 	treasure()
-	// 	if (thePlayer.potions > 0)potionButtonGeneric();
-	// 	if (thePlayer.scrolls > 0)scrollsButtonGeneric();
-	// 	await waitForTreasure();
-	// } else if (!death && thePlayer.encDat.peacefullClr) {
-	// 	MakeContinueButton()
-	// 	if (thePlayer.potions > 0)potionButtonGeneric();
-	// 	if (thePlayer.scrolls > 0)scrollsButtonGeneric();
-	// 	await waitForTreasure();
-	// }
-
-
 	let countDEADenemies = 0
 	let countALIVEenemies = 0
 	//if ( (thePlayer.multipleEncounters && !death) && !thePlayer.noLoot && gameEvent.enemies) {
@@ -812,21 +826,6 @@ async function clearCombat() {
 			ImageScreenTerm.writeSync(escUpByNum(1) + escLeftByNum(1) + '│')
 		}
 	}
-	// temp
-	// await new Promise(r => setTimeout(r, 2000));
-	// multiple combats delay treasure till later
-	// make it flash
-	// if ((!thePlayer.noLoot && !death) && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
-	// 	treasure()
-	// 	if (thePlayer.potions > 0)potionButtonGeneric();
-	// 	if (thePlayer.scrolls > 0)scrollsButtonGeneric();
-	// 	await waitForTreasure();
-	// } else if (!death && thePlayer.encDat.peacefullClr) {
-	// 	MakeContinueButton()
-	// 	if (thePlayer.potions > 0)potionButtonGeneric();
-	// 	if (thePlayer.scrolls > 0)scrollsButtonGeneric();
-	// 	await waitForTreasure();
-	// }
 	thePlayer.encDat = null
 	encounterResolver()
 }
@@ -1658,9 +1657,6 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 	stats.focus()
 	screen.render()
 }
-
-
-
 function potionButtonGeneric() {
 	let potion= new blessedpkg.button({
 		parent: buttonsContainer,

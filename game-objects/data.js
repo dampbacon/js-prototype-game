@@ -127,7 +127,7 @@ export const damageTypes = Object.freeze({
 				try {
 					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
 				} catch (e) {}
-				return `${chalk.hex(self.color)('$$$$$$$$$ 1 poison damage: ')}${bonusDamage}\n`
+				return `${chalk.hex(self.color)(`$$$$$$$$$ cooldown ${bonusDamage} poison damage: `)}${bonusDamage}\n`
 			} else if (chance2.bool({
 					likelihood: (100 * self.chanceToApply)
 				}) || crit) {

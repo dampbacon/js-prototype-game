@@ -209,7 +209,7 @@ let temp_event1 = new game_event({
 	buttons: [
 		[1, "goto 1(recur)", true],
 		[2, "goto 2", true],
-		//[3,"goto 3 lolololololololollolololololololol",true]
+		[3,"goto 3 lolololololololollolololololololol",true]
 	],
 	enemies: [
 		pickEnemy(),
@@ -248,9 +248,14 @@ let temp_event2 = new game_event({
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
 	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
 	loot: [
-		{type:LOOT_OPTIONS.WEAPON,item:weapons.flamberge},
-		{type:LOOT_OPTIONS.GOLD,item:9000},
-		{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}
+		{type:LOOT_OPTIONS.WEAPON, item:weapons.flamberge, text:null},
+		{
+			type:LOOT_OPTIONS.GOLD, 
+			item:9000, 
+			text: chalk.hex(miscColours.gold)("GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOLLD"),
+			searchText:  chalk.hex(miscColours.gold)("LOOKING FOR GOLD")
+		},
+		{type:LOOT_OPTIONS.ITEMS, item:[60,50,40], text:null}
 	],
 	noDrops:true,
 	
@@ -527,41 +532,77 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		if (!death) {
 			combat(gameEvent, i)
 			await (waitForCombat())
+
+			if(!death){
+				if(i === gameEvent.enemies[gameEvent.enemies.length - 1]){
+					MakeContinueButton(chalk.hex("ffffff")("enter the room"))
+				}else{
+					MakeContinueButton(chalk.hex("ffffff")("face the next enemy"))
+				}
+				await waitForTreasure()
+			}
 		}
 	}
+	if(!death){
+		logs.writeSync(`you enter the room\n`);
+		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
+		writeImage(gameEvent)
+		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
+		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
+	}
+
+
 	// idea is for when a room has multiple encounters you loot after defeating all enemies
 	// first check how many are killed, then loot event*kill amount
-	if ( (thePlayer.multipleEncounters&&!death) && !thePlayer.noLoot && gameEvent.enemies) {
-		let countDEADenemies = 0
+	// if ((!thePlayer.noLoot && !death) && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
+	// 	treasure()
+	// 	if (thePlayer.potions > 0)potionButtonGeneric();
+	// 	if (thePlayer.scrolls > 0)scrollsButtonGeneric();
+	// 	await waitForTreasure();
+	// } else if (!death && thePlayer.encDat.peacefullClr) {
+	// 	MakeContinueButton()
+	// 	if (thePlayer.potions > 0)potionButtonGeneric();
+	// 	if (thePlayer.scrolls > 0)scrollsButtonGeneric();
+	// 	await waitForTreasure();
+	// }
+
+
+	let countDEADenemies = 0
+	let countALIVEenemies = 0
+	//if ( (thePlayer.multipleEncounters && !death) && !thePlayer.noLoot && gameEvent.enemies) {
+	if ( (!death) && !thePlayer.noLoot && gameEvent.enemies) {
 		for (let i of gameEvent.enemies) {
 			if(i.hp<=0){
 				countDEADenemies++
 			}
 		}
+		countALIVEenemies=gameEvent.enemies.length-countDEADenemies
 		for (let i = 0; i < countDEADenemies; i++) {
 			treasure()
+			MakeContinueButton(chalk.hex('ffffff')("skip loot"))
 			if (thePlayer.potions > 0)potionButtonGeneric();
 			if (thePlayer.scrolls > 0)scrollsButtonGeneric();
 			await waitForTreasure();
 		}
 	}
 
+	if(!death)
 	thePlayer.multipleEncounters = false
 	thePlayer.noLoot = false
 	thePlayer.currentEvent = null
 	if (!death) {
-
 		// custom loot handling
 		if(gameEvent.loot){
 			for (let i = 0; i < gameEvent.loot.length; i++) {
 				treasure(gameEvent.loot[i])
-				//logs.writeSync(`DEBUGGUGUGUGYou found ${gameEvent.loot[i].type}!`)
+				MakeContinueButton(chalk.hex('ffffff')("skip loot"))
 				if (thePlayer.potions > 0)potionButtonGeneric();
 				if (thePlayer.scrolls > 0)scrollsButtonGeneric();
 				await waitForTreasure();
 			}
 		}
-
+		ImageScreenTerm.term.reset()
+		ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
 		thePlayer.depth++
 		thePlayer.actualDepth++
 		//depth is distance travelled, ACTUAL DEPTH IS CURRENT LOCATION
@@ -576,16 +617,18 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		// await slowLineWrite(gameEvent.toScreen.toScreen.cleanANSI())
 		// ImageScreenTerm.writeSync('[H')
 		// await slowLineWrite(gameEvent.toScreen.toScreen)
-		writeImage(gameEvent)
-		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
-		logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
+
+
+		// writeImage(gameEvent)
+		// await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
+		// logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
 		//
 		// for testing
 		//
 	}
 	temp_event1.enemies = [pickEnemy(),pickEnemy(),pickEnemy()]
 	temp_event2.enemies = [pickEnemy()]
-	temp_event3.enemies = []
+	temp_event3.enemies = [pickEnemy()]
 	resolver()
 }
 async function writeImage(gameEvent) {
@@ -629,9 +672,6 @@ function encounterResolver() {
 }
 async function combat(event, enemy) {
 	thePlayer.encDat = new combatMetrics()
-	if (event.enemies.length > 1) {
-		thePlayer.multipleEncounters = true
-	}
 	if(event.noDrops){
 		thePlayer.noLoot = true
 	}
@@ -768,17 +808,17 @@ async function clearCombat() {
 	// await new Promise(r => setTimeout(r, 2000));
 	// multiple combats delay treasure till later
 	// make it flash
-	if ((!thePlayer.noLoot && !death) && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
-		treasure()
-		if (thePlayer.potions > 0)potionButtonGeneric();
-		if (thePlayer.scrolls > 0)scrollsButtonGeneric();
-		await waitForTreasure();
-	} else if (!death && thePlayer.encDat.peacefullClr) {
-		MakeContinueButton()
-		if (thePlayer.potions > 0)potionButtonGeneric();
-		if (thePlayer.scrolls > 0)scrollsButtonGeneric();
-		await waitForTreasure();
-	}
+	// if ((!thePlayer.noLoot && !death) && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
+	// 	treasure()
+	// 	if (thePlayer.potions > 0)potionButtonGeneric();
+	// 	if (thePlayer.scrolls > 0)scrollsButtonGeneric();
+	// 	await waitForTreasure();
+	// } else if (!death && thePlayer.encDat.peacefullClr) {
+	// 	MakeContinueButton()
+	// 	if (thePlayer.potions > 0)potionButtonGeneric();
+	// 	if (thePlayer.scrolls > 0)scrollsButtonGeneric();
+	// 	await waitForTreasure();
+	// }
 	thePlayer.encDat = null
 	encounterResolver()
 }
@@ -792,7 +832,7 @@ async function clearCombat() {
 // 	
 //
 //
-async function treasure(customTreasure={type: 'items', item: null}) 
+async function treasure(customTreasure={type: 'items', item: null, text: null, searchText:null}) 
 {
 	let gotoTreasure = new blessedpkg.button({
 		parent: buttonsContainer,
@@ -829,9 +869,19 @@ async function treasure(customTreasure={type: 'items', item: null})
 		ImageScreenTerm.term.reset()
 		screen.render()
 		logs.writeSync(`${chalk.hex(miscColours.legendary)(`.`.repeat(logs.term.cols - 1))}\n`);
-		logs.writeSync('searching for loot...\n')
 
-		logs.writeSync(`You find ${lootLocationsPicker()}\n`);
+		if (customTreasure && customTreasure.searchText) {
+			logs.writeSync(`${customTreasure.searchText}\n`);
+		}else{
+			logs.writeSync('searching for loot...\n')
+		}
+		
+
+		if(customTreasure&&customTreasure.text){
+			logs.writeSync(`${customTreasure.text}\n`);
+		}else{
+			logs.writeSync(`You find ${lootLocationsPicker()}\n`);
+		}
 
 
 

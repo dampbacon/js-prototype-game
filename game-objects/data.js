@@ -102,7 +102,7 @@ export const damageTypes = Object.freeze({
 				})
 				target.hp -= bonusDamage
 				try {
-					target2.encDat.TdmgAr[-1] += bonusDamage
+					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
 				} catch (e) {}
 				return `${chalk.hex(self.color)('bonus fire damage: ')}${bonusDamage}\n`
 			} else {
@@ -125,7 +125,7 @@ export const damageTypes = Object.freeze({
 				}
 				target.hp -= bonusDamage
 				try {
-					target2.encDat.TdmgAr[-1] += bonusDamage
+					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
 				} catch (e) {}
 				return `${chalk.hex(self.color)('$$$$$$$$$ 1 poison damage: ')}${bonusDamage}\n`
 			} else if (chance2.bool({
@@ -139,7 +139,7 @@ export const damageTypes = Object.freeze({
 				target2.weaponCooldown = crit ? 0 : selfdmgtype.effectDurationMax
 				target.hp -= bonusDamage
 				try {
-					target2.encDat.TdmgAr[-1] += bonusDamage
+					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
 				} catch (e) {}
 				return `${chalk.hex(self.color)('DEFAULT poison damage: ')}$dam${bonusDamage}__________________\ncool${target2.weaponCooldown}_______________\n`
 			} else {
@@ -166,7 +166,7 @@ export const damageTypes = Object.freeze({
 					})
 					target.hp -= bonusDamage
 					try {
-						target2.encDat.TdmgAr[-1] += bonusDamage
+						target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
 					} catch (e) {}
 					return `${chalk.hex(self.color)('bonus gravitational wave damage: ')}${bonusDamage}\n`
 				}
@@ -203,7 +203,7 @@ export const damageTypes = Object.freeze({
 				--target2.weaponCooldown
 				target.hp -= damage
 				try {
-					target2.encDat.TdmgAr[-1] += damage
+					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += damage
 				} catch (e) {}
 				return `${chalk.hex(self.color)(`${appendStr}`)}`
 			} else if (chance2.bool({
@@ -217,7 +217,7 @@ export const damageTypes = Object.freeze({
 				target2.weaponCooldown = crit ? 7 : selfdmgtype.effectDurationMax
 				target.hp -= bonusDamage
 				try {
-					target2.encDat.TdmgAr[-1] += bonusDamage
+					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
 				} catch (e) {}
 				return `${chalk.hex(self.color)('naruto damage dealt: ')}${bonusDamage}\n`
 			} else {

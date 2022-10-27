@@ -86,7 +86,7 @@ export class Player {
 		this.encDat = new combatMetrics()
 		//multiple combats dont have seperate holder
 		this.currentEvent = null
-		this.multipleEncounters = false
+		//this.multipleEncounters = false
 		this.noLoot = false
 	}
 	makeAttack(){

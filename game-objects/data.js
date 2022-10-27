@@ -1620,7 +1620,7 @@ const roomTextOptions = Object.freeze([
 	["a small chapel", "an inert altar sits in the center of the room, a few decayed pews are scattered around the room"],
 	["a small cavern", "the walls are covered in a thick layer of moss and lichen, it appears to be well travelled", ROOM_ART.cavern],
 	["a hallway", "crumbling stone walls line the hallway, the floor is covered in a thick layer of dust. Most of the exits are blocked by rubble", ROOM_ART.hallway],
-	["a rat infested room", "the floor is covered in a layer of detritus of dubios orgine, you see bones and scraps of food lying around"],
+	["a rat infested room", "the floor is covered in a layer of detritus of dubious orgin, you see bones and scraps of food lying around"],
 	["a dungeon cell", "few furnishings litter the room, you spy manacles and chains on the wall, and steel implements of dubious purpose"],
 	["a small library", "it's filled with bookshelves, most of the books are old and tattered, a few are in better condition"],
 	["an abandoned armory", "the room is filled with weapons and armour, most of it seems rusted and unusable, it's unclear if you'll be able to find something salvageble", ROOM_ART.amoury],

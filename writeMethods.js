@@ -25,6 +25,7 @@ import {
 	ARMOUR,
 	ARMOURmap,
 	ArmourRarityColour,
+	ARMOUR_ART,
 	DMG_COLOUR,
 	DMG_TYPE,
 	dynamicBox,
@@ -393,15 +394,14 @@ export async function writeScroll(amount = 1, term = ImageScreenTerm) {
 }
 export async function writeArmour(armourName, enchant = 0, term = ImageScreenTerm) {
 	//later make rarity change
-	let icon = `\
-[90m[40m▐[90m[47m~~▒░▒▒░▒~~[90m[40m▌[37m[40m [m
-[90m[47m║░Ω░▒░░▒░Ω░║[37m[40m [m
-[90m[40m‼Σ▐[90m[47m▒░▒▒░▒[90m[40m▌Σ‼[37m[40m [m
-[37m[40m  [90m[40m▐[90m[47m░▒░░▒░[90m[40m▌[37m[40m   [m
-[37m[40m  [90m[40m▐[90m[47m§§§§§§[90m[40m▌[37m[40m   [m\
-`
 	let ac = ARMOURmap[armourName]
 	let colour = ArmourRarityColour(ac)
+	let icon = ``
+	if(colour===miscColours.legendary || colour===miscColours.epic){
+	icon = ARMOUR_ART.elite
+	}else{
+		icon = ARMOUR_ART.normal
+	}
 	let k =
 		`\
              ${chalk.hex(colour)('Name   : '+(armourName.replace(/_/g, ' ')))}

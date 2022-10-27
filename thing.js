@@ -231,7 +231,8 @@ let temp_event2 = new game_event({
 			text: chalk.hex(miscColours.gold)("GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOLLD"),
 			searchText:  chalk.hex(miscColours.gold)("LOOKING FOR GOLD")
 		},
-		{type:LOOT_OPTIONS.ITEMS, item:[60,50,40], text:null}
+		{type:LOOT_OPTIONS.ITEMS, item:[60,50,40], text:null, searchText: null},
+		{type:LOOT_OPTIONS.ARMOUR, item:ARMOUR.DENSE_PERSONALITY, text:null, searchText: null},
 	],
 	noDrops:true,
 	

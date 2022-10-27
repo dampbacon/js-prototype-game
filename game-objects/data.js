@@ -393,6 +393,27 @@ export function weaponSubset(min, max) {
                ███    ███                                         ███    ███ 
 
 */
+
+export const ARMOUR_ART = Object.freeze({
+	elite:
+`\
+[90m[40m▐[93m[47m~≈[90m[47m▒[93m[47m([90m[47m▒▒[93m[47m)[90m[47m▒[93m[47m≈~[90m[40m▌[m
+[90m[47m║░[93m[47mΩ[90m[47m░▒[93m[47m▀▀[90m[47m▒░[93m[47mΩ[90m[47m░║[m
+[90m[40m‼¶▐[90m[47m▒░▒▒░▒[90m[40m▌¶‼[m
+[37m[40m  [90m[40m▐[90m[47m░▒░░▒░[90m[40m▌  [m
+[37m[40m  [90m[40m▐[90m[47mV${chalk.bgHex('5f6264')(chalk.hex(miscColours.gold)(`[@@]`))}[90m[47mV[90m[40m▌  [m\	
+`,
+	normal:
+`\
+[90m[40m▐[90m[47m~~▒░▒▒░▒~~[90m[40m▌[37m[40m [m
+[90m[47m║░Ω░▒░░▒░Ω░║[37m[40m [m
+[90m[40m‼Σ▐[90m[47m▒░▒▒░▒[90m[40m▌Σ‼[37m[40m [m
+[37m[40m  [90m[40m▐[90m[47m░▒░░▒░[90m[40m▌[37m[40m   [m
+[37m[40m  [90m[40m▐[90m[47m§§§§§§[90m[40m▌[37m[40m   [m\
+`
+})
+
+
 export const ARMOUR = Object.freeze({
 	LOIN_CLOTH: 'LOIN_CLOTH',
 	TRAVELLERS_CLOTHES: 'TRAVELLERS_CLOTHES',
@@ -525,7 +546,7 @@ export const ScrollsAll = Object.freeze({
 					params.term.reset()
 					player.encounterData.enmyName = player.encounterData.enemy.name
 					params.term.writeSync(player.encounterData.enemy.art)
-					return `You read the scroll and the shape of ${oldName} distorts and... \nturns into a ${player.encounterData.enemyName}!`
+					return `You read the scroll and the shape of ${oldName} distorts and... turns into a ${player.encounterData.enemyName}!`
 				}
 			} else {
 				return `You read the scroll and nothing happens.`
@@ -574,7 +595,7 @@ export const ScrollsAll = Object.freeze({
 		description: 'A scroll that summons a lightning bolt to strike a monster',
 		scrollFunction: dmgScrollFun(
 			`catches a glancing strike and takes`,
-			`catches the full force of the thunder bolt\nand takes`,
+			`catches the full force of the thunder bolt and takes`,
 			`Unfortunately you are not in combat, you cast it out of the room.`,
 			DMG_COLOUR[DMG_TYPE.LIGHTNING], //`FFA500`,
 			`4d6`,
@@ -588,9 +609,9 @@ export const ScrollsAll = Object.freeze({
 		rarity: 1,
 		description: 'A scroll that kills a monster most of the time',
 		scrollFunction: dmgScrollFun(
-			`takes a glancing blow from the curse\nand takes`,
+			`takes a glancing blow from the curse and takes`,
 			`absorbs the full force of the curse killing it`,
-			`unfortunately there is nothing to kill besides yourself.\nYou let the scroll fizzle into ashes`,
+			`unfortunately there is nothing to kill besides yourself. You let the scroll fizzle into ashes`,
 			DMG_COLOUR[DMG_TYPE.DARK],
 			`4d6`,
 			`kill`,
@@ -609,7 +630,7 @@ export const ScrollsAll = Object.freeze({
 			})
 			if (player.hp === player.hpMax) {
 				return chalk.hex(DMG_COLOUR[DMG_TYPE.HOLY])(
-					`You cast heal on yourself even though you are already at full health.\nWasting a spell that could have been used to save yourself.`
+					`You cast heal on yourself even though you are already at full health. Wasting a spell that could have been used to save yourself.`
 				)
 			} else {
 				let healAmount = heal
@@ -1585,7 +1606,7 @@ const roomTextOptions = Object.freeze([
 	//["a small cavern", "the walls are covered in a thick layer of moss and lichen, it appears to be well travelled"], 
 	//["a hallway", "crumbling stone walls line the hallway, the floor is covered in a thick layer of dust. Most of the exits are blocked by rubble"],
 	["a rat infested room", "the floor is covered in a layer of detritus of dubios orgine, you see bones and scraps of food lying around"],
-	["a dungeon cell", "few furnishings litter the room, you spy manacles and chains on the wall, and you see steel implements of dubious purpose"],
+	["a dungeon cell", "few furnishings litter the room, you spy manacles and chains on the wall, and steel implements of dubious purpose"],
 	["a small library", "it's filled with bookshelves, most of the books are old and tattered, a few are in better condition"],
 	["an abandoned armory", "the room is filled with weapons and armour, most of it seems rusted and unusable, it's unclear if you'll be able to find something salvageble"],
 	["a courtyard", "the courtyard is filled with rubble, you see a few broken statues and fountains"],

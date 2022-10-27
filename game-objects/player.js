@@ -85,6 +85,7 @@ export class Player {
 		//add support for nonhostile
 		this.encDat = new combatMetrics()
 		//multiple combats dont have seperate holder
+		this.currentEvent = null
 		this.multipleEncounters = false
 		this.noLoot = false
 	}
@@ -180,6 +181,9 @@ export class Player {
 		return scrollPick.use(this, params)
 	}
 }
+
+
+
 class inventory {
 	constructor(items = []) {
 		this.thing = items

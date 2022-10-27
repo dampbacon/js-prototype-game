@@ -247,7 +247,11 @@ let temp_event2 = new game_event({
 	//test loot overrides
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
 	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
-	loot: [{type:LOOT_OPTIONS.WEAPON,item:weapons.flamberge},{type:LOOT_OPTIONS.GOLD,item:9000},{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
+	loot: [
+		{type:LOOT_OPTIONS.WEAPON,item:weapons.flamberge},
+		{type:LOOT_OPTIONS.GOLD,item:9000},
+		{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}
+	],
 	noDrops:true,
 	
 })
@@ -332,23 +336,7 @@ let caleb = `[48;5;241m [38;5;241;48;5;241m▄[38;5;242;48;5;241m▄▄[38;5
 [38;5;236;48;5;238m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄[38;5;238;48;5;237m▄[38;5;237;48;5;237m▄▄▄[38;5;234;48;5;237m▄[38;5;235;48;5;235m▄[38;5;236;48;5;235m▄[38;5;236;48;5;236m▄[38;5;235;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;235m▄[38;5;233;48;5;232m▄[38;5;232;48;5;233m▄[38;5;233;48;5;233m▄▄[38;5;233;48;5;234m▄[38;5;233;48;5;233m▄[38;5;233;48;5;234m▄[38;5;234;48;5;239m▄[38;5;237;48;5;95m▄[38;5;95;48;5;95m▄▄▄[38;5;95;48;5;239m▄[38;5;95;48;5;238m▄[38;5;239;48;5;237m▄[38;5;95;48;5;238m▄[38;5;237;48;5;238m▄[38;5;234;48;5;235m▄[38;5;232;48;5;232m▄[38;5;232;48;5;0m▄[38;5;232;48;5;232m▄[38;5;233;48;5;233m▄[38;5;234;48;5;234m▄▄▄[38;5;232;48;5;233m▄[38;5;234;48;5;234m▄▄[38;5;233;48;5;234m▄[38;5;234;48;5;234m▄▄▄[38;5;235;48;5;235m▄[38;5;234;48;5;235m▄[38;5;234;48;5;234m▄[38;5;235;48;5;236m▄[38;5;237;48;5;238m▄[38;5;238;48;5;238m▄▄▄▄▄[m
 `
 let thing = chalk.blue('Hello') + ' World' + chalk.red('!')
-let ch = `The Yuan Family.
 
-“Father, today, Brother Huang will leave to join the army. I\’m going to go see him off,” said Yuan Luoyu respectfully. 
-
-Yuan Wutong immediately made his decision. “Take some presents with you. 
-Stop by the treasury and pick out something good. 
-Our gift might be intended for Huang Qianjun, 
-but what matters is that Master Su will see it; 
-we absolutely cannot be half-hearted about this. 
-Let’s take this chance to display our Yuan Family\’s sincerity.” 
-
-“Alright!” Yuan Luoyu straightforwardly agreed. 
-
-Yuan Wutong snorted coldly. “Last night, your expenditures at the Sand-Scouring Waves weren’t the least bit small. 
-Out of respect for Master Su, 
-I’ll let you off just this once, 
-but you’d best hurry back to the Redscale Army, you brat!” `
 //test button declarations
 let button1 = blessedpkg.button({
 	parent: buttonsContainer,
@@ -476,46 +464,46 @@ async function createButtons(gameEvent, storyObj = {}) {
 	await waitForClear();
 	if (death) {
 		await reset()
-		return 0
-	}
-	gameEvent['buttons'].forEach(item => {
-		let temp = new blessedpkg.button({
-			parent: buttonsContainer,
-			mouse: true,
-			keys: true,
-			shrink: true,
-			padding: {
+	}else{
+		gameEvent['buttons'].forEach(item => {
+			let temp = new blessedpkg.button({
+				parent: buttonsContainer,
+				mouse: true,
+				keys: true,
+				shrink: true,
+				padding: {
+					left: 1,
+					right: 1
+				},
 				left: 1,
-				right: 1
-			},
-			left: 1,
-			top: 1,
-			name: item[1],
-			content: item[1],
-			//shadow: true,
-			style: {
-				bg: '#0066CC',
-				focus: {
-					bg: '#cc0066',
+				top: 1,
+				name: item[1],
+				content: item[1],
+				//shadow: true,
+				style: {
+					bg: '#0066CC',
+					focus: {
+						bg: '#cc0066',
+					},
+					hover: {
+						bg: '#cc0066',
+					},
 				},
-				hover: {
-					bg: '#cc0066',
-				},
-			},
+			})
+			buttonsArray.push(temp)
+			temp.on('press', function() {
+				clearButtons()
+				buttonsContainer.setContent('')
+				screen.render();
+				createButtons(storyObj[item[0]], storyObj);
+				resizeButtons();
+				stats.focus();
+				screen.render();
+			})
 		})
-		buttonsArray.push(temp)
-		temp.on('press', function() {
-			clearButtons()
-			buttonsContainer.setContent('')
-			screen.render();
-			createButtons(storyObj[item[0]], storyObj);
-			resizeButtons();
-			stats.focus();
-			screen.render();
-		})
-	})
-	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length) + " " + chalk.bold.greenBright("choices")}`)
-	resizeButtons()
+		buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length) + " " + chalk.bold.greenBright("choices")}`)
+		resizeButtons()
+	}
 }
 // basically to map event to an object using the event id as a key,
 // this is so that events can be looked up by button param then loaded
@@ -533,6 +521,8 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	let gb = gameEvent.body
 	let gbf = gb.format
 	//change to for loop eventually
+	thePlayer.currentEvent = gameEvent
+
 	for (let i of gameEvent.enemies) {
 		if (!death) {
 			combat(gameEvent, i)
@@ -558,6 +548,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
 	thePlayer.multipleEncounters = false
 	thePlayer.noLoot = false
+	thePlayer.currentEvent = null
 	if (!death) {
 
 		// custom loot handling
@@ -779,19 +770,13 @@ async function clearCombat() {
 	// make it flash
 	if ((!thePlayer.noLoot && !death) && (!thePlayer.encDat.peacefullClr && !thePlayer.multipleEncounters)) {
 		treasure()
-
-		//debug
-		//logs.writeSync(`AAAAAAA ${thePlayer.noLoot}`)
-
 		if (thePlayer.potions > 0)potionButtonGeneric();
 		if (thePlayer.scrolls > 0)scrollsButtonGeneric();
-
 		await waitForTreasure();
 	} else if (!death && thePlayer.encDat.peacefullClr) {
 		MakeContinueButton()
 		if (thePlayer.potions > 0)potionButtonGeneric();
 		if (thePlayer.scrolls > 0)scrollsButtonGeneric();
-
 		await waitForTreasure();
 	}
 	thePlayer.encDat = null

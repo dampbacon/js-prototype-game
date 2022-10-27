@@ -24,6 +24,7 @@ import { copyMonster, monster } from "./game-objects/mobs.js";
 import gradient from 'gradient-string';
 import longest from 'longest';
 import chalk, { Chalk } from "chalk";
+import wrapAnsi from "wrap-ansi";
 
 //test array values
 // console.log(weaponsArray)
@@ -192,3 +193,40 @@ console.log(blah)
 console.log(ARMOURmap)
 console.log(ArmourSubsetMaker(16,22))
 console.log(weaponSubset(0,0.4))
+
+let lorem=
+`Voluptate fugiat do deserunt consectetur sunt. Irure amet laboris enim magna consectetur quis ex magna. Dolore incididunt esse reprehenderit dolor anim exercitation amet labore laboris est eu velit aute.
+
+Occaecat voluptate aliqua ullamco est Lorem qui et irure. Non ex aliqua qui duis adipisicing voluptate commodo dolor sint magna. Et eu sunt nisi aliqua est non adipisicing consectetur. Ex enim in nisi sit anim non duis commodo culpa et officia consectetur. Officia esse velit id enim commodo exercitation eiusmod eu anim aute. Occaecat irure eiusmod commodo exercitation nostrud ullamco.
+
+Id nisi aute anim fugiat ea qui nostrud. Dolore mollit consequat deserunt esse adipisicing ipsum elit voluptate non ea pariatur velit irure. In reprehenderit Lorem labore minim id deserunt ad est sit.
+
+Occaecat occaecat eu laboris sit non commodo. Duis exercitation laboris ad veniam sunt anim incididunt nostrud qui nulla excepteur officia. Mollit adipisicing veniam minim voluptate fugiat. Ipsum nulla ex duis nulla culpa ullamco sit nulla aliqua exercitation tempor ipsum. Non id mollit exercitation laborum irure et laboris sunt amet exercitation esse laboris minim minim. Do excepteur voluptate ullamco exercitation elit officia nisi Lorem ea occaecat duis duis excepteur. Proident fugiat id commodo tempor enim mollit eiusmod laborum culpa aliquip Lorem amet.
+
+Non sit ut exercitation voluptate. Ipsum eiusmod deserunt sit excepteur laborum consectetur commodo. Ea fugiat ea velit reprehenderit culpa aute in enim ad quis duis ex. Veniam velit excepteur id nostrud amet do elit magna adipisicing. Occaecat incididunt veniam irure tempor laborum irure officia id excepteur voluptate veniam. Excepteur reprehenderit magna eiusmod incididunt do duis commodo consequat irure officia non sunt laborum eu.
+
+Ullamco consectetur magna cillum nostrud aliquip sit enim proident do nostrud velit do consectetur. Non cillum ipsum veniam fugiat elit ut quis est reprehenderit. Sit anim et ea pariatur enim aliqua duis occaecat irure qui nisi velit nulla aliquip. Mollit veniam adipisicing deserunt nulla enim.
+
+Ut aliquip sunt velit non excepteur irure commodo esse consequat incididunt cupidatat consequat non Lorem. Enim ullamco cupidatat consectetur qui ad laborum. Esse laborum ut ullamco cillum id. Pariatur Lorem occaecat quis proident ipsum aliquip commodo labore. Consequat incididunt consequat proident do eiusmod Lorem ad enim voluptate tempor sint eu pariatur.
+
+Adipisicing minim adipisicing sunt tempor labore voluptate aliquip aliqua non id do est. Magna reprehenderit adipisicing excepteur ipsum labore. Nulla et adipisicing elit quis sunt id do velit do pariatur laborum labore in commodo. Mollit aute exercitation sit veniam nulla aute amet veniam dolor tempor. Excepteur ad nostrud eiusmod dolor laborum. Voluptate labore non elit Lorem fugiat fugiat minim exercitation culpa consequat deserunt aute eu occaecat.
+
+Nostrud quis pariatur veniam cupidatat nulla ut dolor et aute duis ea culpa. Anim nulla ipsum consectetur cupidatat deserunt. Sint do veniam consequat veniam dolor eiusmod aute. Id aliquip qui ipsum voluptate esse reprehenderit qui adipisicing aliqua. Tempor ea fugiat magna irure sint. Nisi aute fugiat elit dolor eu nisi duis magna.
+
+Deserunt sint ea consequat ipsum aliquip quis id exercitation proident sit consectetur ad sunt aute. Magna nisi qui consequat officia pariatur id ipsum. Laboris culpa esse enim adipisicing elit dolore. Consectetur occaecat deserunt sunt sint pariatur.`
+let loremTest=wrapAnsi(gradient.retro(lorem),20,{hard:true}) 
+
+console.log(loremTest)
+
+// export function teststr(text, width = 80) {
+// 	let multiline = ``
+// 	let lorem_lines = wrapAnsi(text, width)
+// 	for (let line of lorem_lines) {
+// 		let line_str = line.join('')
+// 		if (line_str) {
+// 			line_str = line_str.concat('\n')
+// 		}
+// 		multiline = multiline.concat(line_str)
+// 	}
+// 	return multiline
+// }

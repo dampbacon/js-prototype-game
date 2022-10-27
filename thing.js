@@ -85,6 +85,7 @@ import {
 } from './game-objects/items.js';
 //const cfonts = require('cfonts');
 import cfonts from 'cfonts';
+import wrapAnsi from 'wrap-ansi';
 chalk.level = 2;
 const {
 	tinygradient
@@ -1413,10 +1414,10 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
 			thePlayer.encounterData.addScrollUse()
-			logs.writeSync(player.useScroll({
+			logs.writeSync(wrapAnsi(player.useScroll({
 				monster: monster,
 				term: ImageScreenTerm
-			}) + '\n')
+			}), logs.term.cols-1,{hard:true}) + '\n')
 			if (monster !== player.encounterData.enemy) {
 				monster = player.encounterData.enemy
 			}

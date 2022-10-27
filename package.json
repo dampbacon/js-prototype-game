@@ -26,6 +26,7 @@
     "term.js": "^0.0.7",
     "tinygradient": "^1.1.5",
     "word-wrap": "^1.2.3",
+    "wrap-ansi": "^8.0.1",
     "xterm": "^4.18.0",
     "xterm-headless": "^4.18.0"
   },

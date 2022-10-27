@@ -21,6 +21,7 @@ import {
 } from "./ui.js";
 import gradient from 'gradient-string';
 import chalk from "chalk";
+import wrapAnsi from "wrap-ansi";
 import {
 	ARMOUR,
 	ARMOURmap,

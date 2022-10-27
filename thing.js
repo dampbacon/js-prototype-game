@@ -277,7 +277,7 @@ let temp_event3 = new game_event({
 		},
 	},
 	toScreen: {
-		toScreen: ROOM_ART.cellar,
+		toScreen: ROOM_ART.emptyRoom,
 		AnsiFile: {
 			exists: false,
 			url: '',
@@ -566,7 +566,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		if (!death) {
 			combat(gameEvent, i)
 			await (waitForCombat())
-
+			//looks redundant but isn't because player can die in combat
 			if(!death){
 				if(i === gameEvent.enemies[gameEvent.enemies.length - 1]){
 					MakeContinueButton(chalk.hex("ffffff")("enter the room"))

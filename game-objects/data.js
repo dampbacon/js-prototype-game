@@ -1518,6 +1518,32 @@ export const ROOM_ART = Object.freeze({
 [37m[40m    [90m[40m░░[93m[40m▒░░▓████▓██████[90m[40m▒█░[37m[40m                 [33m[40m╚═╝[37m[40m       [90m[40m\\[m
 [37m[40m   [90m[40m▒▒[93m[40m▒▒▓▓██▒▒▒██▒▓████[90m[40m█░[37m[40m                            [m
 [37m[40m  [90m[40m░▒[93m[40m░▒▓█▓██▓████▓██░░▒▓[90m[40m▒░[37m[40m                           [m\
+`,
+	emptyRoom: `\
+[37m[40m                                                 [90m[40m---[37m[40m  [m
+[37m[40m                                           [90m[40m------[37m[40m     [m
+[90m[40m---------------------------------[37m[40m       [90m[40m---[37m[40m           [m
+[37m[40m                                 [90m[40m╔═════╗[37m[40m              [m
+[37m[40m    [93m[40m*[37m[40m       [93m[40m*[37m[40m       [93m[40m*[37m[40m       [93m[40m*[37m[40m    [90m[40m║[37m[40m     [90m[40m║[37m[40m              [m
+[37m[40m  ○ [90m[40m¶[37m[40m ○   ○ [90m[40m¶[37m[40m ○   ○ [90m[40m¶[37m[40m ○   ○ [90m[40m¶[37m[40m ○  [90m[40m║[37m[40m     [90m[40m║[37m[40m              [m
+[90m[40m_________________________________║[37m[40m     [90m[40m║[37m[40m              [m
+[37m[40m                                       [90m[40m\\[37m[40m     ○[93m[40m*[37m[40m       [m
+[37m[40m   [33m[40m(☼☼☼)[37m[40m                                [90m[40m\\[37m[40m     [90m[40m¶[37m[40m       [m
+[37m[40m                                    [33m[40m_[37m[40m    [90m[40m\\[37m[40m      ○     [m
+[37m[40m                                   [33m[40m╔═╗[37m[40m    [90m[40m\\[37m[40m     ○ [93m[40m*[37m[40m   [m
+[37m[40m [33m[40m┌───┐[37m[40m                             [33m[40m╚═╝[37m[40m    [90m[40m\\[37m[40m       [90m[40m¶[37m[40m   [m
+[37m[40m [33m[40m╔═══╗[37m[40m                                     [90m[40m\\[37m[40m        ○ [m
+[37m[40m [33m[40m║[37m[40m   [33m[40m║[37m[40m    [33m[40m_[37m[40m                                 [90m[40m\\[37m[40m         [m
+[37m[40m [33m[40m╚═══╝[37m[40m   [33m[40m╔═╗[37m[40m                                 [90m[40m\\[37m[40m        [m
+[37m[40m         [33m[40m╚═╝[37m[40m                                  [90m[40m\\[37m[40m       [m
+[37m[40m                                               [90m[40m\\[37m[40m      [m
+[37m[40m               [90m[40m░░░[37m[40m               [33m[40m┌───┐[37m[40m          [90m[40m\\[37m[40m     [m
+[37m[40m      [90m[40m░[37m[40m     [90m[40m▒▓▒░▒[37m[40m [90m[40m░[37m[40m              [33m[40m╔═══╗[37m[40m   [33m[40m(☼☼☼)[37m[40m  [90m[40m\\[37m[40m     [m
+[37m[40m         [90m[40m░▓█[93m[40m██▓[90m[40m▒▒▒░░░░[37m[40m           [33m[40m║[37m[40m   [33m[40m║[37m[40m    [33m[40m_[37m[40m      [90m[40m\\[37m[40m    [m
+[37m[40m     [90m[40m░[37m[40m [90m[40m░[93m[40m▒▒█████▓▓▓▒▒[90m[40m░▓█░[37m[40m         [33m[40m╚═══╝[37m[40m   [33m[40m╔═╗[37m[40m      [90m[40m\\[37m[40m   [m
+[37m[40m    [90m[40m░░[93m[40m▒░░▓████▓██████[90m[40m▒█░[37m[40m                 [33m[40m╚═╝[37m[40m       [90m[40m\\[37m[40m  [m
+[37m[40m   [90m[40m▒▒[93m[40m▒▒▓▓██▒▒▒██▒▓████[90m[40m█░[37m[40m                              [m
+[37m[40m  [90m[40m░▒[93m[40m░▒▓█▓██▓████▓██░░▒▓[90m[40m▒░[37m[40m                             [m\
 `
 })
 
@@ -1528,7 +1554,7 @@ const roomTextOptions = Object.freeze([
 	["an abandoned mess hall","pots and pans are strewn about the room, with benches and tables that have seen better days"],
 	["a foundry","The room glows a warm red which eminates from the furnaces in the center of the room, you spy various pieces of weapons and armour in varying states of completion littered around the room"],
 	["an abandoned treasury", "empty shelves, racks and chests fill the room, the room appears to have been cleaned out many years ago"],
-	["just an empty room", "a few furnishings lie around but the room appears to be mostly empty, it's unclear if anyone was here recently"],
+	//["just an empty room", "a few furnishings lie around but the room appears to be mostly empty, it's unclear if anyone was here recently"],
 	["a small chapel", "an inert altar sits in the center of the room, a few decayed pews are scattered around the room"],
 	//["a small cavern", "the walls are covered in a thick layer of moss and lichen, it appears to be well travelled"], 
 	//["a hallway", "crumbling stone walls line the hallway, the floor is covered in a thick layer of dust. Most of the exits are blocked by rubble"],

@@ -1511,12 +1511,38 @@ export const ROOM_ART = Object.freeze({
 [37m[40m    [90m[40m░░[93m[40m▒░░▓████▓██████[90m[40m▒█░[37m[40m                           [90m[40m\\[m
 [37m[40m   [90m[40m▒▒[93m[40m▒▒▓▓██▒▒▒██▒▓████[90m[40m█░[37m[40m                            [m
 [37m[40m  [90m[40m░▒[93m[40m░▒▓█▓██▓████▓██░░▒▓[90m[40m▒░[37m[40m                           [m\\
+`,
+	cellar:`\
+[37m[40m                                                 [90m[40m---[m
+[37m[40m                                           [90m[40m------[37m[40m   [m
+[37m[40m                                        [90m[40m---[37m[40m         [m
+[33m[40m══════[90m[40m╦[33m[40m══════[90m[40m╦[33m[40m═══════════[90m[40m╗[33m[40m//[37m[40m     [90m[40m╔═════╗[37m[40m            [m
+[37m[40m([33m[40mO[37m[40m)([33m[40mO[37m[40m)[33m[40m║[37m[40m([33m[40mO[37m[40m)([33m[40mO[37m[40m)[33m[40m║[37m[40m  [33m[40m▄▄[37m[40m   [33m[40m▄▄[37m[40m  [33m[40m║[37m[40m  [33m[40m//[37m[40m   [90m[40m║[37m[40m     [90m[40m║[37m[40m            [m
+[37m[40m([33m[40mO[37m[40m)([33m[40mO[37m[40m)[33m[40m║[37m[40m([33m[40mO[37m[40m)([33m[40mO[37m[40m)[33m[40m║[37m[40m [90m[43m[[33m[43m#[37m[43m#[90m[43m][37m[40m [90m[43m[[33m[43m#[37m[43m#[90m[43m][37m[40m [33m[40m║[37m[40m       [90m[40m║[37m[40m     [90m[40m║[37m[40m            [m
+[33m[40m══════[90m[40m╬[33m[40m══════[90m[40m╣[37m[40m  [33m[40m▀▀[37m[40m   [33m[40m▀▀[37m[40m  [33m[40m║[37m[40m       [90m[40m║[37m[40m     [90m[40m║[37m[40m            [m
+[37m[40m([33m[40mO[37m[40m)([33m[40mO[37m[40m)[33m[40m║[37m[40m([33m[40mO[37m[40m)([33m[40mO[37m[40m)[33m[40m║[37m[40m  [33m[40m▄▄[37m[40m   [33m[40m▄▄[37m[40m  [33m[40m║[37m[40m             [90m[40m\\[37m[40m      [93m[40m*[37m[40m     [m
+[37m[40m([33m[40mO[37m[40m)([33m[40mO[37m[40m)[33m[40m║[37m[40m([33m[40mO[37m[40m)([33m[40mO[37m[40m)[33m[40m║[37m[40m [90m[43m[[33m[43m#[37m[43m#[90m[43m][37m[40m [90m[43m[[33m[43m#[37m[43m#[90m[43m][37m[40m [33m[40m║[37m[40m  [33m[40m/[37m[40m           [90m[40m\\[37m[40m     [90m[40m¶[37m[40m     [m
+[33m[40m══════[90m[40m╩[33m[40m══════[90m[40m╣[37m[40m  [33m[40m▀▀[37m[40m   [33m[40m▀▀[37m[40m  [33m[40m║[37m[40m [33m[40m/[37m[40m             [90m[\\[37m[40m          [m
+[90m[40m▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[33m[40m/[37m[40m               [90m[40m\\[37m[40m       [93m[40m*[37m[40m [m
+[37m[40m           [33m[40m_[30m[40m_[37m[40m         [33m[40m┌───┐[37m[40m               [90m[40m\\[37m[40m      [90m[40m¶[37m[40m  [m
+[37m[40m     [33m[40m_[30m[40m_[37m[40m   [33m[40m╔═╗[37m[40m         [33m[40m╔═══╗[37m[40m                [90m[40m\\[37m[40m        [m
+[37m[40m    [33m[40m╔═╗[37m[40m   [33m[40m╚═╝[37m[40m         [33m[40m║[37m[40m   [33m[40m║[37m[40m           [33m[40m┌───┐[37m[40m [90m[40m\\[37m[40m       [m
+[37m[40m    [33m[40m╚═╝[37m[40m               [33m[40m╚═══╝[37m[40m           [33m[40m╔═══╗[37m[40m  [90m[40m\\[37m[40m      [m
+[37m[40m                                      [33m[40m║[37m[40m   [33m[40m║[37m[40m   [90m[40m\\[37m[40m     [m
+[37m[40m                                      [33m[40m╚═══╝[37m[40m    [90m[40m\\[37m[40m    [m
+[37m[40m               [90m[40m░░░[37m[40m               [33m[40m┌───┐[37m[40m          [90m[40m\\[37m[40m   [m
+[37m[40m      [90m[40m░[37m[40m     [90m[40m▒▓▒░▒[37m[40m [90m[40m░[37m[40m              [33m[40m╔═══╗[37m[40m   [33m[40m(☼☼☼)[37m[40m  [90m[40m\\[37m[40m   [m
+[37m[40m         [90m[40m░▓█[93m[40m██▓[90m[40m▒▒▒░░░░[37m[40m           [33m[40m║[37m[40m   [33m[40m║[37m[40m    [33m[40m_[30m[40m_[37m[40m     [90m[40m\\[37m[40m  [m
+[37m[40m     [90m[40m░[37m[40m [90m[40m░[93m[40m▒▒█████▓▓▓▒▒[90m[40m░▓█░[37m[40m         [33m[40m╚═══╝[37m[40m   [33m[40m╔═╗[37m[40m      [90m[40m\\[37m[40m [m
+[37m[40m    [90m[40m░░[93m[40m▒░░▓████▓██████[90m[40m▒█░[37m[40m                 [33m[40m╚═╝[37m[40m       [90m[40m\\[m
+[37m[40m   [90m[40m▒▒[93m[40m▒▒▓▓██▒▒▒██▒▓████[90m[40m█░[37m[40m                            [m
+[37m[40m  [90m[40m░▒[93m[40m░▒▓█▓██▓████▓██░░▒▓[90m[40m▒░[37m[40m                           [m\\
 `
 })
 
 
 
-
+// commented out is done, i will comment out when all art done
 const realRoomTextOptions = Object.freeze([
 	["an abandoned mess hall","pots and pans are strewn about the room, with benches and tables that have seen better days"],
 	["a foundry","The room glows a warm red which eminates from the furnaces in the center of the room, you spy various pieces of weapons and armour in varying states of completion littered around the room"],
@@ -1533,7 +1559,7 @@ const realRoomTextOptions = Object.freeze([
 	["an old guard barracks", "the room is filled with beds and lockers in varying states of disrepair, you see a few broken weapons and armour on the floor"],
 	//["a narrow corridor", "a few items are strewn about, there's only one clear exit"],
 	["a mining depot", "the room is strewn throughout with mining equipment, you see a few pickaxes and shovels, and a some mine carts"],
-	["an abandoned cellar", "the room is filled with barrels and crates, noting the grubs wriggling through the wood you doubt it's safe to consume anything in here"],
+	//["an abandoned cellar", "the room is filled with barrels and crates, noting the grubs wriggling through the wood you doubt it's safe to consume anything in here"],
 ])
 
 export function pickRealRoomText(){

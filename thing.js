@@ -277,7 +277,7 @@ let temp_event3 = new game_event({
 		},
 	},
 	toScreen: {
-		toScreen: ROOM_ART.hallway,
+		toScreen: ROOM_ART.cellar,
 		AnsiFile: {
 			exists: false,
 			url: '',

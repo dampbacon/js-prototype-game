@@ -53,7 +53,7 @@ import XTermNew from "./blessed-xterm/blessed-xterm.js";
 import {
 	ARMOUR,
 	ARMOURmap,
-	armourPicker,
+	pickArmour,
 	ArmourRarityColour,
 	DMG_COLOUR,
 	DMG_TYPE,
@@ -64,13 +64,13 @@ import {
 	escRightByNum,
 	escUpByNum,
 	ITEM_TYPES,
-	lootLocationsPicker,
+	pickLootLocation,
 	LOOT_OPTIONS,
-	makeRoomText,
+	makeEncounterText,
 	miscColours,
 	monsters,
 	pickEnemy,
-	pickRealRoomText,
+	pickRoomText,
 	pickWeapon,
 	rarityByWeight,
 	ROOM_ART,
@@ -645,11 +645,11 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		//
 	}
 	temp_event1.enemies = [pickEnemy(),pickEnemy(),pickEnemy()]
-	temp_event1.body.body = pickRealRoomText()
+	temp_event1.body.body = pickRoomText()
 	temp_event2.enemies = [pickEnemy()]
-	temp_event2.body.body = pickRealRoomText()
+	temp_event2.body.body = pickRoomText()
 	temp_event3.enemies = []
-	temp_event3.body.body = pickRealRoomText()
+	temp_event3.body.body = pickRoomText()
 
 	resolver()
 }
@@ -693,13 +693,13 @@ function encounterResolver() {
 	if (waitForCombatResolve) waitForCombatResolve()
 }
 async function combat(event, enemy) {
-	thePlayer.encDat = new combatMetrics()
+	thePlayer.encounterData = new combatMetrics()
 	if(event.noDrops){
 		thePlayer.noLoot = true
 	}
 	let monster = enemy //copyMonster(tempMonster)
 	logs.writeSync('\n' + escUpByNum(1))
-	await (gradient_scanlines(logs, makeRoomText(monster), 3, gradient.pastel.multiline, rainbowVoil))
+	await (gradient_scanlines(logs, makeEncounterText(monster), 3, gradient.pastel.multiline, rainbowVoil))
 	thePlayer.state = playerState.COMBAT
 	buttonsContainer.setContent('')
 	const foundFont = cfonts.render(`combat begin!`, {
@@ -718,8 +718,8 @@ async function combat(event, enemy) {
 	//logs.writeSync(`\n${chalk.hex('ECE236')(`Combat Start!`)}`);
 	logs.writeSync('\n' + foundBLKTXT)
 	logs.writeSync(`\n${chalk.hex(miscColours.darkWood)(`@`.repeat(logs.term.cols - 1))}\n`);
-	thePlayer.encDat.enmyName = monster.name
-	thePlayer.encDat.enemy = monster
+	thePlayer.encounterData.enemyName = monster.name
+	thePlayer.encounterData.enemy = monster
 	ImageScreenTerm.reset()
 	ImageScreenTerm.writeSync(monster.art)
 	combatLogic(thePlayer, true)
@@ -734,7 +734,7 @@ async function enemyAtack(monster, player = thePlayer, first = false) {
 ${chalk.blueBright(monster.weapon+'!')}\n`))
 	if (monster.rollToHit() >= player.ac) {
 		let monsterDamage = monster.rollDamage()
-		player.encDat.AdmgTkn(monsterDamage)
+		player.encounterData.addDamageTaken(monsterDamage)
 		//await new Promise(resolve => setTimeout(resolve, 100))
 		logs.writeSync(`${chalk.blueBright(monster.name)} \
 ${chalk.hex('ea0000')(`hits you for`)} ${chalk.hex('fe2c54')(monsterDamage)} \
@@ -785,7 +785,7 @@ async function clearCombat() {
 	ImageScreenTerm.removeLabel()
 	clearButtons();
 	//`red,#4B4B4B`
-	const foundFont = cfonts.render(`You ${thePlayer.encDat.peacefullClr?'cleared':'defeated'}|the enemy!`, {
+	const foundFont = cfonts.render(`You ${thePlayer.encounterData.peacefullClr?'cleared':'defeated'}|the enemy!`, {
 		gradient: `#${miscColours.legendary},#4B4B4B`,
 		font: 'chrome',
 		colors: ['system'],
@@ -804,19 +804,19 @@ async function clearCombat() {
 		let length = '╰╾────────────────────────────────────────────╼╯'.length
 		let combatBanner = `\
 ╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
-│   ${gradient.instagram(thePlayer.encDat.enmyName)} ${chalk.blue(thePlayer.encDat.peacefullClr?`cleared in`:`deafeated in`)} ${chalk.greenBright(`${thePlayer.encDat.turn} turns`)}
+│   ${gradient.instagram(thePlayer.encounterData.enemyName)} ${chalk.blue(thePlayer.encounterData.peacefullClr?`cleared in`:`deafeated in`)} ${chalk.greenBright(`${thePlayer.encounterData.turn} turns`)}
 │   <${'-'.repeat(38)}>
-│   XP earned:  ${thePlayer.encDat.peacefullClr?chalk.redBright(`0`):chalk.greenBright(`545`)}
+│   XP earned:  ${thePlayer.encounterData.peacefullClr?chalk.redBright(`0`):chalk.greenBright(`545`)}
 │
-│   average hit rate: ${(thePlayer.encDat.calculateHitMissAVG()*100).toFixed(2)} % hit chance
-│   average damage dealt per turn: ${chalk.redBright(thePlayer.encDat.calculateTurnDmgAVG())} dmg
+│   average hit rate: ${(thePlayer.encounterData.calculateHitMissAVG()*100).toFixed(2)} % hit chance
+│   average damage dealt per turn: ${chalk.redBright(thePlayer.encounterData.calculateTurnDmgAVG())} dmg
 │
-│   Total dmg dealt; ${chalk.redBright(`${thePlayer.encDat.returnDamageDealt()} dmg`)}
-│   Total dmg taken: ${chalk.greenBright(`${thePlayer.encDat.returnDamageTaken()}`)} dmg
+│   Total dmg dealt; ${chalk.redBright(`${thePlayer.encounterData.returnDamageDealt()} dmg`)}
+│   Total dmg taken: ${chalk.greenBright(`${thePlayer.encounterData.returnDamageTaken()}`)} dmg
 │
-│   ${chalk.cyan('potions used')} ${chalk.green('   |')} ${thePlayer.encDat.pUse}
-│   ${chalk.yellow('scrolls used')} ${chalk.green('   |')} ${thePlayer.encDat.sUse}
-│   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encDat.fUse}
+│   ${chalk.cyan('potions used')} ${chalk.green('   |')} ${thePlayer.encounterData.potionUses}
+│   ${chalk.yellow('scrolls used')} ${chalk.green('   |')} ${thePlayer.encounterData.scrollUses}
+│   ${chalk.redBright('oil flasks used')} ${chalk.green('|')} ${thePlayer.encounterData.flaskOilUses}
 ╰${gradient.pastel('╾────────────────────────────────────────────╼')}╯\
 `
 //draw banner
@@ -826,7 +826,7 @@ async function clearCombat() {
 			ImageScreenTerm.writeSync(escUpByNum(1) + escLeftByNum(1) + '│')
 		}
 	}
-	thePlayer.encDat = null
+	thePlayer.encounterData = null
 	encounterResolver()
 }
 //keep or change weapon or armour
@@ -887,7 +887,7 @@ async function treasure(customTreasure={type: 'items', item: null, text: null, s
 		if(customTreasure&&customTreasure.text){
 			logs.writeSync(`${customTreasure.text}\n`);
 		}else{
-			logs.writeSync(`You find ${lootLocationsPicker()}\n`);
+			logs.writeSync(`You find ${pickLootLocation()}\n`);
 		}
 
 
@@ -1085,7 +1085,7 @@ async function treasure(customTreasure={type: 'items', item: null, text: null, s
 					assert(customTreasure.item in ARMOUR, 'ITEM MUST BE A VALID ARMOUR')
 					arm=customTreasure.item
 				}else{
-					arm = armourPicker()
+					arm = pickArmour()
 				}
 				ComplexTreasure(arm, false)
 				break
@@ -1253,12 +1253,12 @@ function MakeContinueButton(text) {
 }
 async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = true, hostile = false, counter = 1) {
 	ImageScreenTerm.setLabel(`${gradient.summer(`Turn counter: ${counter}`)}`)
-	let monster = thePlayer.encDat.enemy
+	let monster = thePlayer.encounterData.enemy
 	//logs.writeSync('hp '+monster.hp+'\n')
 	let playerWonInitiative = false
 	let monsterHostile = hostile
 	let turn = counter
-	thePlayer.encDat.turn = turn
+	thePlayer.encounterData.turn = turn
 	//logs.writeSync(`${chalk.bold.green(turn)}\n`);
 	if (firstLoop) {
 		if ( /*room.forceHostile == -1 &&*/ monster.aggro < 12) {
@@ -1302,7 +1302,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			await new Promise(resolve => setTimeout(resolve, 1000))
 		}
 		if ((TOHIT[0] + TOHIT[1]) >= monster.ac) {
-			player.encDat.AHM(true)
+			player.encounterData.attackHitMiss(true)
 			let playerDamage = player.rollDamage()
 			let crit = false
 			if (TOHIT[0] === 20) {
@@ -1310,14 +1310,14 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 				playerDamage += player.rollDamage()
 			}
 			monster.hp -= playerDamage
-			player.encDat.ATdmg(playerDamage)
+			player.encounterData.addTurnDamage(playerDamage)
 			logs.writeSync(
 				`${chalk.hex('00ea00')(`You hit for`)} ${chalk.hex('fe2c54')(playerDamage)} ${chalk.hex('00ea00')('damage!')}\n`
 				); // ___DEBUGenemyhp=${monster.hp}\n`);
 			logs.writeSync(player.wBonus.applyEffectWF(monster, crit, player));
 			//logs.writeSync(chalk.hex('00ea00')(`___DEBUGenemyhp=${monster.hp}\n`));
 		} else {
-			player.encDat.AHM(false)
+			player.encounterData.attackHitMiss(false)
 			logs.writeSync(chalk.hex('00ea00')(`You miss!\n`)) //    ____DEBUGenemyhp=${monster.hp}\n`));
 		}
 		if (monster.hp <= 0) {
@@ -1334,7 +1334,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 		//bad name
 		let dexSave = player.rollSkillCheck(player.dex)
 		if ((dexSave >= (10 + monster.hitDie)) || !monsterHostile) {
-			player.encDat.peacefullClr = true
+			player.encounterData.peacefullClr = true
 			logs.writeSync(`${!playerWonInitiative&&firstLoop?escUpByNum(1)+'\r':''}${chalk.bold.magenta(`#`.repeat(logs.term.cols - 1))}\n`);
 			monsterHostile ? logs.writeSync(`${chalk.hex('00ea00')(`You escaped through a random tunnel`)}\n`) :
 				logs.writeSync(`${chalk.hex('00ea00')(`You walk past the ${monster.name} \nfollowing the path till you reach the room`)}\n`);
@@ -1382,7 +1382,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			}
 			thePlayer.increaseHP(heal)
 			thePlayer.potions--
-			thePlayer.encDat.APuse()
+			thePlayer.encounterData.addPotionUse()
 			refreshStats()
 			refreshInventory()
 			let testHostileDebug = monsterHostile
@@ -1400,11 +1400,11 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 	}
 	if ('oil' in combatButtonsMap) {
 		combatButtonsMap['oil'].on('press', async () => {
-			player.encDat.AHM(true)
+			player.encounterData.attackHitMiss(true)
 			let damage = chance2.rpg('2d6', {
 				sum: true
 			}) + 4
-			player.encDat.ATdmg(damage)
+			player.encounterData.addTurnDamage(damage)
 			clearButtons();
 			if (playerWonInitiative && firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
@@ -1416,7 +1416,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			);
 			monster.hp -= damage
 			thePlayer.oil--
-			thePlayer.encDat.AfUse()
+			thePlayer.encounterData.addFlaskOilUse()
 			refreshInventory()
 			await new Promise(resolve => setTimeout(resolve, 100))
 			if (monster.hp <= 0) {
@@ -1437,13 +1437,13 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			} else if (!firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
-			thePlayer.encDat.AsUse()
+			thePlayer.encounterData.addScrollUse()
 			logs.writeSync(player.useScroll({
 				monster: monster,
 				term: ImageScreenTerm
 			}) + '\n')
-			if (monster !== player.encDat.enemy) {
-				monster = player.encDat.enemy
+			if (monster !== player.encounterData.enemy) {
+				monster = player.encounterData.enemy
 			}
 			//console.log(monster)
 			refreshStats()
@@ -1523,7 +1523,7 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 		top: 1,
 		name: 'flee',
 		content: monsterHostile ? `flee ${thePlayer.dex > -1 ? chalk.bold.greenBright('dex check') : chalk.bold.redBright('dex check')}` :
-			`${chalk.bold.greenBright(`walk past ${thePlayer.encDat.enmyName}\nand continue onwards`)}`,
+			`${chalk.bold.greenBright(`walk past ${thePlayer.encounterData.enemyName}\nand continue onwards`)}`,
 		//shadow: true,
 		style: {
 			bg: '#000072',

@@ -11,63 +11,59 @@ export class GlobalMetrics {
 	}
 	addMetrics(metric) {}
 }
-export class combatMetrics extends GlobalMetrics {
+export class combatMetrics{
 	constructor() {
-		super();
-		this.HMar = [] //hitmiss array
-		this.TdmgAr = [] //turn damage array,  USE FOR TOTAL DAMAGE DEALT AND DAMAGE AVERAGE
-		this.dmgTkn = 0 //dmg taken 
-		this.pUse = 0 //potions
-		this.sUse = 0 //scrolls
-		this.fUse = 0 //flask oil
+		this.HitMissArray = [] //hitmiss array
+		this.TurnDamageArray = [] //turn damage array,  USE FOR TOTAL DAMAGE DEALT AND DAMAGE AVERAGE
+		this.damageTaken = 0 //dmg taken
+		this.potionUses = 0 //potions
+		this.scrollUses = 0 //scrolls
+		this.flaskOilUses = 0 //flask oil
 		this.turn = 0 //turn
 		this.enemy = null
-		this.enmyName = ""
+		this.enemyName = ""
 		this.peacefullClr = false
 	}
 	calculateHitMissAVG() {
-		//console.assert(Number.isInteger(_.sum(this.HMar)), "SHit")
-		return ((_.sum(this.HMar) / this.HMar.length).toFixed(3))
+		//console.assert(Number.isInteger(_.sum(this.HitMissArray)), "SHit")
+		return ((_.sum(this.HitMissArray) / this.HitMissArray.length).toFixed(3))
 	}
 	calculateTurnDmgAVG() {
-		if (this.turn != 0) {
-			return (_.sum(this.TdmgAr) / this.turn).toFixed(3)
+		if (this.turn !== 0) {
+			return (_.sum(this.TurnDamageArray) / this.turn).toFixed(3)
 		} else {
-			return (_.sum(this.TdmgAr)).toFixed(3)
+			return (_.sum(this.TurnDamageArray)).toFixed(3)
 		}
 	}
 	returnDamageTaken() {
-		return this.dmgTkn
+		return this.damageTaken
 	}
 	returnDamageDealt() {
-		return _.sum(this.TdmgAr)
+		return _.sum(this.TurnDamageArray)
 	}
-	AHM(bool) {
+	attackHitMiss(bool) {
 		let temp = 0
 		if (bool) {
 			temp = 1
 		}
-		this.HMar.push(temp)
+		this.HitMissArray.push(temp)
 	}
-	ATdmg(dmg) {
+	addTurnDamage(dmg) {
 		console.assert(Number.isInteger(dmg), chalk.red("FUCCCKKKKKK"))
-		this.TdmgAr.push(dmg)
+		this.TurnDamageArray.push(dmg)
 	}
-	AdmgTkn(dmg) {
+	addDamageTaken(dmg) {
 		console.assert(Number.isInteger(dmg), chalk.red("FUCCCKKKKKK"))
-		this.dmgTkn += dmg
+		this.damageTaken += dmg
 	}
-	APuse() {
-		this.pUse++
+	addPotionUse() {
+		this.potionUses++
 	}
-	AsUse() {
-		this.sUse++
+	addScrollUse() {
+		this.scrollUses++
 	}
-	AfUse() {
-		this.fUse++
-	}
-	Aturn() {
-		this.turn++
+	addFlaskOilUse() {
+		this.flaskOilUses++
 	}
 	mergeIntoGlobal(global) {
 		global.addMetrics(this);

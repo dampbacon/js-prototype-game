@@ -238,15 +238,15 @@ export function dmgScrollFun(
 			if ((monsterRandom.d20() + monster.hitDie >= saveDC) && !confirmedHit) {
 				damage = Math.floor(damage / 2)
 				monster.hp -= damage //str
-				player.encDat.AHM(true)
-				player.encDat.ATdmg(damage)
+				player.encounterData.attackHitMiss(true)
+				player.encounterData.addTurnDamage(damage)
 				return `${descStr}\
 \n${chalk.hex(color)(`The`)} ${chalk.blueBright(monster.name)} ${chalk.hex(color)(dodgestr)} \
 ${chalk.hex('fe2c54')(damage)} ${chalk.hex(color)(`damage.`)}`;
 			} else {
 				monster.hp -= damage //target
-				player.encDat.AHM(true)
-				player.encDat.ATdmg(damage)
+				player.encounterData.attackHitMiss(true)
+				player.encounterData.addTurnDamage(damage)
 				return `${descStr}${chalk.hex(color)('at')} \
 ${chalk.blueBright(monster.name+`.`)} ${chalk.blueBright(monster.name)} ${chalk.hex(color)(hitstr)} \
 ${chalk.red(damage)} ${chalk.hex(color)('damage.')}`

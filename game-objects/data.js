@@ -1,26 +1,11 @@
-import {
-	chance2,
-	chance3,
-	chance4,
-	monsterRandom
-} from "./random_nums.js";
+import {chance2, chance3, chance4, monsterRandom} from "./random_nums.js";
 import chalk from "chalk";
-import {
-	dmgScrollFun,
-	dmgTypeClass,
-	Scroll,
-	weapon
-} from "./items.js";
+import {dmgScrollFun, dmgTypeClass, Scroll, weapon} from "./items.js";
 import _ from "lodash";
 import assert from 'node:assert/strict';
 import gradient from 'gradient-string';
-import {
-	monster
-} from "./mobs.js";
-import {
-	Player,
-	playerState
-} from "./player.js";
+import {monster} from "./mobs.js";
+import {Player, playerState} from "./player.js";
 //DAMAGE TYPES
 chalk.level = 2;
 /*
@@ -102,7 +87,7 @@ export const damageTypes = Object.freeze({
 				})
 				target.hp -= bonusDamage
 				try {
-					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
+					target2.encounterData.TurnDamageArray[target2.encounterData.TurnDamageArray.length-1] += bonusDamage
 				} catch (e) {}
 				return `${chalk.hex(self.color)('bonus fire damage: ')}${bonusDamage}\n`
 			} else {
@@ -125,7 +110,7 @@ export const damageTypes = Object.freeze({
 				}
 				target.hp -= bonusDamage
 				try {
-					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
+					target2.encounterData.TurnDamageArray[target2.encounterData.TurnDamageArray.length-1] += bonusDamage
 				} catch (e) {}
 				return `${chalk.hex(self.color)(`$$$$$$$$$ cooldown ${bonusDamage} poison damage: `)}${bonusDamage}\n`
 			} else if (chance2.bool({
@@ -139,7 +124,7 @@ export const damageTypes = Object.freeze({
 				target2.weaponCooldown = crit ? 0 : selfdmgtype.effectDurationMax
 				target.hp -= bonusDamage
 				try {
-					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
+					target2.encounterData.TurnDamageArray[target2.encounterData.TurnDamageArray.length-1] += bonusDamage
 				} catch (e) {}
 				return `${chalk.hex(self.color)('DEFAULT poison damage: ')}$dam${bonusDamage}__________________\ncool${target2.weaponCooldown}_______________\n`
 			} else {
@@ -166,7 +151,7 @@ export const damageTypes = Object.freeze({
 					})
 					target.hp -= bonusDamage
 					try {
-						target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
+						target2.encounterData.TurnDamageArray[target2.encounterData.TurnDamageArray.length-1] += bonusDamage
 					} catch (e) {}
 					return `${chalk.hex(self.color)('bonus gravitational wave damage: ')}${bonusDamage}\n`
 				}
@@ -203,7 +188,7 @@ export const damageTypes = Object.freeze({
 				--target2.weaponCooldown
 				target.hp -= damage
 				try {
-					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += damage
+					target2.encounterData.TurnDamageArray[target2.encounterData.TurnDamageArray.length-1] += damage
 				} catch (e) {}
 				return `${chalk.hex(self.color)(`${appendStr}`)}`
 			} else if (chance2.bool({
@@ -217,7 +202,7 @@ export const damageTypes = Object.freeze({
 				target2.weaponCooldown = crit ? 7 : selfdmgtype.effectDurationMax
 				target.hp -= bonusDamage
 				try {
-					target2.encDat.TdmgAr[target2.encDat.TdmgAr.length-1] += bonusDamage
+					target2.encounterData.TurnDamageArray[target2.encounterData.TurnDamageArray.length-1] += bonusDamage
 				} catch (e) {}
 				return `${chalk.hex(self.color)('naruto damage dealt: ')}${bonusDamage}\n`
 			} else {
@@ -385,9 +370,8 @@ export function pickWeapon() {
 }
 
 function pickRandom(items, weights) {
-	let copy = _.cloneDeep(chance3.weighted(items, weights))
 	//copy.dmgType=damageTypes[copy.dmgType.name]
-	return copy
+	return _.cloneDeep(chance3.weighted(items, weights))
 }
 export function weaponSubset(min, max) {
 	let copy = _.cloneDeep(weaponsArray)
@@ -457,10 +441,9 @@ export function ArmourSubsetMaker(min, max) {
 		d: 'f',
 		e: 's'
 	}
-	let subset = Object.keys(ARMOURmap).filter((key) => {
+	return Object.keys(ARMOURmap).filter((key) => {
 		return ARMOURmap[key] >= min && ARMOURmap[key] <= max
 	})
-	return subset
 }
 export function ArmourRarityColour(ac) {
 	//let colour=''
@@ -507,7 +490,7 @@ export const armourArrayWeights = Object.values(ARMOURmap).map((ac) => {
 	return 1 / ac
 })
 export const armourArray = Object.values(ARMOUR)
-export function armourPicker() {
+export function pickArmour() {
 	return pickRandom(armourArray, armourArrayWeights)
 }
 /*
@@ -533,16 +516,16 @@ export const ScrollsAll = Object.freeze({
 		scrollFunction: (player = new Player(), params = {}) => {
 			if (player.state === playerState.COMBAT) {
 				let saveDC = 10 + player.int + (player.level > 4 ? 4 : player.level)
-				if (monsterRandom.d20() + player.encDat.enemy >= saveDC) {
+				if (monsterRandom.d20() + player.encounterData.enemy >= saveDC) {
 					return `You read the scroll and nothing happens.`
 				} else {
-					let oldName = player.encDat.enmyName
-					player.encDat.enemy = pickEnemy() //new Monster()  //temp till implemented fully
-					player.encDat.enemy.polymorph = true
+					let oldName = player.encounterData.enemyName
+					player.encounterData.enemy = pickEnemy() //new Monster()  //temp till implemented fully
+					player.encounterData.enemy.polymorph = true
 					params.term.reset()
-					player.encDat.enmyName = player.encDat.enemy.name
-					params.term.writeSync(player.encDat.enemy.art)
-					return `You read the scroll and the shape of ${oldName} distorts and... \nturns into a ${player.encDat.enmyName}!`
+					player.encounterData.enmyName = player.encounterData.enemy.name
+					params.term.writeSync(player.encounterData.enemy.art)
+					return `You read the scroll and the shape of ${oldName} distorts and... \nturns into a ${player.encounterData.enemyName}!`
 				}
 			} else {
 				return `You read the scroll and nothing happens.`
@@ -1420,14 +1403,12 @@ function pickRoomWord() {
 function pickBlockingWords() {
 	return monsterRandom.pickone(blockingWords)
 }
-export function makeRoomText(monster) {
-	let roomText =
-		`\
+export function makeEncounterText(monster) {
+	return `\
 you attempt to ${pickMoveWord()} your way ${pickThroughAlt()} the ${pickPathName()} to get to the next ${pickRoomWord()}.    
 A ${pickEnemyAdjective()} ${monster.name} is ${pickEnemyVerb()} here... ${pickBlockingWords()}.
 Choose your next move.\
 `
-	return roomText
 }
 
 export const ROOM_ART = Object.freeze({
@@ -1543,7 +1524,7 @@ export const ROOM_ART = Object.freeze({
 
 
 // commented out is done, i will comment out when all art done
-const realRoomTextOptions = Object.freeze([
+const roomTextOptions = Object.freeze([
 	["an abandoned mess hall","pots and pans are strewn about the room, with benches and tables that have seen better days"],
 	["a foundry","The room glows a warm red which eminates from the furnaces in the center of the room, you spy various pieces of weapons and armour in varying states of completion littered around the room"],
 	["an abandoned treasury", "empty shelves, racks and chests fill the room, the room appears to have been cleaned out many years ago"],
@@ -1562,10 +1543,9 @@ const realRoomTextOptions = Object.freeze([
 	//["an abandoned cellar", "the room is filled with barrels and crates, noting the grubs wriggling through the wood you doubt it's safe to consume anything in here"],
 ])
 
-export function pickRealRoomText(){
-	let randomRoomText=chance4.pickone(realRoomTextOptions) 
-	let roomStr = `it appears to be ${randomRoomText[0]}, ${randomRoomText[1]} `
-	return roomStr
+export function pickRoomText(){
+	let randomRoomText=chance4.pickone(roomTextOptions)
+	return `it appears to be ${randomRoomText[0]}, ${randomRoomText[1]} `
 	// later array with picture
 }
 
@@ -1596,7 +1576,7 @@ const lootLocations= Object.freeze([
 	"lying in the open"
 ])
 
-export function lootLocationsPicker() {
+export function pickLootLocation() {
 	return chance4.pickone(lootLocations)
 }
 
@@ -1664,7 +1644,7 @@ export const STATS= Object.freeze({
 //shorthand for replacing escape sequences
 Object.defineProperty(String.prototype, 'cleanANSI', {
 	value() {
-		return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
+		return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
 	}
 });
 
@@ -1673,8 +1653,7 @@ function centerText(text, width) {
 	return (' '.repeat(pad) + text);
 }
 export function dynamicBox(text = '', width = 20, center = false, gradientFunction = gradient.pastel, vertLn = '36454f') {
-	let str = text
-	let lines = str.split('\n');
+	let lines = text.split('\n');
 	if (center) {
 		lines = lines.map(line => centerText(line, width))
 	}

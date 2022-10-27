@@ -6,7 +6,7 @@ import {
 import {
 	ARMOUR,
 	ARMOURmap,
-	armourPicker,
+	pickArmour,
 	pickScroll,
 	pickWeapon,
 	weapons
@@ -63,7 +63,7 @@ export class Player {
 		this.wBonus = this.weapon.dmgType
 		// this.weapon = WEAPONmap[this.weaponName]
 		//change weapon later to be similar to monster class
-		this.armourName = armourPicker()
+		this.armourName = pickArmour()
 		this.armour = ARMOURmap[this.armourName]
 		this.armourMagic = 0;
 		//redundant
@@ -85,7 +85,7 @@ export class Player {
 		//encounterData
 		this.state = playerState.INIT
 		//add support for nonhostile
-		this.encDat = new combatMetrics()
+		this.encounterData = new combatMetrics()
 		//multiple combats dont have seperate holder
 		this.currentEvent = null
 		//this.multipleEncounters = false

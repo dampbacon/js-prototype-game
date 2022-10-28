@@ -18,8 +18,10 @@ Any kind of rpg/rougelite game logic is deceptively complex, and that is where m
 Use WSL2(windows subsystem for linux), windows default terminal mode is incompatible.\
 Use a Linux terminal with xterm-256colors as term info.
 <br>
-TERMINAL COLUMNS AND ROWS SHOULD BE SET TO 120 columns 30 rows
+
+TERMINAL COLUMNS AND ROWS SHOULD BE SET TO <b>120 columns 30 rows</b>
 <br>
+
 it works on WSL and is reccomended to be ran on windows terminal as it's super easy to change fonts to what i designed it with. \
 The recomended Font is <b>ibm vga 8x16</b>.
 

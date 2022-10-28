@@ -557,7 +557,7 @@ export const ScrollsAll = Object.freeze({
 					player.encounterData.enemy = newEnemy  //new Monster()  //temp till implemented fully
 					player.encounterData.enemy.polymorph = true
 					params.term.reset()
-					player.encounterData.enmyName = newEnemy.name//player.encounterData.enemy.name
+					player.encounterData.enemyName = newEnemy.name//player.encounterData.enemy.name
 					params.term.writeSync(player.encounterData.enemy.art)
 					//console.log(player.encounterData.enemy)
 					drawImageAtPos(0,14,miscArt.handWithLantern,params.term)

@@ -1687,6 +1687,33 @@ export const ROOM_ART = Object.freeze({
 [37m[40m  [90m[40m░░░[37m[40m  [93m[40m▓██▓█▒▓██████░░░░▒[90m[40m░[93m[40m▒▓█▓▒█[90m[40m▒░░[37m[40m [93m[40m▓▒[90m[40m░░░▒░[37m[40m          [m
 [37m[40m [90m[40m▒▒░[93m[40m▒▒▓██▓▓▓██▓▒███████▓▓▒█░[90m[40m▒[93m[40m█░▓▓▒██▓[90m[40m▓██▓░░░[37m[40m         [m
 [90m[40m░[93m[40m▓▒███▒█▓░░▓████▓░░▓▓█▓█░█▓▒░░░█▓█[90m[40m▓█▓▒[37m[40m               [m\
+`,
+	ratRoom:`\
+[37m[40m                                                        [m
+[37m[40m                                                 [90m[40m---[37m[40m    [m
+[37m[40m                                           [90m[40m------[37m[40m       [m
+[90m[40m≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈[37m[40m       [90m[40m---[37m[40m             [m
+[37m[40m                                 [90m[40m╔═════╗[37m[40m                [m
+[37m[40m    [93m[40m*[37m[40m       [93m[40m*[37m[40m       [93m[40m*[37m[40m       [93m[40m*[37m[40m    [90m[40m║[37m[40m     [90m[40m║[37m[40m                [m
+[37m[40m  ○ [90m[40m¶[37m[40m ○   ○ [90m[40m¶[37m[40m ○   ○ [90m[40m¶[37m[40m ○   ○ [90m[40m¶[37m[40m ○  [90m[40m║[37m[40m     [90m[40m║[37m[40m                [m
+[90m[40m_________________________________║[37m[40m     [90m[40m║[37m[40m                [m
+[37m[40m                            [90m[40m▒▒[37m[40m         [90m[40m\\[37m[40m                [m
+[37m[40m   [33m[40m(☼☼☼)[37m[40m         [97m[40m▬‼‼[37m[40m       [90m[40m▓▓▒[37m[40m          [90m[40m\\[37m[40m               [m
+[37m[40m            [97m[40m/[37m[40m             [90m[40m░▒░[37m[40m            [90m[40m\\[37m[40m              [m
+[37m[40m                        [90m[40m░▓[37m[40m          [97m[40m‼‼▬[37m[40m   [90m[40m\\[37m[40m             [m
+[37m[40m               [97m[40mπ[37m[40m       ░[90m[40m▓▒[37m[40m                [90m[40m\\[37m[40m             [m
+[37m[40m     [97m[40m/[37m[40m             [90m[40m░▒▓▓▓▒[37m[40m       [97m[40m¥[37m[40m          [90m[40m\\[37m[40m            [m
+[37m[40m                      [90m[40m░[37m[40m           [97m[40m¥[37m[40m         [90m[40m\\[37m[40m           [m
+[37m[40m         [97m[40mπ[37m[40m                   [97m[40m/[37m[40m           [97m[40m¥[37m[40m   [90m[40m\\[37m[40m          [m
+[37m[40m                             [97m[40m/[37m[40m           [97m[40m¥[37m[40m    [90m[40m\\[37m[40m         [m
+[37m[40m                                               [90m[40m\\[37m[40m        [m
+[37m[40m   [97m[40m▬‼‼[37m[40m         [90m[40m░░░[37m[40m               [33m[40m┌───┐[37m[40m          [90m[40m\\[37m[40m       [m
+[37m[40m      [90m[40m░[37m[40m     [90m[40m▒▓▒░▒[37m[40m [90m[40m░[37m[40m              [33m[40m╔═══╗[37m[40m   [33m[40m(☼☼☼)[37m[40m  [90m[40m\\[37m[40m       [m
+[37m[40m         [90m[40m░▓█[93m[40m██▓[90m[40m▒▒▒░░░░[37m[40m        [90m[40m▒[37m[40m  [33m[40m║[37m[40m   [33m[40m║[37m[40m    [33m[40m_[37m[40m      [90m[40m\\[37m[40m      [m
+[37m[40m     [90m[40m░[37m[40m [90m[40m░[93m[40m▒▒█████▓▓▓▒▒[90m[40m░▓█░[37m[40m      [90m[40m▒[37m[40m  [33m[40m╚═══╝[37m[40m   [33m[40m╔═╗[37m[40m      [90m[40m\\[37m[40m     [m
+[37m[40m    [90m[40m░░[93m[40m▒░░▓████▓██████[90m[40m▒█░[37m[40m      [90m[40m▒▒▒[37m[40m        [33m[40m╚═╝[37m[40m       [90m[40m\\[37m[40m    [m
+[37m[40m   [90m[40m▒▒[93m[40m▒▒▓▓██▒▒▒██▒▓████[90m[40m█░[37m[40m        [90m[40m░[37m[40m       [90m[40m▒▒[37m[40m     [90m[40m░[37m[40m        [m
+[37m[40m  [90m[40m░▒[93m[40m░▒▓█▓██▓████▓██░░▒▓[90m[40m▒░[37m[40m                [90m[40m▒▒[37m[40m  [90m[40m░░░[37m[40m        [m\
 `
 })
 
@@ -1701,7 +1728,7 @@ const roomTextOptions = Object.freeze([
 	["a small chapel", "an inert altar sits in the center of the room, a few decayed pews are scattered around the room"],
 	["a small cavern", "the walls are covered in a thick layer of moss and lichen, it appears to be well travelled", ROOM_ART.cavern],
 	["a hallway", "crumbling stone walls line the hallway, the floor is covered in a thick layer of dust. Most of the exits are blocked by rubble", ROOM_ART.hallway],
-	["a rat infested room", "the floor is covered in a layer of detritus of dubious orgin, you see bones and scraps of food lying around"],
+	["a rat infested room", "the floor is covered in a layer of detritus of dubious orgin, you see bones and scraps of food lying around", ROOM_ART.ratRoom],
 	["a dungeon cell", "few furnishings litter the room, you spy manacles and chains on the wall, and steel implements of dubious purpose"],
 	["a small library", "it's filled with bookshelves, most of the books are old and tattered, a few are in better condition"],
 	["an abandoned armory", "the room is filled with weapons and armour, most of it seems rusted and unusable, it's unclear if you'll be able to find something salvageble", ROOM_ART.amoury],

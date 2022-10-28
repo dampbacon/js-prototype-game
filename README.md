@@ -61,7 +61,8 @@ it is a mess, but a mess that works.
   
 - [ ] ability to override encounter text
 - [ ] custom events that do not belong to any event chain
-- [ ] custom event chains with art and unique enemies that cannot be found anywhere else. triggers may include special weapons equiped or certian depth reached
+- [ ] custom event chains with art and unique enemies that cannot be found anywhere else.\
+triggers may include special weapons equiped or certian depth reached
 - [ ] custom event chain dwarf foundry
 - [ ] event structure HOME EVENT/ VILLAGE EVENTS, ENTRY POINT INTO DUNGEON, entry points into random events random events can then terminate into custom event chains which will terminate back into random chains once completed
 <br>

@@ -52,30 +52,75 @@ rather than be purely event driven a function pauses execution till a promise is
 it is a mess, but a mess that works. 
 
 ## Known issues:
-- combat metrics does not correctly count some special damage effects(low priority)
-- rare crashes when switching windows (low priority)
-- rare crashes once ~ every few hours (low priority)
-- linux terminal weirdness()
-
+- Rare crashes when switching windows (low priority)
+- Rare crashes once ~ every few hours (low priority)
+- Polymorph sometimes does not display correct name
 ## stuff:
-- [X] on hostile enemies 
-- [x] persausion (dead button currently)
+- [X] hostile enemies 
+
+- [ ] persausion (dead button currently)
 - [ ] trap, shrines, shop.
-- [ ] random loot gen via weighted random picker from list in data file
+
+- [ ] ability to override encounter text
+- [ ] custom events that do not belong to any event chain
+- [ ] custom event chains with art and unique enemies that cannot be found anywhere else. triggers may include special weapons equiped or certian depth reached
+- [ ] custom event chain dwarf foundry
+- [ ] event structure HOME EVENT/ VILLAGE EVENTS, ENTRY POINT INTO DUNGEON, entry points into random events random events can then terminate into custom event chains which will terminate back into random chains once completed
+
+
+- [ ] finish generic room art
+
+
+- [x] random loot gen via weighted random picker from list in data file
+- [ ] better random loot selection (functions written but not used currently)
 - [x] random enemy select from weighted random picker from list in data file
 - [x] random descriptions for monsters
+
+
+- [ ] more item types (low prioririty)
+- [ ] more items
+- [ ] quest items
+
+
+- [ ] splash screen / main menu to start game
+- [ ] minor upgrades for each run??? (low priority)
+- [ ] leaderboard, persistent data between runs (low priority)
+- [ ] allow player name entry (low priority)
 - [ ] random player class or descriptors
-- [ ] random treasure event descriptors (ALTAR, WEAPON, AND LOCATION FOUND)
-- [ ] make scrolls and potions usable everywhere
-- [ ] random description post treasure
+- [ ] better character sheet
+
+
+- [x] random treasure event descriptors (ALTAR, WEAPON, AND LOCATION FOUND)
+- [x] random description post treasure
+- [x] make scrolls and potions usable everywhere
+
+
 - [x] weapons, armour, items loot implemented
 - [ ] shrines and altar loot event
 - [x] advanced weapons, implementtaion of weapon class.
-- [ ] floor depth mechanic. (partial)
-- [ ] home base, level up out of dungeon mechanic.
+
+
 - [x] animated writing of text
 - [x] enemy encounter random room text 
 - [x] item and enemy random pickers
-- [ ] animated ansi/ascii art as opposed to the current static images.
-- [ ] external storage of data maybe.
+- [ ] many more enemies and art
+- [ ] BALANCE (will be done after all mechanics implemented)
 
+
+- [ ] light mechanic (bones of implementation done, oil consumed every 4 floors)
+- [ ] specail darkness enemies, will choose from the misc art, creature will be selected via random picker weighted based on current depth (easy,medium,hard, very hard)
+- [ ] some generic dark room art
+- [ ] difficult to escape in dark, use int check
+
+
+- [ ] random teleport scrolls random choice between home, deeper in dungeon, go up floors in dungeon
+
+
+- [ ] floor depth mechanic. (partial implementation currently)
+- [ ] add button to leave dungeon that takes you up 10 floors each cick and a random room unlikely to have enemies but still possible
+- [ ] add entrance event, home event
+- [ ] home base, level up out of dungeon mechanic.
+
+
+- [ ] animated ansi/ascii art as opposed to the current static images.(low priority)
+- [ ] external storage of data maybe.

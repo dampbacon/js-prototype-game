@@ -787,7 +787,7 @@ async function clearCombat() {
 // 	
 //
 //
-async function treasure(customTreasure={type: 'items', item: null, text: null, searchText:null}) 
+async function treasure(customTreasure={type: null, item: null, text: null, searchText:null}) 
 {
 	let gotoTreasure = new blessedpkg.button({
 		parent: buttonsContainer,

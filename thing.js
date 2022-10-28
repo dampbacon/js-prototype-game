@@ -215,7 +215,7 @@ let temp_event3 = new game_event({
 		},
 	},
 	toScreen: {
-		toScreen: ROOM_ART.amoury,
+		toScreen: ROOM_ART.barracks,
 		AnsiFile: {
 			exists: false,
 			url: '',

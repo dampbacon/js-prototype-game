@@ -38,6 +38,7 @@ import {
 } from "./ui.js";
 import {
 	drawBanner,
+	drawImageAtPos,
 	fitLines,
 	fitLinesStr,
 	gradient_scanlines,
@@ -137,7 +138,7 @@ let temp_event1 = new game_event({
 		},
 	},
 	toScreen: {
-		toScreen: SPECIAL_ROOM_ART.mountain,
+		toScreen: ROOM_ART.cavern,
 		AnsiFile: {
 			exists: false,
 			url: '',
@@ -233,8 +234,8 @@ let temp_event3 = new game_event({
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
 	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
 })
-let HOMEBASE = new game_event({
-	id: 0,
+let village = new game_event({
+	id: -1,
 	body: {
 		body: 'Home, level up, party, etc.',
 		format: {
@@ -255,9 +256,39 @@ let HOMEBASE = new game_event({
 		},
 	},
 	buttons: [
-		[1, "Enter the dungeon once more", true],
+		[0, "head towards the dungeon", true],
 		//some shop redirect
 	],
+	customRoomEnterString: "You arrive at the village, the villagers are happy to see you.",
+})
+
+let dungeonEntrance = new game_event({
+	id: 0,
+	body: {
+		body: 'enter or head back to village',
+		format: {
+			writeMode: 'gradientScanlines',
+			gradientFunction: gradient.passion.multiline,
+			gradientArr: [`#${miscColours.legendary}`, `#${miscColours.epic}`, `#${miscColours.oil}`],
+		},
+		TextFile: {
+			exists: false,
+			url: ''
+		},
+	},
+	toScreen: {
+		toScreen: SPECIAL_ROOM_ART.mountain,
+		AnsiFile: {
+			exists: false,
+			url: '',
+		},
+	},
+	buttons: [
+		[1, "enter the dungeon", true],
+		[-1, "go to the village", true],
+		//some shop redirect
+	],
+	customRoomEnterString: "You make your way to the mountain where the dungeon is located.",
 })
 
 
@@ -265,7 +296,7 @@ let HOMEBASE = new game_event({
 
 
 
-let testEventArr = [temp_event1, temp_event2, temp_event3 ]
+let testEventArr = [temp_event1, temp_event2, temp_event3, village,dungeonEntrance]
 //test content
 let body = `[0m\r
 \r
@@ -497,8 +528,13 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	rollLog(logs)
 	let gb = gameEvent.body
 	let gbf = gb.format
-	//change to for loop eventually
 	thePlayer.currentEvent = gameEvent
+
+	//later make function if more states depend on id
+	let homeEventID=[-1,0]
+	if (homeEventID.includes(gameEvent.id)){
+		thePlayer.state=playerState.TOWN
+	}
 
 	for (let i of gameEvent.enemies) {
 		if (!death) {
@@ -514,9 +550,14 @@ async function eventHandler(gameEvent = temp_event1, ) {
 				await waitForTreasure()
 			}
 		}
-	}
+	} 
 	if(!death){
-		logs.writeSync(`you enter the room\n`);
+		if (gameEvent.customRoomEnterString){
+			logs.writeSync(`${wrapAnsi(gameEvent.customRoomEnterString,logs.term.cols-1)}\n`);
+
+		}else{
+			logs.writeSync(`you enter the room\n`);
+		}
 		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
 		await writeImage(gameEvent)
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
@@ -670,6 +711,15 @@ async function combat(event, enemy) {
 	thePlayer.encounterData.enemy = monster
 	ImageScreenTerm.reset()
 	ImageScreenTerm.writeSync(monster.art)
+
+	//later make more concrete way of skipping hands
+	if(monster.name!==monsters.batman.name){
+		drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
+		drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
+	//drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm
+	}
+		ImageScreenTerm.writeSync('\r'+escUpByNum(16))
+	
 	combatLogic(thePlayer, true)
 }
 // moster picker in random event later
@@ -703,6 +753,7 @@ ${chalk.hex('ea0000')(`damage!`)}\n`)
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
 }
+
 //
 //
 // Treasure event
@@ -749,6 +800,15 @@ async function clearCombat() {
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
 	if (!death) {
 		thePlayer.state = playerState.TREASURE_ROOM
+
+
+		let block=chalk.hex('000000')(miscArt.block.cleanANSI())
+		ImageScreenTerm.writeSync(block)
+		ImageScreenTerm.writeSync('\r'+escUpByNum(16))
+
+
+
+
 		let length = '╰╾────────────────────────────────────────────╼╯'.length
 		let combatBanner = `\
 ╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
@@ -1703,7 +1763,9 @@ function scrollsButtonGeneric() {
 	})
 }
 
+function exitDungeon(depth=0){
 
+}
 
 
 
@@ -1832,7 +1894,7 @@ async function reset() {
 	// buttonsArray = [];
 	stats.focus();
 	ImageScreenTerm.term.reset()
-	await createButtons(temp_event1, story);
+	await createButtons(village, story);
 	//buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 	//resizeButtons();
 	//stats.focus();
@@ -1890,7 +1952,7 @@ screen.key('y', function() {
 	stats.focus();
 	refreshInventory()
 	//ImageScreenTerm.term.reset()
-	createButtons(temp_event1, story);
+	createButtons(village, story);
 	buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length.toString()) + " " + chalk.bold.greenBright("choices")}`)
 	resizeButtons();
 	stats.focus();
@@ -2013,5 +2075,9 @@ ImageScreenTerm.writeSync(v + '\n')
 await drawBanner()
 
 ImageScreenTerm.term.reset()
-writeImage(temp_event3)
+await writeImage(temp_event3)
 
+
+
+
+//drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)

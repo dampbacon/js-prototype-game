@@ -34,6 +34,7 @@ import {
 	escLeftByNum,
 	escRightByNum,
 	escUpByNum,
+	miscArt,
 	miscColours,
 	rarityByWeight,
 	weapons
@@ -422,4 +423,17 @@ export async function writeArmour(armourName, enchant = 0, term = ImageScreenTer
 		term.writeSync(i + '\n\r' + escRightByNum(1))
 	}
 	term.writeSync('\n')
+}
+
+
+
+
+
+
+export function drawImageAtPos(x,y,image=miscArt.handWithLantern,terminal){
+	let imageLines=image.split('\n')
+	for(let i of imageLines){
+		terminal.writeSync(`[${y++};${x}H`)
+		terminal.writeSync(i)
+	}
 }

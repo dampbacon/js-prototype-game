@@ -49,7 +49,6 @@ it is a mess, but a mess that works.
 ## Known issues:
 - Rare crashes when switching windows (low priority)
 - Rare crashes once ~ every few hours (low priority)
-- Polymorph sometimes does not display correct name
 <br>
 ## TODO:
 - [x] hostile enemies 
@@ -117,6 +116,8 @@ triggers may include special weapons equiped or certian depth reached
 <br>
   
 - [ ] floor depth mechanic. (partial implementation currently)
+- [ ] make fleeing combat from hostile enemies randomly take you either closer to the surface
+or deeper
 - [ ] add button to leave dungeon that takes you up 10 floors each cick and a random room unlikely to have enemies but still possible
 - [ ] add entrance event, home event
 - [ ] home base, level up out of dungeon mechanic.

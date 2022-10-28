@@ -1,5 +1,5 @@
 //from https://github.com/astefanutti/kubebox
-//modern xserver.js implementation files
+// xterm.js implementation files
 
 // Polyfill for window.performance.now
 const performance = global.performance || {}

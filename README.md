@@ -69,7 +69,7 @@ it is a mess, but a mess that works.
 
 
 - [ ] finish generic room art
-
+- [ ] add hand holding weapon and lantern to fill blank space in enemy art, this will be done by simply drawing the image over by escape sequences rather than editing each piece of art
 
 - [x] random loot gen via weighted random picker from list in data file
 - [ ] better random loot selection (functions written but not used currently)

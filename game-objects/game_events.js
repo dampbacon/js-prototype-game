@@ -12,7 +12,7 @@ const defaults = {
 			writeMode: 'gradientScanlines',
 			gradientFunction: gradient.retro.multiline,
 			gradientArr: ['#3f51b1', '#5a55ae', '#7b5fac', '#8f6aae', '#a86aa4', '#cc6b8e', '#f18271', '#f3a469', '#f7c978'],
-			speed: 20,
+			speed: 10,
 		},
 		TextFile: {
 			exists: false,

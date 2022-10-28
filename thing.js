@@ -425,52 +425,8 @@ let button2 = blessedpkg.button({
 		}
 	}
 });
-let button3 = blessedpkg.button({
-	parent: buttonsContainer,
-	mouse: true,
-	keys: true,
-	shrink: true,
-	padding: {
-		left: 1,
-		right: 1
-	},
-	left: 1,
-	top: 7,
-	name: 'cancel',
-	content: 'button',
-	style: {
-		bg: '#0066CC',
-		focus: {
-			bg: '#cc0066'
-		},
-		hover: {
-			bg: '#cc0066'
-		}
-	}
-});
-let button4 = blessedpkg.button({
-	parent: buttonsContainer,
-	mouse: true,
-	keys: true,
-	shrink: true,
-	padding: {
-		left: 1,
-		right: 1
-	},
-	left: 1,
-	top: 10,
-	name: 'cancel',
-	content: 'button 444444444~~~',
-	style: {
-		bg: '#0066CC',
-		focus: {
-			bg: '#cc0066'
-		},
-		hover: {
-			bg: '#cc0066'
-		}
-	}
-});
+
+
 //screen.render is essential for the correct screenlines amount to calculate inorder to resize buttons
 function resizeButtons() {
 	buttonsArray.forEach((element) => {
@@ -2118,7 +2074,7 @@ screen.append(ImageScreenTerm)
 screen.append(logs)
 screen.render()
 createEventsMap(testEventArr, story)
-buttonsArray = [button1, button2, button3, button4];
+buttonsArray = [button1, button2];
 screen.render()
 resizeButtons()
 toggleUi()

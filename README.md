@@ -55,7 +55,7 @@ it is a mess, but a mess that works.
 - Rare crashes when switching windows (low priority)
 - Rare crashes once ~ every few hours (low priority)
 - Polymorph sometimes does not display correct name
-## stuff:
+## TODO:
 - [X] hostile enemies 
 
 - [ ] persausion (dead button currently)

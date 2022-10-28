@@ -1714,23 +1714,49 @@ export const ROOM_ART = Object.freeze({
 [37m[40m    [90m[40m░░[93m[40m▒░░▓████▓██████[90m[40m▒█░[37m[40m      [90m[40m▒▒▒[37m[40m        [33m[40m╚═╝[37m[40m       [90m[40m\\[37m[40m    [m
 [37m[40m   [90m[40m▒▒[93m[40m▒▒▓▓██▒▒▒██▒▓████[90m[40m█░[37m[40m        [90m[40m░[37m[40m       [90m[40m▒▒[37m[40m     [90m[40m░[37m[40m        [m
 [37m[40m  [90m[40m░▒[93m[40m░▒▓█▓██▓████▓██░░▒▓[90m[40m▒░[37m[40m                [90m[40m▒▒[37m[40m  [90m[40m░░░[37m[40m        [m\
+`,
+	library: `\
+[37m[40m                                        [90m[40m│[37m[40m               [m
+[37m[40m                                        [90m[40m│[37m[40m               [m
+[37m[40m         [33m[40m//////////////[37m[40m [33m[40m/////////[37m[40m       [90m[40m│[37m[40m               [m
+[37m[40m         [33m[40m║▀▀▀▀▀▀▀▀▀▀▀║▐[37m[40m [33m[40m║▀▀▀▀▀▀║▐[37m[40m       [90m[40m│[37m[40m               [m
+[37m[40m         [33m[40m║[94m[40m║[90m[40m║[91m[40m║[92m[40m║[95m[40m║[90m[40m║[94m[40m║[92m[40m║[94m[40m║[90m[40m║[95m[40m║[33m[40m║▐[37m[40m [33m[40m║[94m[40m║[90m[40m║[91m[40m║[92m[40m║[95m[40m║[90m[40m║[33m[40m║▐[90m[40m╔═════╗│[37m[40m               [m
+[97m[40m______[33m[40m│[37m[40m  [33m[40m║▀▀▀▀▀▀▀▀▀▀▀║▐[37m[40m [33m[40m║▀▀▀▀▀▀║▐[90m[40m║[37m[40m     [90m[40m║│[37m[40m               [m
+[97m[40m____[33m[40m│[97m[40m/[33m[40m│[37m[40m  [33m[40m║[94m[40m║[91m[40m║[95m[40m//[96m[40m║[90m[40m║[94m[40m║[95m[40m║[90m[40m║[95m[40m║║[33m[40m║▐[37m[40m [33m[40m║[94m[40m║[91m[40m║[95m[40m//[96m[40m║[90m[40m║[33m[40m║▐[90m[40m║[37m[40m     [90m[40m║│[37m[40m               [m
+[33m[40m════╡/│[90m[40m__[33m[40m║▀▀▀▀▀▀▀▀▀▀▀║▐[90m[40m_[33m[40m║▀▀▀▀▀▀║▐[90m[40m║[37m[40m     [90m[40m║│[37m[40m               [m
+[97m[40m%%%%[33m[40m│[97m[40m-[33m[40m│[37m[40m  [33m[40m║[94m[40m║[90m[40m║[91m[40m║[92m[40m║[95m[40m║[90m[40m║[94m[40m║[92m[40m║[94m[40m║[90m[40m║[95m[40m║[33m[40m║/[37m[40m [33m[40m║[94m[40m║[90m[40m║[91m[40m║[92m[40m║[95m[40m║[90m[40m║[33m[40m║/[37m[40m       [90m[40m#[37m[40m     [93m[40m*[37m[40m         [m
+[33m[40m/│[97m[40m%%[33m[40m│/[37m[40m   [33m[40m▀▀▀▀▀▀▀▀▀▀▀▀▀[37m[40m  [33m[40m▀▀▀▀▀▀▀▀[37m[40m         [90m[40m#[37m[40m    [90m[40m¶[37m[40m         [m
+[37m[40m [33m[40m│[37m[40m                                        [90m[40m#[37m[40m             [m
+[33m[40m/[37m[40m   [33m[40m//////////////[37m[40m [33m[40m/////////[37m[40m              [90m[40m#[37m[40m       [93m[40m*[37m[40m     [m
+[37m[40m    [33m[40m║▀▀▀▀▀▀▀▀▀▀▀║▐[37m[40m [33m[40m║▀▀▀▀▀▀║▐[37m[40m               [90m[40m#[37m[40m      [90m[40m¶[37m[40m     [m
+[37m[40m    [33m[40m║[94m[40m║[90m[40m║[91m[40m║[92m[40m║[95m[40m║[90m[40m║[94m[40m║[92m[40m║[94m[40m║[90m[40m║[95m[40m║[33m[40m║▐[37m[40m [33m[40m║[94m[40m║[90m[40m║[91m[40m║[92m[40m║[95m[40m║[90m[40m║[33m[40m║▐[37m[40m       [93m[40m┌[90m[40m---[93m[40m┐┌[90m[40m--[93m[40m-[90m[40m--[93m[40m┐[37m[40m         [m
+[37m[40m    [33m[40m║▀▀▀▀▀▀▀▀▀▀▀║▐[37m[40m [33m[40m║▀▀▀▀▀▀║▐[37m[40m       [93m[40m╔[90m[40m═══[93m[40m╗╔[90m[40m══[93m[40m═[90m[40m══[93m[40m╗[37m[40m         [m
+[37m[40m [33m[40m_[37m[40m  [33m[40m║[94m[40m║[91m[40m║[95m[40m//[96m[40m║[90m[40m║[94m[40m║[95m[40m║[90m[40m║[95m[40m║║[33m[40m║▐[37m[40m [33m[40m║[94m[40m║[91m[40m║[95m[40m//[96m[40m║[90m[40m║[33m[40m║▐[37m[40m       [90m[40m╠[93m[40m-^-[90m[40m╣╠[93m[40m-═○═-[90m[40m╣[37m[40m         [m
+[33m[40m╔═╗[37m[40m [33m[40m║▀▀▀▀▀▀▀▀▀▀▀║▐[90m[40m_[33m[40m║▀▀▀▀▀▀║▐[37m[40m       [93m[40m╚[90m[40m═══[93m[40m╝╚[90m[40m══[93m[40m═[90m[40m══[93m[40m╝[90m[40m#[37m[40m        [m
+[33m[40m╚═╝[37m[40m [33m[40m║[94m[40m║[90m[40m║[91m[40m║[92m[40m║[95m[40m║[90m[40m║[94m[40m║[92m[40m║[94m[40m║[90m[40m║[95m[40m║[33m[40m║/[37m[40m [33m[40m║[94m[40m║[90m[40m║[91m[40m║[92m[40m║[95m[40m║[90m[40m║[33m[40m║/[37m[40m     [33m[40m║[37m[40m    [33m[47m○[33m[40m█[90m[43mƒ[33m[40m██[94m[47m≈≈[33m[40m███[90m[40m#[37m[40m       [m
+[37m[40m    [33m[40m▀▀▀▀▀▀▀▀▀▀▀▀▀[37m[40m  [33m[40m▀▀▀▀▀▀▀▀[37m[40m      [33m[40m║[97m[40m░░░[37m[40m [33m[40m██████████[37m[40m        [m
+[37m[40m      [90m[40m░[37m[40m     [90m[40m▒▓▒░▒[37m[40m [90m[40m░[37m[40m              [33m[40m╠══╗[37m[40m [33m[40m░░░░░░░░░░[37m[40m [90m[40m#[37m[40m      [m
+[37m[40m         [90m[40m░▓█[93m[40m██▓[90m[40m▒▒▒░░░░[37m[40m           [90m[40m╙[37m[40m  [90m[40m╜[37m[40m  [33m[40m║[37m[40m      [33m[40m║[37m[40m   [90m[40m#[37m[40m     [m
+[37m[40m     [90m[40m░[37m[40m [90m[40m░[93m[40m▒▒█████▓▓▓▒▒[90m[40m░▓█░[37m[40m              [97m[45m‼‼‼‼‼‼‼‼‼‼[37m[40m   [90m[40m#[37m[40m    [m
+[37m[40m    [90m[40m░░[93m[40m▒░░▓████▓██████[90m[40m▒█░[37m[40m              [97m[45m▒▒▒▒▒▒▒▒▒▒[37m[40m    [90m[40m#[37m[40m   [m
+[37m[40m   [90m[40m▒▒[93m[40m▒▒▓▓██▒▒▒██▒▓████[90m[40m█░[37m[40m              [97m[45m▒▒▒▒▒▒▒▒▒▒[37m[40m        [m
+[37m[40m  [90m[40m░▒[93m[40m░▒▓█▓██▓████▓██░░▒▓[90m[40m▒░[37m[40m             [97m[45m‼‼‼‼‼‼‼‼‼‼[37m[40m        [m\
 `
 })
 
 
 
-// commented out is done, i will comment out when all art done
+// 
 const roomTextOptions = Object.freeze([
-	["an abandoned mess hall","pots and pans are strewn about the room, with benches and tables that have seen better days"],
-	["a foundry","The room glows a warm red which eminates from the furnaces in the center of the room, you spy various pieces of weapons and armour in varying states of completion littered around the room"],
+	["an abandoned mess hall","pots and pans are strewn about the room, with benches and tables that have seen better days", ROOM_ART.barracks],//temp art
 	["an abandoned treasury", "empty shelves, racks and chests fill the room, the room appears to have been cleaned out many years ago", ROOM_ART.emptyRoom],
 	["just an empty room", "a few furnishings lie around but the room appears to be mostly empty, it's unclear if anyone was here recently", ROOM_ART.emptyRoom],
 	["a small chapel", "an inert altar sits in the center of the room, a few decayed pews are scattered around the room"],
 	["a small cavern", "the walls are covered in a thick layer of moss and lichen, it appears to be well travelled", ROOM_ART.cavern],
 	["a hallway", "crumbling stone walls line the hallway, the floor is covered in a thick layer of dust. Most of the exits are blocked by rubble", ROOM_ART.hallway],
 	["a rat infested room", "the floor is covered in a layer of detritus of dubious orgin, you see bones and scraps of food lying around", ROOM_ART.ratRoom],
-	["a dungeon cell", "few furnishings litter the room, you spy manacles and chains on the wall, and steel implements of dubious purpose"],
-	["a small library", "it's filled with bookshelves, most of the books are old and tattered, a few are in better condition"],
+	["a dungeon cell", "few furnishings litter the room, you spy manacles and chains on the wall, and steel implements of dubious purpose", ROOM_ART.ratRoom],//temp art
+	["a small library", "it's filled with bookshelves, most of the books are old and tattered, a few are in better condition", ROOM_ART.library],
 	["an abandoned armory", "the room is filled with weapons and armour, most of it seems rusted and unusable, it's unclear if you'll be able to find something salvageble", ROOM_ART.amoury],
 	["a courtyard", "the courtyard is filled with rubble, you see a few broken statues and fountains"],
 	["an old guard barracks", "the room is filled with beds and lockers in varying states of disrepair, you see a few broken weapons and armour on the floor", ROOM_ART.barracks],

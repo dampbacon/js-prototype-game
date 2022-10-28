@@ -65,6 +65,7 @@ export class game_event {
 		noDrops,
 		loot,
 		customRoomEnterString,
+		overrideEncounterStr,
 		
 	} = {
 		...defaults
@@ -77,6 +78,8 @@ export class game_event {
 		// later pick between enemy or trap
 		// enemies will ussually be just a pick enemy function refreshed
 		// how ever for custom events and more flexibility ability for a room to have no enemies will be added
+		// when implement
+		this.overrideEncounterStr = overrideEncounterStr?overrideEncounterStr:[]
 		this.enemies = enemies ? enemies : []
 		this.loot = loot ? loot : []  // {type: 'gold', item: 10, text:"blah"} or {type: 'weapon', item: weapons.sword} or {type: 'armor', item: null}
 		this.noDrops = noDrops ? noDrops : false

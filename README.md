@@ -15,11 +15,12 @@ Any kind of rpg/rougelite game logic is deceptively complex, and that is where m
 \
 <br>
 ## how to run
-use WSL, windows default terminal mode is incompatible.
+Use WSL, windows default terminal mode is incompatible.
+<br>
 it works on WSL and is reccomended to be ran on windows terminal as it's super easy to change fonts to what i designed it with. \
 The recomended Font is <b>ibm vga 8x16</b> it can be made to work in a linux terminal, \
-but it's a complete pain in the ass and a huge pain to turn off AA\
-
+but it's a complete pain in the ass and a huge pain to turn off Anti Aliasing for only one font
+<br>
 get it from:\
 https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_vga_8x16
 

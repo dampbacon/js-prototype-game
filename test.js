@@ -11,6 +11,7 @@ import assert from 'node:assert/strict';
 import {
     ARMOURmap,
     ArmourSubsetMaker,
+    darkRooms,
     DMG_COLOUR,
     DMG_TYPE,
     dynamicBox,
@@ -238,3 +239,8 @@ let loremTest=wrapAnsi(gradient.retro(lorem),20,{hard:true})
 //console.log(chance4.pickone(Object.values(ROOM_ART)))
 
 console.log(pickRoomText()[1])
+
+darkRooms.forEach((room)=>{
+    console.log(room)
+})
+//console.log(darkRooms[0])

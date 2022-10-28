@@ -7,6 +7,16 @@ import gradient from 'gradient-string';
 import {monster} from "./mobs.js";
 import {Player, playerState} from "./player.js";
 //DAMAGE TYPES
+
+
+//
+//
+//shorthand for replacing escape sequences
+Object.defineProperty(String.prototype, 'cleanANSI', {
+	value() {
+		return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
+	}
+});
 chalk.level = 2;
 /*
 ████████▄     ▄████████   ▄▄▄▄███▄▄▄▄      ▄████████    ▄██████▄     ▄████████          ███     ▄██   ▄      ▄███████▄    ▄████████    ▄████████ 
@@ -1741,15 +1751,45 @@ export const ROOM_ART = Object.freeze({
 [37m[40m    [90m[40m░░[93m[40m▒░░▓████▓██████[90m[40m▒█░[37m[40m              [97m[45m▒▒▒▒▒▒▒▒▒▒[37m[40m    [90m[40m#[37m[40m   [m
 [37m[40m   [90m[40m▒▒[93m[40m▒▒▓▓██▒▒▒██▒▓████[90m[40m█░[37m[40m              [97m[45m▒▒▒▒▒▒▒▒▒▒[37m[40m        [m
 [37m[40m  [90m[40m░▒[93m[40m░▒▓█▓██▓████▓██░░▒▓[90m[40m▒░[37m[40m             [97m[45m‼‼‼‼‼‼‼‼‼‼[37m[40m        [m\
+`,
+	courtyard: `\
+[37m[40m                                                        [m
+[37m[40m     [91m[40m§[37m[40m                         [91m[40m§[37m[40m                        [m
+[37m[40m    [93m[40m☼§☼[37m[40m                       [93m[40m☼§☼[37m[40m                       [m
+[37m[40m   [97m[40m▄▄▄▄▄[37m[40m                     [97m[40m▄▄▄▄▄[37m[40m                      [m
+[37m[40m   [97m[40m{╠╬╣}[37m[40m    █▄▄              [97m[40m{╠╬╣}[37m[40m                      [m
+[37m[40m    [97m[40m╠╬╣[37m[40m    [97m[40m¶█[97m[47m▄[97m[40m¶[37m[40m               [97m[40m╠╬╣[37m[40m                       [m
+[37m[40m    [97m[40m╠╬╣[37m[40m    ▓▓▓▓       [97m[40m☻[37m[40m       [97m[40m╠╬╣[37m[40m                 [90m[40m░▓▒[37m[40m   [m
+[37m[40m  [97m[40m███████[37m[40m  [97m[40m████[37m[40m     [97m[40m░▒▒[30m[40m☻[37m[40m    [97m[40m███████[37m[40m            [90m[40m░██▒[37m[40m     [m
+[37m[40m  ▒█████▓  [97m[40m████[37m[40m     [97m[40m▀░[30m[40m☻☻[37m[40m    ▒█████▓         [90m[40m░▓█▓[37m[40m        [m
+[37m[40m                                        [90m[40m░▒▓█▓░[37m[40m          [m
+[90m[40m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░▒▓▒░[37m[40m             [m
+[90m[40m▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒[37m[40m                [m
+[37m[40m                                                        [m
+[37m[40m                                   [97m[40m▄[94m[40m▄[97m[40m▄▄[37m[40m    [97m[40m▄▄[94m[40m▄[37m[40m          [m
+[37m[40m     [93m[40m┌[90m[40m---[93m[40m┐┌[90m[40m--[93m[40m-[90m[40m--[93m[40m┐[37m[40m                 [97m[40m█[94m[40m▀[37m[40m [94m[40m▀██▄▄[97m[44m▀[94m[40m█▄[37m[40m [97m[40m▀█[94m[40m▄[37m[40m       [m
+[37m[40m     [93m[40m╔[90m[40m═══[93m[40m╗╔[90m[40m══[93m[40m═[90m[40m══[93m[40m╗[37m[40m                [97m[40m█[94m[40m▀[37m[40m  [94m[40m█[94m[47m▀▀[94m[40m██[94m[47m▀▀[94m[40m█[37m[40m   [94m[40m█[37m[40m       [m
+[37m[40m     [90m[40m╠[93m[40m-^-[90m[40m╣╠[93m[40m-═○═-[90m[40m╣[37m[40m                [94m[40m█[37m[40m   [94m[40m█[37m[40m [97m[47m▄[37m[40m██[97m[47m▄[37m[40m [94m[40m█[37m[40m   [97m[44m▄[37m[40m       [m
+[37m[40m     [93m[40m╚[90m[40m═══[93m[40m╝╚[90m[40m══[93m[40m═[90m[40m══[93m[40m╝[37m[40m               ▄[94m[40m█[37m[40m▄▄[94m[47m▄[94m[40m█[94m[47m▄[97m[40m████[94m[47m▄[94m[40m█[94m[47m▄[37m[40m▄▄[97m[40m█[37m[40m▄      [m
+[37m[40m                             ▄██[94m[47m▄[94m[40m██████[37m[40m█[97m[47m▀▀[37m[40m█[94m[40m██████[94m[47m▄[37m[40m██▄   [m
+[37m[40m      [90m[40m░[37m[40m     [90m[40m▒▓▒░▒[37m[40m [90m[40m░[37m[40m          ██[94m[47m▀[94m[40m████████[94m[47m▄▄[94m[40m████████[94m[47m▀[37m[40m██   [m
+[37m[40m         [90m[40m░▓█[93m[40m██▓[90m[40m▒▒▒░░░░[37m[40m       [90m[40m█[90m[47m▄▄[37m[40m█[94m[47m▀▀▀[94m[40m██████████[94m[47m▀▀▀[37m[40m█[90m[47m▄▄[90m[40m█[37m[40m   [m
+[37m[40m     [90m[40m░[37m[40m [90m[40m░[93m[40m▒▒█████▓▓▓▒▒[90m[40m░▓█░[37m[40m      [90m[40m▀▀████[90m[47m▄▄▄▄▄▄▄▄▄▄[90m[40m████▀▀[37m[40m    [m
+[37m[40m    [90m[40m░░[93m[40m▒░░▓████▓██████[90m[40m▒█░[37m[40m            [90m[40m▀▀▀▀▀▀▀▀▀▀[37m[40m          [m
+[37m[40m   [90m[40m▒▒[93m[40m▒▒▓▓██▒▒▒██▒▓████[90m[40m█░[37m[40m                                [m
+[37m[40m  [90m[40m░▒[93m[40m░▒▓█▓██▓████▓██░░▒▓[90m[40m▒░[37m[40m                               [m\
 `
 })
 
-
-
+export const darkRooms = Object.values(ROOM_ART).map((room) => {return chalk.hex('1d1d1d')(room.cleanANSI())})
+export function pickDarkRoomImage(){
+	return chance4.pickone(darkRooms)
+}
 // 
 const roomTextOptions = Object.freeze([
 	["an abandoned mess hall","pots and pans are strewn about the room, with benches and tables that have seen better days", ROOM_ART.barracks],//temp art
 	["an abandoned treasury", "empty shelves, racks and chests fill the room, the room appears to have been cleaned out many years ago", ROOM_ART.emptyRoom],
+	//storage room
 	["just an empty room", "a few furnishings lie around but the room appears to be mostly empty, it's unclear if anyone was here recently", ROOM_ART.emptyRoom],
 	["a small chapel", "an inert altar sits in the center of the room, a few decayed pews are scattered around the room"],
 	["a small cavern", "the walls are covered in a thick layer of moss and lichen, it appears to be well travelled", ROOM_ART.cavern],
@@ -1757,8 +1797,9 @@ const roomTextOptions = Object.freeze([
 	["a rat infested room", "the floor is covered in a layer of detritus of dubious orgin, you see bones and scraps of food lying around", ROOM_ART.ratRoom],
 	["a dungeon cell", "few furnishings litter the room, you spy manacles and chains on the wall, and steel implements of dubious purpose", ROOM_ART.ratRoom],//temp art
 	["a small library", "it's filled with bookshelves, most of the books are old and tattered, a few are in better condition", ROOM_ART.library],
+	["a mages study", "there's a desk with a half written scroll and the book shelfs are lined with books of magical origin, keeping your wits about you, you try to avoid disturbing anything, a mages den is a dangerous place", ROOM_ART.library],
 	["an abandoned armory", "the room is filled with weapons and armour, most of it seems rusted and unusable, it's unclear if you'll be able to find something salvageble", ROOM_ART.amoury],
-	["a courtyard", "the courtyard is filled with rubble, you see a few broken statues and fountains"],
+	["a courtyard", "the courtyard is filled with rubble, you see a few broken statues and a fountain", ROOM_ART.courtyard],
 	["an old guard barracks", "the room is filled with beds and lockers in varying states of disrepair, you see a few broken weapons and armour on the floor", ROOM_ART.barracks],
 	["a narrow corridor", "a few items are strewn about, there's only one clear exit", ROOM_ART.hallway],
 	["a mining depot", "the room is strewn throughout with mining equipment, you see a few pickaxes and shovels, and a some mine carts",ROOM_ART.mine],
@@ -1885,14 +1926,7 @@ export const STATS= Object.freeze({
 //
 //
 //
-//
-//
-//shorthand for replacing escape sequences
-Object.defineProperty(String.prototype, 'cleanANSI', {
-	value() {
-		return this.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
-	}
-});
+
 
 function centerText(text, width) {
 	let pad = Math.floor((width - text.cleanANSI().length) / 2);

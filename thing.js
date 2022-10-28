@@ -640,6 +640,16 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 		ImageScreenTerm.term.reset()
 		ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
+
+		if(!gameEvent.loot && !gameEvent.enemies){
+			MakeContinueButton(chalk.hex('ffffff')("continue your journey"))
+			if (thePlayer.potions > 0)potionButtonGeneric();
+			if (thePlayer.scrolls > 0)scrollsButtonGeneric();
+			await waitForTreasure();
+		}
+
+
+
 		if(thePlayer.state!==playerState.TOWN){
 			thePlayer.depth++
 			thePlayer.actualDepth++

@@ -88,6 +88,7 @@ import {
 //const cfonts = require('cfonts');
 import cfonts from 'cfonts';
 import wrapAnsi from 'wrap-ansi';
+import os from 'os';
 chalk.level = 2;
 const {
 	tinygradient
@@ -107,6 +108,10 @@ let story = {}
 let combatButtonsMap = {}
 let thePlayer = new Player("name")
 let box = createStatsBox()
+
+if(os.platform() === 'win32'){
+	process.env['FORCE_COLOR'] = '1';
+}
 // test content
 
 const rainbowVoil = ['ee82ee', '4b0082', '0000ff', '008000', 'ffff00', 'ffa500', 'ff0000', ]

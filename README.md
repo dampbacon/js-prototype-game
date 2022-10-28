@@ -15,10 +15,13 @@ Any kind of rpg/rougelite game logic is deceptively complex, and that is where m
 \
 <br>
 ## how to run
-Use WSL, windows default terminal mode is incompatible.
+Use WSL, windows default terminal mode is incompatible.\
+Use a Linux terminal with xterm-256colors as term info.
 <br>
 it works on WSL and is reccomended to be ran on windows terminal as it's super easy to change fonts to what i designed it with. \
-The recomended Font is <b>ibm vga 8x16</b> it can be made to work in a linux terminal, \
+The recomended Font is <b>ibm vga 8x16</b>.
+
+it can be made to work in a linux terminal, \
 but it's a complete pain in the ass and a huge pain to turn off Anti Aliasing for only one font
 <br>
 get it from:\
@@ -33,7 +36,9 @@ do a npm install in project root
 run either ./thing.js if you chmod +x \
 or node thing.js 
 <br>
-to test basic event combat loop press 'y' instead of just displaying the test buttons 
+to test basic event combat loop press 'y' instead of just displaying the test buttons,\
+the first screen that loads up is a testing sandbox effectively\
+avoid pressing 'r' or 'y' ever, the functions bound are for debug purposes
 <br>
 # Branch details.
 both branches the code is ....messy \

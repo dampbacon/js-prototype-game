@@ -46,10 +46,12 @@ the first screen that loads up is a testing sandbox effectively\
 avoid pressing 'r' or 'y' ever, the functions bound are for debug purposes
 <br>
 # Branch details.
-both branches the code is ....messy \
+the code is ....messy \
 main branch execution loop is spaghetti code. \
 rather than be purely event driven a function pauses execution till a promise is returned \
-it is a mess, but a mess that works. 
+it is a mess, but a mess that works. \
+i tried simplifying it earlier however it game me untracable errors,\
+and trying to deal with those would take more time than just using what already works
 <br>
 ## Known issues:
 - Rare crashes when switching windows (low priority)

@@ -80,7 +80,6 @@ export class game_event {
 		this.enemies = enemies ? enemies : []
 		this.loot = loot ? loot : []  // {type: 'gold', item: 10, text:"blah"} or {type: 'weapon', item: weapons.sword} or {type: 'armor', item: null}
 		this.noDrops = noDrops ? noDrops : false
-
 		this.customRoomEnterString = customRoomEnterString ? customRoomEnterString : ''
 		//buttons are in the format of [[event_id,"button label", enabled_always=true]]        
 	}

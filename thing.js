@@ -24,6 +24,7 @@ import {
 import {
 	chance2,
 	chance4,
+	monsterRandom,
 	resetRandoms
 } from './game-objects/random_nums.js';
 import {
@@ -291,12 +292,46 @@ let dungeonEntrance = new game_event({
 	customRoomEnterString: "You make your way to the mountain where the dungeon is located.",
 })
 
+let goingUpEvent = new game_event({
+	id: 4,
+	body: {
+		body: 'GAME EVENT 4',
+		format: {
+			writeMode: 'gradientScanlines',
+			gradientFunction: gradient.retro.multiline,
+			gradientArr: [`#${miscColours.legendary}`, `#${miscColours.epic}`, `#${miscColours.oil}`],
+		},
+		TextFile: {
+			exists: false,
+			url: ''
+		},
+	},
+	toScreen: {
+		toScreen: ROOM_ART.barracks,
+		AnsiFile: {
+			exists: false,
+			url: '',
+		},
+	},
+	buttons: [
+		[1, "go deeper", true],
+	],
+	enemies: [],
+	customRoomEnterString: "SOMETHING SOMETHING MAKING YOURWAY TO THE SURFACE.",
+	//test loot overrides
+	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
+	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
+})
 
+let testEventArr = [
+	temp_event1, 
+	temp_event2, 
+	temp_event3, 
+	village, 
+	dungeonEntrance, 
+	goingUpEvent
+]
 
-
-
-
-let testEventArr = [temp_event1, temp_event2, temp_event3, village,dungeonEntrance]
 //test content
 let body = `[0m\r
 \r
@@ -510,6 +545,10 @@ async function createButtons(gameEvent, storyObj = {}, skipEventHandling = false
 			})
 		})
 		buttonsContainer.setContent(` ${chalk.bold.yellow(buttonsArray.length) + " " + chalk.bold.greenBright("choices")}`)
+		//make so it checks list later if u want unescapable events
+		if(thePlayer.state!==playerState.TOWN){
+			exitDungeon()
+		}
 		resizeButtons()
 	}
 }
@@ -536,13 +575,14 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		thePlayer.state=playerState.TOWN
 	}
 
+	assert(Array.isArray(gameEvent.enemies), `ENEMIES ISNT ARRAY ${gameEvent.enemies}`)
 	for (let i of gameEvent.enemies) {
 		if (!death) {
 			combat(gameEvent, i)
 			await (waitForCombat())
 			//looks redundant but isn't because player can die in combat
 			if(!death){
-				if(i === gameEvent.enemies[gameEvent.enemies.length - 1]){
+				if(i === gameEvent.enemies[gameEvent.enemies.length - 1].toString()){
 					MakeContinueButton(chalk.hex("ffffff")("enter the room"))
 				}else{
 					MakeContinueButton(chalk.hex("ffffff")("continue your journey \nto the next room"))
@@ -600,8 +640,10 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 		ImageScreenTerm.term.reset()
 		ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
-		thePlayer.depth++
-		thePlayer.actualDepth++
+		if(thePlayer.state!==playerState.TOWN){
+			thePlayer.depth++
+			thePlayer.actualDepth++
+		}
 		//depth is distance travelled, ACTUAL DEPTH IS CURRENT LOCATION
 		//They look the same for now but eventually youll be able to skip floors due to events and oil consumption
 		//or other things (Like loot rarity) will need to track actuall distance travelled
@@ -611,34 +653,33 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 		refreshInventory()
 		screen.render()
-		// await slowLineWrite(gameEvent.toScreen.toScreen.cleanANSI())
-		// ImageScreenTerm.writeSync('[H')
-		// await slowLineWrite(gameEvent.toScreen.toScreen)
-
-
-		// writeImage(gameEvent)
-		// await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
-		// logs.writeSync(`${escLeftByNum(20)}${chalk.yellow(`-`.repeat(logs.term.cols - 1))}`);
-		//
-		// for testing
-		//
 	}
-	temp_event1.enemies = [pickEnemy(),pickEnemy(),pickEnemy()]
+	
+	//make a EVENT refesher function later
+	//ONLY MAKE CURRENT EVENT REFRESH AT THE END OF THE EVENT
+	//INSTEAD OF THIS LAZY SHIT SHOW OF REPEATED CODE
+	temp_event1.enemies = [pickEnemy(),pickEnemy()]
 	let t1=pickRoomText()
 	temp_event1.toScreen.toScreen = t1[1]
 	temp_event1.body.body = t1[0]
 
-
+	//make a EVENT refesher function later
 	temp_event2.enemies = [pickEnemy()]
 	let t2=pickRoomText()
 	temp_event2.toScreen.toScreen = t2[1]
 	temp_event2.body.body = t2[0]
 
-
+	//make a EVENT refesher function later
 	temp_event3.enemies = []
 	let t3=pickRoomText()
 	temp_event3.toScreen.toScreen = t3[1]
 	temp_event3.body.body = t3[0]
+
+	//make a EVENT refesher function later
+	goingUpEvent.enemies = monsterRandom.pickone([[pickEnemy()],[],[]])
+	let t4=pickRoomText()
+	goingUpEvent.toScreen.toScreen = t4[1]
+	//goingUpEvent.body.body = t4[0]
 
 	resolver()
 }
@@ -1763,8 +1804,52 @@ function scrollsButtonGeneric() {
 	})
 }
 
-function exitDungeon(depth=0){
-
+function exitDungeon(){
+	let exitButton = new blessedpkg.button({
+		parent: buttonsContainer,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'scrolls',
+		content: chalk.hex('ffffff')(`make your way\nout of the dungeon\n#DEBUG DEPTH:${thePlayer.actualDepth}`),
+		//shadow: true,
+		style: {
+			bg: '#ff0000',
+			focus: {
+				bg: '#00ff00',
+			},
+			hover: {
+				bg: '#00ff00',
+			},
+		},
+	})
+	buttonsArray.push(exitButton)
+	screen.render()
+	resizeButtons()
+	if(thePlayer.actualDepth<10){
+		exitButton.on('press', async () => {
+			thePlayer.actualDepth=0
+			thePlayer.depth=0
+			refreshInventory()
+			clearButtons()
+			ImageScreenTerm.reset()
+			createButtons(dungeonEntrance, story)		
+		})
+	}else{
+		exitButton.on('press', async () => {
+			thePlayer.actualDepth-=5
+			refreshInventory()
+			clearButtons()
+			ImageScreenTerm.reset()
+			createButtons(goingUpEvent, story)	
+		})
+	}
 }
 
 

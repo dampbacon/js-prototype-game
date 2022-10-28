@@ -978,7 +978,7 @@ export const monsters = Object.freeze({
 		weapon: "NA NA NA NA NA NA NA NA NA NA ... BATMAN!",
 		dmgDie: 6,
 		aggro: 7,
-		rarity: 1,
+		rarity: 0.06,
 		art: enemiesArt.batman
 	}),
 	guard: new monster({

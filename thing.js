@@ -685,9 +685,9 @@ async function eventHandler(gameEvent = temp_event1, ) {
 }
 async function writeImage(gameEvent) {
 	ImageScreenTerm.term.reset()
-	await slowLineWrite(chalk.hex('323232')(gameEvent.toScreen.toScreen.cleanANSI()), ImageScreenTerm, 10)
+	await slowLineWrite(chalk.hex('323232')(gameEvent.toScreen.toScreen.cleanANSI()), ImageScreenTerm, 10, true)
 	ImageScreenTerm.writeSync('[H')
-	await slowLineWrite(gameEvent.toScreen.toScreen, ImageScreenTerm, 18)
+	await slowLineWrite(gameEvent.toScreen.toScreen, ImageScreenTerm, 18, true)
 }
 
 function kill() {

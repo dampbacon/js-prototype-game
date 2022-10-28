@@ -1465,7 +1465,9 @@ Choose your next move.\
 
 
 export const SPECIAL_ROOM_ART = Object.freeze({
-	mountain: `\
+	mountain: `${chalk.white("AAAAA")}
+${chalk.white("AAAAA")}
+${chalk.white("AAAAA")}
 [37m[40m                        [97m[40m▄▄[37m[40m                               [m
 [37m[40m                  [97m[40m▄▄[37m[40m   [97m[40m▄██▓▓▄[37m[40m                            [m
 [37m[40m                 [97m[40m█▀[37m[40m#[97m[40m█[37m[40m [97m[40m▄▓█████▓[37m[40m                           [m

@@ -286,11 +286,15 @@ export function fitLinesStr(text, width = logs.term.cols - 1) {
 	}
 	return multiline
 }
-export async function slowLineWrite(multiLineText, term = ImageScreenTerm, speed = 50) {
+export async function slowLineWrite(multiLineText, term = ImageScreenTerm, speed = 50,skipLast=false) {
 	let lines = multiLineText.split('\n')
 	for (let i of lines) {
 		await new Promise(r => setTimeout(r, speed));
-		term.writeSync(i + '\n')
+		if(skipLast&&(i===lines[lines.length-1])){
+			term.writeSync(i)
+		}else{
+			term.writeSync(i + '\n')
+		}
 	}
 }
 export async function drawBanner(weap = weapons.newtons_apple, term = ImageScreenTerm) {

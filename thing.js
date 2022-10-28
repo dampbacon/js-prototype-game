@@ -210,6 +210,7 @@ let temp_event3 = new game_event({
 			writeMode: 'gradientScanlines',
 			gradientFunction: gradient.retro.multiline,
 			gradientArr: [`#${miscColours.legendary}`, `#${miscColours.epic}`, `#${miscColours.oil}`],
+			speed:2
 		},
 		TextFile: {
 			exists: false,
@@ -229,7 +230,6 @@ let temp_event3 = new game_event({
 		[3,"goto 3 recur",true]
 	],
 	enemies: [
-		pickEnemy(),
 	],
 	//test loot overrides
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
@@ -641,12 +641,23 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		ImageScreenTerm.term.reset()
 		ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
 
-		if(!gameEvent.loot && !gameEvent.enemies){
-			MakeContinueButton(chalk.hex('ffffff')("continue your journey"))
+
+		//assert((!gameEvent.loot) === true, `LOOT ISNT valid ${JSON.stringify(gameEvent.loot)}`)
+		//assert(!gameEvent.enemies === true, `ENEMIWE ISNT valid ${JSON.stringify(gameEvent.enemies)}`)
+		if (thePlayer.state!==playerState.TOWN && !gameEvent.loot?.length && !gameEvent.enemies?.length) {
+			//logs.writeSync("SADIUOHUOSAIHUIOASFHUOIFSA")
+
+			MakeContinueButton(chalk.hex('ffffff')("continue"))
 			if (thePlayer.potions > 0)potionButtonGeneric();
 			if (thePlayer.scrolls > 0)scrollsButtonGeneric();
 			await waitForTreasure();
+		}else{
+			//logs.writeSync("SADIJDSAKJSDA")
 		}
+
+		// if((gameEvent.loot) && (gameEvent.enemies)){
+			
+		// }
 
 
 

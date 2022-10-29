@@ -590,7 +590,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 			logs.writeSync(`you enter the room\n`);
 		}
 		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
-		await writeImage(gameEvent)
+		await writeImage(gameEvent, 10, 10)
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
 	}
@@ -2191,7 +2191,7 @@ temp_event3.toScreen.toScreen=SPECIAL_ROOM_ART.house
 await writeImage(temp_event3)
 
 
-
+//move to write methods file
 async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=50,color1,color2){
 	ImageScreenTerm.writeSync('[H')
 	let bolt = magicBolt(color1,color2)

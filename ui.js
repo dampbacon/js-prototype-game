@@ -217,3 +217,5 @@ export function createStatsBox() {
 		}
 	});
 }
+
+const k = new blessedpkg.ANSIImage

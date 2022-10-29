@@ -330,7 +330,7 @@ let goingUpEvent = new game_event({
 let homeEvent = new game_event({
 	id: -2,
 	body: {
-		body: 'GAME EVENT HOME',
+		body: 'after a good nights sleep you wake up feeling refreshed and ready to continue your adventure',
 		format: {
 			writeMode: 'gradientScanlines',
 			gradientFunction: gradient.rainbow.multiline,
@@ -351,7 +351,7 @@ let homeEvent = new game_event({
 	buttons: [
 		[-1, "go to village", true],
 	],
-	customRoomEnterString: "SOMETHING SOMETHING ENTERING HOME.",
+	customRoomEnterString: "You rest for the night or some shiz idk im not a writer.",
 	//test loot overrides
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
 	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
@@ -561,12 +561,19 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	thePlayer.currentEvent = gameEvent
 
 	//later make function if more states depend on id
-	let homeEventID=[-1,0]
+	let homeEventID=[-2,-1,0]
 	if (homeEventID.includes(gameEvent.id)){
 		thePlayer.state=playerState.TOWN
 	}
 
+
+
+
+
+
+
 	assert(Array.isArray(gameEvent.enemies), `ENEMIES ISNT ARRAY ${gameEvent.enemies}`)
+	// runs combat if enemies are present loops through enemies array
 	for (let i of gameEvent.enemies) {
 		if (!death) {
 			combatSetup(gameEvent, i)
@@ -589,15 +596,37 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}else{
 			logs.writeSync(`you enter the room\n`);
 		}
+		//shitty hack for night time effect till i can get bothered to make a proper
+		//night time effect art piece for the room
+		if (gameEvent.id === -2) {
+			ImageScreenTerm.writeSync(chalk.hex('202020')(gameEvent.toScreen.toScreen.cleanANSI()))
+			ImageScreenTerm.writeSync('[H')
+			await new Promise(resolve => setTimeout(resolve, 2000))	
+			await writeImage(gameEvent, 10, 10,true)
+			ImageScreenTerm.writeSync('[H')
+			//reset is a work around to a bug in the slow line write that
+			//for some reason moved a char out of place comment out to see
+			ImageScreenTerm.term.reset()
+			ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
+		}else{
+			await writeImage(gameEvent, 10, 10)
+		}
 		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
-		await writeImage(gameEvent, 10, 10)
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
+		if(gameEvent.id === -2){
+			logs.writeSync(chalk.hex(miscColours.gold)(`After a good nights sleep you heal to max\n`));
+			thePlayer.hp=thePlayer.hpMax
+			refreshStats()
+			logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
+		}
 	}
 
 	let countDEADenemies = 0
 	let countALIVEenemies = 0
-	//if ( (thePlayer.multipleEncounters && !death) && !thePlayer.noLoot && gameEvent.enemies) {
+	// default loot, can be skipped via noloot
+	// noloot is a relic from when treasure handling was elsewheree
+	// should later be refactored to use game event flag
 	if ( (!death) && !thePlayer.noLoot && gameEvent.enemies) {
 		for (let i of gameEvent.enemies) {
 			if(i.hp<=0){
@@ -613,13 +642,19 @@ async function eventHandler(gameEvent = temp_event1, ) {
 			await waitForTreasure();
 		}
 	}
+	
+	
 
-	if(!death)
-	thePlayer.multipleEncounters = false
-	thePlayer.noLoot = false
-	thePlayer.currentEvent = null
 	if (!death) {
-		// custom loot handling
+
+		//DELETE SOME OF THESE FULLY
+		thePlayer.multipleEncounters = false
+		thePlayer.noLoot = false
+		thePlayer.currentEvent = null
+		
+
+
+		// custom loot defined in events handling
 		if(gameEvent.loot){
 			for (let i = 0; i < gameEvent.loot.length; i++) {
 				treasure(gameEvent.loot[i])
@@ -629,15 +664,18 @@ async function eventHandler(gameEvent = temp_event1, ) {
 				await waitForTreasure();
 			}
 		}
-		ImageScreenTerm.term.reset()
-		ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
 
+		//
+		// continuation of shitty hack for night time effect
+		if (gameEvent.id !== -2) {
+			ImageScreenTerm.term.reset()
+			ImageScreenTerm.writeSync(gameEvent.toScreen.toScreen)
+		}else{
+			//slowLineWrite(gameEvent.toScreen.toScreen, ImageScreenTerm, 10, true)
+		}
 
-		//assert((!gameEvent.loot) === true, `LOOT ISNT valid ${JSON.stringify(gameEvent.loot)}`)
-		//assert(!gameEvent.enemies === true, `ENEMIWE ISNT valid ${JSON.stringify(gameEvent.enemies)}`)
+		// allows player to use potions and scrools in rooms with no loot and no enemies
 		if (thePlayer.state!==playerState.TOWN && !gameEvent.loot?.length && !gameEvent.enemies?.length) {
-			//logs.writeSync("SADIUOHUOSAIHUIOASFHUOIFSA")
-
 			MakeContinueButton(chalk.hex('ffffff')("continue"))
 			if (thePlayer.potions > 0)potionButtonGeneric();
 			if (thePlayer.scrolls > 0)scrollsButtonGeneric();
@@ -646,23 +684,20 @@ async function eventHandler(gameEvent = temp_event1, ) {
 			//logs.writeSync("SADIJDSAKJSDA")
 		}
 
-		// if((gameEvent.loot) && (gameEvent.enemies)){
-			
-		// }
 
 
-
+		//depth and oil ticker
 		if(thePlayer.state!==playerState.TOWN){
 			thePlayer.depth++
 			thePlayer.actualDepth++
+			if ((thePlayer.depth % 4 === 0) && (thePlayer.oil > 0)) {
+				thePlayer.oil--
+			}
 		}
 		//depth is distance travelled, ACTUAL DEPTH IS CURRENT LOCATION
-		//They look the same for now but eventually youll be able to skip floors due to events and oil consumption
-		//or other things (Like loot rarity) will need to track actuall distance travelled
+		//They look the same for now but eventually youll be able to skip floors due to events
+		//actual depth is the current floor you are on, depth is the distance you have travelled
 		//plan is for both to be reset once you leave the dungeon. with the data stored somewhere for stats for a gameover screen.
-		if ((thePlayer.depth % 4 === 0) && (thePlayer.oil > 0)) {
-			thePlayer.oil--
-		}
 		refreshInventory()
 		screen.render()
 	}
@@ -695,13 +730,17 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
 	resolver()
 }
-async function writeImage(gameEvent, speedShadow = 10, speedfinal = 15) {
-	ImageScreenTerm.term.reset()
+//
+//
+//move to write methods file
+async function writeImage(gameEvent, speedShadow = 10, speedfinal = 15, noreset = false) {
+	if(!noreset)ImageScreenTerm.term.reset()
 	await slowLineWrite(chalk.hex('323232')(gameEvent.toScreen.toScreen.cleanANSI()), ImageScreenTerm, speedShadow, true)
 	ImageScreenTerm.writeSync('[H')
 	await slowLineWrite(gameEvent.toScreen.toScreen, ImageScreenTerm, speedfinal, true)
 }
 
+//useless function that should be merged with reset
 function kill() {
 	clearButtons()
 	death = true;
@@ -734,6 +773,8 @@ function waitForCombat() {
 function encounterResolver() {
 	if (waitForCombatResolve) waitForCombatResolve()
 }
+
+//combat setup function
 async function combatSetup(event, enemy) {
 	thePlayer.encounterData = new combatMetrics()
 	if(event.noDrops){
@@ -775,7 +816,8 @@ async function combatSetup(event, enemy) {
 	
 	combatLogic(thePlayer, true)
 }
-// moster picker in random event later
+
+//enemy attack function
 async function enemyAtack(monster, player = thePlayer, first = false) {
 	if (!first) {
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`);
@@ -856,13 +898,11 @@ async function clearCombat() {
 
 		ImageScreenTerm.term.reset()
 		ImageScreenTerm.writeSync(thePlayer.encounterData.enemy.art)
-		// let block=chalk.hex('000000')(miscArt.block.cleanANSI())
-		// ImageScreenTerm.writeSync(block)
-		// ImageScreenTerm.writeSync('\r'+escUpByNum(17))
-
-
-
-
+		
+//
+// A relic of before the dynamic box function was created, basically this is top,bottom,left + string 
+// with the right border being drawn by escaping
+// later make dynamic box but not urgent
 		let length = '╰╾────────────────────────────────────────────╼╯'.length
 		let combatBanner = `\
 ╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
@@ -900,7 +940,8 @@ async function clearCombat() {
 //	ADD ENCHANTING ITEMS AS LOOT LATER
 // 	
 //
-//
+// IMPLEMENT SUBSET RANDOM SELECTION USING FUNCTIONS DEFINED IN DATA FILE
+// CUT OF TRASH ITEMS AT CERTIAN DEPTHS
 async function treasure(customTreasure={type: null, item: null, text: null, searchText:null}) 
 {
 	let gotoTreasure = new blessedpkg.button({
@@ -1157,6 +1198,8 @@ async function treasure(customTreasure={type: null, item: null, text: null, sear
 		}
 	});
 }
+
+//handles weapons and armour loot
 async function ComplexTreasure(strOrObject = weapons.flamberge, weapon = true) {
 	let itemStr = weapon ? "weapon" : "armour"
 	let itemName = weapon ? strOrObject.name : strOrObject
@@ -1275,7 +1318,7 @@ function pickTreasure() {
 	let weights_array = [5, 2, 1, 1] //,1]
 	return chance4.weighted(options, weights_array)
 }
-
+// USE WITH WAITFORTREASURE
 function MakeContinueButton(text) {
 	let continueButton = new blessedpkg.button({
 		parent: buttonsContainer,
@@ -1313,6 +1356,10 @@ function MakeContinueButton(text) {
 		tresureResolver()
 	});
 }
+
+//combat code messy needs to be refined later
+//an absolute mess
+//a complete pain in the ass
 async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = true, hostile = false, counter = 1) {
 	ImageScreenTerm.setLabel(`${gradient.summer(`Turn counter: ${counter}`)}`)
 	let monster = thePlayer.encounterData.enemy
@@ -1554,6 +1601,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 	//generate listener for potion button if potions button exists
 }
 
+
 function createCombatButtons(hostile) {
 	let monsterHostile = hostile
 	clearButtons()
@@ -1733,6 +1781,8 @@ ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe
 	stats.focus()
 	screen.render()
 }
+
+//outside of combat item use button
 function potionButtonGeneric() {
 	let potion= new blessedpkg.button({
 		parent: buttonsContainer,
@@ -1785,7 +1835,7 @@ function potionButtonGeneric() {
 		screen.render()
 	})
 }
-
+//outside of combat item use button
 function scrollsButtonGeneric() {
 	let scrolls = new blessedpkg.button({
 		parent: buttonsContainer,
@@ -1831,6 +1881,10 @@ function scrollsButtonGeneric() {
 	})
 }
 
+// if depth less than 10 leave dungeon else -5 to depth
+// and redirect to a random generic room that is unlikely to have enemies
+// going down again will make your encounters frequent again
+// as the button will redirect to the start random room event
 function exitDungeon(){
 	let exitButton = new blessedpkg.button({
 		parent: buttonsContainer,
@@ -1905,6 +1959,8 @@ function toggleUi() {
 // function toggleButtons() {
 // 	buttonsContainer.toggle()
 // }
+
+
 async function fillStatsRollBox(speed = 2, player = thePlayer, startBox = box) {
 	await new Promise(resolve => setTimeout(resolve, speed))
 	startBox.pushLine(`${' '.repeat(Math.floor(startBox.width / 2) - ' HP: '.length - 2)} hp: ${player.hp}`)
@@ -2200,7 +2256,7 @@ async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=50,color1,color
 		ImageScreenTerm.writeSync('[H')
 		await new Promise((r) => setTimeout(r, speed));
 	}
-	let k=[...bolt].reverse(bolt)
+	let k=[...bolt].reverse()
 	k=[...k,'']
 	for(let i of k){
 		if(i==''){

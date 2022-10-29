@@ -2097,7 +2097,15 @@ export function magicBolt(color1=altdmgColour[DMG_TYPE.MAGIC],color2=DMG_COLOUR[
 	]
 }
 
+export function scrollExplosionSwitch(scroll=ScrollsAll.fireball){
+	DMG_TYPE
 
+	switch(scroll.dmgTypeE){
+		case DMG_TYPE.FIRE:{return}
+		case DMG_TYPE.MAGIC:{return}
+		case DMG_TYPE.DARK:{return}
+	}
+}
 
 //
 //

@@ -98,7 +98,7 @@ export class Scroll {
 		rarity,
 		description,
 		altar,
-		dmgType,
+		//dmgType,
 	}) {
 		//mix of sorting and function flags
 		this.targetmonster = targetmonster ? targetmonster : false
@@ -109,7 +109,7 @@ export class Scroll {
 		this.resolveEncounter = resolveEncounter ? resolveEncounter : false
 		this.teleport = teleport ? teleport : false
 		this.altar = altar ? altar : false
-		this.dmgType = dmgType ? dmgType : null
+		//this.dmgType = dmgType ? dmgType : null
 		this.dmgTypeE = dmgTypeE ? dmgTypeE : DMG_TYPE.NONE
 		this.name = name ? name : 'Scroll';
 		this.rarity = rarity ? rarity : 1;

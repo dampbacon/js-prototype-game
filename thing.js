@@ -2147,6 +2147,7 @@ await drawBanner()
 ImageScreenTerm.term.reset()
 await writeImage(temp_event3)
 
+ImageScreenTerm.writeSync('[H')
 ImageScreenTerm.writeSync(animationArt.magicBolt)
 
 

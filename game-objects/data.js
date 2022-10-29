@@ -80,7 +80,7 @@ export const miscColours = Object.freeze({
 	epic: 'a335ee',
 	legendary: 'ff8000',
 })
-
+// to make these work for traps
 // make later if(isTrap)target1.encounterData else {target2.encounterData}
 export const damageTypes = Object.freeze({
 	fire_damage: new dmgTypeClass({

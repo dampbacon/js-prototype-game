@@ -706,7 +706,7 @@ async function combat(event, enemy) {
 	}
 	let monster = enemy //copyMonster(tempMonster)
 	logs.writeSync('\n' + escUpByNum(1))
-	await (gradient_scanlines(logs, makeEncounterText(monster), 3, gradient.pastel.multiline, rainbowVoil))
+	await (gradient_scanlines(logs, makeEncounterText(monster), 2, gradient.pastel.multiline, rainbowVoil))
 	thePlayer.state = playerState.COMBAT
 	buttonsContainer.setContent('')
 	const foundFont = cfonts.render(`combat begin!`, {

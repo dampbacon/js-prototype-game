@@ -1977,7 +1977,7 @@ export const miscArt = Object.freeze({
 `
 })
 
-const animationArt= Object.freeze({
+export const animationArt= Object.freeze({
 magicBolt:`\
 [97m[40m0[37m[40m                      [m
 [97m[40m1[37m[40m                      [m

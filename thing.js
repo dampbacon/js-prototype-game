@@ -599,7 +599,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		//shitty hack for night time effect till i can get bothered to make a proper
 		//night time effect art piece for the room
 		if (gameEvent.id === -2) {
-			ImageScreenTerm.writeSync(chalk.hex('202020')(gameEvent.toScreen.toScreen.cleanANSI()))
+			ImageScreenTerm.writeSync(chalk.hex('101020')(gameEvent.toScreen.toScreen.cleanANSI()))
 			ImageScreenTerm.writeSync('[H')
 			await new Promise(resolve => setTimeout(resolve, 2000))	
 			await writeImage(gameEvent, 10, 10,true)

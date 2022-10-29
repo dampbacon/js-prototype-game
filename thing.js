@@ -738,7 +738,7 @@ async function combatSetup(event, enemy) {
 		drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
 	//drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm
 	}
-	ImageScreenTerm.writeSync('\r'+escUpByNum(17))
+	//ImageScreenTerm.writeSync('\r'+escUpByNum(17))
 	
 	combatLogic(thePlayer, true)
 }
@@ -821,10 +821,11 @@ async function clearCombat() {
 	if (!death) {
 		thePlayer.state = playerState.TREASURE_ROOM
 
-		
-		let block=chalk.hex('000000')(miscArt.block.cleanANSI())
-		ImageScreenTerm.writeSync(block)
-		ImageScreenTerm.writeSync('\r'+escUpByNum(17))
+		ImageScreenTerm.term.reset()
+		ImageScreenTerm.writeSync(thePlayer.encounterData.enemy.art)
+		// let block=chalk.hex('000000')(miscArt.block.cleanANSI())
+		// ImageScreenTerm.writeSync(block)
+		// ImageScreenTerm.writeSync('\r'+escUpByNum(17))
 
 
 
@@ -1442,6 +1443,8 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			} else if (!firstLoop) {
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
+			await drawMagicBolt(monster.art,50, "ffff00", DMG_COLOUR[DMG_TYPE.FIRE])
+
 			logs.writeSync(
 				`${chalk.hex('00ea00')(`You light a flask of oil and throw it to the enemy!\n`)+chalk.hex(DMG_COLOUR[DMG_TYPE.FIRE])(`dealing 2d6+4=${damage} fire damage!`)}\n`
 			);
@@ -2157,7 +2160,7 @@ await writeImage(temp_event3)
 
 async function drawMagicBolt(image=ROOM_ART.barracks, speed=50,color1,color2){
 	ImageScreenTerm.writeSync('[H')
-	let bolt = magicBolt()
+	let bolt = magicBolt(color1,color2)
 	for(let i of bolt){
 		ImageScreenTerm.writeSync(i)
 		ImageScreenTerm.writeSync('[H')
@@ -2172,7 +2175,7 @@ async function drawMagicBolt(image=ROOM_ART.barracks, speed=50,color1,color2){
 			ImageScreenTerm.writeSync(image)
 			drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
 			drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
-			ImageScreenTerm.writeSync('\r'+escUpByNum(17))
+			//ImageScreenTerm.writeSync('\r'+escUpByNum(17))
 		}else{
 			ImageScreenTerm.term.reset()
 			ImageScreenTerm.writeSync('[H')

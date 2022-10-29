@@ -2013,6 +2013,7 @@ export function magicBolt(color1=altdmgColour[DMG_TYPE.MAGIC],color2=DMG_COLOUR[
 [97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
 [97m[40m[37m[40m${escRightByNum(13)}${chalk.hex(colorA)('██')}[37m[40m[m
 [97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
@@ -2021,6 +2022,7 @@ export function magicBolt(color1=altdmgColour[DMG_TYPE.MAGIC],color2=DMG_COLOUR[
 [97m[40m[37m[40m[m\
 `,
 `\
+[97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
@@ -2038,6 +2040,7 @@ export function magicBolt(color1=altdmgColour[DMG_TYPE.MAGIC],color2=DMG_COLOUR[
 [97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
 [97m[40m[37m[40m${escRightByNum(9)}${chalk.hex(colorB)('██████████')}[37m[40m[m
 [97m[40m[37m[40m${escRightByNum(7)}${chalk.hex(colorB)('█')}${chalk.bgHex(colorB)(chalk.hex(colorA)('▄██████████▄'))}${chalk.hex(colorB)('█')}[37m[40m[m
 [97m[40m[37m[40m${escRightByNum(6)}${chalk.hex(colorB)('█')}${chalk.hex(colorA)('██')}[97m[40m██████████${chalk.hex(colorA)('██')}${chalk.hex(colorB)('█')}[37m[40m[m
@@ -2047,6 +2050,7 @@ export function magicBolt(color1=altdmgColour[DMG_TYPE.MAGIC],color2=DMG_COLOUR[
 [97m[40m[37m[40m[m\
 `,
 `\
+[97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
 [97m[40m[37m[40m[m
 [97m[40m[37m[40m${escRightByNum(9)}${chalk.hex(colorB)('██████████')}[37m[40m[m

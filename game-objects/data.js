@@ -428,6 +428,7 @@ export const ARMOUR_ART = Object.freeze({
 
 export const ARMOUR = Object.freeze({
 	LOIN_CLOTH: 'LOIN_CLOTH',
+	TUNIC: 'TUNIC',
 	TRAVELLERS_CLOTHES: 'TRAVELLERS_CLOTHES',
 	OXFORD_BLUE_ROBE: 'OXFORD_BLUE_ROBE',
 	PADDED_ARMOUR: 'PADDED_ARMOUR',
@@ -444,7 +445,8 @@ export const ARMOUR = Object.freeze({
 })
 //all the rooms and loot and stuff initialized here in a list we random select from
 const ARMOURmap = {}
-ARMOURmap[ARMOUR.LOIN_CLOTH] = 10
+ARMOURmap[ARMOUR.LOIN_CLOTH] = 8
+ARMOURmap[ARMOUR.TUNIC] = 10
 ARMOURmap[ARMOUR.TRAVELLERS_CLOTHES] = 12
 ARMOURmap[ARMOUR.OXFORD_BLUE_ROBE] = 12
 ARMOURmap[ARMOUR.PADDED_ARMOUR] = 14

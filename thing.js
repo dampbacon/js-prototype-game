@@ -80,7 +80,7 @@ import {
 	weapons,
 	miscArt,
 	SPECIAL_ROOM_ART,
-	animationArt,
+	magicBolt,
 } from './game-objects/data.js';
 import {
 	combatMetrics
@@ -2149,8 +2149,21 @@ await writeImage(temp_event3)
 
 ImageScreenTerm.writeSync('[H')
 //ImageScreenTerm.writeSync(animationArt.magicBolt)
-
-let testStr=animationArt.magicBolt
+let bolt = magicBolt
+for(let i of bolt){
+	ImageScreenTerm.writeSync(i)
+	ImageScreenTerm.writeSync('[H')
+	await new Promise((r) => setTimeout(r, 50));
+}
+let k=[...bolt].reverse(bolt)
+k=[...k,'.']
+for(let i of k){
+	ImageScreenTerm.writeSync('[H')
+	ImageScreenTerm.writeSync(ROOM_ART.barracks)
+	ImageScreenTerm.writeSync('[H')
+	ImageScreenTerm.writeSync(i)
+	await new Promise((r) => setTimeout(r, 50));
+}
 
 
 

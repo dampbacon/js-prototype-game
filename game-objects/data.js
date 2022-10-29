@@ -527,7 +527,7 @@ export function ArmourRarityColour(ac) {
 export const armourArrayWeights = Object.values(ARMOURmap).map((ac) => {
 	if (ac > 20) {
 		return .2 / ac
-	} else if (ac >= 18) {
+	} else if (ac >= 16) {
 		return .5 / ac
 	}
 	return 1 / ac

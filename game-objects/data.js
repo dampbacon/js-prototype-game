@@ -81,7 +81,7 @@ altdmgColour[DMG_TYPE.DARK] = '280495'
 altdmgColour[DMG_TYPE.GRAVITY] = 'e019e6'
 altdmgColour[DMG_TYPE.NARUTO] = '0c2fdf'
 altdmgColour[DMG_TYPE.NONE] = 'FFFFFF'
-altdmgColour[DMG_TYPE.MAGIC] = '6F26E3'
+altdmgColour[DMG_TYPE.MAGIC] = '6753e9'
 Object.freeze(altdmgColour)
 export {
 	altdmgColour
@@ -1997,13 +1997,16 @@ export const miscArt = Object.freeze({
 `
 })
 
+let colorB=DMG_COLOUR[DMG_TYPE.MAGIC]
+let colorA=altdmgColour[DMG_TYPE.MAGIC]
+
 export const animationArt= Object.freeze({
 magicBolt:`\
 [97m[40m0[37m[40m[m
 [97m[40m1[37m[40m[m
 [97m[40m2[37m[40m[m
 [97m[40m3[37m[40m[m
-[97m[40m4[37m[40m          [93m[40m██[37m[40m[m
+[97m[40m4[37m[40m          ${chalk.hex(colorA)('██')}[37m[40m[m
 [97m[40m5[37m[40m[m
 [97m[40m6[37m[40m[m
 [97m[40m7[37m[40m[m
@@ -2013,20 +2016,20 @@ magicBolt:`\
 [97m[40m1[37m[40m[m
 [97m[40m2[37m[40m[m
 [97m[40m3[37m[40m[m
-[97m[40m4[37m[40m        [91m[40m██████[37m[40m[m
-[97m[40m5[37m[40m      [91m[40m█[93m[40m██[97m[40m████[93m[40m██[91m[40m█[37m[40m[m
-[97m[40m6[37m[40m        [91m[40m██████[37m[40m[m
+[97m[40m4[37m[40m        ${chalk.hex(colorB)('██████')}[37m[40m[m
+[97m[40m5[37m[40m      ${chalk.hex(colorB)('█')}${chalk.hex(colorA)('██')}[97m[40m████${chalk.hex(colorA)('██')}${chalk.hex(colorB)('█')}[37m[40m[m
+[97m[40m6[37m[40m        ${chalk.hex(colorB)('██████')}[37m[40m[m
 [97m[40m7[37m[40m[m
 [97m[40m8[37m[40m[m
 [97m[40m9[37m[40m[m
 [97m[40m0[37m[40m[m
 [97m[40m1[37m[40m[m
 [97m[40m2[37m[40m[m
-[97m[40m3[37m[40m      [91m[40m██████████[37m[40m[m
+[97m[40m3[37m[40m      ${chalk.hex(colorB)('██████████')}[37m[40m[m
 [97m[40m4[37m[40m    [91m[40m█[93m[41m▄[93m[40m██████████[93m[41m▄[91m[40m█[37m[40m[m
 [97m[40m5[37m[40m   [91m[40m█[93m[40m██[97m[40m██████████[93m[40m██[91m[40m█[37m[40m[m
 [97m[40m6[37m[40m    [91m[40m█[93m[41m▀[93m[40m██████████[93m[41m▀[91m[40m█[37m[40m[m
-[97m[40m7[37m[40m      [91m[40m██████████[37m[40m[m
+[97m[40m7[37m[40m      ${chalk.hex(colorB)('██████████')}[37m[40m[m
 [97m[40m8[37m[40m[m
 [97m[40m9[37m[40m[m
 [97m[40m0[37m[40m[m

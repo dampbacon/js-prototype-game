@@ -326,7 +326,7 @@ let goingUpEvent = new game_event({
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
 	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
 })
-
+//make a night sleepy event
 let homeEvent = new game_event({
 	id: -2,
 	body: {

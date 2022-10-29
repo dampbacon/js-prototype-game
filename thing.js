@@ -535,7 +535,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	assert(Array.isArray(gameEvent.enemies), `ENEMIES ISNT ARRAY ${gameEvent.enemies}`)
 	for (let i of gameEvent.enemies) {
 		if (!death) {
-			combat(gameEvent, i)
+			combatSetup(gameEvent, i)
 			await (waitForCombat())
 			//looks redundant but isn't because player can die in combat
 			if(!death){
@@ -700,7 +700,7 @@ function waitForCombat() {
 function encounterResolver() {
 	if (waitForCombatResolve) waitForCombatResolve()
 }
-async function combat(event, enemy) {
+async function combatSetup(event, enemy) {
 	thePlayer.encounterData = new combatMetrics()
 	if(event.noDrops){
 		thePlayer.noLoot = true

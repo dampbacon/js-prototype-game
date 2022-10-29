@@ -1,6 +1,6 @@
 import {chance2, chance3, chance4, monsterRandom} from "./random_nums.js";
 import chalk from "chalk";
-import {dmgScrollFun, dmgTypeClass, Scroll, weapon} from "./items.js";
+import {dmgScrollFuncFactory, dmgTypeClass, Scroll, weapon} from "./items.js";
 import _ from "lodash";
 import assert from 'node:assert/strict';
 import gradient from 'gradient-string';
@@ -587,7 +587,7 @@ export const ScrollsAll = Object.freeze({
 		targetmonster: true,
 		rarity: 1,
 		description: 'A scroll that summons a fireball to attack a monster',
-		scrollFunction: dmgScrollFun(
+		scrollFunction: dmgScrollFuncFactory(
 			`dodges the worst of the blast and takes`,
 			`catches the full force of the fiery explosion and takes`,
 			`Unfortunately you are not in combat, you cast it out of the room.`,
@@ -602,7 +602,7 @@ export const ScrollsAll = Object.freeze({
 		targetmonster: true,
 		rarity: 0.2,
 		description: 'A scroll that summons magic missles to attack a monster',
-		scrollFunction: dmgScrollFun(
+		scrollFunction: dmgScrollFuncFactory(
 			`####### SHOULD NOT DISPLAY ######`,
 			`is struck by four magical bolts takes`,
 			`Unfortunately you are not in combat, you cast it out of the room.`,
@@ -621,7 +621,7 @@ export const ScrollsAll = Object.freeze({
 		targetmonster: true,
 		rarity: 1,
 		description: 'A scroll that summons a lightning bolt to strike a monster',
-		scrollFunction: dmgScrollFun(
+		scrollFunction: dmgScrollFuncFactory(
 			`catches a glancing strike and takes`,
 			`catches the full force of the thunder bolt and takes`,
 			`Unfortunately you are not in combat, you cast it out of the room.`,
@@ -636,7 +636,7 @@ export const ScrollsAll = Object.freeze({
 		targetmonster: true,
 		rarity: 1,
 		description: 'A scroll that kills a monster most of the time',
-		scrollFunction: dmgScrollFun(
+		scrollFunction: dmgScrollFuncFactory(
 			`takes a glancing blow from the curse and takes`,
 			`absorbs the full force of the curse killing it`,
 			`unfortunately there is nothing to kill besides yourself. You let the scroll fizzle into ashes`,

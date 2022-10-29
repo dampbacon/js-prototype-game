@@ -210,7 +210,7 @@ export class Scroll {
 let defDodgeStr = ` dodges the worst of the blast, and takes `
 let defHitStr = `catches the full force of the fiery explosion and takes`
 let defNoTarget = `Unfortunately you are not in combat, you cast it out of the room`
-export function dmgScrollFun(
+export function dmgScrollFuncFactory(
 	dodgestr = defDodgeStr,
 	hitstr = defHitStr,
 	notarget = defNoTarget,

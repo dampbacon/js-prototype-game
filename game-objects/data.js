@@ -2001,6 +2001,8 @@ export const miscArt = Object.freeze({
 let colorB=DMG_COLOUR[DMG_TYPE.MAGIC]
 let colorA=altdmgColour[DMG_TYPE.MAGIC]
 
+
+//escape codes are used instead of spaces to avoid completely overriding the background image. 
 export function magicBolt(color1=altdmgColour[DMG_TYPE.MAGIC],color2=DMG_COLOUR[DMG_TYPE.MAGIC]){
 	let colorB=color2
 	let colorA=color1

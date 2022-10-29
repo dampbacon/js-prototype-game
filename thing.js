@@ -2158,7 +2158,7 @@ for(let i of bolt){
 	await new Promise((r) => setTimeout(r, 50));
 }
 let k=[...bolt].reverse(bolt)
-k=[...k,'.']
+k=[...k,'']
 for(let i of k){
 	ImageScreenTerm.writeSync('[H')
 	ImageScreenTerm.writeSync(ROOM_ART.barracks)

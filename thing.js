@@ -260,6 +260,7 @@ let village = new game_event({
 	},
 	buttons: [
 		[0, "head towards the dungeon", true],
+		[-2, "head home to rest", true],
 		//some shop redirect
 	],
 	customRoomEnterString: "You arrive at the village, the villagers are happy to see you.",
@@ -289,6 +290,7 @@ let dungeonEntrance = new game_event({
 	buttons: [
 		[1, "enter the dungeon", true],
 		[-1, "go to the village", true],
+		[-2, "head home to rest", true],
 		//some shop redirect
 	],
 	customRoomEnterString: "You make your way to the mountain where the dungeon is located.",
@@ -325,13 +327,44 @@ let goingUpEvent = new game_event({
 	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
 })
 
+let homeEvent = new game_event({
+	id: -2,
+	body: {
+		body: 'GAME EVENT HOME',
+		format: {
+			writeMode: 'gradientScanlines',
+			gradientFunction: gradient.rainbow.multiline,
+			gradientArr: [`#${miscColours.legendary}`, `#${miscColours.epic}`, `#${miscColours.oil}`],
+		},
+		TextFile: {
+			exists: false,
+			url: ''
+		},
+	},
+	toScreen: {
+		toScreen: SPECIAL_ROOM_ART.house,
+		AnsiFile: {
+			exists: false,
+			url: '',
+		},
+	},
+	buttons: [
+		[-1, "go to village", true],
+	],
+	customRoomEnterString: "SOMETHING SOMETHING ENTERING HOME.",
+	//test loot overrides
+	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
+	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
+})
+
 let testEventArr = [
 	temp_event1, 
 	temp_event2, 
 	temp_event3, 
 	village, 
 	dungeonEntrance, 
-	goingUpEvent
+	goingUpEvent,
+	homeEvent
 ]
 
 //test content
@@ -2154,11 +2187,12 @@ ImageScreenTerm.writeSync(v + '\n')
 await drawBanner()
 
 ImageScreenTerm.term.reset()
+temp_event3.toScreen.toScreen=SPECIAL_ROOM_ART.house
 await writeImage(temp_event3)
 
 
 
-async function drawMagicBolt(image=ROOM_ART.barracks, speed=50,color1,color2){
+async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=50,color1,color2){
 	ImageScreenTerm.writeSync('[H')
 	let bolt = magicBolt(color1,color2)
 	for(let i of bolt){

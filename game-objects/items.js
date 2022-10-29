@@ -3,7 +3,7 @@
 //
 import chalk from "chalk";
 import {
-	DMG_TYPE, STATS, weaponART
+	DMG_TYPE, miscColours, STATS, weaponART
 } from "./data.js";
 import {
 	playerState
@@ -171,7 +171,7 @@ ${chalk.blueBright(monster.name+`.`)} ${chalk.blueBright(monster.name)} ${chalk.
 ${chalk.red(damage)} ${chalk.hex(color)('damage.')}`
 			}
 		} else {
-			return `${chalk.hex(color)(`You cast`)} ${chalk.yellow(name)} ${chalk.hex(color)(notarget+`.`)}`
+			return `${chalk.hex(color)(`You cast`)} ${chalk.hex(miscColours.gold)(name)} ${chalk.hex(color)(notarget+`.`)}`
 		}
 	}
 }

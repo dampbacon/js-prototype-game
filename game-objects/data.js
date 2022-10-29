@@ -7,7 +7,6 @@ import gradient from 'gradient-string';
 import {monster} from "./mobs.js";
 import {Player, playerState} from "./player.js";
 import { drawImageAtPos } from "../writeMethods.js";
-import term from "term.js/lib/index.js";
 //DAMAGE TYPES
 
 
@@ -68,6 +67,27 @@ Object.freeze(DMG_COLOUR)
 export {
 	DMG_COLOUR
 }
+// analogous colours for dmg type colours
+const altdmgColour = {}
+altdmgColour[DMG_TYPE.FIRE] = 'ff2500'
+altdmgColour[DMG_TYPE.ICE] = '9affff'
+altdmgColour[DMG_TYPE.LIGHTNING] = '0cfad2'
+altdmgColour[DMG_TYPE.POISON] = '80ff00'
+altdmgColour[DMG_TYPE.BLUNT] = 'FFFFFF'
+altdmgColour[DMG_TYPE.SLASH] = 'FFFFFF'
+altdmgColour[DMG_TYPE.PIERCE] = 'FFFFFF'
+altdmgColour[DMG_TYPE.HOLY] = 'fefaa7'
+altdmgColour[DMG_TYPE.DARK] = '280495'
+altdmgColour[DMG_TYPE.GRAVITY] = 'e019e6'
+altdmgColour[DMG_TYPE.NARUTO] = '0c2fdf'
+altdmgColour[DMG_TYPE.NONE] = 'FFFFFF'
+altdmgColour[DMG_TYPE.MAGIC] = '6F26E3'
+Object.freeze(altdmgColour)
+export {
+	altdmgColour
+}
+
+
 export const miscColours = Object.freeze({
 	oil: '3B3131',
 	gold: 'FFD700',

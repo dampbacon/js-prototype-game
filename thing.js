@@ -80,6 +80,7 @@ import {
 	weapons,
 	miscArt,
 	SPECIAL_ROOM_ART,
+	animationArt,
 } from './game-objects/data.js';
 import {
 	combatMetrics
@@ -2145,6 +2146,9 @@ await drawBanner()
 
 ImageScreenTerm.term.reset()
 await writeImage(temp_event3)
+
+ImageScreenTerm.writeSync(animationArt.magicBolt)
+
 
 
 

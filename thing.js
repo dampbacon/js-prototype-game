@@ -738,7 +738,7 @@ async function combatSetup(event, enemy) {
 		drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
 	//drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm
 	}
-		ImageScreenTerm.writeSync('\r'+escUpByNum(16))
+	ImageScreenTerm.writeSync('\r'+escUpByNum(17))
 	
 	combatLogic(thePlayer, true)
 }
@@ -821,10 +821,10 @@ async function clearCombat() {
 	if (!death) {
 		thePlayer.state = playerState.TREASURE_ROOM
 
-
+		
 		let block=chalk.hex('000000')(miscArt.block.cleanANSI())
 		ImageScreenTerm.writeSync(block)
-		ImageScreenTerm.writeSync('\r'+escUpByNum(16))
+		ImageScreenTerm.writeSync('\r'+escUpByNum(17))
 
 
 
@@ -1469,10 +1469,16 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 				logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 			}
 			thePlayer.encounterData.addScrollUse()
-			logs.writeSync(wrapAnsi(player.useScroll({
+			let useScrollArr=player.useScroll({
 				monster: monster,
 				term: ImageScreenTerm
-			}), logs.term.cols-1,{hard:true}) + '\n')
+			})
+			if(useScrollArr[1]&&useScrollArr[2]!=='polymorph'){
+				await drawMagicBolt(monster.art)
+			}
+			logs.writeSync(wrapAnsi(useScrollArr[0], logs.term.cols-1,{hard:true}) + '\n')
+
+			
 			if (monster !== player.encounterData.enemy) {
 				monster = player.encounterData.enemy
 			}
@@ -1775,7 +1781,7 @@ function scrollsButtonGeneric() {
 	scrolls.on('press', async () => {
 		logs.writeSync(thePlayer.useScroll({
 			term: ImageScreenTerm
-		}) + '\n')
+		})[0] + '\n')
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 		refreshStats()
 		refreshInventory()
@@ -2149,23 +2155,38 @@ await writeImage(temp_event3)
 
 
 
+async function drawMagicBolt(image=ROOM_ART.barracks, speed=50,color1,color2){
+	ImageScreenTerm.writeSync('[H')
+	let bolt = magicBolt()
+	for(let i of bolt){
+		ImageScreenTerm.writeSync(i)
+		ImageScreenTerm.writeSync('[H')
+		await new Promise((r) => setTimeout(r, speed));
+	}
+	let k=[...bolt].reverse(bolt)
+	k=[...k,'']
+	for(let i of k){
+		if(i==''){
+			ImageScreenTerm.term.reset()
+			ImageScreenTerm.writeSync('[H')
+			ImageScreenTerm.writeSync(image)
+			drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
+			drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
+			ImageScreenTerm.writeSync('\r'+escUpByNum(17))
+		}else{
+			ImageScreenTerm.term.reset()
+			ImageScreenTerm.writeSync('[H')
+			ImageScreenTerm.writeSync(image)
+			drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
+			drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
+			ImageScreenTerm.writeSync('[H')
+			ImageScreenTerm.writeSync(i)
+			await new Promise((r) => setTimeout(r, speed));
+		}
+	}
+}
 
-ImageScreenTerm.writeSync('[H')
-let bolt = magicBolt
-for(let i of bolt){
-	ImageScreenTerm.writeSync(i)
-	ImageScreenTerm.writeSync('[H')
-	await new Promise((r) => setTimeout(r, 50));
-}
-let k=[...bolt].reverse(bolt)
-k=[...k,'']
-for(let i of k){
-	ImageScreenTerm.writeSync('[H')
-	ImageScreenTerm.writeSync(ROOM_ART.barracks)
-	ImageScreenTerm.writeSync('[H')
-	ImageScreenTerm.writeSync(i)
-	await new Promise((r) => setTimeout(r, 50));
-}
+await drawMagicBolt()
 
 
 

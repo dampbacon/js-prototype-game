@@ -180,7 +180,7 @@ export class Player {
 	useScroll(params = {}) {
 		let scrollPick = pickScroll()
 		//console.log(scrollPick)
-		return scrollPick.use(this, params)
+		return [scrollPick.use(this, params),scrollPick.targetmonster,scrollPick.name]
 	}
 }
 

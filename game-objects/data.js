@@ -1973,6 +1973,7 @@ export const miscArt = Object.freeze({
 [90m[40m██████████████████████████████████████████████████████[m
 [90m[40m██████████████████████████████████████████████████████[m
 [90m[40m██████████████████████████████████████████████████████[m
+[90m[40m██████████████████████████████████████████████████████[m
 [90m[40m██████████████████████████████████████████████████████[m\
 `,
 	handSword: `\
@@ -2000,56 +2001,64 @@ export const miscArt = Object.freeze({
 let colorB=DMG_COLOUR[DMG_TYPE.MAGIC]
 let colorA=altdmgColour[DMG_TYPE.MAGIC]
 
-export const magicBolt= Object.freeze([
+export function magicBolt(color1=altdmgColour[DMG_TYPE.MAGIC],color2=DMG_COLOUR[DMG_TYPE.MAGIC]){
+	let colorB=color2
+	let colorA=color1
+	return[
 `\
-[97m[40m0[37m[40m[m
-[97m[40m1[37m[40m[m
-[97m[40m2[37m[40m[m
-[97m[40m3[37m[40m[m
-[97m[40m4[37m[40m${escRightByNum(10)}${chalk.hex(colorA)('██')}[37m[40m[m
-[97m[40m5[37m[40m[m
-[97m[40m6[37m[40m[m
-[97m[40m7[37m[40m[m
-[97m[40m8[37m[40m[m
-[97m[40m9[37m[40m[m\
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(13)}${chalk.hex(colorA)('██')}[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m\
 `,
 `\
-[97m[40m0[37m[40m[m
-[97m[40m1[37m[40m[m
-[97m[40m2[37m[40m[m
-[97m[40m3[37m[40m[m
-[97m[40m4[37m[40m${escRightByNum(8)}${chalk.hex(colorB)('██████')}[37m[40m[m
-[97m[40m5[37m[40m${escRightByNum(6)}${chalk.hex(colorB)('█')}${chalk.hex(colorA)('██')}[97m[40m████${chalk.hex(colorA)('██')}${chalk.hex(colorB)('█')}[37m[40m[m
-[97m[40m6[37m[40m${escRightByNum(8)}${chalk.hex(colorB)('██████')}[37m[40m[m
-[97m[40m7[37m[40m[m
-[97m[40m8[37m[40m[m
-[97m[40m9[37m[40m[m\
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(11)}${chalk.hex(colorB)('██████')}[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(9)}${chalk.hex(colorB)('█')}${chalk.hex(colorA)('██')}[97m[40m████${chalk.hex(colorA)('██')}${chalk.hex(colorB)('█')}[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(11)}${chalk.hex(colorB)('██████')}[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m\
 `,
 `\
-[97m[40m0[37m[40m[m
-[97m[40m1[37m[40m[m
-[97m[40m2[37m[40m[m
-[97m[40m3[37m[40m${escRightByNum(6)}${chalk.hex(colorB)('██████████')}[37m[40m[m
-[97m[40m4[37m[40m${escRightByNum(4)}${chalk.hex(colorB)('█')}${chalk.bgHex(colorB)(chalk.hex(colorA)('▄██████████▄'))}${chalk.hex(colorB)('█')}[37m[40m[m
-[97m[40m5[37m[40m${escRightByNum(3)}${chalk.hex(colorB)('█')}${chalk.hex(colorA)('██')}[97m[40m██████████${chalk.hex(colorA)('██')}${chalk.hex(colorB)('█')}[37m[40m[m
-[97m[40m6[37m[40m${escRightByNum(4)}${chalk.hex(colorB)('█')}${chalk.bgHex(colorB)(chalk.hex(colorA)('▀██████████▀'))}${chalk.hex(colorB)('█')}[37m[40m[m
-[97m[40m7[37m[40m${escRightByNum(6)}${chalk.hex(colorB)('██████████')}[37m[40m[m
-[97m[40m8[37m[40m[m
-[97m[40m9[37m[40m[m\
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(9)}${chalk.hex(colorB)('██████████')}[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(7)}${chalk.hex(colorB)('█')}${chalk.bgHex(colorB)(chalk.hex(colorA)('▄██████████▄'))}${chalk.hex(colorB)('█')}[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(6)}${chalk.hex(colorB)('█')}${chalk.hex(colorA)('██')}[97m[40m██████████${chalk.hex(colorA)('██')}${chalk.hex(colorB)('█')}[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(7)}${chalk.hex(colorB)('█')}${chalk.bgHex(colorB)(chalk.hex(colorA)('▀██████████▀'))}${chalk.hex(colorB)('█')}[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(9)}${chalk.hex(colorB)('██████████')}[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m\
 `,
 `\
-[97m[40m0[37m[40m[m
-[97m[40m1[37m[40m${escRightByNum(6)}${chalk.hex(colorB)('██████████')}[37m[40m[m
-[97m[40m2[37m[40m${escRightByNum(2)}${chalk.hex(colorB)('████')}${chalk.hex(colorA)('██████████')}${chalk.hex(colorB)('████')}[37m[40m[m
-[97m[40m3[37m[40m${escRightByNum(1)}${chalk.hex(colorB)('██')}${chalk.hex(colorA)('███')}[97m[40m██████████${chalk.hex(colorA)('███')}${chalk.hex(colorB)('██')}[37m[40m [m
-[97m[40m4${chalk.hex(colorB)('██')}${chalk.hex(colorA)('█')}[97m[40m████████████████${chalk.hex(colorA)('█')}${chalk.hex(colorB)('██')}[m
-[97m[40m5[37m[40m${escRightByNum(1)}${chalk.hex(colorB)('██')}${chalk.hex(colorA)('███')}[97m[40m██████████${chalk.hex(colorA)('███')}${chalk.hex(colorB)('██')}[37m[40m [m
-[97m[40m6[37m[40m${escRightByNum(2)}${chalk.hex(colorB)('████')}${chalk.hex(colorA)('██████████')}${chalk.hex(colorB)('████')}[37m[40m[m
-[97m[40m7[37m[40m${escRightByNum(6)}${chalk.hex(colorB)('██████████')}[37m[40m[m
-[97m[40m8[37m[40m[m
-[97m[40m9[37m[40m[m\
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(9)}${chalk.hex(colorB)('██████████')}[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(5)}${chalk.hex(colorB)('████')}${chalk.hex(colorA)('██████████')}${chalk.hex(colorB)('████')}[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(4)}${chalk.hex(colorB)('██')}${chalk.hex(colorA)('███')}[97m[40m██████████${chalk.hex(colorA)('███')}${chalk.hex(colorB)('██')}[37m[40m [m
+[97m[40m${escRightByNum(3)}${chalk.hex(colorB)('██')}${chalk.hex(colorA)('█')}[97m[40m████████████████${chalk.hex(colorA)('█')}${chalk.hex(colorB)('██')}[m
+[97m[40m[37m[40m${escRightByNum(4)}${chalk.hex(colorB)('██')}${chalk.hex(colorA)('███')}[97m[40m██████████${chalk.hex(colorA)('███')}${chalk.hex(colorB)('██')}[37m[40m [m
+[97m[40m[37m[40m${escRightByNum(5)}${chalk.hex(colorB)('████')}${chalk.hex(colorA)('██████████')}${chalk.hex(colorB)('████')}[37m[40m[m
+[97m[40m[37m[40m${escRightByNum(9)}${chalk.hex(colorB)('██████████')}[37m[40m[m
+[97m[40m[37m[40m[m
+[97m[40m[37m[40m[m\
 `
-])
+	]
+}
 
 
 

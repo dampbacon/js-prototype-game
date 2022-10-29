@@ -19,7 +19,8 @@ import smallGrad from 'tinygradient';
 import lodashC from 'lodash.compact';
 import {
 	copyMonster,
-	monster
+	monster,
+	MONSTER_STATE
 } from './game-objects/mobs.js';
 import {
 	chance2,
@@ -1290,12 +1291,15 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 		if ( /*room.forceHostile == -1 &&*/ monster.aggro < 12) {
 			// friendly
 			monsterHostile = false;
+			monster.state=MONSTER_STATE.FRIENDLY
 		} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12 /* || room.forceHostile == 1*/ ) {
 			// hostile
 			monsterHostile = true;
+			monster.state=MONSTER_STATE.HOSTILE
 		} else {
 			// neutral, which is functionally the same as friendly
 			monsterHostile = false;
+			monster.state=MONSTER_STATE.NEUTRAL
 		}
 	}
 	if (firstLoop && monsterHostile) {
@@ -1484,13 +1488,16 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 					if (monster.aggro < 12) {
 						// friendly
 						monsterHostile = false;
+						monster.state=MONSTER_STATE.FRIENDLY
 					} else if (player.rollReaction <= monster.aggro || monster.aggro >= 12) {
 						// hostile
 						monsterHostile = true;
+						monster.state=MONSTER_STATE.HOSTILE
 						await enemyAtack(monster, player)
 					} else {
 						// neutral
 						monsterHostile = false;
+						monster.state=MONSTER_STATE.NEUTRAL
 					}
 				} else {
 					monsterHostile = true;

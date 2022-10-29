@@ -65,6 +65,7 @@ and trying to deal with those would take more time than just using what already 
   
 - [ ] persausion (dead button currently)
 - [ ] trap, shrines, shop.
+- [ ] repurpose perhaps dmgtypes classes defined for weapons for use with traps.
 <br>
   
 - [ ] ability to override encounter text

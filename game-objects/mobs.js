@@ -22,8 +22,18 @@ const defaults = {
 	dmgDie: 6,
 	aggro: 6,
 	rarity: 1,
-	weaknesses: []
+	dmgWeakness: []
 }
+
+export const MONSTER_STATE = Object.freeze({
+	HOSTILE:'HOSTILE',
+	FRIENDLY:'FRIENDLY',
+	NEUTRAL:'NEUTRAL',
+	NONE:'NONE',
+	SHOP:'SHOP'
+})
+
+
 export class monster {
 	/*12always hostile 0 inverse */
 	constructor({
@@ -38,6 +48,7 @@ export class monster {
 		art,
 		dmgWeakness,
 		dmgType,
+		state
 	} = {
 		...defaults
 	}) {
@@ -57,6 +68,7 @@ export class monster {
 			sum: true
 		});
 		this.polymorph = false
+		this.state=state?state:MONSTER_STATE.NONE
 	}
 	rollDamage() {
 		// later change to bring consistancy simaler to player class
@@ -99,12 +111,6 @@ export function copyMonster(monsterToCopy) {
 		dmgType: monsterToCopy.dmgType,
 		dmgColor: monsterToCopy.dmgColor
 	})
-}
-//to allow methods to change monster during combat encounters more easily
-export class monsterHolder {
-	constructor(monster) {
-		this.monster ? monster : null //later make pick random
-	}
 }
 //some damage types have alternate effects on a targets weapon cooldowns 
 //these implentations will simulate being target 2 in a trap

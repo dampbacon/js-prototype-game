@@ -2248,7 +2248,7 @@ await writeImage(temp_event3)
 
 
 //move to write methods file
-async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=500,color1,color2){
+async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=50,color1,color2){
 	ImageScreenTerm.writeSync('[H')
 	let bolt = magicBolt(color1,color2)
 	for(let i of bolt){

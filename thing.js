@@ -2272,10 +2272,10 @@ async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=500,color1,colo
 			// the work around is draw a block to erase the previous image
 			// then draw over it
 			ImageScreenTerm.writeSync('[H'+chalk.hex('000000')(miscArt.block)+'[H')
-			ImageScreenTerm.writeSync(image)
+			ImageScreenTerm.writeSync(image+'[H')
 			//drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
 			//drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
-			ImageScreenTerm.writeSync('[H')
+			//ImageScreenTerm.writeSync()
 			ImageScreenTerm.writeSync(i)
 			await new Promise((r) => setTimeout(r, speed));
 		}

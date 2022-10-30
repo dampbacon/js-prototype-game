@@ -549,6 +549,7 @@ function createEventsMap(eventsArrary = [], storyArr = {}) {
 	})
 }
 //sloppy but easy way to make it work
+//some sections should be moved to seperate functions but it's not urgent
 async function eventHandler(gameEvent = temp_event1, ) {
 	ImageScreenTerm.term.clear()
 	ImageScreenTerm.term.reset()

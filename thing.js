@@ -568,7 +568,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
 	//allow injection of custom event function
 	if('preCombat' in customCBfs){
-		customCBfs['preCombat'](thePlayer)
+		customCBfs['preCombat'](thePlayer,gameEvent)
 	}
 
 
@@ -596,7 +596,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
 		//allow injection of custom event function
 		if('preRoom' in customCBfs){
-			customCBfs['preRoom'](thePlayer)
+			customCBfs['preRoom'](thePlayer,gameEvent)
 		}
 
 
@@ -663,7 +663,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	if (!death) {
 
 		if('preLoot' in customCBfs){
-			customCBfs['preLoot'](thePlayer)
+			customCBfs['preLoot'](thePlayer,gameEvent)
 		}
 	
 
@@ -727,7 +727,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
 
 		if('postLoot' in customCBfs){
-			customCBfs['postLoot'](thePlayer)
+			customCBfs['postLoot'](thePlayer,gameEvent)
 		}
 	}
 	

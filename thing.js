@@ -239,7 +239,7 @@ let temp_event3 = new game_event({
 let village = new game_event({
 	id: -1,
 	body: {
-		body: 'Home, level up, party, etc.',
+		body: `There's a general store and a tavern. Villagers are milling about completing their daily errands`,
 		format: {
 			writeMode: 'gradientScanlines',
 			gradientFunction: gradient.passion.multiline,
@@ -262,7 +262,17 @@ let village = new game_event({
 		[-2, "head home to rest", true],
 		//some shop redirect
 	],
-	customRoomEnterString: "You arrive at the village, the villagers are happy to see you.",
+	customRoomEnterString: "You arrive at the village.",
+	customCallbacks: {'preLoot': (_1,_2) => {
+		logs.writeSync(
+			wrapAnsi(
+			`You have `
+			+
+			chalk.hex(DMG_COLOUR["FIRE"])(`${thePlayer.oil} flasks of oil `)
+			+ 
+			`and`+ chalk.hex(miscColours.gold)(` ${thePlayer.gold} gold\n`)))
+		}
+	}
 })
 let dungeonEntrance = new game_event({
 	id: 0,
@@ -536,6 +546,8 @@ async function createButtons(gameEvent, storyObj = {}, skipEventHandling = false
 		//make so it checks list later if u want unescapable events
 		if(thePlayer.state!==playerState.TOWN){
 			exitDungeon()
+		}else if(gameEvent.id===-1){
+			buyOilmenu(gameEvent)
 		}
 		resizeButtons()
 	}
@@ -611,7 +623,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		//shitty hack for night time effect till i can get bothered to make a proper
 		//night time effect art piece for the room
 		if (gameEvent.id === -2) {
-			ImageScreenTerm.writeSync(chalk.hex('101020')(gameEvent.toScreen.toScreen.cleanANSI()))
+			ImageScreenTerm.writeSync(chalk.hex('101010')(gameEvent.toScreen.toScreen.cleanANSI()))
 			ImageScreenTerm.writeSync('[H')
 			await new Promise(resolve => setTimeout(resolve, 2000))	
 			await writeImage(gameEvent, 10, 10,true)
@@ -1909,6 +1921,133 @@ function scrollsButtonGeneric() {
 		screen.render()
 	})
 }
+
+
+// clear buttons, creates buttons to choose ammount to buy and cancel/back button, 
+// then calls create button the previous function with skip override
+function buyOilmenu(eventReddir){
+	let openBuyMenu = new blessedpkg.button({
+		parent: buttonsContainer,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'oilMenu',
+		content: `buy oil flasks, you have ${thePlayer.oil} flasks left`,
+		//shadow: true,
+		style: {
+			bg: '#000072',
+			focus: {
+				bg: '#880808',
+			},
+			hover: {
+				bg: '#880808',
+			},
+		},
+	})
+	buttonsArray.push(openBuyMenu)
+	screen.render()
+	resizeButtons()
+	openBuyMenu.on('press', async () => {
+		clearButtons()
+		makeOilBuyButton(1)
+		makeOilBuyButton(5)
+		makeOilBuyButton(10)
+		let goBack = new blessedpkg.button({
+			parent: buttonsContainer,
+			mouse: true,
+			keys: true,
+			shrink: true,
+			padding: {
+				left: 1,
+				right: 1
+			},
+			left: 1,
+			top: 1,
+			name: 'goBack',
+			content: `go back`,
+			//shadow: true,
+			style: {
+				bg: '#000072',
+				focus: {
+					bg: '#880808',
+				},
+				hover: {
+					bg: '#880808',
+				},
+			},
+		})
+		buttonsArray.push(goBack)
+		screen.render()
+		resizeButtons()
+		goBack.on('press', async () => {
+			clearButtons()
+			createButtons(eventReddir, story, true)
+		})
+	})
+	
+
+}
+
+//grey out later if poor and unable to buy anything
+function makeOilBuyButton(amount){
+	let amntToBuy=amount
+	let oilButton = new blessedpkg.button({
+		parent: buttonsContainer,
+		mouse: true,
+		keys: true,
+		shrink: true,
+		padding: {
+			left: 1,
+			right: 1
+		},
+		left: 1,
+		top: 1,
+		name: 'buyOil',
+		content: `buy oil x${amntToBuy}`,
+		//shadow: true,
+		style: {
+			bg: '#000072',
+			focus: {
+				bg: '#880808',
+			},
+			hover: {
+				bg: '#880808',
+			},
+		},
+	})
+	buttonsArray.push(oilButton)
+	screen.render()
+	resizeButtons()
+	oilButton.on('press', async () => {
+		if(thePlayer.gold<(amount*10)){
+			logs.writeSync(`${chalk.yellow(`You don't have enough gold!`)}\n`);
+		}else{
+			thePlayer.gold-=(amount*10)
+			thePlayer.oil+=amount
+			logs.writeSync(`${chalk.yellow(`You buy x${amount} oil flasks from the shopkeep!`)}\n`);
+		}
+		refreshStats()
+		refreshInventory()
+	})
+}
+// function buyOil(amount=1){
+// 	if(thePlayer.gold<(amount*10)){
+// 		logs.writeSync(`${chalk.yellow(`You don't have enough gold!`)}\n`);
+// 	}else{
+// 		thePlayer.gold-=(amount*10)
+// 		thePlayer.oil+=amount
+// 		logs.writeSync(`${chalk.yellow(`You buy x${amount} oil flasks from the shopkeep!`)}\n`);
+// 	}
+// 	refreshStats()
+// 	refreshInventory()
+// }
+
 
 // if depth less than 10 leave dungeon else -5 to depth
 // and redirect to a random generic room that is unlikely to have enemies

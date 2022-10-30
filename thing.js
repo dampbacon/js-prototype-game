@@ -156,7 +156,6 @@ let temp_event1 = new game_event({
 		pickEnemy(),
 	],
 })
-
 let temp_event2 = new game_event({
 	id: 2,
 	body: {
@@ -265,7 +264,6 @@ let village = new game_event({
 	],
 	customRoomEnterString: "You arrive at the village, the villagers are happy to see you.",
 })
-
 let dungeonEntrance = new game_event({
 	id: 0,
 	body: {
@@ -295,7 +293,6 @@ let dungeonEntrance = new game_event({
 	],
 	customRoomEnterString: "You make your way to the mountain where the dungeon is located.",
 })
-
 let goingUpEvent = new game_event({
 	id: 4,
 	body: {
@@ -622,12 +619,13 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 	}
 
-	let countDEADenemies = 0
-	let countALIVEenemies = 0
+	
 	// default loot, can be skipped via noloot
 	// noloot is a relic from when treasure handling was elsewheree
 	// should later be refactored to use game event flag
 	if ( (!death) && !thePlayer.noLoot && gameEvent.enemies) {
+		let countDEADenemies = 0
+		let countALIVEenemies = 0
 		for (let i of gameEvent.enemies) {
 			if(i.hp<=0){
 				countDEADenemies++

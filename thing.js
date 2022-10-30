@@ -2248,7 +2248,7 @@ await writeImage(temp_event3)
 
 
 //move to write methods file
-async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=50,color1,color2){
+async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=500,color1,color2){
 	ImageScreenTerm.writeSync('[H')
 	let bolt = magicBolt(color1,color2)
 	for(let i of bolt){
@@ -2260,18 +2260,21 @@ async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=50,color1,color
 	k=[...k,'']
 	for(let i of k){
 		if(i==''){
-			ImageScreenTerm.term.reset()
-			ImageScreenTerm.writeSync('[H')
+			//ImageScreenTerm.term.reset()
+			ImageScreenTerm.writeSync('[H'+chalk.hex('000000')(miscArt.block)+'[H')
 			ImageScreenTerm.writeSync(image)
-			drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
-			drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
+			//drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
+			//drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
 			//ImageScreenTerm.writeSync('\r'+escUpByNum(17))
 		}else{
-			ImageScreenTerm.term.reset()
-			ImageScreenTerm.writeSync('[H')
+			// ImageScreenTerm.term.reset()
+			// term reset causes some bad flickering on some terminals
+			// the work around is draw a block to erase the previous image
+			// then draw over it
+			ImageScreenTerm.writeSync('[H'+chalk.hex('000000')(miscArt.block)+'[H')
 			ImageScreenTerm.writeSync(image)
-			drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
-			drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
+			//drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
+			//drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
 			ImageScreenTerm.writeSync('[H')
 			ImageScreenTerm.writeSync(i)
 			await new Promise((r) => setTimeout(r, speed));

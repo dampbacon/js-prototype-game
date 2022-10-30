@@ -1894,9 +1894,9 @@ function scrollsButtonGeneric() {
 	screen.render()
 	resizeButtons()
 	scrolls.on('press', async () => {
-		logs.writeSync(thePlayer.useScroll({
+		logs.writeSync(wrapAnsi(thePlayer.useScroll({
 			term: ImageScreenTerm
-		})[0] + '\n')
+		})[0], logs.term.cols-1) + '\n')
 		logs.writeSync(`${chalk.bold.blue(`-`.repeat(logs.term.cols - 1))}\n`)
 		refreshStats()
 		refreshInventory()

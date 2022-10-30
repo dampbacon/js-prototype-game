@@ -67,7 +67,7 @@ export class game_event {
 		customRoomEnterString,
 		overrideEncounterStr,
 
-		customCallback,
+		customCallbacks,
 	} = {
 		...defaults
 	}) {
@@ -86,7 +86,7 @@ export class game_event {
 		this.noDrops = noDrops ? noDrops : false
 		this.customRoomEnterString = customRoomEnterString ? customRoomEnterString : ''
 		//buttons are in the format of [[event_id,"button label", enabled_always=true]]
-		this.customCallback?this.customCallback:null     
+		this.customCallbacks=customCallbacks?customCallbacks:{}     
 	}
 	setCleared() {
 		this.cleared = true

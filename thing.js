@@ -554,6 +554,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	ImageScreenTerm.term.clear()
 	ImageScreenTerm.term.reset()
 	rollLog(logs)
+	let customCBfs=gameEvent.customCallbacks
 	let gb = gameEvent.body
 	let gbf = gb.format
 	thePlayer.currentEvent = gameEvent
@@ -565,8 +566,10 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	}
 
 
-
-
+	//allow injection of custom event function
+	if('preCombat' in customCBfs){
+		customCBfs['preCombat'](thePlayer)
+	}
 
 
 
@@ -588,6 +591,17 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		}
 	} 
 	if(!death){
+
+
+
+		//allow injection of custom event function
+		if('preRoom' in customCBfs){
+			customCBfs['preRoom'](thePlayer)
+		}
+
+
+
+
 		if (gameEvent.customRoomEnterString){
 			logs.writeSync(`${wrapAnsi(gameEvent.customRoomEnterString,logs.term.cols-1)}\n`);
 
@@ -612,6 +626,8 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
 		await (gradient_scanlines(logs, gb.body, gbf.speed, gbf.gradientFunction, gbf.gradientArr))
 		logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);
+
+
 		if(gameEvent.id === -2){
 			logs.writeSync(chalk.hex(miscColours.gold)(`After a good nights sleep you heal to max\n`));
 			thePlayer.hp=thePlayer.hpMax
@@ -645,6 +661,11 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	
 
 	if (!death) {
+
+		if('preLoot' in customCBfs){
+			customCBfs['preLoot'](thePlayer)
+		}
+	
 
 		//DELETE SOME OF THESE FULLY
 		thePlayer.multipleEncounters = false
@@ -685,6 +706,10 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
 
 
+		
+		
+		
+		
 		//depth and oil ticker
 		if(thePlayer.state!==playerState.TOWN){
 			thePlayer.depth++
@@ -699,6 +724,11 @@ async function eventHandler(gameEvent = temp_event1, ) {
 		//plan is for both to be reset once you leave the dungeon. with the data stored somewhere for stats for a gameover screen.
 		refreshInventory()
 		screen.render()
+
+
+		if('postLoot' in customCBfs){
+			customCBfs['postLoot'](thePlayer)
+		}
 	}
 	
 	//make a EVENT refesher function later

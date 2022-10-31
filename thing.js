@@ -643,7 +643,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 
 
 		if(gameEvent.id === -2){
-			logs.writeSync(chalk.hex(miscColours.gold)(`After a good nights sleep you heal to max\n`));
+			logs.writeSync(chalk.hex(miscColours.gold)(`you heal to max health\n`));
 			thePlayer.hp=thePlayer.hpMax
 			refreshStats()
 			logs.writeSync(`${escLeftByNum(20)}${chalk.magenta(`-`.repeat(logs.term.cols - 1))}\n`);

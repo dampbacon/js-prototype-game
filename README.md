@@ -19,7 +19,7 @@ Any kind of rpg/rougelite game logic is deceptively complex, and that is where m
 \
 <br>
 ## how to run
-Use a terminal that is gpu accelerated to avoid flickering in animations.
+Use a terminal that is gpu accelerated to avoid flickering in animations.\
 Use WSL2(windows subsystem for linux), windows default terminal mode is incompatible.\
 Use a Linux terminal with xterm-256colors as term info.
 <br>

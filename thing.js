@@ -261,7 +261,7 @@ let village = new game_event({
 	buttons: [
 		[0, "head towards the dungeon", true],
 		[-2, "head home to rest", true],
-		[-3, "enter the tavern", true],
+		[-3, "splurge at the tavern and lvl up", true],
 		//some shop redirect
 	],
 	customRoomEnterString: "You arrive at the village.",
@@ -392,7 +392,15 @@ let tavern = new game_event({
 		//some shop redirect
 	],
 	customRoomEnterString: "You enter the tavern.",
-	customCallbacks: {}
+	customCallbacks: {'preLoot': (_1,_2) => {
+		logs.writeSync(
+			wrapAnsi(
+			`gold converted to ${thePlayer.gold}XP`
+		))
+		thePlayer.xp += thePlayer.gold
+		thePlayer.gold = 0
+		}
+	}
 })
 
 let testEventArr = [
@@ -2212,7 +2220,7 @@ ${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
 ${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armourName.replace(/_/g, ' '))}\
  ${thePlayer.armourMagic!==0?`{bold}${chalk.yellow (`+${thePlayer.armourMagic}`)}{/bold}`:''}
 debug depth: ${player.depth};${player.actualDepth}
-${chalk.magenta("XP : ")}${"200/400"}
+${chalk.magenta("XP : ")}${thePlayer.xp}/$$$$
 ${chalk.magenta("Lvl: ")}${thePlayer.level}
 
 ${chalk.hex('3B3131')('oil')} = ${thePlayer.oil}

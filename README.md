@@ -7,17 +7,19 @@ Any kind of rpg/rougelite game logic is deceptively complex, and that is where m
 ![My Image2](screenshots/lib.png)
 
 ## terminals tested
-
+#### windows terminal with WSL (recommended)
+#### kitty with config option term=xterm-256color
 #### tabby for linux
-#### konsole for linux
-#### windows terminal(IT'S NOT POWERSHELL OR CMD) with WSL 
-#### CMD with WSL 
-#### powershell with WSL
+
+#### konsole for linux (not recommended)
+#### CMD with WSL (not recomended)
+#### powershell with WSL (not recommended)
 \
 \
 \
 <br>
 ## how to run
+Use a terminal that is gpu accelerated to avoid flickering in animations.
 Use WSL2(windows subsystem for linux), windows default terminal mode is incompatible.\
 Use a Linux terminal with xterm-256colors as term info.
 <br>

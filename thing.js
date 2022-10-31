@@ -268,9 +268,9 @@ let village = new game_event({
 			wrapAnsi(
 			`You have `
 			+
-			chalk.hex(DMG_COLOUR["FIRE"])(`${thePlayer.oil} flasks of oil `)
+			chalk.hex(DMG_COLOUR["FIRE"])(`x${thePlayer.oil} `) //+ ``
 			+ 
-			`and`+ chalk.hex(miscColours.gold)(` ${thePlayer.gold} gold\n`)))
+			`${chalk.hex(miscColours.oil)(`oil flasks`)} and`+ chalk.hex(miscColours.gold)(` ${thePlayer.gold} gold\n`)))
 		}
 	}
 })
@@ -2031,7 +2031,7 @@ function makeOilBuyButton(amount){
 		}else{
 			thePlayer.gold-=(amount*10)
 			thePlayer.oil+=amount
-			logs.writeSync(`${chalk.yellow(`You buy x${amount} oil flasks from the shopkeep!`)}\n`);
+			logs.writeSync(`You buy ${chalk.hex(DMG_COLOUR[DMG_TYPE.FIRE])(`x${amount}`)} ${chalk.hex(miscColours.oil)(`oil flasks`)} from the shopkeep!\n`)
 		}
 		refreshStats()
 		refreshInventory()

@@ -2444,16 +2444,30 @@ async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=50,color1,color
 	}
 }
 
+
+
+
+
+
+
+
+//ESC[2J
 //await drawMagicBolt()
-ImageScreenTerm.writeSync('[H')
-for(let i of slash){
-	ImageScreenTerm.writeSync(SPECIAL_ROOM_ART.house)
+async function slashAnim(art=enemiesArt.gobo){
 	ImageScreenTerm.writeSync('[H')
-	ImageScreenTerm.writeSync(i)
+	for(let i of slash){
+		ImageScreenTerm.writeSync(art)
+		ImageScreenTerm.writeSync('[H')
+		ImageScreenTerm.writeSync(i)
+		ImageScreenTerm.writeSync('[H')
+		if (i==slash[4]){
+			await new Promise((r) => setTimeout(r, 40));
+		}
+		await new Promise((r) => setTimeout(r, 50));
+		ImageScreenTerm.writeSync('[2J')
+	}
 	ImageScreenTerm.writeSync('[H')
-	await new Promise((r) => setTimeout(r, 500));
-	ImageScreenTerm.term.reset()
+	ImageScreenTerm.writeSync(art)
 }
-
-
+await slashAnim()
 //drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)

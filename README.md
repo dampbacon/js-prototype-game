@@ -73,16 +73,17 @@ and trying to deal with those would take more time than just using what already 
 - [ ] repurpose perhaps dmgtypes classes defined for weapons for use with traps.
 <br>
   
-- [ ] ability to override encounter text
+- [x] ability to override encounter text
 - [ ] custom events that do not belong to any event chain
 - [ ] custom event chains with art and unique enemies that cannot be found anywhere else.\
 triggers may include special weapons equiped or certian depth reached
 - [ ] custom event chain dwarf foundry
-- [ ] event structure HOME EVENT/ VILLAGE EVENTS, ENTRY POINT INTO DUNGEON, entry points into random events random events can then terminate into custom event chains which will terminate back into random chains once completed
+- [ ] entry points into random events random events can then terminate into custom event chains which will terminate back into random chains once completed
+- [x] HOME EVENT/ VILLAGE EVENTS, ENTRY POINT INTO DUNGEON, heal up at home
 <br>
   
-- [ ] finish generic room art
-- [ ] add hand holding weapon and lantern to fill blank space in enemy art, this will be done by simply drawing the image over by escape sequences rather than editing each piece of art
+- [x] finish generic room art
+- [x] add hand holding weapon and lantern to fill blank space in enemy art, this will be done by simply drawing the image over by escape sequences rather than editing each piece of art
 <br>
   
 - [x] random loot gen via weighted random picker from list in data file
@@ -133,10 +134,10 @@ triggers may include special weapons equiped or certian depth reached
 - [ ] floor depth mechanic. (partial implementation currently)
 - [ ] make fleeing combat from hostile enemies randomly take you either closer to the surface
 or deeper
-- [ ] add button to leave dungeon that takes you up 10 floors each cick and a random room unlikely to have enemies but still possible
-- [ ] add entrance event, home event
+- [x] add button to leave dungeon that takes you up 10 floors each cick and a random room unlikely to have enemies but still possible
+- [x] add entrance event, home event
 - [ ] home base, level up out of dungeon mechanic.
 <br>
   
-- [ ] animated ansi/ascii art as opposed to the current static images.(low priority)
+- [ ] animated ansi/ascii art as opposed to the current static images.(low priority) (1 animation done used for magic and oil flasks)   
 - [ ] external storage of data maybe.

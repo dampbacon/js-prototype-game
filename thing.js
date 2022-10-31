@@ -81,6 +81,7 @@ import {
 	miscArt,
 	SPECIAL_ROOM_ART,
 	magicBolt,
+	slash,
 } from './game-objects/data.js';
 import {
 	combatMetrics
@@ -2429,31 +2430,30 @@ async function drawMagicBolt(image=SPECIAL_ROOM_ART.house, speed=50,color1,color
 	k=[...k,'']
 	for(let i of k){
 		if(i==''){
-			//ImageScreenTerm.term.reset()
 			ImageScreenTerm.writeSync('[H'+chalk.hex('000000')(miscArt.block)+'[H')
 			ImageScreenTerm.writeSync(image)
-			//drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
-			//drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
-			//ImageScreenTerm.writeSync('\r'+escUpByNum(17))
 		}else{
-			// ImageScreenTerm.term.reset()
 			// term reset causes some bad flickering on some terminals
 			// the work around is draw a block to erase the previous image
 			// then draw over it
 			ImageScreenTerm.writeSync('[H'+chalk.hex('000000')(miscArt.block)+'[H')
 			ImageScreenTerm.writeSync(image+'[H')
-			//drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
-			//drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
-			//ImageScreenTerm.writeSync()
 			ImageScreenTerm.writeSync(i)
 			await new Promise((r) => setTimeout(r, speed));
 		}
 	}
 }
 
-await drawMagicBolt()
-
-
+//await drawMagicBolt()
+ImageScreenTerm.writeSync('[H')
+for(let i of slash){
+	ImageScreenTerm.writeSync(SPECIAL_ROOM_ART.house)
+	ImageScreenTerm.writeSync('[H')
+	ImageScreenTerm.writeSync(i)
+	ImageScreenTerm.writeSync('[H')
+	await new Promise((r) => setTimeout(r, 500));
+	ImageScreenTerm.term.reset()
+}
 
 
 //drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)

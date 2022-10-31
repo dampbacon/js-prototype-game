@@ -2090,6 +2090,64 @@ export function magicBolt(color1=altdmgColour[DMG_TYPE.MAGIC],color2=DMG_COLOUR[
 	]
 }
 
+export const slash=Object.freeze([
+`
+
+
+[37m[40m${escRightByNum(32)}[97m[40m▓██[m
+[37m[40m${escRightByNum(28)}[97m[40m▓███[m
+[37m[40m${escRightByNum(26)}[97m[40m██[m\
+`,
+`
+
+
+[37m[40m${escRightByNum(31)}[97m[40m▓██████[m
+[37m[40m${escRightByNum(28)}[97m[40m▓██[m
+[37m[40m${escRightByNum(24)}[97m[40m▓███[m
+[37m[40m${escRightByNum(22)}[97m[40m▓█[m\
+`,
+`
+
+[37m[40m${escRightByNum(35)}[97m[40m▓████[m
+[37m[40m${escRightByNum(30)}[97m[40m▓▓▓███[m
+[37m[40m${escRightByNum(25)}[97m[40m▓▓██████[m
+[37m[40m${escRightByNum(22)}[97m[40m▓▓████[m
+[37m[40m${escRightByNum(20)}[97m[40m▓█████[m
+[37m[40m${escRightByNum(19)}[97m[40m▓███[m\
+`,
+`
+
+[37m[40m${escRightByNum(37)}[97m[40m▓▓▓▓██[m
+[37m[40m${escRightByNum(34)}[97m[40m████[m
+[37m[40m${escRightByNum(28)}[97m[40m▓▓████[m
+[37m[40m${escRightByNum(24)}[97m[40m▓▓█████[m
+[37m[40m${escRightByNum(20)}[97m[40m▓▓███████[m
+[37m[40m${escRightByNum(16)}[97m[40m▓▓▓█████▓[m
+[37m[40m${escRightByNum(12)}[97m[40m▓▓▓██████▓[m
+[37m[40m${escRightByNum(10)}[97m[40m▓▓██████▓▓[m
+[37m[40m${escRightByNum(10)}[97m[40m██████▓[m
+[37m[40m${escRightByNum(10)}[97m[40m███▓▓[m\
+`,
+`\
+[37m[40m${escRightByNum(33)}[97m[40m▓▓▓▓▓▓[m
+[37m[40m${escRightByNum(30)}[97m[40m▓▓▓[m
+[37m[40m${escRightByNum(36)}[97m[40m▓▓▓[30m[40m████[m
+[37m[40m${escRightByNum(33)}[97m[40m██[30m[40m████[m
+[37m[40m${escRightByNum(27)}[97m[40m▓▓████[m
+[37m[40m${escRightByNum(23)}[97m[40m▓▓█████[m
+[37m[40m${escRightByNum(13)}[97m[40m██[37m[40m    [97m[40m▓▓███████[m
+[37m[40m${escRightByNum(11)}[97m[40m██████▓█████▓[m
+[37m[40m${escRightByNum(10)}[97m[40m██▓▓██████▓[m
+[37m[40m${escRightByNum(8)}[97m[40m██████████▓[m
+[37m[40m${escRightByNum(7)}[97m[40m███████████[m
+[37m[40m${escRightByNum(5)}[97m[40m███████████████[m
+[37m[40m${escRightByNum(4)}[97m[40m███████[m\
+`])
+
+
+
+
+
 export function scrollExplosionSwitch(scroll=ScrollsAll.fireball){
 	DMG_TYPE
 

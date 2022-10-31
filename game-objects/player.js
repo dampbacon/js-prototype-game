@@ -72,7 +72,7 @@ export class Player {
 		this.depth = 1;
 		//depth used for events
 		this.actualDepth = 1;
-		this.gold = 0;
+		this.gold = 9990;
 		this.oil = 5;
 		// later when oil runs out Disadvantage combat, select specail darkness enemies and make escaping harder
 		this.canSee=true

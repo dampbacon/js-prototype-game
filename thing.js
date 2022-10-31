@@ -497,6 +497,7 @@ function clearButtons() {
 		element.destroy()
 	})
 	buttonsArray = []
+	screen.render()
 }
 async function createButtons(gameEvent, storyObj = {}, skipEventHandling = false) {
 	if(!skipEventHandling){

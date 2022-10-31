@@ -1457,6 +1457,7 @@ async function combatLogic( /*make into enemy*/ player = thePlayer, firstLoop = 
 			await new Promise(resolve => setTimeout(resolve, 1000))
 		}
 		if ((TOHIT[0] + TOHIT[1]) >= monster.ac) {
+			await slashAnim(monster.art)
 			player.encounterData.attackHitMiss(true)
 			let playerDamage = player.rollDamage()
 			let crit = false
@@ -2457,17 +2458,21 @@ async function slashAnim(art=enemiesArt.gobo){
 	ImageScreenTerm.writeSync('[H')
 	for(let i of slash){
 		ImageScreenTerm.writeSync(art)
+		drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
+		drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
 		ImageScreenTerm.writeSync('[H')
 		ImageScreenTerm.writeSync(i)
 		ImageScreenTerm.writeSync('[H')
 		if (i==slash[4]){
-			await new Promise((r) => setTimeout(r, 40));
+			await new Promise((r) => setTimeout(r, 20));
 		}
-		await new Promise((r) => setTimeout(r, 50));
+		await new Promise((r) => setTimeout(r, 30));
 		ImageScreenTerm.writeSync('[2J')
 	}
 	ImageScreenTerm.writeSync('[H')
 	ImageScreenTerm.writeSync(art)
+	drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
+	drawImageAtPos(35,12,miscArt.handSword,ImageScreenTerm)
 }
 await slashAnim()
 //drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)

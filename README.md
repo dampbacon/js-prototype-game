@@ -23,7 +23,7 @@ Use a terminal that is gpu accelerated to avoid flickering in animations.\
 Use WSL2(windows subsystem for linux), windows default terminal mode is incompatible.\
 Use a Linux terminal with xterm-256colors as term info.\
 <br>
-If using windows terminal use the font reccomended as some fonts don't display shaded blocks screwing up the art
+If using windows terminal use the font recommended as some fonts don't display shaded blocks screwing up the art
 <br>
 
 TERMINAL COLUMNS AND ROWS SHOULD BE SET TO <b>120 columns 30 rows</b>

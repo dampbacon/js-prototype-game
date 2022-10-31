@@ -21,7 +21,9 @@ Any kind of rpg/rougelite game logic is deceptively complex, and that is where m
 ## how to run
 Use a terminal that is gpu accelerated to avoid flickering in animations.\
 Use WSL2(windows subsystem for linux), windows default terminal mode is incompatible.\
-Use a Linux terminal with xterm-256colors as term info.
+Use a Linux terminal with xterm-256colors as term info.\
+<br>
+If using windows terminal use the font reccomended as some fonts don't display shaded blocks screwing up the art
 <br>
 
 TERMINAL COLUMNS AND ROWS SHOULD BE SET TO <b>120 columns 30 rows</b>
@@ -34,7 +36,8 @@ it can be made to work in a linux terminal, \
 but it's a complete pain in the ass and a huge pain to turn off Anti Aliasing for only one font
 <br>
 get it from:\
-https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_vga_8x16
+https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_vga_8x16\
+Use ibm vga 8x16 AC version
 
 
 

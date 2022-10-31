@@ -261,6 +261,7 @@ let village = new game_event({
 	buttons: [
 		[0, "head towards the dungeon", true],
 		[-2, "head home to rest", true],
+		[-3, "enter the tavern", true],
 		//some shop redirect
 	],
 	customRoomEnterString: "You arrive at the village.",
@@ -364,6 +365,35 @@ let homeEvent = new game_event({
 	//loot:[{type:LOOT_OPTIONS.ITEMS,item:[60,50,40]}],
 	//loot:[{type:LOOT_OPTIONS.GOLD,item:9000}],
 })
+//level up at tavern
+let tavern = new game_event({
+	id: -3,
+	body: {
+		body: `tavern blah blah blah blah blah describe bar and stuff`,
+		format: {
+			writeMode: 'gradientScanlines',
+			gradientFunction: gradient.passion.multiline,
+			gradientArr: [`#${miscColours.legendary}`, `#${miscColours.epic}`, `#${miscColours.oil}`],
+		},
+		TextFile: {
+			exists: false,
+			url: ''
+		},
+	},
+	toScreen: {
+		toScreen: SPECIAL_ROOM_ART.bar,
+		AnsiFile: {
+			exists: false,
+			url: '',
+		},
+	},
+	buttons: [
+		[-1, "leave the tavern", true],
+		//some shop redirect
+	],
+	customRoomEnterString: "You enter the tavern.",
+	customCallbacks: {}
+})
 
 let testEventArr = [
 	temp_event1, 
@@ -372,7 +402,8 @@ let testEventArr = [
 	village, 
 	dungeonEntrance, 
 	goingUpEvent,
-	homeEvent
+	homeEvent,
+	tavern
 ]
 
 //test content
@@ -574,7 +605,7 @@ async function eventHandler(gameEvent = temp_event1, ) {
 	thePlayer.currentEvent = gameEvent
 
 	//later make function if more states depend on id
-	let homeEventID=[-2,-1,0]
+	let homeEventID=[-3,-2,-1,0]
 	if (homeEventID.includes(gameEvent.id)){
 		thePlayer.state=playerState.TOWN
 	}

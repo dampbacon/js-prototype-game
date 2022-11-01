@@ -34,6 +34,7 @@ import {
 	ImageScreenTerm,
 	InventoryBox,
 	logs,
+	lvlup,
 	program,
 	screen,
 	stats
@@ -2165,6 +2166,7 @@ function toggleUi() {
 	logs.toggle()
 	stats.toggle()
 	InventoryBox.toggle()
+	lvlup.toggle()
 }
 // function toggleButtons() {
 // 	buttonsContainer.toggle()
@@ -2386,8 +2388,6 @@ let scrollUpPrev = false
 program.cursorColor('000000')
 screen.title = '~game~';
 screen.program.hideCursor(true);
-screen.append(ImageScreenTerm)
-screen.append(logs)
 screen.render()
 createEventsMap(testEventArr, story)
 buttonsArray = [button1, button2];
@@ -2403,6 +2403,7 @@ logs.writeSync('[?25l')
 await (fillStatsRollBox(40, thePlayer, box))
 refreshStats(thePlayer)
 box.focus()
+//lvlup.
 box.key('enter', function() {
 	toggleUi()
 	box.hide()
@@ -2505,7 +2506,7 @@ async function slashAnim(art=enemiesArt.gobo){
 		if (i==slash[4]){
 			await new Promise((r) => setTimeout(r, 20));
 		}
-		await new Promise((r) => setTimeout(r, 30));
+		await new Promise((r) => setTimeout(r, 15));
 		ImageScreenTerm.writeSync('[2J')
 	}
 	ImageScreenTerm.writeSync('[H')

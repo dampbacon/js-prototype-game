@@ -32,6 +32,7 @@ const grid = new BlessedContrib.grid({
 	screen: screen
 })
 export const ImageScreenTerm = new XTermNew({
+	parent: screen,
 	top: 0,
 	bottom: 0,
 	width: '50%',
@@ -63,6 +64,7 @@ export const ImageScreenTerm = new XTermNew({
 	},
 }).with(scroll.scroll, scroll.throttle)
 export const logs = new XTermNew({
+	parent: screen,
 	top: '50%',
 	bottom: 0,
 	left: '50%',
@@ -218,4 +220,41 @@ export function createStatsBox() {
 	});
 }
 
-const k = new blessedpkg.ANSIImage
+//const k = new blessedpkg.ANSIImage
+
+export const lvlup = blessedpkg.radioset({
+	parent: screen,
+	keys: true,
+	mouse: true,
+	top: 'center',
+	left: 'center',
+	width: '50%',
+	height: '50%',
+	content: 'test?',
+	padding: {
+		right: 0,
+	},
+	style: {
+		bg: '#515151',
+		border: {
+		bg: '#000033'},
+		focus: {
+			border: {
+				fg: "green"
+			}
+		}
+	},
+	alwaysScroll: 'true',
+	scrollable: 'true',
+	scrollbars: 'true',
+	scrollbar: {
+		ch: chalk.green.bgBlueBright('\u2592'),
+		track: {
+			bg: '#630330',
+			fg: 'red'
+		},
+		style: {
+			inverse: true
+		}
+	}
+}).with(scroll.scroll, scroll.throttle)

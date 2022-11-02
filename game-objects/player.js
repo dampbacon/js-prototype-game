@@ -33,6 +33,7 @@ export const playerState = Object.freeze({
 export class Player {
 	constructor(name = 'apples') {
 		this.level = 0;
+		this.levelPoints = 0;
 		this.xp = 0
 		this.nextLvlxp = 200
 		this.name = name;

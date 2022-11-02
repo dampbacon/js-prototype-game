@@ -376,7 +376,7 @@ let hpRadio= new blessedpkg.radiobutton({
 	left: 3,
 	top: 10,
 	name: 'hp',
-	content: `hp`,
+	content: `hp `,
 	//shadow: true,
 	style: {
 		bg: '#000072',
@@ -387,4 +387,38 @@ let hpRadio= new blessedpkg.radiobutton({
 			bg: '#880808',
 		},
 	},
+})
+
+
+
+let lvlBoxStr=
+`\
+ 2 pts reroll stat
+      
+ 4 pts for stat inc
+       
+ 3 pts for dmgtype 
+   transmute altars\
+`
+
+let hmm=blessedpkg.box({
+	parent: lvlup,
+	top: 2,
+	left: 15,
+	width: '40%',
+	height: 7,
+	tags: true,
+	//keys: true,
+	content: chalk.hex('000000')(lvlBoxStr),
+	style: {
+		fg: 'white',
+		bg: '#fddd00',
+		border: {
+			//fg: '#4b0082',
+			//bg: '#4b0082',
+		},
+		// hover: {
+		// 	bg: 'green'
+		// }
+	}
 })

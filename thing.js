@@ -2224,6 +2224,7 @@ ${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armou
 debug depth: ${player.depth};${player.actualDepth}
 ${chalk.magenta("XP : ")}${thePlayer.xp}/$$$$
 ${chalk.magenta("Lvl: ")}${thePlayer.level}
+${chalk.magenta("Lvl points: ")}${thePlayer.levelPoints}
 
 ${chalk.hex('3B3131')('oil')} = ${thePlayer.oil}
 ${chalk.red('potions')} = ${thePlayer.potions}

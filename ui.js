@@ -221,16 +221,19 @@ export function createStatsBox() {
 }
 
 //const k = new blessedpkg.ANSIImage
-
+// 4 levelpoints for a perk point
+// 2 level points to reroll weapon damage type
+// make weak weapons with exclusive damage types
+// that require lvl points to improve
 export const lvlup = blessedpkg.radioset({
 	parent: screen,
 	keys: true,
 	mouse: true,
 	top: 'center',
 	left: 'center',
-	width: '50%',
-	height: '50%',
-	content: 'test?',
+	width: 50,
+	height: 12,
+	content: 'level up!',
 	padding: {
 		right: 0,
 	},
@@ -258,3 +261,130 @@ export const lvlup = blessedpkg.radioset({
 		}
 	}
 }).with(scroll.scroll, scroll.throttle)
+
+let strRadio= new blessedpkg.radiobutton({
+	parent: lvlup,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 3,
+	top: 2,
+	name: 'str',
+	content: `str`,
+	//shadow: true,
+	style: {
+		bg: '#000072',
+		focus: {
+			bg: '#880808',
+		},
+		hover: {
+			bg: '#880808',
+		},
+	},
+})
+
+
+
+let dexRadio= new blessedpkg.radiobutton({
+	parent: lvlup,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 3,
+	top: 4,
+	name: 'dex',
+	content: `dex`,
+	//shadow: true,
+	style: {
+		bg: '#000072',
+		focus: {
+			bg: '#880808',
+		},
+		hover: {
+			bg: '#880808',
+		},
+	},
+})
+
+let chaRadio= new blessedpkg.radiobutton({
+	parent: lvlup,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 3,
+	top: 6,
+	name: 'cha',
+	content: `cha`,
+	//shadow: true,
+	style: {
+		bg: '#000072',
+		focus: {
+			bg: '#880808',
+		},
+		hover: {
+			bg: '#880808',
+		},
+	},
+})
+
+let intRadio= new blessedpkg.radiobutton({
+	parent: lvlup,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 3,
+	top: 8,
+	name: 'int',
+	content: `int`,
+	//shadow: true,
+	style: {
+		bg: '#000072',
+		focus: {
+			bg: '#880808',
+		},
+		hover: {
+			bg: '#880808',
+		},
+	},
+})
+
+let hpRadio= new blessedpkg.radiobutton({
+	parent: lvlup,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 3,
+	top: 10,
+	name: 'hp',
+	content: `hp`,
+	//shadow: true,
+	style: {
+		bg: '#000072',
+		focus: {
+			bg: '#880808',
+		},
+		hover: {
+			bg: '#880808',
+		},
+	},
+})

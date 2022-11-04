@@ -7,6 +7,7 @@ import "./blessed/screen.cjs";
 import "./blessed/element.cjs";
 import "./blessed/patches.cjs";
 import "./blessed/node.cjs";
+import { toggleUi } from "./thing.js";
 
 const {
 	blessed
@@ -232,7 +233,7 @@ export const lvlup = blessedpkg.radioset({
 	top: 'center',
 	left: 'center',
 	width: 50,
-	height: 12,
+	height: 15,
 	content: 'level up!',
 	padding: {
 		right: 0,
@@ -422,3 +423,112 @@ let hmm=blessedpkg.box({
 		// }
 	}
 })
+
+let reroll= new blessedpkg.button({
+	parent: lvlup,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 38,
+	top: 2,
+	name: 'reroll',
+	content: `reroll `,
+	//shadow: true,
+	style: {
+		bg: 'blue',
+		focus: {
+			bg: '#00ff00',
+		},
+		hover: {
+			bg: '#00ff00',
+		},
+	},
+})
+
+let improve= new blessedpkg.button({
+	parent: lvlup,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 38,
+	top: 4,
+	name: 'improve',
+	content: `improve`,
+	//shadow: true,
+	style: {
+		bg: 'blue',
+		focus: {
+			bg: '#00ff00',
+		},
+		hover: {
+			bg: '#00ff00',
+		},
+	},
+})
+
+let close= new blessedpkg.button({
+	parent: lvlup,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	left: 'center',
+	top: 10,
+	name: 'exit',
+	content: chalk.black(`  exit  `),
+	//shadow: true,
+	style: {
+		bg: '#fddd00',
+		focus: {
+			bg: '#ff0000',
+		},
+		hover: {
+			bg: '#ff0000',
+		},
+	},
+})
+
+close.on('press', function() {
+	lvlup.hide()
+	screen.render()
+})
+
+
+export const levelBut= new blessedpkg.button({
+	parent: lvlup,
+	mouse: true,
+	keys: true,
+	shrink: true,
+	padding: {
+		left: 1,
+		right: 1
+	},
+	right: 3,
+	top: 13,
+	name: 'lvlup',
+	content: chalk.black(` lvlup `),
+	//shadow: true,
+	style: {
+		bg: '#fddd00',
+		focus: {
+			bg: '#ff0000',
+		},
+		hover: {
+			bg: '#ff0000',
+		},
+	},
+})
+
+
+

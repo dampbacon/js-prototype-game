@@ -32,8 +32,8 @@ export const playerState = Object.freeze({
 });
 export class Player {
 	constructor(name = 'apples') {
-		this.level = 0;
-		this.levelPoints = 0;
+		this.level = 1;
+		this.levelPoints = 1;
 		this.xp = 0
 		this.nextLvlxp = 200
 		this.name = name;
@@ -139,10 +139,6 @@ export class Player {
 		this.hpMax += amount
 		this.hp += amount
 	}
-	levelUp() {}
-	nextLevelXP() {
-		this.nextLevelXP = this.nextLevelXP * 2
-	}
 	rollReaction() {
 		return chance2.rpg('2d6', {
 			sum: true
@@ -183,6 +179,14 @@ export class Player {
 		//console.log(scrollPick)
 		return [scrollPick.use(this, params),scrollPick.targetmonster,scrollPick.name]
 	}
+
+	levelUp(){
+		if (this.level<=21&&this.xp>=this.nextLvlxp){
+			this.level += 1
+			this.levelPoints += 1
+			this.nextLvlxp= XPmap[this.level+1]
+		}
+	}
 }
 
 
@@ -204,3 +208,26 @@ function getRandom(max) {
 // function d(n) {
 //     return 1 + getRandom(n)
 // }
+export const XPmap = Object.freeze({
+	1: 0,
+	2: 200,
+	3: 600,
+	4: 1200,
+	5: 2000,
+	6: 3000,
+	7: 4000,
+	8: 5000,
+	9: 6000,
+	10: 7000,
+	11: 8000,
+	12: 9000,
+	13: 10000,
+	14: 11000,
+	15: 12000,
+	16: 13000,
+	17: 14000,
+	18: 15000,
+	19: 16000,
+	20: 17000,
+	21: 69420,
+})

@@ -33,6 +33,7 @@ import {
 	createStatsBox,
 	ImageScreenTerm,
 	InventoryBox,
+	levelBut,
 	logs,
 	lvlup,
 	program,
@@ -400,6 +401,7 @@ let tavern = new game_event({
 		))
 		thePlayer.xp += thePlayer.gold
 		thePlayer.gold = 0
+		lvlup.show()
 		}
 	}
 })
@@ -2160,13 +2162,14 @@ function exitDungeon(){
 //ESC[?25h	make cursor visible
 //
 //double check cursor is disabled on all subterminals and main one
-function toggleUi() {
+export function toggleUi() {
 	buttonsContainer.toggle()
 	ImageScreenTerm.toggle()
 	logs.toggle()
 	stats.toggle()
 	InventoryBox.toggle()
-	lvlup.toggle()
+
+	
 }
 // function toggleButtons() {
 // 	buttonsContainer.toggle()
@@ -2222,7 +2225,7 @@ ${chalk.hex(thePlayer.wBonus.color)(thePlayer.weaponName.replace(/_/g, ' '))}\
 ${chalk.hex(ArmourRarityColour(ARMOURmap[thePlayer.armourName]))(thePlayer.armourName.replace(/_/g, ' '))}\
  ${thePlayer.armourMagic!==0?`{bold}${chalk.yellow (`+${thePlayer.armourMagic}`)}{/bold}`:''}
 debug depth: ${player.depth};${player.actualDepth}
-${chalk.magenta("XP : ")}${thePlayer.xp}/$$$$
+${chalk.magenta("XP : ")}${thePlayer.xp}/${thePlayer.nextLvlxp}
 ${chalk.magenta("Lvl: ")}${thePlayer.level}
 ${chalk.magenta("Lvl points: ")}${thePlayer.levelPoints}
 
@@ -2394,6 +2397,7 @@ createEventsMap(testEventArr, story)
 buttonsArray = [button1, button2];
 screen.render()
 resizeButtons()
+lvlup.hide()
 toggleUi()
 screen.render()
 stats.focus()
@@ -2404,7 +2408,7 @@ logs.writeSync('[?25l')
 await (fillStatsRollBox(40, thePlayer, box))
 refreshStats(thePlayer)
 box.focus()
-//lvlup.
+
 box.key('enter', function() {
 	toggleUi()
 	box.hide()
@@ -2417,6 +2421,13 @@ box.on('click', function() {
 	box.hide()
 	box.destroy()
 	box = null
+	screen.render()
+})
+levelBut.on('press', function() {
+	thePlayer.levelUp()
+	refreshStats()
+	refreshInventory()
+	stats.focus()
 	screen.render()
 })
 logs.writeSync("TESTING SANDBOX, PRESS Y AFTER ITEMS WRITTEN \nTO GO TO COMBAT TEST\n")

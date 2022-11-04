@@ -984,6 +984,16 @@ async function clearCombat() {
 	logs.writeSync(foundBLKTXT + '\n')
 	logs.writeSync(`${chalk.hex('1B1B1B')(`#`.repeat(logs.term.cols - 1))}\n`);
 	if (!death) {
+
+		//temp simple xp gain
+		let xpgain=0
+		if(!thePlayer.encounterData.peacefullClr){
+			xpgain = monsterRandom.rpg('3d8',{sum:true})+thePlayer.encounterData.returnDamageDealt()
+			thePlayer.xp += xpgain
+			refreshInventory(thePlayer)
+			refreshStats(thePlayer)
+		}
+
 		thePlayer.state = playerState.TREASURE_ROOM
 
 		ImageScreenTerm.term.reset()
@@ -998,7 +1008,7 @@ async function clearCombat() {
 ╭${gradient.pastel('╾────────────────────────────────────────────╼')}╮ 
 │   ${gradient.instagram(thePlayer.encounterData.enemyName)} ${chalk.blue(thePlayer.encounterData.peacefullClr?`cleared in`:`deafeated in`)} ${chalk.greenBright(`${thePlayer.encounterData.turn} turns`)}
 │   <${'-'.repeat(38)}>
-│   XP earned:  ${thePlayer.encounterData.peacefullClr?chalk.redBright(`0`):chalk.greenBright(`545`)}
+│   XP earned:  ${thePlayer.encounterData.peacefullClr?chalk.redBright(xpgain):chalk.greenBright(xpgain)}
 │
 │   average hit rate: ${(thePlayer.encounterData.calculateHitMissAVG()*100).toFixed(2)} % hit chance
 │   average damage dealt per turn: ${chalk.redBright(thePlayer.encounterData.calculateTurnDmgAVG())} dmg

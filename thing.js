@@ -520,6 +520,7 @@ let button2 = blessedpkg.button({
 //screen.render is essential for the correct screenlines amount to calculate inorder to resize buttons
 function resizeButtons() {
 	buttonsArray.forEach((element) => {
+		assert(element instanceof blessedpkg.button)
 		element.width = buttonsContainer.width - 5
 	})
 	screen.render()
@@ -580,6 +581,7 @@ async function createButtons(gameEvent, storyObj = {}, skipEventHandling = false
 					},
 				},
 			})
+			screen.render()
 			buttonsArray.push(temp)
 			temp.on('press', function() {
 				clearButtons()
@@ -2046,7 +2048,9 @@ function buyOilmenu(eventReddir){
 		screen.render()
 		resizeButtons()
 		goBack.on('press', async () => {
+			screen.render()
 			clearButtons()
+			screen.render()
 			createButtons(eventReddir, story, true)
 		})
 	})

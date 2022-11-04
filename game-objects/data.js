@@ -7,6 +7,17 @@ import gradient from 'gradient-string';
 import {monster} from "./mobs.js";
 import {Player, playerState} from "./player.js";
 import { drawImageAtPos } from "../writeMethods.js";
+
+
+export const STATS= Object.freeze({
+	STR:"STR",
+	DEX:"DEX",
+	INT:"INT",
+	CHA:"CHA",
+	HP:"HP",
+	NONE:"NONE",
+})
+
 //DAMAGE TYPES
 
 
@@ -2247,14 +2258,7 @@ export const ITEM_TYPES = Object.freeze({
 	SCROLL:"SCROLL",
 	OIL:"OIL",
 })
-export const STATS= Object.freeze({
-	STR:"STR",
-	DEX:"DEX",
-	INT:"INT",
-	CHA:"CHA",
-	HP:"HP",
-	NONE:"NONE",
-})
+
 
 
 

@@ -23,6 +23,7 @@ import {
 	MONSTER_STATE
 } from './game-objects/mobs.js';
 import {
+	chance1,
 	chance2,
 	chance4,
 	monsterRandom,
@@ -31,12 +32,15 @@ import {
 import {
 	buttonsContainer,
 	createStatsBox,
+	getSelected,
 	ImageScreenTerm,
+	improve,
 	InventoryBox,
 	levelBut,
 	logs,
 	lvlup,
 	program,
+	reroll,
 	screen,
 	stats
 } from "./ui.js";
@@ -84,6 +88,7 @@ import {
 	SPECIAL_ROOM_ART,
 	magicBolt,
 	slash,
+	STATS,
 } from './game-objects/data.js';
 import {
 	combatMetrics
@@ -1705,8 +1710,8 @@ function createCombatButtons(hostile) {
 		top: 1,
 		name: `attack`,
 		content: `${chalk.bold.white('attack ')}${chalk.bold.green(thePlayer.weapon.dmgDie)}\
-${thePlayer.basedamage<0?chalk.bold.white(' - '):chalk.bold.white(' + ')}\
-${chalk.bold.white(Math.abs(thePlayer.basedamage))}\
+${thePlayer.str<0?chalk.bold.white(' - '):chalk.bold.white(' + ')}\
+${chalk.bold.white(Math.abs(thePlayer.str))}\
 ${monsterHostile?'':gradient.retro.multiline('\nTrigger hostilities')}`, //maybe add damage die
 		//shadow: true,
 		style: {
@@ -2352,6 +2357,63 @@ screen.key('n', async function() {
 })
 let bInd = 0
 let scrollUpPrev = false
+
+
+// reroll stat level up screen
+reroll.on('press',()=>{
+	let stat=getSelected()
+	if (stat!==STATS.NONE&&thePlayer.levelPoints>=1){
+		thePlayer.levelPoints-=1
+		switch(stat){
+			case STATS.STR:
+				thePlayer.str=thePlayer.rollStat()
+				break
+			case STATS.DEX:
+				thePlayer.dex=thePlayer.rollStat()
+				break
+			case STATS.INT:
+				thePlayer.int=thePlayer.rollStat()
+				break
+			case STATS.CHA:
+				thePlayer.cha=thePlayer.rollStat()
+				break
+			case STATS.HP:
+				thePlayer.hpMax=chance1.rpg('2d6', {sum: true}) + thePlayer.str + 6
+				thePlayer.hp=thePlayer.hpMax
+				break
+		}
+		refreshStats(thePlayer)
+		refreshInventory(thePlayer)
+	}
+})
+
+improve.on('press',()=>{
+	let stat=getSelected()
+	if (stat!==STATS.NONE&&thePlayer.levelPoints>=4){
+		thePlayer.levelPoints-=4
+		switch(stat){
+			case STATS.STR:
+				thePlayer.str+=1
+				break
+			case STATS.DEX:
+				thePlayer.dex+=1
+				break
+			case STATS.INT:
+				thePlayer.int+=1
+				break
+			case STATS.CHA:
+				thePlayer.cha+1
+				break
+			case STATS.HP:
+				thePlayer.hpMax+= chance1.rpg('1d6', {sum: true})
+				thePlayer.hp=thePlayer.hpMax
+				break
+		}
+		refreshStats(thePlayer)
+		refreshInventory(thePlayer)
+	}
+})
+
 //buuuuuuuuuuuuuuuuuugged when removing button
 // screen.key('k', () => {
 // 	if (buttonsArray.length>0){
@@ -2528,3 +2590,5 @@ async function slashAnim(art=enemiesArt.gobo){
 }
 await slashAnim()
 //drawImageAtPos(0,14,miscArt.handWithLantern,ImageScreenTerm)
+
+

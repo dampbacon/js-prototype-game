@@ -8,7 +8,18 @@ import "./blessed/element.cjs";
 import "./blessed/patches.cjs";
 import "./blessed/node.cjs";
 import { toggleUi } from "./thing.js";
-import { STATS } from "./game-objects/data.js";
+//import { STATS } from "./game-objects/data.js";
+
+
+//duplication coz im too lazy to refactor
+const STATS= Object.freeze({
+	STR:"STR",
+	DEX:"DEX",
+	INT:"INT",
+	CHA:"CHA",
+	HP:"HP",
+	NONE:"NONE",
+})
 
 const {
 	blessed
@@ -234,7 +245,7 @@ export const lvlup = blessedpkg.radioset({
 	top: 'center',
 	left: 'center',
 	width: 50,
-	height: 15,
+	height: 12,
 	content: 'level up!',
 	padding: {
 		right: 0,
@@ -398,12 +409,13 @@ export function getSelected(){
 			return radio.name
 		}
 	}
+	return "NONE"
 }
 
 
 let lvlBoxStr=
 `\
- 2 pts reroll stat
+ 1 pts reroll stat
       
  4 pts for stat inc
        
@@ -433,7 +445,7 @@ let hmm=blessedpkg.box({
 	}
 })
 
-let reroll= new blessedpkg.button({
+export const reroll= new blessedpkg.button({
 	parent: lvlup,
 	mouse: true,
 	keys: true,
@@ -458,7 +470,7 @@ let reroll= new blessedpkg.button({
 	},
 })
 
-let improve= new blessedpkg.button({
+export const improve= new blessedpkg.button({
 	parent: lvlup,
 	mouse: true,
 	keys: true,
@@ -524,17 +536,17 @@ export const levelBut= new blessedpkg.button({
 		right: 1
 	},
 	right: 3,
-	top: 13,
+	top: 10,
 	name: 'lvlup',
 	content: chalk.black(` lvlup `),
 	//shadow: true,
 	style: {
-		bg: '#fddd00',
+		bg: 'blue',
 		focus: {
-			bg: '#ff0000',
+			bg: '#00ff00',
 		},
 		hover: {
-			bg: '#ff0000',
+			bg: '#00ff00',
 		},
 	},
 })

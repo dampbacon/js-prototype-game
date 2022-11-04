@@ -57,7 +57,6 @@ export class Player {
 			ring: false
 		}
 		//this.items = Array(5).fill(0)
-		this.basedamage = this.str
 		this.weapon = /*weapons.newtons_apple*/ pickWeapon()
 		this.weaponName = this.weapon.name
 		this.weaponCooldown = 0
@@ -145,7 +144,7 @@ export class Player {
 		}) + this.cha
 	}
 	rollDamage() {
-		let damage = this.basedamage + chance2.rpg(this.weapon.dmgDie, {
+		let damage = this.str + chance2.rpg(this.weapon.dmgDie, {
 			sum: true
 		}) + this.weapon.enchant
 		damage = damage < 1 ? 1 : damage
@@ -161,7 +160,7 @@ export class Player {
 		//return [20,bonus]
 	}
 	rollInitiative() {
-		return chance2.rpg('1d20', {
+		return this.dex + chance2.rpg('1d20', {
 			sum: true
 		})
 	}

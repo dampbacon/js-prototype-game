@@ -69,6 +69,7 @@ and trying to deal with those would take more time than just using what already 
 - [x] hostile enemies 
 <br>
  
+- [ ] make weapons that scale with different stats
 - [ ] flesh out cha uses, create a dmgtype class and a unique weapon (loot)
 - [ ] persausion (dead button currently)
 - [ ] trap, shrines, shop.

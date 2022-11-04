@@ -65,15 +65,19 @@ and trying to deal with those would take more time than just using what already 
 - Rare crashes once ~ every few hours (low priority)
 <br>
 ## TODO:
+<br>
 - [x] hostile enemies 
 <br>
-  
+ 
+- [ ] make weapons that scale with different stats
+- [ ] flesh out cha uses, create a dmgtype class and a unique weapon (loot)
 - [ ] persausion (dead button currently)
 - [ ] trap, shrines, shop.
 - [ ] repurpose perhaps dmgtypes classes defined for weapons for use with traps.
 <br>
   
 - [x] ability to override encounter text
+- [x] custom event callback injection
 - [ ] custom events that do not belong to any event chain
 - [ ] custom event chains with art and unique enemies that cannot be found anywhere else.\
 triggers may include special weapons equiped or certian depth reached
@@ -102,7 +106,7 @@ triggers may include special weapons equiped or certian depth reached
 - [ ] leaderboard, persistent data between runs (low priority)
 - [ ] allow player name entry (low priority)
 - [ ] random player class or descriptors
-- [ ] better character sheet
+- [ ] better character sheet, splash that pops up on keypress.
 <br>
   
 - [x] random treasure event descriptors (ALTAR, WEAPON, AND LOCATION FOUND)
@@ -124,7 +128,7 @@ triggers may include special weapons equiped or certian depth reached
   
 - [ ] light mechanic (bones of implementation done, oil consumed every 4 floors)
 - [ ] specail darkness enemies, will choose from the misc art, creature will be selected via random picker weighted based on current depth (easy,medium,hard, very hard)
-- [ ] some generic dark room art
+- [x] some generic dark room art
 - [ ] difficult to escape in dark, use int check
 <br>
   
@@ -136,8 +140,10 @@ triggers may include special weapons equiped or certian depth reached
 or deeper
 - [x] add button to leave dungeon that takes you up 10 floors each cick and a random room unlikely to have enemies but still possible
 - [x] add entrance event, home event
-- [ ] home base, level up out of dungeon mechanic.
+- [x] home base, level up out of dungeon mechanic.
 <br>
-  
-- [ ] animated ansi/ascii art as opposed to the current static images.(low priority) (1 animation done used for magic and oil flasks)   
+
+- [x] basic animations implemented
+- [ ] animated ansi/ascii art as opposed to the current static images, more advanced animations   
+
 - [ ] external storage of data maybe.

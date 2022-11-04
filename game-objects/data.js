@@ -2252,6 +2252,7 @@ export const STATS= Object.freeze({
 	DEX:"DEX",
 	INT:"INT",
 	CHA:"CHA",
+	HP:"HP",
 	NONE:"NONE",
 })
 

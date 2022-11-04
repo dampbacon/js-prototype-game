@@ -8,6 +8,7 @@ import "./blessed/element.cjs";
 import "./blessed/patches.cjs";
 import "./blessed/node.cjs";
 import { toggleUi } from "./thing.js";
+import { STATS } from "./game-objects/data.js";
 
 const {
 	blessed
@@ -274,7 +275,7 @@ let strRadio= new blessedpkg.radiobutton({
 	},
 	left: 3,
 	top: 2,
-	name: 'str',
+	name: STATS.STR,
 	content: `str`,
 	//shadow: true,
 	style: {
@@ -301,7 +302,7 @@ let dexRadio= new blessedpkg.radiobutton({
 	},
 	left: 3,
 	top: 4,
-	name: 'dex',
+	name: STATS.DEX,
 	content: `dex`,
 	//shadow: true,
 	style: {
@@ -326,7 +327,7 @@ let chaRadio= new blessedpkg.radiobutton({
 	},
 	left: 3,
 	top: 6,
-	name: 'cha',
+	name: STATS.CHA,
 	content: `cha`,
 	//shadow: true,
 	style: {
@@ -351,7 +352,7 @@ let intRadio= new blessedpkg.radiobutton({
 	},
 	left: 3,
 	top: 8,
-	name: 'int',
+	name: STATS.INT,
 	content: `int`,
 	//shadow: true,
 	style: {
@@ -376,7 +377,7 @@ let hpRadio= new blessedpkg.radiobutton({
 	},
 	left: 3,
 	top: 10,
-	name: 'hp',
+	name: STATS.HP,
 	content: `hp `,
 	//shadow: true,
 	style: {
@@ -390,6 +391,14 @@ let hpRadio= new blessedpkg.radiobutton({
 	},
 })
 
+let radioArray=[strRadio,dexRadio,chaRadio,intRadio,hpRadio]
+export function getSelected(){
+	for(let radio of radioArray){
+		if(radio.checked){
+			return radio.name
+		}
+	}
+}
 
 
 let lvlBoxStr=

@@ -52,17 +52,9 @@ to test basic event combat loop press 'y' instead of just displaying the test bu
 the first screen that loads up is a testing sandbox effectively\
 avoid pressing 'r' or 'y' ever, the functions bound are for debug purposes
 <br>
-# Branch details.
-the code is ....messy \
-main branch execution loop is spaghetti code. \
-rather than be purely event driven a function pauses execution till a promise is returned \
-it is a mess, but a mess that works. \
-i tried simplifying it earlier however it game me untracable errors,\
-and trying to deal with those would take more time than just using what already works
-<br>
+
 ## Known issues:
-- Rare crashes when switching windows (low priority)
-- Rare crashes once ~ every few hours (low priority)
+- crashes when switching windows and switching back sometimes (low priority)
 <br>
 ## TODO:
 <br>

@@ -58,7 +58,9 @@ avoid pressing 'r' or 'y' ever, the functions bound are for debug purposes
 <br>
 ## TODO:
 <br>
-- [x] hostile enemies 
+- [x] hostile enemies
+
+<br>
 - [ ] make weapons that scale with different stats
 - [ ] flesh out cha uses, create a dmgtype class and a unique weapon (loot)
 - [ ] persausion (dead button currently)

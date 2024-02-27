@@ -1,4 +1,4 @@
-# js node project
+# js node project (main file is thing.js)
 terminal ui based game (Incomplete)
 using this as an excuse to learn js and figure out how to deal with game logic.
 Any kind of rpg/rougelite game logic is deceptively complex, and that is where my game dev interest leans towards.

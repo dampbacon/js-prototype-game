@@ -3,6 +3,8 @@ terminal ui based game (Incomplete)
 using this as an excuse to learn js and figure out how to deal with game logic.
 Any kind of rpg/rougelite game logic is deceptively complex, and that is where my game dev interest leans towards.
 
+Showcase: https://www.youtube.com/watch?v=U9g25V64mcI
+
 ![My Image](screenshots/combat.png)
 ![My Image2](screenshots/lib.png)
 
